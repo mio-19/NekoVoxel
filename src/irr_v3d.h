@@ -31,3 +31,4 @@ typedef core::vector3d<s32> v3s32;
 
 // for nodes etc
 typedef core::vector3d<s32> v3size;
+typedef s32 s_size;
