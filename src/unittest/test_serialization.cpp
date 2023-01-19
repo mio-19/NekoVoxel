@@ -282,7 +282,7 @@ void TestSerialization::testStreamRead()
 	UASSERT(deSerializeString16(is) == "foobar!");
 
 	UASSERT(readV2S16(is) == v2s16(500, 500));
-	UASSERT(readV3S16(is) == v3s16(4207, 604, -30));
+	UASSERT(readV3S16(is) == v3size(4207, 604, -30));
 	UASSERT(readV2S32(is) == v2s32(1920, 1080));
 	UASSERT(readV3S32(is) == v3s32(-400, 6400054, 290549855));
 
@@ -324,7 +324,7 @@ void TestSerialization::testStreamWrite()
 	UASSERT(!memcmp(&data[0], test_serialized_data, data.size()));
 
 	writeV2S16(os, v2s16(500, 500));
-	writeV3S16(os, v3s16(4207, 604, -30));
+	writeV3S16(os, v3size(4207, 604, -30));
 	writeV2S32(os, v2s32(1920, 1080));
 	writeV3S32(os, v3s32(-400, 6400054, 290549855));
 

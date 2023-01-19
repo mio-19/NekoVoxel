@@ -306,7 +306,7 @@ void ClientEnvironment::step(float dtime)
 		// (day: LIGHT_SUN, night: 0)
 		MapNode node_at_lplayer(CONTENT_AIR, 0x0f, 0);
 
-		v3s16 p = lplayer->getLightPosition();
+		v3size p = lplayer->getLightPosition();
 		node_at_lplayer = m_map->getNode(p);
 
 		u16 light = getInteriorLight(node_at_lplayer, 0, m_client->ndef());

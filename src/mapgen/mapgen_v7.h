@@ -88,7 +88,7 @@ public:
 	virtual MapgenType getType() const { return MAPGEN_V7; }
 
 	virtual void makeChunk(BlockMakeData *data);
-	int getSpawnLevelAtPoint(v2s16 p);
+	int getSpawnLevelAtPoint(v2size p);
 
 	float baseTerrainLevelAtPoint(s16 x, s16 z);
 	float baseTerrainLevelFromMap(int index);

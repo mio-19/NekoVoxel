@@ -22,22 +22,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "irrlichttypes.h"
 #include "irr_v3d.h"
 
-extern const v3s16 g_6dirs[6];
+extern const v3size g_6dirs[6];
 
-extern const v3s16 g_7dirs[7];
+extern const v3size g_7dirs[7];
 
-extern const v3s16 g_26dirs[26];
+extern const v3size g_26dirs[26];
 
 // 26th is (0,0,0)
-extern const v3s16 g_27dirs[27];
+extern const v3size g_27dirs[27];
 
 extern const u8 wallmounted_to_facedir[6];
 
-extern const v3s16 wallmounted_dirs[8];
+extern const v3size wallmounted_dirs[8];
 
-extern const v3s16 facedir_dirs[32];
+extern const v3size facedir_dirs[32];
 
-extern const v3s16 fourdir_dirs[4];
+extern const v3size fourdir_dirs[4];
 
 /// Direction in the 6D format. g_27dirs contains corresponding vectors.
 /// Here P means Positive, N stands for Negative.

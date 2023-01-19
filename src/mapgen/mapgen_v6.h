@@ -88,11 +88,11 @@ public:
 	int ystride;
 	u32 spflags;
 
-	v3s16 node_min;
-	v3s16 node_max;
-	v3s16 full_node_min;
-	v3s16 full_node_max;
-	v3s16 central_area_size;
+	v3size node_min;
+	v3size node_max;
+	v3size full_node_min;
+	v3size full_node_max;
+	v3size central_area_size;
 
 	Noise *noise_terrain_base;
 	Noise *noise_terrain_higher;
@@ -139,34 +139,34 @@ public:
 	virtual MapgenType getType() const { return MAPGEN_V6; }
 
 	void makeChunk(BlockMakeData *data);
-	int getGroundLevelAtPoint(v2s16 p);
-	int getSpawnLevelAtPoint(v2s16 p);
+	int getGroundLevelAtPoint(v2size p);
+	int getSpawnLevelAtPoint(v2size p);
 
 	float baseTerrainLevel(float terrain_base, float terrain_higher,
 		float steepness, float height_select);
-	virtual float baseTerrainLevelFromNoise(v2s16 p);
-	virtual float baseTerrainLevelFromMap(v2s16 p);
+	virtual float baseTerrainLevelFromNoise(v2size p);
+	virtual float baseTerrainLevelFromMap(v2size p);
 	virtual float baseTerrainLevelFromMap(int index);
 
-	s16 find_stone_level(v2s16 p2d);
-	bool block_is_underground(u64 seed, v3s16 blockpos);
+	s16 find_stone_level(v2size p2d);
+	bool block_is_underground(u64 seed, v3size blockpos);
 
-	float getHumidity(v2s16 p);
-	float getTreeAmount(v2s16 p);
-	bool getHaveAppleTree(v2s16 p);
+	float getHumidity(v2size p);
+	float getTreeAmount(v2size p);
+	bool getHaveAppleTree(v2size p);
 	float getMudAmount(int index);
 	bool getHaveBeach(int index);
-	BiomeV6Type getBiome(v2s16 p);
-	BiomeV6Type getBiome(int index, v2s16 p);
+	BiomeV6Type getBiome(v2size p);
+	BiomeV6Type getBiome(int index, v2size p);
 
-	u32 get_blockseed(u64 seed, v3s16 p);
+	u32 get_blockseed(u64 seed, v3size p);
 
 	virtual void calculateNoise();
 	int generateGround();
 	void addMud();
 	void flowMud(s16 &mudflow_minpos, s16 &mudflow_maxpos);
 	void moveMud(u32 remove_index, u32 place_index,
-		u32 above_remove_index, v2s16 pos, v3s16 em);
+		u32 above_remove_index, v2size pos, v3size em);
 	void growGrass();
 	void placeTreesAndJungleGrass();
 	virtual void generateCaves(int max_stone_y);

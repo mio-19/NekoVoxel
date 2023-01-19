@@ -55,12 +55,12 @@ void MapgenSinglenode::makeChunk(BlockMakeData *data)
 	this->vm   = data->vmanip;
 	this->ndef = data->nodedef;
 
-	v3s16 blockpos_min = data->blockpos_min;
-	v3s16 blockpos_max = data->blockpos_max;
+	v3size blockpos_min = data->blockpos_min;
+	v3size blockpos_max = data->blockpos_max;
 
 	// Area of central chunk
-	v3s16 node_min = blockpos_min * MAP_BLOCKSIZE;
-	v3s16 node_max = (blockpos_max + v3s16(1, 1, 1)) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	v3size node_min = blockpos_min * MAP_BLOCKSIZE;
+	v3size node_max = (blockpos_max + v3size(1, 1, 1)) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
 	blockseed = getBlockSeed2(node_min, data->seed);
 
@@ -87,7 +87,7 @@ void MapgenSinglenode::makeChunk(BlockMakeData *data)
 }
 
 
-int MapgenSinglenode::getSpawnLevelAtPoint(v2s16 p)
+int MapgenSinglenode::getSpawnLevelAtPoint(v2size p)
 {
 	return 0;
 }

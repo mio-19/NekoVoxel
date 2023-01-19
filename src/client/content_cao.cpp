@@ -425,7 +425,7 @@ const v3f GenericCAO::getPosition() const
 
 	// Calculate real position in world based on MatrixNode
 	if (m_matrixnode) {
-		v3s16 camera_offset = m_env->getCameraOffset();
+		v3size camera_offset = m_env->getCameraOffset();
 		return m_matrixnode->getAbsolutePosition() +
 				intToFloat(camera_offset, BS);
 	}
@@ -864,7 +864,7 @@ void GenericCAO::updateLight(u32 day_night_ratio)
 	u8 light_at_pos_intensity = 0;
 	bool pos_ok = false;
 
-	v3s16 pos[3];
+	v3size pos[3];
 	u16 npos = getLightPosition(pos);
 	for (u16 i = 0; i < npos; i++) {
 		bool this_ok;
@@ -934,7 +934,7 @@ void GenericCAO::setNodeLight(const video::SColor &light_color)
 	}
 }
 
-u16 GenericCAO::getLightPosition(v3s16 *pos)
+u16 GenericCAO::getLightPosition(v3size *pos)
 {
 	const auto &box = m_prop.collisionbox;
 	pos[0] = floatToInt(m_position + box.MinEdge * BS, BS);
@@ -1009,7 +1009,7 @@ void GenericCAO::updateNodePos()
 	scene::ISceneNode *node = getSceneNode();
 
 	if (node) {
-		v3s16 camera_offset = m_env->getCameraOffset();
+		v3size camera_offset = m_env->getCameraOffset();
 		v3f pos = pos_translator.val_current -
 				intToFloat(camera_offset, BS);
 		getPosRotMatrix().setTranslation(pos);
@@ -1173,7 +1173,7 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 			m_step_distance_counter = 0.0f;
 			if (!m_is_local_player && m_prop.makes_footstep_sound) {
 				const NodeDefManager *ndef = m_client->ndef();
-				v3s16 p = floatToInt(getPosition() +
+				v3size p = floatToInt(getPosition() +
 					v3f(0.0f, (m_prop.collisionbox.MinEdge.Y - 0.5f) * BS, 0.0f), BS);
 				MapNode n = m_env->getMap().getNode(p);
 				SimpleSoundSpec spec = ndef->get(n).sound_footstep;
@@ -1599,7 +1599,7 @@ void GenericCAO::updateAttachments()
 
 	if (!parent) { // Detach or don't attach
 		if (m_matrixnode) {
-			v3s16 camera_offset = m_env->getCameraOffset();
+			v3size camera_offset = m_env->getCameraOffset();
 			v3f old_pos = getPosition();
 
 			m_matrixnode->setParent(m_smgr->getRootSceneNode());
@@ -1754,7 +1754,7 @@ void GenericCAO::processMessage(const std::string &data)
 		}
 		updateTextures(mod);
 	} else if (cmd == AO_CMD_SET_SPRITE) {
-		v2s16 p = readV2S16(is);
+		v2s32 p = readV2S32(is);
 		int num_frames = readU16(is);
 		float framelength = readF32(is);
 		bool select_horiz_by_yawpitch = readU8(is);

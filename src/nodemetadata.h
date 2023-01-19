@@ -70,7 +70,7 @@ private:
 	List of metadata of all the nodes of a block
 */
 
-typedef std::map<v3s16, NodeMetadata *> NodeMetadataMap;
+typedef std::map<v3size, NodeMetadata *> NodeMetadataMap;
 
 class NodeMetadataList
 {
@@ -87,13 +87,13 @@ public:
 		bool absolute_pos = false);
 
 	// Add all keys in this list to the vector keys
-	std::vector<v3s16> getAllKeys();
+	std::vector<v3size> getAllKeys();
 	// Get pointer to data
-	NodeMetadata *get(v3s16 p);
+	NodeMetadata *get(v3size p);
 	// Deletes data
-	void remove(v3s16 p);
+	void remove(v3size p);
 	// Deletes old data and sets a new one
-	void set(v3s16 p, NodeMetadata *d);
+	void set(v3size p, NodeMetadata *d);
 	// Deletes all
 	void clear();
 

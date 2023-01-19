@@ -90,7 +90,7 @@ public:
 	virtual MapgenType getType() const { return MAPGEN_VALLEYS; }
 
 	virtual void makeChunk(BlockMakeData *data);
-	int getSpawnLevelAtPoint(v2s16 p);
+	int getSpawnLevelAtPoint(v2size p);
 
 private:
 	BiomeGenOriginal *m_bgen;

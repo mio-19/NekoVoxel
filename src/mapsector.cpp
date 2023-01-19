@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "mapblock.h"
 #include "serialization.h"
 
-MapSector::MapSector(Map *parent, v2s16 pos, IGameDef *gamedef):
+MapSector::MapSector(Map *parent, v2size pos, IGameDef *gamedef):
 		m_parent(parent),
 		m_pos(pos),
 		m_gamedef(gamedef)
@@ -76,7 +76,7 @@ MapBlock * MapSector::createBlankBlockNoInsert(s16 y)
 {
 	assert(getBlockBuffered(y) == NULL);	// Pre-condition
 
-	v3s16 blockpos_map(m_pos.X, y, m_pos.Y);
+	v3size blockpos_map(m_pos.X, y, m_pos.Y);
 
 	MapBlock *block = new MapBlock(m_parent, blockpos_map, m_gamedef);
 
@@ -101,7 +101,7 @@ void MapSector::insertBlock(MapBlock *block)
 		throw AlreadyExistsException("Block already exists");
 	}
 
-	v2s16 p2d(block->getPos().X, block->getPos().Z);
+	v2size p2d(block->getPos().X, block->getPos().Z);
 	assert(p2d == m_pos);
 
 	// Insert into container

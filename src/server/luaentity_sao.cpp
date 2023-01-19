@@ -460,7 +460,7 @@ std::string LuaEntitySAO::generateSetTextureModCommand() const
 	return os.str();
 }
 
-std::string LuaEntitySAO::generateSetSpriteCommand(v2s16 p, u16 num_frames,
+std::string LuaEntitySAO::generateSetSpriteCommand(v2size p, u16 num_frames,
 	f32 framelength, bool select_horiz_by_yawpitch)
 {
 	std::ostringstream os(std::ios::binary);
@@ -474,7 +474,7 @@ std::string LuaEntitySAO::generateSetSpriteCommand(v2s16 p, u16 num_frames,
 	return os.str();
 }
 
-void LuaEntitySAO::setSprite(v2s16 p, int num_frames, float framelength,
+void LuaEntitySAO::setSprite(v2size p, int num_frames, float framelength,
 		bool select_horiz_by_yawpitch)
 {
 	std::string str = generateSetSpriteCommand(

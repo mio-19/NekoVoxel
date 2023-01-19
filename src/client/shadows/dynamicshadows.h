@@ -37,7 +37,7 @@ struct shadowFrustum
 	core::matrix4 ViewMat;
 	v3f position;
 	v3f player;
-	v3s16 camera_offset;
+	v3size camera_offset;
 };
 
 class DirectionalLight

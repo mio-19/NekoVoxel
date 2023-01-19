@@ -48,7 +48,7 @@ static inline s64 pythonmodulo(s64 i, s16 mod)
 }
 
 
-s64 MapDatabase::getBlockAsInteger(const v3s16 &pos)
+s64 MapDatabase::getBlockAsInteger(const v3size &pos)
 {
 	return (u64) pos.Z * 0x1000000 +
 		(u64) pos.Y * 0x1000 +
@@ -56,9 +56,9 @@ s64 MapDatabase::getBlockAsInteger(const v3s16 &pos)
 }
 
 
-v3s16 MapDatabase::getIntegerAsBlock(s64 i)
+v3size MapDatabase::getIntegerAsBlock(s64 i)
 {
-	v3s16 pos;
+	v3size pos;
 	pos.X = unsigned_to_signed(pythonmodulo(i, 4096), 2048);
 	i = (i - pos.X) / 4096;
 	pos.Y = unsigned_to_signed(pythonmodulo(i, 4096), 2048);

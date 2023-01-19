@@ -295,12 +295,12 @@ void read_object_properties(lua_State *L, int index,
 
 	lua_getfield(L, -1, "spritediv");
 	if(lua_istable(L, -1))
-		prop->spritediv = read_v2s16(L, -1);
+		prop->spritediv = read_v2size(L, -1);
 	lua_pop(L, 1);
 
 	lua_getfield(L, -1, "initial_sprite_basepos");
 	if(lua_istable(L, -1))
-		prop->initial_sprite_basepos = read_v2s16(L, -1);
+		prop->initial_sprite_basepos = read_v2size(L, -1);
 	lua_pop(L, 1);
 
 	getboolfield(L, -1, "is_visible", prop->is_visible);
@@ -407,9 +407,9 @@ void push_object_properties(lua_State *L, ObjectProperties *prop)
 	}
 	lua_setfield(L, -2, "colors");
 
-	push_v2s16(L, prop->spritediv);
+	push_v2size(L, prop->spritediv);
 	lua_setfield(L, -2, "spritediv");
-	push_v2s16(L, prop->initial_sprite_basepos);
+	push_v2size(L, prop->initial_sprite_basepos);
 	lua_setfield(L, -2, "initial_sprite_basepos");
 	lua_pushboolean(L, prop->is_visible);
 	lua_setfield(L, -2, "is_visible");
@@ -1865,9 +1865,9 @@ void push_pointed_thing(lua_State *L, const PointedThing &pointed, bool csm,
 	if (pointed.type == POINTEDTHING_NODE) {
 		lua_pushstring(L, "node");
 		lua_setfield(L, -2, "type");
-		push_v3s16(L, pointed.node_undersurface);
+		push_v3size(L, pointed.node_undersurface);
 		lua_setfield(L, -2, "under");
-		push_v3s16(L, pointed.node_abovesurface);
+		push_v3size(L, pointed.node_abovesurface);
 		lua_setfield(L, -2, "above");
 	} else if (pointed.type == POINTEDTHING_OBJECT) {
 		lua_pushstring(L, "object");
@@ -2133,7 +2133,7 @@ void push_collision_move_result(lua_State *L, const collisionMoveResult &res)
 		lua_setfield(L, -2, "axis");
 
 		if (c.type == COLLISION_NODE) {
-			push_v3s16(L, c.node_p);
+			push_v3size(L, c.node_p);
 			lua_setfield(L, -2, "node_pos");
 		} else if (c.type == COLLISION_OBJECT) {
 			push_objectRef(L, c.object->getId());

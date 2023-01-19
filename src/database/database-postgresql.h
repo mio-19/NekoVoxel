@@ -56,9 +56,9 @@ protected:
 		return (float) atof(PQgetvalue(res, row, col));
 	}
 
-	inline v3s16 pg_to_v3s16(PGresult *res, int row, int col)
+	inline v3size pg_to_v3size(PGresult *res, int row, int col)
 	{
-		return v3s16(
+		return v3size(
 			pg_to_int(res, row, col),
 			pg_to_int(res, row, col + 1),
 			pg_to_int(res, row, col + 2)
@@ -120,10 +120,10 @@ public:
 	MapDatabasePostgreSQL(const std::string &connect_string);
 	virtual ~MapDatabasePostgreSQL() = default;
 
-	bool saveBlock(const v3s16 &pos, const std::string &data);
-	void loadBlock(const v3s16 &pos, std::string *block);
-	bool deleteBlock(const v3s16 &pos);
-	void listAllLoadableBlocks(std::vector<v3s16> &dst);
+	bool saveBlock(const v3size &pos, const std::string &data);
+	void loadBlock(const v3size &pos, std::string *block);
+	bool deleteBlock(const v3size &pos);
+	void listAllLoadableBlocks(std::vector<v3size> &dst);
 
 	void beginSave() { Database_PostgreSQL::beginSave(); }
 	void endSave() { Database_PostgreSQL::endSave(); }

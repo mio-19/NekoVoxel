@@ -60,9 +60,9 @@ float LuaHelper::readParam(lua_State *L, int index)
 }
 
 template <>
-v2s16 LuaHelper::readParam(lua_State *L, int index)
+v2size LuaHelper::readParam(lua_State *L, int index)
 {
-	return read_v2s16(L, index);
+	return read_v2size(L, index);
 }
 
 template <>

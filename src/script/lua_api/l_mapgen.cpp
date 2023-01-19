@@ -228,7 +228,7 @@ bool read_schematic_def(lua_State *L, int index,
 
 	//// Get schematic size
 	lua_getfield(L, index, "size");
-	v3s16 size = check_v3s16(L, -1);
+	v3size size = check_v3size(L, -1);
 	lua_pop(L, 1);
 
 	schem->size = size;
@@ -389,11 +389,11 @@ Biome *read_biome_def(lua_State *L, int index, const NodeDefManager *ndef)
 	b->vertical_blend  = getintfield_default(L,    index, "vertical_blend",  0);
 	b->flags           = 0; // reserved
 
-	b->min_pos = getv3s16field_default(
-		L, index, "min_pos", v3s16(-31000, -31000, -31000));
+	b->min_pos = getv3sizefield_default(
+		L, index, "min_pos", v3size(-31000, -31000, -31000));
 	getintfield(L, index, "y_min", b->min_pos.Y);
-	b->max_pos = getv3s16field_default(
-		L, index, "max_pos", v3s16(31000, 31000, 31000));
+	b->max_pos = getv3sizefield_default(
+		L, index, "max_pos", v3size(31000, 31000, 31000));
 	getintfield(L, index, "y_max", b->max_pos.Y);
 
 	std::vector<std::string> &nn = b->m_nodenames;
@@ -523,7 +523,7 @@ int ModApiMapgen::l_get_heat(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	v3s16 pos = read_v3s16(L, 1);
+	v3size pos = read_v3size(L, 1);
 
 	const BiomeGen *biomegen = getServer(L)->getEmergeManager()->getBiomeGen();
 
@@ -544,7 +544,7 @@ int ModApiMapgen::l_get_humidity(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	v3s16 pos = read_v3s16(L, 1);
+	v3size pos = read_v3size(L, 1);
 
 	const BiomeGen *biomegen = getServer(L)->getEmergeManager()->getBiomeGen();
 
@@ -565,7 +565,7 @@ int ModApiMapgen::l_get_biome_data(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	v3s16 pos = read_v3s16(L, 1);
+	v3size pos = read_v3size(L, 1);
 
 	const BiomeGen *biomegen = getServer(L)->getEmergeManager()->getBiomeGen();
 	if (!biomegen)
@@ -627,10 +627,10 @@ int ModApiMapgen::l_get_mapgen_object(lua_State *L)
 		lua_setmetatable(L, -2);
 
 		// emerged min pos
-		push_v3s16(L, vm->m_area.MinEdge);
+		push_v3size(L, vm->m_area.MinEdge);
 
 		// emerged max pos
-		push_v3s16(L, vm->m_area.MaxEdge);
+		push_v3size(L, vm->m_area.MaxEdge);
 
 		return 3;
 	}
@@ -688,7 +688,7 @@ int ModApiMapgen::l_get_mapgen_object(lua_State *L)
 		return 1;
 	}
 	case MGOBJ_GENNOTIFY: {
-		std::map<std::string, std::vector<v3s16> >event_map;
+		std::map<std::string, std::vector<v3size> >event_map;
 
 		mg->gennotify.getEvents(event_map);
 
@@ -697,7 +697,7 @@ int ModApiMapgen::l_get_mapgen_object(lua_State *L)
 			lua_createtable(L, it->second.size(), 0);
 
 			for (size_t j = 0; j != it->second.size(); j++) {
-				push_v3s16(L, it->second[j]);
+				push_v3size(L, it->second[j]);
 				lua_rawseti(L, -2, j + 1);
 			}
 
@@ -721,7 +721,7 @@ int ModApiMapgen::l_get_spawn_level(lua_State *L)
 	s16 z = luaL_checkinteger(L, 2);
 
 	EmergeManager *emerge = getServer(L)->getEmergeManager();
-	int spawn_level = emerge->getSpawnLevelAtPoint(v2s16(x, z));
+	int spawn_level = emerge->getSpawnLevelAtPoint(v2size(x, z));
 	// Unsuitable spawn point
 	if (spawn_level == MAX_MAP_GENERATION_LIMIT)
 		return 0;
@@ -840,8 +840,8 @@ int ModApiMapgen::l_get_mapgen_edges(lua_State *L)
 	}
 
 	std::pair<s16, s16> edges = get_mapgen_edges(mapgen_limit, chunksize);
-	push_v3s16(L, v3s16(1, 1, 1) * edges.first);
-	push_v3s16(L, v3s16(1, 1, 1) * edges.second);
+	push_v3size(L, v3size(1, 1, 1) * edges.first);
+	push_v3size(L, v3size(1, 1, 1) * edges.second);
 	return 2;
 }
 
@@ -1467,10 +1467,10 @@ int ModApiMapgen::l_generate_ores(lua_State *L)
 	mg.vm   = checkObject<LuaVoxelManip>(L, 1)->vm;
 	mg.ndef = getServer(L)->getNodeDefManager();
 
-	v3s16 pmin = lua_istable(L, 2) ? check_v3s16(L, 2) :
-			mg.vm->m_area.MinEdge + v3s16(1,1,1) * MAP_BLOCKSIZE;
-	v3s16 pmax = lua_istable(L, 3) ? check_v3s16(L, 3) :
-			mg.vm->m_area.MaxEdge - v3s16(1,1,1) * MAP_BLOCKSIZE;
+	v3size pmin = lua_istable(L, 2) ? check_v3size(L, 2) :
+			mg.vm->m_area.MinEdge + v3size(1,1,1) * MAP_BLOCKSIZE;
+	v3size pmax = lua_istable(L, 3) ? check_v3size(L, 3) :
+			mg.vm->m_area.MaxEdge - v3size(1,1,1) * MAP_BLOCKSIZE;
 	sortBoxVerticies(pmin, pmax);
 
 	u32 blockseed = Mapgen::getBlockSeed(pmin, mg.seed);
@@ -1496,10 +1496,10 @@ int ModApiMapgen::l_generate_decorations(lua_State *L)
 	mg.vm   = checkObject<LuaVoxelManip>(L, 1)->vm;
 	mg.ndef = getServer(L)->getNodeDefManager();
 
-	v3s16 pmin = lua_istable(L, 2) ? check_v3s16(L, 2) :
-			mg.vm->m_area.MinEdge + v3s16(1,1,1) * MAP_BLOCKSIZE;
-	v3s16 pmax = lua_istable(L, 3) ? check_v3s16(L, 3) :
-			mg.vm->m_area.MaxEdge - v3s16(1,1,1) * MAP_BLOCKSIZE;
+	v3size pmin = lua_istable(L, 2) ? check_v3size(L, 2) :
+			mg.vm->m_area.MinEdge + v3size(1,1,1) * MAP_BLOCKSIZE;
+	v3size pmax = lua_istable(L, 3) ? check_v3size(L, 3) :
+			mg.vm->m_area.MaxEdge - v3size(1,1,1) * MAP_BLOCKSIZE;
 	sortBoxVerticies(pmin, pmax);
 
 	u32 blockseed = Mapgen::getBlockSeed(pmin, mg.seed);
@@ -1523,17 +1523,17 @@ int ModApiMapgen::l_create_schematic(lua_State *L)
 	Map *map = &(getEnv(L)->getMap());
 	Schematic schem;
 
-	v3s16 p1 = check_v3s16(L, 1);
-	v3s16 p2 = check_v3s16(L, 2);
+	v3size p1 = check_v3size(L, 1);
+	v3size p2 = check_v3size(L, 2);
 	sortBoxVerticies(p1, p2);
 
-	std::vector<std::pair<v3s16, u8> > prob_list;
+	std::vector<std::pair<v3size, u8> > prob_list;
 	if (lua_istable(L, 3)) {
 		lua_pushnil(L);
 		while (lua_next(L, 3)) {
 			if (lua_istable(L, -1)) {
 				lua_getfield(L, -1, "pos");
-				v3s16 pos = check_v3s16(L, -1);
+				v3size pos = check_v3size(L, -1);
 				lua_pop(L, 1);
 
 				u8 prob = getintfield_default(L, -1, "prob", MTSCHEM_PROB_ALWAYS);
@@ -1587,7 +1587,7 @@ int ModApiMapgen::l_place_schematic(lua_State *L)
 	SchematicManager *schemmgr = getServer(L)->getEmergeManager()->schemmgr;
 
 	//// Read position
-	v3s16 p = check_v3s16(L, 1);
+	v3size p = check_v3size(L, 1);
 
 	//// Read rotation
 	int rot = ROTATE_0;
@@ -1635,7 +1635,7 @@ int ModApiMapgen::l_place_schematic_on_vmanip(lua_State *L)
 	MMVManip *vm = checkObject<LuaVoxelManip>(L, 1)->vm;
 
 	//// Read position
-	v3s16 p = check_v3s16(L, 2);
+	v3size p = check_v3size(L, 2);
 
 	//// Read rotation
 	int rot = ROTATE_0;
@@ -1755,7 +1755,7 @@ int ModApiMapgen::l_read_schematic(lua_State *L)
 	lua_createtable(L, 0, (write_yslice == "none") ? 2 : 3);
 
 	// Create the size field
-	push_v3s16(L, schem->size);
+	push_v3size(L, schem->size);
 	lua_setfield(L, 1, "size");
 
 	// Create the yslice_prob field

@@ -268,7 +268,7 @@ public:
 	{
 		return m_max_y;
 	}
-	virtual void trigger(ServerEnvironment *env, v3s16 p, MapNode n,
+	virtual void trigger(ServerEnvironment *env, v3size p, MapNode n,
 			u32 active_object_count, u32 active_object_count_wider);
 };
 
@@ -287,7 +287,7 @@ public:
 		this->trigger_contents = trigger_contents;
 		this->name = name;
 	}
-	virtual void trigger(ServerEnvironment *env, v3s16 p, MapNode n, float dtime_s);
+	virtual void trigger(ServerEnvironment *env, v3size p, MapNode n, float dtime_s);
 };
 
 //! Lua wrapper for RaycastState objects

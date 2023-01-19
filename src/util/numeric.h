@@ -54,9 +54,9 @@ inline v2s16 getContainerPos(v2s16 p, s16 d)
 	);
 }
 
-inline v3s16 getContainerPos(v3s16 p, s16 d)
+inline v3size getContainerPos(v3size p, s16 d)
 {
-	return v3s16(
+	return v3size(
 		getContainerPos(p.X, d),
 		getContainerPos(p.Y, d),
 		getContainerPos(p.Z, d)
@@ -71,9 +71,9 @@ inline v2s16 getContainerPos(v2s16 p, v2s16 d)
 	);
 }
 
-inline v3s16 getContainerPos(v3s16 p, v3s16 d)
+inline v3size getContainerPos(v3size p, v3size d)
 {
-	return v3s16(
+	return v3size(
 		getContainerPos(p.X, d.X),
 		getContainerPos(p.Y, d.Y),
 		getContainerPos(p.Z, d.Z)
@@ -92,7 +92,7 @@ inline void getContainerPosWithOffset(const v2s16 &p, s16 d, v2s16 &container, v
 	getContainerPosWithOffset(p.Y, d, container.Y, offset.Y);
 }
 
-inline void getContainerPosWithOffset(const v3s16 &p, s16 d, v3s16 &container, v3s16 &offset)
+inline void getContainerPosWithOffset(const v3size &p, s16 d, v3size &container, v3size &offset)
 {
 	getContainerPosWithOffset(p.X, d, container.X, offset.X);
 	getContainerPosWithOffset(p.Y, d, container.Y, offset.Y);
@@ -100,7 +100,7 @@ inline void getContainerPosWithOffset(const v3s16 &p, s16 d, v3s16 &container, v
 }
 
 
-inline bool isInArea(v3s16 p, s16 d)
+inline bool isInArea(v3size p, s16 d)
 {
 	return (
 		p.X >= 0 && p.X < d &&
@@ -117,7 +117,7 @@ inline bool isInArea(v2s16 p, s16 d)
 	);
 }
 
-inline bool isInArea(v3s16 p, v3s16 d)
+inline bool isInArea(v3size p, v3size d)
 {
 	return (
 		p.X >= 0 && p.X < d.X &&
@@ -126,7 +126,7 @@ inline bool isInArea(v3s16 p, v3s16 d)
 	);
 }
 
-inline void sortBoxVerticies(v3s16 &p1, v3s16 &p2) {
+inline void sortBoxVerticies(v3size &p1, v3size &p2) {
 	if (p1.X > p2.X)
 		SWAP(s16, p1.X, p2.X);
 	if (p1.Y > p2.Y)
@@ -135,14 +135,14 @@ inline void sortBoxVerticies(v3s16 &p1, v3s16 &p2) {
 		SWAP(s16, p1.Z, p2.Z);
 }
 
-inline v3s16 componentwise_min(const v3s16 &a, const v3s16 &b)
+inline v3size componentwise_min(const v3size &a, const v3size &b)
 {
-	return v3s16(MYMIN(a.X, b.X), MYMIN(a.Y, b.Y), MYMIN(a.Z, b.Z));
+	return v3size(MYMIN(a.X, b.X), MYMIN(a.Y, b.Y), MYMIN(a.Z, b.Z));
 }
 
-inline v3s16 componentwise_max(const v3s16 &a, const v3s16 &b)
+inline v3size componentwise_max(const v3size &a, const v3size &b)
 {
-	return v3s16(MYMAX(a.X, b.X), MYMAX(a.Y, b.Y), MYMAX(a.Z, b.Z));
+	return v3size(MYMAX(a.X, b.X), MYMAX(a.Y, b.Y), MYMAX(a.Z, b.Z));
 }
 
 
@@ -254,7 +254,7 @@ inline u32 calc_parity(u32 v)
 
 u64 murmur_hash_64_ua(const void *key, int len, unsigned int seed);
 
-bool isBlockInSight(v3s16 blockpos_b, v3f camera_pos, v3f camera_dir,
+bool isBlockInSight(v3size blockpos_b, v3f camera_pos, v3f camera_dir,
 		f32 camera_fov, f32 range, f32 *distance_ptr=NULL);
 
 s16 adjustDist(s16 dist, float zoom_fov);
@@ -276,9 +276,9 @@ inline constexpr f32 sqr(f32 f)
 /*
 	Returns integer position of node in given floating point position
 */
-inline v3s16 floatToInt(v3f p, f32 d)
+inline v3size floatToInt(v3f p, f32 d)
 {
-	return v3s16(
+	return v3size(
 		(p.X + (p.X > 0 ? d / 2 : -d / 2)) / d,
 		(p.Y + (p.Y > 0 ? d / 2 : -d / 2)) / d,
 		(p.Z + (p.Z > 0 ? d / 2 : -d / 2)) / d);
@@ -287,9 +287,9 @@ inline v3s16 floatToInt(v3f p, f32 d)
 /*
 	Returns integer position of node in given double precision position
  */
-inline v3s16 doubleToInt(v3d p, double d)
+inline v3size doubleToInt(v3d p, double d)
 {
-	return v3s16(
+	return v3size(
 		(p.X + (p.X > 0 ? d / 2 : -d / 2)) / d,
 		(p.Y + (p.Y > 0 ? d / 2 : -d / 2)) / d,
 		(p.Z + (p.Z > 0 ? d / 2 : -d / 2)) / d);
@@ -298,7 +298,7 @@ inline v3s16 doubleToInt(v3d p, double d)
 /*
 	Returns floating point position of node in given integer position
 */
-inline v3f intToFloat(v3s16 p, f32 d)
+inline v3f intToFloat(v3size p, f32 d)
 {
 	return v3f(
 		(f32)p.X * d,
@@ -308,7 +308,7 @@ inline v3f intToFloat(v3s16 p, f32 d)
 }
 
 // Random helper. Usually d=BS
-inline aabb3f getNodeBox(v3s16 p, float d)
+inline aabb3f getNodeBox(v3size p, float d)
 {
 	return aabb3f(
 		(float)p.X * d - 0.5f * d,

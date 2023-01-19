@@ -48,7 +48,7 @@ PlayerSAO::PlayerSAO(ServerEnvironment *env_, RemotePlayer *player_, session_t p
 	m_prop.textures.emplace_back("player_back.png");
 	m_prop.colors.clear();
 	m_prop.colors.emplace_back(255, 255, 255, 255);
-	m_prop.spritediv = v2s16(1,1);
+	m_prop.spritediv = v2size(1,1);
 	m_prop.eye_height = 1.625f;
 	// End of default appearance
 	m_prop.is_visible = true;
@@ -155,7 +155,7 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 {
 	if (!isImmortal() && m_drowning_interval.step(dtime, 2.0f)) {
 		// Get nose/mouth position, approximate with eye position
-		v3s16 p = floatToInt(getEyePosition(), BS);
+		v3size p = floatToInt(getEyePosition(), BS);
 		MapNode n = m_env->getMap().getNode(p);
 		const ContentFeatures &c = m_env->getGameDef()->ndef()->get(n);
 		// If node generates drown
@@ -173,7 +173,7 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 
 	if (m_breathing_interval.step(dtime, 0.5f) && !isImmortal()) {
 		// Get nose/mouth position, approximate with eye position
-		v3s16 p = floatToInt(getEyePosition(), BS);
+		v3size p = floatToInt(getEyePosition(), BS);
 		MapNode n = m_env->getMap().getNode(p);
 		const ContentFeatures &c = m_env->getGameDef()->ndef()->get(n);
 		// If player is alive & not drowning & not in ignore & not immortal, breathe
@@ -191,7 +191,7 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 		// Sequence of damage points, starting 0.1 above feet and progressing
 		// upwards in 1 node intervals, stopping below top damage point.
 		for (float dam_height = 0.1f; dam_height < dam_top; dam_height++) {
-			v3s16 p = floatToInt(m_base_position +
+			v3size p = floatToInt(m_base_position +
 				v3f(0.0f, dam_height * BS, 0.0f), BS);
 			MapNode n = m_env->getMap().getNode(p);
 			const ContentFeatures &c = m_env->getGameDef()->ndef()->get(n);
@@ -202,7 +202,7 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 		}
 
 		// Top damage point
-		v3s16 ptop = floatToInt(m_base_position +
+		v3size ptop = floatToInt(m_base_position +
 			v3f(0.0f, dam_top * BS, 0.0f), BS);
 		MapNode ntop = m_env->getMap().getNode(ptop);
 		const ContentFeatures &c = m_env->getGameDef()->ndef()->get(ntop);
@@ -345,7 +345,7 @@ void PlayerSAO::setPos(const v3f &pos)
 		return;
 
 	// Send mapblock of target location
-	v3s16 blockpos = v3s16(pos.X / MAP_BLOCKSIZE, pos.Y / MAP_BLOCKSIZE, pos.Z / MAP_BLOCKSIZE);
+	v3size blockpos = v3size(pos.X / MAP_BLOCKSIZE, pos.Y / MAP_BLOCKSIZE, pos.Z / MAP_BLOCKSIZE);
 	m_env->getGameDef()->SendBlock(m_peer_id, blockpos);
 
 	setBasePosition(pos);

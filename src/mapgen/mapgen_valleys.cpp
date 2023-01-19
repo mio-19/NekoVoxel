@@ -218,12 +218,12 @@ void MapgenValleys::makeChunk(BlockMakeData *data)
 	this->vm = data->vmanip;
 	this->ndef = data->nodedef;
 
-	v3s16 blockpos_min = data->blockpos_min;
-	v3s16 blockpos_max = data->blockpos_max;
+	v3size blockpos_min = data->blockpos_min;
+	v3size blockpos_max = data->blockpos_max;
 	node_min = blockpos_min * MAP_BLOCKSIZE;
-	node_max = (blockpos_max + v3s16(1, 1, 1)) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	node_max = (blockpos_max + v3size(1, 1, 1)) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 	full_node_min = (blockpos_min - 1) * MAP_BLOCKSIZE;
-	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
 	blockseed = getBlockSeed2(full_node_min, seed);
 
@@ -281,7 +281,7 @@ void MapgenValleys::makeChunk(BlockMakeData *data)
 	updateLiquid(&data->transforming_liquid, full_node_min, full_node_max);
 
 	if (flags & MG_LIGHT)
-		calcLighting(node_min - v3s16(0, 1, 0), node_max + v3s16(0, 1, 0),
+		calcLighting(node_min - v3size(0, 1, 0), node_max + v3size(0, 1, 0),
 			full_node_min, full_node_max);
 
 	this->generating = false;
@@ -290,7 +290,7 @@ void MapgenValleys::makeChunk(BlockMakeData *data)
 }
 
 
-int MapgenValleys::getSpawnLevelAtPoint(v2s16 p)
+int MapgenValleys::getSpawnLevelAtPoint(v2size p)
 {
 	// Check if in a river channel
 	float n_rivers = NoisePerlin2D(&noise_rivers->np, p.X, p.Y, seed);
@@ -357,7 +357,7 @@ int MapgenValleys::generateTerrain()
 
 	noise_inter_valley_fill->perlinMap3D(node_min.X, node_min.Y - 1, node_min.Z);
 
-	const v3s16 &em = vm->m_area.getExtent();
+	const v3size &em = vm->m_area.getExtent();
 	s16 surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 index_2d = 0;
 

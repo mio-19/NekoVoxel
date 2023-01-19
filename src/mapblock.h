@@ -73,7 +73,7 @@ class VoxelManipulator;
 class MapBlock
 {
 public:
-	MapBlock(Map *parent, v3s16 pos, IGameDef *gamedef);
+	MapBlock(Map *parent, v3size pos, IGameDef *gamedef);
 	~MapBlock();
 
 	/*virtual u16 nodeContainerId() const
@@ -204,12 +204,12 @@ public:
 	//// Position stuff
 	////
 
-	inline v3s16 getPos()
+	inline v3size getPos()
 	{
 		return m_pos;
 	}
 
-	inline v3s16 getPosRelative()
+	inline v3size getPosRelative()
 	{
 		return m_pos_relative;
 	}
@@ -218,8 +218,8 @@ public:
 	{
 		return core::aabbox3d<s16>(getPosRelative(),
 				getPosRelative()
-				+ v3s16(MAP_BLOCKSIZE, MAP_BLOCKSIZE, MAP_BLOCKSIZE)
-				- v3s16(1,1,1));
+				+ v3size(MAP_BLOCKSIZE, MAP_BLOCKSIZE, MAP_BLOCKSIZE)
+				- v3size(1,1,1));
 	}
 
 	////
@@ -233,7 +233,7 @@ public:
 			&& z >= 0 && z < MAP_BLOCKSIZE;
 	}
 
-	inline bool isValidPosition(v3s16 p)
+	inline bool isValidPosition(v3size p)
 	{
 		return isValidPosition(p.X, p.Y, p.Z);
 	}
@@ -248,12 +248,12 @@ public:
 		return data[z * zstride + y * ystride + x];
 	}
 
-	inline MapNode getNode(v3s16 p, bool *valid_position)
+	inline MapNode getNode(v3size p, bool *valid_position)
 	{
 		return getNode(p.X, p.Y, p.Z, valid_position);
 	}
 
-	inline MapNode getNodeNoEx(v3s16 p)
+	inline MapNode getNodeNoEx(v3size p)
 	{
 		bool is_valid;
 		return getNode(p.X, p.Y, p.Z, &is_valid);
@@ -268,7 +268,7 @@ public:
 		raiseModified(MOD_STATE_WRITE_NEEDED, MOD_REASON_SET_NODE);
 	}
 
-	inline void setNode(v3s16 p, MapNode n)
+	inline void setNode(v3size p, MapNode n)
 	{
 		setNode(p.X, p.Y, p.Z, n);
 	}
@@ -282,7 +282,7 @@ public:
 		return data[z * zstride + y * ystride + x];
 	}
 
-	inline MapNode getNodeNoCheck(v3s16 p)
+	inline MapNode getNodeNoCheck(v3size p)
 	{
 		return getNodeNoCheck(p.X, p.Y, p.Z);
 	}
@@ -293,15 +293,15 @@ public:
 		raiseModified(MOD_STATE_WRITE_NEEDED, MOD_REASON_SET_NODE_NO_CHECK);
 	}
 
-	inline void setNodeNoCheck(v3s16 p, MapNode n)
+	inline void setNodeNoCheck(v3size p, MapNode n)
 	{
 		setNodeNoCheck(p.X, p.Y, p.Z, n);
 	}
 
 	// These functions consult the parent container if the position
 	// is not valid on this MapBlock.
-	bool isValidPositionParent(v3s16 p);
-	MapNode getNodeParent(v3s16 p, bool *is_valid_position = NULL);
+	bool isValidPositionParent(v3size p);
+	MapNode getNodeParent(v3size p, bool *is_valid_position = NULL);
 
 	// Copies data to VoxelManipulator to getPosRelative()
 	void copyTo(VoxelManipulator &dst);
@@ -328,7 +328,7 @@ public:
 	bool onObjectsActivation();
 	bool saveStaticObject(u16 id, const StaticObject &obj, u32 reason);
 
-	void step(float dtime, const std::function<bool(v3s16, MapNode, f32)> &on_timer_cb);
+	void step(float dtime, const std::function<bool(v3size, MapNode, f32)> &on_timer_cb);
 
 	////
 	//// Timestamp (see m_timestamp)
@@ -399,12 +399,12 @@ public:
 	//// Node Timers
 	////
 
-	inline NodeTimer getNodeTimer(v3s16 p)
+	inline NodeTimer getNodeTimer(v3size p)
 	{
 		return m_node_timers.get(p);
 	}
 
-	inline void removeNodeTimer(v3s16 p)
+	inline void removeNodeTimer(v3size p)
 	{
 		m_node_timers.remove(p);
 	}
@@ -480,7 +480,7 @@ private:
 	// NOTE: Lots of things rely on this being the Map
 	Map *m_parent;
 	// Position in blocks on parent
-	v3s16 m_pos;
+	v3size m_pos;
 
 	/* This is the precalculated m_pos_relative value
 	* This caches the value, improving performance by removing 3 s16 multiplications
@@ -488,7 +488,7 @@ private:
 	* For a 5 minutes runtime with valgrind this removes 3 * 19M s16 multiplications
 	* The gain can be estimated in Release Build to 3 * 100M multiply operations for 5 mins
 	*/
-	v3s16 m_pos_relative;
+	v3size m_pos_relative;
 
 	IGameDef *m_gamedef;
 
@@ -563,7 +563,7 @@ inline bool objectpos_over_limit(v3f p)
 		p.Z >  max_limit_bs;
 }
 
-inline bool blockpos_over_max_limit(v3s16 p)
+inline bool blockpos_over_max_limit(v3size p)
 {
 	const s16 max_limit_bp = MAX_MAP_GENERATION_LIMIT / MAP_BLOCKSIZE;
 	return p.X < -max_limit_bp ||
@@ -577,12 +577,12 @@ inline bool blockpos_over_max_limit(v3s16 p)
 /*
 	Returns the position of the block where the node is located
 */
-inline v3s16 getNodeBlockPos(v3s16 p)
+inline v3size getNodeBlockPos(v3size p)
 {
 	return getContainerPos(p, MAP_BLOCKSIZE);
 }
 
-inline void getNodeBlockPosWithOffset(v3s16 p, v3s16 &block, v3s16 &offset)
+inline void getNodeBlockPosWithOffset(v3size p, v3size &block, v3size &offset)
 {
 	getContainerPosWithOffset(p, MAP_BLOCKSIZE, block, offset);
 }

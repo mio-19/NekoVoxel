@@ -186,9 +186,9 @@ end
 do
 	local f_count = ProtoField.uint8("minetest.client.gotblocks_count", "Count", base.DEC)
 	local f_block = ProtoField.bytes("minetest.client.gotblocks_block", "Block", base.NONE)
-	local f_x = ProtoField.int16("minetest.client.gotblocks_x", "Block position X", base.DEC)
-	local f_y = ProtoField.int16("minetest.client.gotblocks_y", "Block position Y", base.DEC)
-	local f_z = ProtoField.int16("minetest.client.gotblocks_z", "Block position Z", base.DEC)
+	local f_x = ProtoField.int32("minetest.client.gotblocks_x", "Block position X", base.DEC)
+	local f_y = ProtoField.int32("minetest.client.gotblocks_y", "Block position Y", base.DEC)
+	local f_z = ProtoField.int32("minetest.client.gotblocks_z", "Block position Z", base.DEC)
 
 	minetest_client_commands[0x24] = {
 		"GOTBLOCKS", 3,
@@ -219,9 +219,9 @@ end
 do
 	local f_count = ProtoField.uint8("minetest.client.deletedblocks_count", "Count", base.DEC)
 	local f_block = ProtoField.bytes("minetest.client.deletedblocks_block", "Block", base.NONE)
-	local f_x = ProtoField.int16("minetest.client.deletedblocks_x", "Block position X", base.DEC)
-	local f_y = ProtoField.int16("minetest.client.deletedblocks_y", "Block position Y", base.DEC)
-	local f_z = ProtoField.int16("minetest.client.deletedblocks_z", "Block position Z", base.DEC)
+	local f_x = ProtoField.int32("minetest.client.deletedblocks_x", "Block position X", base.DEC)
+	local f_y = ProtoField.int32("minetest.client.deletedblocks_y", "Block position Y", base.DEC)
+	local f_z = ProtoField.int32("minetest.client.deletedblocks_z", "Block position Z", base.DEC)
 
 	minetest_client_commands[0x25] = {
 		"DELETEDBLOCKS", 3,
@@ -378,17 +378,17 @@ do
 		"Pointed Thing Version", base.DEC)
 	local f_pointed_type = ProtoField.uint8(abbr.."pointed_version",
 		"Pointed Thing Type", base.DEC, vs_pointed_type)
-	local f_pointed_under_x = ProtoField.int16(abbr.."pointed_under_x",
+	local f_pointed_under_x = ProtoField.int32(abbr.."pointed_under_x",
 		"Node position (under surface) X")
-	local f_pointed_under_y = ProtoField.int16(abbr.."pointed_under_y",
+	local f_pointed_under_y = ProtoField.int32(abbr.."pointed_under_y",
 		"Node position (under surface) Y")
-	local f_pointed_under_z = ProtoField.int16(abbr.."pointed_under_z",
+	local f_pointed_under_z = ProtoField.int32(abbr.."pointed_under_z",
 		"Node position (under surface) Z")
-	local f_pointed_above_x = ProtoField.int16(abbr.."pointed_above_x",
+	local f_pointed_above_x = ProtoField.int32(abbr.."pointed_above_x",
 		"Node position (above surface) X")
-	local f_pointed_above_y = ProtoField.int16(abbr.."pointed_above_y",
+	local f_pointed_above_y = ProtoField.int32(abbr.."pointed_above_y",
 		"Node position (above surface) Y")
-	local f_pointed_above_z = ProtoField.int16(abbr.."pointed_above_z",
+	local f_pointed_above_z = ProtoField.int32(abbr.."pointed_above_z",
 		"Node position (above surface) Z")
 	local f_pointed_object_id = ProtoField.int16(abbr.."pointed_object_id",
 		"Object ID")
@@ -568,9 +568,9 @@ minetest_server_obsolete[0x10] = true
 -- TOCLIENT_BLOCKDATA
 
 do
-	local f_x = ProtoField.int16("minetest.server.blockdata_x", "Block position X", base.DEC)
-	local f_y = ProtoField.int16("minetest.server.blockdata_y", "Block position Y", base.DEC)
-	local f_z = ProtoField.int16("minetest.server.blockdata_z", "Block position Z", base.DEC)
+	local f_x = ProtoField.int32("minetest.server.blockdata_x", "Block position X", base.DEC)
+	local f_y = ProtoField.int32("minetest.server.blockdata_y", "Block position Y", base.DEC)
+	local f_z = ProtoField.int32("minetest.server.blockdata_z", "Block position Z", base.DEC)
 	local f_data = ProtoField.bytes("minetest.server.blockdata_block", "Serialized MapBlock")
 
 	minetest_server_commands[0x20] = {
@@ -588,9 +588,9 @@ end
 -- TOCLIENT_ADDNODE
 
 do
-	local f_x = ProtoField.int16("minetest.server.addnode_x", "Position X", base.DEC)
-	local f_y = ProtoField.int16("minetest.server.addnode_y", "Position Y", base.DEC)
-	local f_z = ProtoField.int16("minetest.server.addnode_z", "Position Z", base.DEC)
+	local f_x = ProtoField.int32("minetest.server.addnode_x", "Position X", base.DEC)
+	local f_y = ProtoField.int32("minetest.server.addnode_y", "Position Y", base.DEC)
+	local f_z = ProtoField.int32("minetest.server.addnode_z", "Position Z", base.DEC)
 	local f_data = ProtoField.bytes("minetest.server.addnode_node", "Serialized MapNode")
 
 	minetest_server_commands[0x21] = {
@@ -608,9 +608,9 @@ end
 -- TOCLIENT_REMOVENODE
 
 do
-	local f_x = ProtoField.int16("minetest.server.removenode_x", "Position X", base.DEC)
-	local f_y = ProtoField.int16("minetest.server.removenode_y", "Position Y", base.DEC)
-	local f_z = ProtoField.int16("minetest.server.removenode_z", "Position Z", base.DEC)
+	local f_x = ProtoField.int32("minetest.server.removenode_x", "Position X", base.DEC)
+	local f_y = ProtoField.int32("minetest.server.removenode_y", "Position Y", base.DEC)
+	local f_z = ProtoField.int32("minetest.server.removenode_z", "Position Z", base.DEC)
 
 	minetest_server_commands[0x22] = {
 		"REMOVENODE", 8,

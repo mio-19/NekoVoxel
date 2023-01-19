@@ -58,7 +58,7 @@ MeshUpdateQueue::~MeshUpdateQueue()
 	}
 }
 
-bool MeshUpdateQueue::addBlock(Map *map, v3s16 p, bool ack_block_to_server, bool urgent)
+bool MeshUpdateQueue::addBlock(Map *map, v3size p, bool ack_block_to_server, bool urgent)
 {
 	MapBlock *main_block = map->getBlockNoCreateNoEx(p);
 	if (!main_block)
@@ -106,7 +106,7 @@ bool MeshUpdateQueue::addBlock(Map *map, v3s16 p, bool ack_block_to_server, bool
 	cached_blocks.reserve(3*3*3);
 	cached_blocks.push_back(main_block);
 	main_block->refGrab();
-	for (v3s16 dp : g_26dirs) {
+	for (v3size dp : g_26dirs) {
 		MapBlock *block = map->getBlockNoCreateNoEx(p + dp);
 		cached_blocks.push_back(block);
 		if (block)
@@ -159,7 +159,7 @@ QueuedMeshUpdate *MeshUpdateQueue::pop()
 	return result;
 }
 
-void MeshUpdateQueue::done(v3s16 pos)
+void MeshUpdateQueue::done(v3size pos)
 {
 	MutexAutoLock lock(m_mutex);
 	m_inflight_blocks.erase(pos);
@@ -185,7 +185,7 @@ void MeshUpdateQueue::fillDataFromMapBlocks(QueuedMeshUpdate *q)
 	MeshUpdateWorkerThread
 */
 
-MeshUpdateWorkerThread::MeshUpdateWorkerThread(MeshUpdateQueue *queue_in, MeshUpdateManager *manager, v3s16 *camera_offset) :
+MeshUpdateWorkerThread::MeshUpdateWorkerThread(MeshUpdateQueue *queue_in, MeshUpdateManager *manager, v3size *camera_offset) :
 		UpdateThread("Mesh"), m_queue_in(queue_in), m_manager(manager), m_camera_offset(camera_offset)
 {
 	m_generation_interval = g_settings->getU16("mesh_generation_interval");
@@ -239,7 +239,7 @@ MeshUpdateManager::MeshUpdateManager(Client *client):
 		m_workers.push_back(std::make_unique<MeshUpdateWorkerThread>(&m_queue_in, this, &m_camera_offset));
 }
 
-void MeshUpdateManager::updateBlock(Map *map, v3s16 p, bool ack_block_to_server,
+void MeshUpdateManager::updateBlock(Map *map, v3size p, bool ack_block_to_server,
 		bool urgent, bool update_neighbors)
 {
 	static thread_local const bool many_neighbors =
@@ -252,10 +252,10 @@ void MeshUpdateManager::updateBlock(Map *map, v3s16 p, bool ack_block_to_server,
 	}
 	if (update_neighbors) {
 		if (many_neighbors) {
-			for (v3s16 dp : g_26dirs)
+			for (v3size dp : g_26dirs)
 				m_queue_in.addBlock(map, p + dp, false, urgent);
 		} else {
-			for (v3s16 dp : g_6dirs)
+			for (v3size dp : g_6dirs)
 				m_queue_in.addBlock(map, p + dp, false, urgent);
 		}
 	}

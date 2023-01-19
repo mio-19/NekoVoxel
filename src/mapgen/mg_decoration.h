@@ -57,10 +57,10 @@ public:
 
 	virtual void resolveNodeNames();
 
-	bool canPlaceDecoration(MMVManip *vm, v3s16 p);
-	size_t placeDeco(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	bool canPlaceDecoration(MMVManip *vm, v3size p);
+	size_t placeDeco(Mapgen *mg, u32 blockseed, v3size nmin, v3size nmax);
 
-	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s16 p, bool ceiling) = 0;
+	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3size p, bool ceiling) = 0;
 
 	u32 flags = 0;
 	int mapseed = 0;
@@ -86,7 +86,7 @@ public:
 	ObjDef *clone() const;
 
 	virtual void resolveNodeNames();
-	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s16 p, bool ceiling);
+	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3size p, bool ceiling);
 
 	std::vector<content_t> c_decos;
 	s16 deco_height;
@@ -103,7 +103,7 @@ public:
 	DecoSchematic() = default;
 	virtual ~DecoSchematic();
 
-	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s16 p, bool ceiling);
+	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3size p, bool ceiling);
 
 	Rotation rotation;
 	Schematic *schematic = nullptr;
@@ -114,7 +114,7 @@ public:
 /*
 class DecoLSystem : public Decoration {
 public:
-	virtual void generate(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	virtual void generate(Mapgen *mg, u32 blockseed, v3size nmin, v3size nmax);
 };
 */
 
@@ -145,7 +145,7 @@ public:
 		}
 	}
 
-	size_t placeAllDecos(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	size_t placeAllDecos(Mapgen *mg, u32 blockseed, v3size nmin, v3size nmax);
 
 private:
 	DecorationManager() {};

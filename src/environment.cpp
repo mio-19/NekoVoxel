@@ -83,7 +83,7 @@ float Environment::getTimeOfDayF()
 	return m_time_of_day_f;
 }
 
-bool Environment::line_of_sight(v3f pos1, v3f pos2, v3s16 *p)
+bool Environment::line_of_sight(v3f pos1, v3f pos2, v3size *p)
 {
 	// Iterate trough nodes on the line
 	voxalgo::VoxelLineIterator iterator(pos1 / BS, (pos2 - pos1) / BS);
@@ -153,7 +153,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 		new_nodes.MaxEdge += state->m_iterator.m_current_node_pos;
 
 		// Only check new nodes
-		v3s16 delta = state->m_iterator.m_current_node_pos
+		v3size delta = state->m_iterator.m_current_node_pos
 			- state->m_previous_node;
 		if (delta.X > 0) {
 			new_nodes.MinEdge.X = new_nodes.MaxEdge.X;
@@ -180,7 +180,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 		for (s16 y = new_nodes.MinEdge.Y; y <= new_nodes.MaxEdge.Y; y++)
 		for (s16 z = new_nodes.MinEdge.Z; z <= new_nodes.MaxEdge.Z; z++) {
 			MapNode n;
-			v3s16 np(x, y, z);
+			v3size np(x, y, z);
 			bool is_valid_position;
 
 			n = map.getNode(np, &is_valid_position);

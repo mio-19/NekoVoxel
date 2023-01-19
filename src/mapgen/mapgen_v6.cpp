@@ -236,9 +236,9 @@ void MapgenV6Params::setDefaultSettings(Settings *settings)
 
 
 // Returns Y one under area minimum if not found
-s16 MapgenV6::find_stone_level(v2s16 p2d)
+s16 MapgenV6::find_stone_level(v2size p2d)
 {
-	const v3s16 &em = vm->m_area.getExtent();
+	const v3size &em = vm->m_area.getExtent();
 	s16 y_nodes_max = vm->m_area.MaxEdge.Y;
 	s16 y_nodes_min = vm->m_area.MinEdge.Y;
 	u32 i = vm->m_area.index(p2d.X, y_nodes_max, p2d.Y);
@@ -256,10 +256,10 @@ s16 MapgenV6::find_stone_level(v2s16 p2d)
 
 
 // Required by mapgen.h
-bool MapgenV6::block_is_underground(u64 seed, v3s16 blockpos)
+bool MapgenV6::block_is_underground(u64 seed, v3size blockpos)
 {
 	/*s16 minimum_groundlevel = (s16)get_sector_minimum_ground_level(
-			seed, v2s16(blockpos.X, blockpos.Z));*/
+			seed, v2size(blockpos.X, blockpos.Z));*/
 	// Nah, this is just a heuristic, just return something
 	s16 minimum_groundlevel = water_level;
 
@@ -300,7 +300,7 @@ float MapgenV6::baseTerrainLevel(float terrain_base, float terrain_higher,
 }
 
 
-float MapgenV6::baseTerrainLevelFromNoise(v2s16 p)
+float MapgenV6::baseTerrainLevelFromNoise(v2size p)
 {
 	if (spflags & MGV6_FLAT)
 		return water_level;
@@ -319,7 +319,7 @@ float MapgenV6::baseTerrainLevelFromNoise(v2s16 p)
 }
 
 
-float MapgenV6::baseTerrainLevelFromMap(v2s16 p)
+float MapgenV6::baseTerrainLevelFromMap(v2size p)
 {
 	int index = (p.Y - node_min.Z) * ystride + (p.X - node_min.X);
 	return baseTerrainLevelFromMap(index);
@@ -341,13 +341,13 @@ float MapgenV6::baseTerrainLevelFromMap(int index)
 }
 
 
-int MapgenV6::getGroundLevelAtPoint(v2s16 p)
+int MapgenV6::getGroundLevelAtPoint(v2size p)
 {
 	return baseTerrainLevelFromNoise(p) + MGV6_AVERAGE_MUD_AMOUNT;
 }
 
 
-int MapgenV6::getSpawnLevelAtPoint(v2s16 p)
+int MapgenV6::getSpawnLevelAtPoint(v2size p)
 {
 	s16 level_at_point = baseTerrainLevelFromNoise(p) + MGV6_AVERAGE_MUD_AMOUNT;
 	if (level_at_point <= water_level ||
@@ -361,7 +361,7 @@ int MapgenV6::getSpawnLevelAtPoint(v2s16 p)
 //////////////////////// Noise functions
 
 
-BiomeV6Type MapgenV6::getBiome(v2s16 p)
+BiomeV6Type MapgenV6::getBiome(v2size p)
 {
 	int index = (p.Y - full_node_min.Z) * (ystride + 2 * MAP_BLOCKSIZE)
 			+ (p.X - full_node_min.X);
@@ -369,7 +369,7 @@ BiomeV6Type MapgenV6::getBiome(v2s16 p)
 }
 
 
-float MapgenV6::getHumidity(v2s16 p)
+float MapgenV6::getHumidity(v2size p)
 {
 	/*double noise = noise2d_perlin(
 		0.5+(float)p.X/500, 0.5+(float)p.Y/500,
@@ -388,7 +388,7 @@ float MapgenV6::getHumidity(v2s16 p)
 }
 
 
-float MapgenV6::getTreeAmount(v2s16 p)
+float MapgenV6::getTreeAmount(v2size p)
 {
 	/*double noise = noise2d_perlin(
 			0.5+(float)p.X/125, 0.5+(float)p.Y/125,
@@ -403,7 +403,7 @@ float MapgenV6::getTreeAmount(v2s16 p)
 }
 
 
-bool MapgenV6::getHaveAppleTree(v2s16 p)
+bool MapgenV6::getHaveAppleTree(v2size p)
 {
 	/*is_apple_tree = noise2d_perlin(
 		0.5+(float)p.X/100, 0.5+(float)p.Z/100,
@@ -440,7 +440,7 @@ bool MapgenV6::getHaveBeach(int index)
 }
 
 
-BiomeV6Type MapgenV6::getBiome(int index, v2s16 p)
+BiomeV6Type MapgenV6::getBiome(int index, v2size p)
 {
 	// Just do something very simple as for now
 	/*double d = noise2d_perlin(
@@ -485,7 +485,7 @@ BiomeV6Type MapgenV6::getBiome(int index, v2s16 p)
 }
 
 
-u32 MapgenV6::get_blockseed(u64 seed, v3s16 p)
+u32 MapgenV6::get_blockseed(u64 seed, v3size p)
 {
 	s32 x = p.X, y = p.Y, z = p.Z;
 	return (u32)(seed % 0x100000000ULL) + z * 38134234 + y * 42123 + x * 23;
@@ -505,18 +505,18 @@ void MapgenV6::makeChunk(BlockMakeData *data)
 	this->ndef = data->nodedef;
 
 	// Hack: use minimum block coords for old code that assumes a single block
-	v3s16 blockpos_min = data->blockpos_min;
-	v3s16 blockpos_max = data->blockpos_max;
+	v3size blockpos_min = data->blockpos_min;
+	v3size blockpos_max = data->blockpos_max;
 
 	// Area of central chunk
 	node_min = blockpos_min * MAP_BLOCKSIZE;
-	node_max = (blockpos_max + v3s16(1, 1, 1)) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	node_max = (blockpos_max + v3size(1, 1, 1)) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
 	// Full allocated area
 	full_node_min = (blockpos_min - 1) * MAP_BLOCKSIZE;
-	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
-	central_area_size = node_max - node_min + v3s16(1, 1, 1);
+	central_area_size = node_max - node_min + v3size(1, 1, 1);
 	assert(central_area_size.X == central_area_size.Z);
 
 	// Create a block-specific seed
@@ -581,17 +581,17 @@ void MapgenV6::makeChunk(BlockMakeData *data)
 			dp.np_alt_wall
 				= NoiseParams(-0.4, 1.0, v3f(40.0, 40.0, 40.0), 32474, 6, 1.1, 2.0);
 
-			if (getBiome(0, v2s16(node_min.X, node_min.Z)) == BT_DESERT) {
+			if (getBiome(0, v2size(node_min.X, node_min.Z)) == BT_DESERT) {
 				dp.c_wall              = c_desert_stone;
 				dp.c_alt_wall          = CONTENT_IGNORE;
 				dp.c_stair             = c_stair_desert_stone;
 
 				dp.diagonal_dirs       = true;
-				dp.holesize            = v3s16(2, 3, 2);
-				dp.room_size_min       = v3s16(6, 9, 6);
-				dp.room_size_max       = v3s16(10, 11, 10);
-				dp.room_size_large_min = v3s16(10, 13, 10);
-				dp.room_size_large_max = v3s16(18, 21, 18);
+				dp.holesize            = v3size(2, 3, 2);
+				dp.room_size_min       = v3size(6, 9, 6);
+				dp.room_size_max       = v3size(10, 11, 10);
+				dp.room_size_large_min = v3size(10, 13, 10);
+				dp.room_size_large_max = v3size(18, 21, 18);
 				dp.notifytype          = GENNOTIFY_TEMPLE;
 			} else {
 				dp.c_wall              = c_cobble;
@@ -599,11 +599,11 @@ void MapgenV6::makeChunk(BlockMakeData *data)
 				dp.c_stair             = c_stair_cobble;
 
 				dp.diagonal_dirs       = false;
-				dp.holesize            = v3s16(1, 2, 1);
-				dp.room_size_min       = v3s16(4, 4, 4);
-				dp.room_size_max       = v3s16(8, 6, 8);
-				dp.room_size_large_min = v3s16(8, 8, 8);
-				dp.room_size_large_max = v3s16(16, 16, 16);
+				dp.holesize            = v3size(1, 2, 1);
+				dp.room_size_min       = v3size(4, 4, 4);
+				dp.room_size_max       = v3size(8, 6, 8);
+				dp.room_size_large_min = v3size(8, 8, 8);
+				dp.room_size_large_max = v3size(16, 16, 16);
 				dp.notifytype          = GENNOTIFY_DUNGEON;
 			}
 
@@ -632,8 +632,8 @@ void MapgenV6::makeChunk(BlockMakeData *data)
 
 	// Calculate lighting
 	if (flags & MG_LIGHT)
-		calcLighting(node_min - v3s16(1, 1, 1) * MAP_BLOCKSIZE,
-			node_max + v3s16(1, 0, 1) * MAP_BLOCKSIZE,
+		calcLighting(node_min - v3size(1, 1, 1) * MAP_BLOCKSIZE,
+			node_max + v3size(1, 0, 1) * MAP_BLOCKSIZE,
 			full_node_min, full_node_max);
 
 	this->generating = false;
@@ -682,10 +682,10 @@ int MapgenV6::generateGround()
 		if (surface_y > stone_surface_max_y)
 			stone_surface_max_y = surface_y;
 
-		BiomeV6Type bt = getBiome(v2s16(x, z));
+		BiomeV6Type bt = getBiome(v2size(x, z));
 
 		// Fill ground with stone
-		const v3s16 &em = vm->m_area.getExtent();
+		const v3size &em = vm->m_area.getExtent();
 		u32 i = vm->m_area.index(x, node_min.Y, z);
 		for (s16 y = node_min.Y; y <= node_max.Y; y++) {
 			if (vm->m_data[i].getContent() == CONTENT_IGNORE) {
@@ -724,13 +724,13 @@ void MapgenV6::addMud()
 		s16 mud_add_amount = getMudAmount(index) / 2.0 + 0.5;
 
 		// Find ground level
-		s16 surface_y = find_stone_level(v2s16(x, z)); /////////////////optimize this!
+		s16 surface_y = find_stone_level(v2size(x, z)); /////////////////optimize this!
 
 		// Handle area not found
 		if (surface_y == vm->m_area.MinEdge.Y - 1)
 			continue;
 
-		BiomeV6Type bt = getBiome(v2s16(x, z));
+		BiomeV6Type bt = getBiome(v2size(x, z));
 		addnode = (bt == BT_DESERT) ? n_desert_sand : n_dirt;
 
 		if (bt == BT_DESERT && surface_y + mud_add_amount <= water_level + 1) {
@@ -754,7 +754,7 @@ void MapgenV6::addMud()
 
 		// Add mud on ground
 		s16 mudcount = 0;
-		const v3s16 &em = vm->m_area.getExtent();
+		const v3size &em = vm->m_area.getExtent();
 		s16 y_start = surface_y + 1;
 		u32 i = vm->m_area.index(x, y_start, z);
 		for (s16 y = y_start; y <= node_max.Y; y++) {
@@ -772,12 +772,12 @@ void MapgenV6::addMud()
 
 void MapgenV6::flowMud(s16 &mudflow_minpos, s16 &mudflow_maxpos)
 {
-	const v3s16 &em = vm->m_area.getExtent();
-	static const v3s16 dirs4[4] = {
-		v3s16(0, 0, 1), // Back
-		v3s16(1, 0, 0), // Right
-		v3s16(0, 0, -1), // Front
-		v3s16(-1, 0, 0), // Left
+	const v3size &em = vm->m_area.getExtent();
+	static const v3size dirs4[4] = {
+		v3size(0, 0, 1), // Back
+		v3size(1, 0, 0), // Right
+		v3size(0, 0, -1), // Front
+		v3size(-1, 0, 0), // Left
 	};
 
 	// Iterate twice
@@ -785,13 +785,13 @@ void MapgenV6::flowMud(s16 &mudflow_minpos, s16 &mudflow_maxpos)
 		for (s16 z = mudflow_minpos; z <= mudflow_maxpos; z++)
 		for (s16 x = mudflow_minpos; x <= mudflow_maxpos; x++) {
 			// Node column position
-			v2s16 p2d;
+			v2size p2d;
 			// Invert coordinates on second iteration to process columns in
 			// opposite order, to avoid a directional bias.
 			if (k == 1)
-				p2d = v2s16(node_max.X, node_max.Z) - v2s16(x, z);
+				p2d = v2size(node_max.X, node_max.Z) - v2size(x, z);
 			else
-				p2d = v2s16(node_min.X, node_min.Z) + v2s16(x, z);
+				p2d = v2size(node_min.X, node_min.Z) + v2size(x, z);
 
 			s16 y = node_max.Y;
 
@@ -838,7 +838,7 @@ void MapgenV6::flowMud(s16 &mudflow_minpos, s16 &mudflow_maxpos)
 						continue;
 
 					// Drop mud on one side
-					for (const v3s16 &dirp : dirs4) {
+					for (const v3size &dirp : dirs4) {
 						u32 i2 = i;
 						// Move to side
 						VoxelArea::add_p(em, i2, dirp);
@@ -885,7 +885,7 @@ void MapgenV6::flowMud(s16 &mudflow_minpos, s16 &mudflow_maxpos)
 
 
 void MapgenV6::moveMud(u32 remove_index, u32 place_index,
-	u32 above_remove_index, v2s16 pos, v3s16 em)
+	u32 above_remove_index, v2size pos, v3size em)
 {
 	MapNode n_air(CONTENT_AIR);
 	// Copy mud from old place to new place
@@ -935,7 +935,7 @@ void MapgenV6::placeTreesAndJungleGrass()
 	if (c_junglegrass == CONTENT_IGNORE)
 		c_junglegrass = CONTENT_AIR;
 	MapNode n_junglegrass(c_junglegrass);
-	const v3s16 &em = vm->m_area.getExtent();
+	const v3size &em = vm->m_area.getExtent();
 
 	// Divide area into parts
 	s16 div = 8;
@@ -947,17 +947,17 @@ void MapgenV6::placeTreesAndJungleGrass()
 	for (s16 z0 = 0; z0 < div; z0++)
 	for (s16 x0 = 0; x0 < div; x0++) {
 		// Center position of part of division
-		v2s16 p2d_center(
+		v2size p2d_center(
 			node_min.X + sidelen / 2 + sidelen * x0,
 			node_min.Z + sidelen / 2 + sidelen * z0
 		);
 		// Minimum edge of part of division
-		v2s16 p2d_min(
+		v2size p2d_min(
 			node_min.X + sidelen * x0,
 			node_min.Z + sidelen * z0
 		);
 		// Maximum edge of part of division
-		v2s16 p2d_max(
+		v2size p2d_max(
 			node_min.X + sidelen + sidelen * x0 - 1,
 			node_min.Z + sidelen + sidelen * z0 - 1
 		);
@@ -1009,7 +1009,7 @@ void MapgenV6::placeTreesAndJungleGrass()
 			if (y < water_level || y > node_max.Y - 6)
 				continue;
 
-			v3s16 p(x, y, z);
+			v3size p(x, y, z);
 			// Trees grow only on mud and grass
 			{
 				u32 i = vm->m_area.index(p);
@@ -1025,10 +1025,10 @@ void MapgenV6::placeTreesAndJungleGrass()
 			if (bt == BT_JUNGLE) {
 				treegen::make_jungletree(*vm, p, ndef, myrand());
 			} else if (bt == BT_TAIGA) {
-				treegen::make_pine_tree(*vm, p - v3s16(0, 1, 0), ndef, myrand());
+				treegen::make_pine_tree(*vm, p - v3size(0, 1, 0), ndef, myrand());
 			} else if (bt == BT_NORMAL) {
 				bool is_apple_tree = (myrand_range(0, 3) == 0) &&
-							getHaveAppleTree(v2s16(x, z));
+							getHaveAppleTree(v2size(x, z));
 				treegen::make_tree(*vm, p, is_apple_tree, ndef, myrand());
 			}
 		}
@@ -1042,7 +1042,7 @@ void MapgenV6::growGrass() // Add surface nodes
 	MapNode n_dirt_with_grass(c_dirt_with_grass);
 	MapNode n_dirt_with_snow(c_dirt_with_snow);
 	MapNode n_snowblock(c_snowblock);
-	const v3s16 &em = vm->m_area.getExtent();
+	const v3size &em = vm->m_area.getExtent();
 
 	u32 index = 0;
 	for (s16 z = full_node_min.Z; z <= full_node_max.Z; z++)
@@ -1065,7 +1065,7 @@ void MapgenV6::growGrass() // Add surface nodes
 			surface_y = (y >= full_node_min.Y) ? y : full_node_min.Y;
 		}
 
-		BiomeV6Type bt = getBiome(index, v2s16(x, z));
+		BiomeV6Type bt = getBiome(index, v2size(x, z));
 		u32 i = vm->m_area.index(x, surface_y, z);
 		content_t c = vm->m_data[i].getContent();
 		if (surface_y >= water_level - 20) {
@@ -1102,7 +1102,7 @@ void MapgenV6::generateCaves(int max_stone_y)
 	if (ps.range(1, 6) == 1)
 		bruises_count = ps.range(0, ps.range(0, 2));
 
-	if (getBiome(v2s16(node_min.X, node_min.Z)) == BT_DESERT) {
+	if (getBiome(v2size(node_min.X, node_min.Z)) == BT_DESERT) {
 		caves_count   /= 3;
 		bruises_count /= 3;
 	}

@@ -73,9 +73,9 @@ public:
 
 	virtual void resolveNodeNames();
 
-	size_t placeOre(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	size_t placeOre(Mapgen *mg, u32 blockseed, v3size nmin, v3size nmax);
 	virtual void generate(MMVManip *vm, int mapseed, u32 blockseed,
-		v3s16 nmin, v3s16 nmax, biome_t *biomemap) = 0;
+		v3size nmin, v3size nmax, biome_t *biomemap) = 0;
 
 protected:
 	void cloneTo(Ore *def) const;
@@ -88,7 +88,7 @@ public:
 	ObjDef *clone() const override;
 
 	void generate(MMVManip *vm, int mapseed, u32 blockseed,
-			v3s16 nmin, v3s16 nmax, biome_t *biomemap) override;
+			v3size nmin, v3size nmax, biome_t *biomemap) override;
 };
 
 class OreSheet : public Ore {
@@ -102,7 +102,7 @@ public:
 	float column_midpoint_factor;
 
 	void generate(MMVManip *vm, int mapseed, u32 blockseed,
-			v3s16 nmin, v3s16 nmax, biome_t *biomemap) override;
+			v3size nmin, v3size nmax, biome_t *biomemap) override;
 };
 
 class OrePuff : public Ore {
@@ -118,7 +118,7 @@ public:
 	virtual ~OrePuff();
 
 	void generate(MMVManip *vm, int mapseed, u32 blockseed,
-			v3s16 nmin, v3s16 nmax, biome_t *biomemap) override;
+			v3size nmin, v3size nmax, biome_t *biomemap) override;
 };
 
 class OreBlob : public Ore {
@@ -127,7 +127,7 @@ public:
 
 	OreBlob() : Ore(true) {}
 	void generate(MMVManip *vm, int mapseed, u32 blockseed,
-			v3s16 nmin, v3s16 nmax, biome_t *biomemap) override;
+			v3size nmin, v3size nmax, biome_t *biomemap) override;
 };
 
 class OreVein : public Ore {
@@ -142,7 +142,7 @@ public:
 	virtual ~OreVein();
 
 	void generate(MMVManip *vm, int mapseed, u32 blockseed,
-			v3s16 nmin, v3s16 nmax, biome_t *biomemap) override;
+			v3size nmin, v3size nmax, biome_t *biomemap) override;
 };
 
 class OreStratum : public Ore {
@@ -157,7 +157,7 @@ public:
 	virtual ~OreStratum();
 
 	void generate(MMVManip *vm, int mapseed, u32 blockseed,
-			v3s16 nmin, v3s16 nmax, biome_t *biomemap) override;
+			v3size nmin, v3size nmax, biome_t *biomemap) override;
 };
 
 class OreManager : public ObjDefManager {
@@ -194,7 +194,7 @@ public:
 
 	void clear();
 
-	size_t placeAllOres(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	size_t placeAllOres(Mapgen *mg, u32 blockseed, v3size nmin, v3size nmax);
 
 private:
 	OreManager() {};

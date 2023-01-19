@@ -83,7 +83,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 struct TextDestNodeMetadata : public TextDest
 {
-	TextDestNodeMetadata(v3s16 p, Client *client)
+	TextDestNodeMetadata(v3size p, Client *client)
 	{
 		m_p = p;
 		m_client = client;
@@ -103,7 +103,7 @@ struct TextDestNodeMetadata : public TextDest
 		m_client->sendNodemetaFields(m_p, "", fields);
 	}
 
-	v3s16 m_p;
+	v3size m_p;
 	Client *m_client;
 };
 
@@ -192,7 +192,7 @@ struct LocalFormspecHandler : public TextDest
 class NodeMetadataFormSource: public IFormSource
 {
 public:
-	NodeMetadataFormSource(ClientMap *map, v3s16 p):
+	NodeMetadataFormSource(ClientMap *map, v3size p):
 		m_map(map),
 		m_p(p)
 	{
@@ -219,7 +219,7 @@ public:
 	}
 
 	ClientMap *m_map;
-	v3s16 m_p;
+	v3size m_p;
 };
 
 class PlayerInventoryFormSource: public IFormSource
@@ -242,10 +242,10 @@ public:
 class NodeDugEvent : public MtEvent
 {
 public:
-	v3s16 p;
+	v3size p;
 	MapNode n;
 
-	NodeDugEvent(v3s16 p, MapNode n):
+	NodeDugEvent(v3size p, MapNode n):
 		p(p),
 		n(n)
 	{}
@@ -837,13 +837,13 @@ protected:
 	 */
 	PointedThing updatePointedThing(
 			const core::line3d<f32> &shootline, bool liquids_pointable,
-			bool look_for_object, const v3s16 &camera_offset);
+			bool look_for_object, const v3size &camera_offset);
 	void handlePointingAtNothing(const ItemStack &playerItem);
 	void handlePointingAtNode(const PointedThing &pointed,
 			const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime);
 	void handlePointingAtObject(const PointedThing &pointed, const ItemStack &playeritem,
 			const v3f &player_position, bool show_debug);
-	void handleDigging(const PointedThing &pointed, const v3s16 &nodepos,
+	void handleDigging(const PointedThing &pointed, const v3size &nodepos,
 			const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime);
 	void updateFrame(ProfilerGraph *graph, RunStats *stats, f32 dtime,
 			const CameraOrientation &cam);
@@ -912,7 +912,7 @@ private:
 	void updateChat(f32 dtime);
 
 	bool nodePlacement(const ItemDefinition &selected_def, const ItemStack &selected_item,
-		const v3s16 &nodepos, const v3s16 &neighborpos, const PointedThing &pointed,
+		const v3size &nodepos, const v3size &neighborpos, const PointedThing &pointed,
 		const NodeMetadata *meta);
 	static const ClientEventHandler clientEventHandler[CLIENTEVENT_MAX];
 
@@ -3089,7 +3089,7 @@ void Game::updateCamera(f32 dtime)
 	ToolCapabilities playeritem_toolcap =
 		playeritem.getToolCapabilities(itemdef_manager);
 
-	v3s16 old_camera_offset = camera->getOffset();
+	v3size old_camera_offset = camera->getOffset();
 
 	if (wasKeyDown(KeyType::CAMERA_MODE)) {
 		GenericCAO *playercao = player->getCAO();
@@ -3118,7 +3118,7 @@ void Game::updateCamera(f32 dtime)
 	camera->step(dtime);
 
 	f32 camera_fov = camera->getFovMax();
-	v3s16 camera_offset = camera->getOffset();
+	v3size camera_offset = camera->getOffset();
 
 	m_camera_offset_changed = (camera_offset != old_camera_offset);
 
@@ -3143,7 +3143,7 @@ void Game::updateCamera(f32 dtime)
 void Game::updateSound(f32 dtime)
 {
 	// Update sound listener
-	v3s16 camera_offset = camera->getOffset();
+	v3size camera_offset = camera->getOffset();
 	sound->updateListener(camera->getCameraNode()->getPosition() + intToFloat(camera_offset, BS),
 			      v3f(0, 0, 0), // velocity
 			      camera->getDirection(),
@@ -3183,7 +3183,7 @@ void Game::processPlayerInteraction(f32 dtime, bool show_hud)
 	LocalPlayer *player = client->getEnv().getLocalPlayer();
 
 	const v3f camera_direction = camera->getDirection();
-	const v3s16 camera_offset  = camera->getOffset();
+	const v3size camera_offset  = camera->getOffset();
 
 	/*
 		Calculate what block is the crosshair pointing to
@@ -3266,7 +3266,7 @@ void Game::processPlayerInteraction(f32 dtime, bool show_hud)
 
 		if (!runData.digging) {
 			client->interact(INTERACT_STOP_DIGGING, runData.pointed_old);
-			client->setCrack(-1, v3s16(0, 0, 0));
+			client->setCrack(-1, v3size(0, 0, 0));
 			runData.dig_time = 0.0;
 		}
 	} else if (runData.dig_instantly && wasKeyReleased(KeyType::DIG)) {
@@ -3334,7 +3334,7 @@ PointedThing Game::updatePointedThing(
 	const core::line3d<f32> &shootline,
 	bool liquids_pointable,
 	bool look_for_object,
-	const v3s16 &camera_offset)
+	const v3size &camera_offset)
 {
 	std::vector<aabb3f> *selectionboxes = hud->getSelectionBoxes();
 	selectionboxes->clear();
@@ -3393,14 +3393,14 @@ PointedThing Game::updatePointedThing(
 	// Update selection mesh light level and vertex colors
 	if (!selectionboxes->empty()) {
 		v3f pf = hud->getSelectionPos();
-		v3s16 p = floatToInt(pf, BS);
+		v3size p = floatToInt(pf, BS);
 
 		// Get selection mesh light level
 		MapNode n = map.getNode(p);
 		u16 node_light = getInteriorLight(n, -1, nodedef);
 		u16 light_level = node_light;
 
-		for (const v3s16 &dir : g_6dirs) {
+		for (const v3size &dir : g_6dirs) {
 			n = map.getNode(p + dir);
 			node_light = getInteriorLight(n, -1, nodedef);
 			if (node_light > light_level)
@@ -3440,8 +3440,8 @@ void Game::handlePointingAtNothing(const ItemStack &playerItem)
 void Game::handlePointingAtNode(const PointedThing &pointed,
 	const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime)
 {
-	v3s16 nodepos = pointed.node_undersurface;
-	v3s16 neighborpos = pointed.node_abovesurface;
+	v3size nodepos = pointed.node_undersurface;
+	v3size neighborpos = pointed.node_abovesurface;
 
 	/*
 		Check information text of node
@@ -3494,7 +3494,7 @@ void Game::handlePointingAtNode(const PointedThing &pointed,
 }
 
 bool Game::nodePlacement(const ItemDefinition &selected_def,
-	const ItemStack &selected_item, const v3s16 &nodepos, const v3s16 &neighborpos,
+	const ItemStack &selected_item, const v3size &nodepos, const v3size &neighborpos,
 	const PointedThing &pointed, const NodeMetadata *meta)
 {
 	const auto &prediction = selected_def.node_placement_prediction;
@@ -3544,7 +3544,7 @@ bool Game::nodePlacement(const ItemDefinition &selected_def,
 
 	verbosestream << "Node placement prediction for "
 		<< selected_def.name << " is " << prediction << std::endl;
-	v3s16 p = neighborpos;
+	v3size p = neighborpos;
 
 	// Place inside node itself if buildable_to
 	MapNode n_under = map.getNode(nodepos, &is_valid_position);
@@ -3587,7 +3587,7 @@ bool Game::nodePlacement(const ItemDefinition &selected_def,
 		predicted_node.setParam2(place_param2);
 	} else if (predicted_f.param_type_2 == CPT2_WALLMOUNTED ||
 			predicted_f.param_type_2 == CPT2_COLORED_WALLMOUNTED) {
-		v3s16 dir = nodepos - neighborpos;
+		v3size dir = nodepos - neighborpos;
 
 		if (abs(dir.Y) > MYMAX(abs(dir.X), abs(dir.Z))) {
 			predicted_node.setParam2(dir.Y < 0 ? 1 : 0);
@@ -3600,7 +3600,7 @@ bool Game::nodePlacement(const ItemDefinition &selected_def,
 			predicted_f.param_type_2 == CPT2_COLORED_FACEDIR ||
 			predicted_f.param_type_2 == CPT2_4DIR ||
 			predicted_f.param_type_2 == CPT2_COLORED_4DIR) {
-		v3s16 dir = nodepos - floatToInt(client->getEnv().getLocalPlayer()->getPosition(), BS);
+		v3size dir = nodepos - floatToInt(client->getEnv().getLocalPlayer()->getPosition(), BS);
 
 		if (abs(dir.X) > abs(dir.Z)) {
 			predicted_node.setParam2(dir.X < 0 ? 3 : 1);
@@ -3612,12 +3612,12 @@ bool Game::nodePlacement(const ItemDefinition &selected_def,
 	// Check attachment if node is in group attached_node
 	int an = itemgroup_get(predicted_f.groups, "attached_node");
 	if (an != 0) {
-		v3s16 pp;
+		v3size pp;
 
 		if (an == 3) {
-			pp = p + v3s16(0, -1, 0);
+			pp = p + v3size(0, -1, 0);
 		} else if (an == 4) {
-			pp = p + v3s16(0, 1, 0);
+			pp = p + v3size(0, 1, 0);
 		} else if (an == 2) {
 			if (predicted_f.param_type_2 == CPT2_FACEDIR ||
 					predicted_f.param_type_2 == CPT2_COLORED_FACEDIR ||
@@ -3631,7 +3631,7 @@ bool Game::nodePlacement(const ItemDefinition &selected_def,
 				predicted_f.param_type_2 == CPT2_COLORED_WALLMOUNTED) {
 			pp = p + predicted_node.getWallMountedDir(nodedef);
 		} else {
-			pp = p + v3s16(0, -1, 0);
+			pp = p + v3size(0, -1, 0);
 		}
 
 		if (!nodedef->get(map.getNode(pp)).walkable) {
@@ -3676,8 +3676,8 @@ bool Game::nodePlacement(const ItemDefinition &selected_def,
 				g_settings->getBool("enable_build_where_you_stand") ||
 				(client->checkPrivilege("noclip") && g_settings->getBool("noclip")) ||
 				(predicted_f.walkable &&
-					neighborpos != player->getStandingNodePos() + v3s16(0, 1, 0) &&
-					neighborpos != player->getStandingNodePos() + v3s16(0, 2, 0))) {
+					neighborpos != player->getStandingNodePos() + v3size(0, 1, 0) &&
+					neighborpos != player->getStandingNodePos() + v3size(0, 2, 0))) {
 			// This triggers the required mesh update too
 			client->addNode(p, predicted_node);
 			// Report to server
@@ -3750,7 +3750,7 @@ void Game::handlePointingAtObject(const PointedThing &pointed,
 }
 
 
-void Game::handleDigging(const PointedThing &pointed, const v3s16 &nodepos,
+void Game::handleDigging(const PointedThing &pointed, const v3size &nodepos,
 		const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime)
 {
 	// See also: serverpackethandle.cpp, action == 2
@@ -3825,7 +3825,7 @@ void Game::handleDigging(const PointedThing &pointed, const v3s16 &nodepos,
 		client->setCrack(runData.dig_index, nodepos);
 	} else {
 		infostream << "Digging completed" << std::endl;
-		client->setCrack(-1, v3s16(0, 0, 0));
+		client->setCrack(-1, v3size(0, 0, 0));
 
 		runData.dig_time = 0;
 		runData.digging = false;
@@ -3957,7 +3957,7 @@ void Game::updateFrame(ProfilerGraph *graph, RunStats *stats, f32 dtime,
 			clouds->step(dtime);
 			// camera->getPosition is not enough for 3rd person views
 			v3f camera_node_position = camera->getCameraNode()->getPosition();
-			v3s16 camera_offset      = camera->getOffset();
+			v3size camera_offset      = camera->getOffset();
 			camera_node_position.X   = camera_node_position.X + camera_offset.X * BS;
 			camera_node_position.Y   = camera_node_position.Y + camera_offset.Y * BS;
 			camera_node_position.Z   = camera_node_position.Z + camera_offset.Z * BS;

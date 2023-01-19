@@ -40,12 +40,12 @@ class MapSector
 {
 public:
 
-	MapSector(Map *parent, v2s16 pos, IGameDef *gamedef);
+	MapSector(Map *parent, v2size pos, IGameDef *gamedef);
 	virtual ~MapSector();
 
 	void deleteBlocks();
 
-	v2s16 getPos()
+	v2size getPos()
 	{
 		return m_pos;
 	}
@@ -70,7 +70,7 @@ protected:
 
 	Map *m_parent;
 	// Position on parent (in MapBlock widths)
-	v2s16 m_pos;
+	v2size m_pos;
 
 	IGameDef *m_gamedef;
 

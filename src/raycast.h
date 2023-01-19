@@ -45,7 +45,7 @@ public:
 	//! Iterator to store the progress of the raycast.
 	voxalgo::VoxelLineIterator m_iterator;
 	//! Previous tested node during the raycast.
-	v3s16 m_previous_node;
+	v3size m_previous_node;
 
 	/*!
 	 * This priority queue stores the found pointed things

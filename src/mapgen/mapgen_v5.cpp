@@ -162,7 +162,7 @@ void MapgenV5Params::setDefaultSettings(Settings *settings)
 /////////////////////////////////////////////////////////////////
 
 
-int MapgenV5::getSpawnLevelAtPoint(v2s16 p)
+int MapgenV5::getSpawnLevelAtPoint(v2size p)
 {
 
 	float f = 0.55 + NoisePerlin2D(&noise_factor->np, p.X, p.Y, seed);
@@ -207,12 +207,12 @@ void MapgenV5::makeChunk(BlockMakeData *data)
 	this->ndef = data->nodedef;
 	//TimeTaker t("makeChunk");
 
-	v3s16 blockpos_min = data->blockpos_min;
-	v3s16 blockpos_max = data->blockpos_max;
+	v3size blockpos_min = data->blockpos_min;
+	v3size blockpos_max = data->blockpos_max;
 	node_min = blockpos_min * MAP_BLOCKSIZE;
-	node_max = (blockpos_max + v3s16(1, 1, 1)) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	node_max = (blockpos_max + v3size(1, 1, 1)) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 	full_node_min = (blockpos_min - 1) * MAP_BLOCKSIZE;
-	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
 	// Create a block-specific seed
 	blockseed = getBlockSeed2(full_node_min, seed);
@@ -273,7 +273,7 @@ void MapgenV5::makeChunk(BlockMakeData *data)
 
 	// Calculate lighting
 	if (flags & MG_LIGHT) {
-		calcLighting(node_min - v3s16(0, 1, 0), node_max + v3s16(0, 1, 0),
+		calcLighting(node_min - v3size(0, 1, 0), node_max + v3size(0, 1, 0),
 			full_node_min, full_node_max);
 	}
 

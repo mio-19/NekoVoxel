@@ -81,7 +81,7 @@ class LuaPerlinNoiseMap : public ModApiBase
 	static int l_get_map_slice(lua_State *L);
 
 public:
-	LuaPerlinNoiseMap(const NoiseParams *np, s32 seed, v3s16 size);
+	LuaPerlinNoiseMap(const NoiseParams *np, s32 seed, v3size size);
 	~LuaPerlinNoiseMap();
 
 	inline bool is3D() const { return noise->sz > 1; }

@@ -132,7 +132,7 @@ void NodeMetadataList::serialize(std::ostream &os, u8 blockver, bool disk,
 	for (NodeMetadataMap::const_iterator
 			i = m_data.begin();
 			i != m_data.end(); ++i) {
-		v3s16 p = i->first;
+		v3size p = i->first;
 		NodeMetadata *data = i->second;
 		if (!include_empty && data->empty())
 			continue;
@@ -172,7 +172,7 @@ void NodeMetadataList::deSerialize(std::istream &is,
 	u16 count = readU16(is);
 
 	for (u16 i = 0; i < count; i++) {
-		v3s16 p;
+		v3size p;
 		if (absolute_pos) {
 			p.X = readS16(is);
 			p.Y = readS16(is);
@@ -203,9 +203,9 @@ NodeMetadataList::~NodeMetadataList()
 	clear();
 }
 
-std::vector<v3s16> NodeMetadataList::getAllKeys()
+std::vector<v3size> NodeMetadataList::getAllKeys()
 {
-	std::vector<v3s16> keys;
+	std::vector<v3size> keys;
 	keys.reserve(m_data.size());
 	for (const auto &it : m_data)
 		keys.push_back(it.first);
@@ -213,7 +213,7 @@ std::vector<v3s16> NodeMetadataList::getAllKeys()
 	return keys;
 }
 
-NodeMetadata *NodeMetadataList::get(v3s16 p)
+NodeMetadata *NodeMetadataList::get(v3size p)
 {
 	NodeMetadataMap::const_iterator n = m_data.find(p);
 	if (n == m_data.end())
@@ -221,7 +221,7 @@ NodeMetadata *NodeMetadataList::get(v3s16 p)
 	return n->second;
 }
 
-void NodeMetadataList::remove(v3s16 p)
+void NodeMetadataList::remove(v3size p)
 {
 	NodeMetadata *olddata = get(p);
 	if (olddata) {
@@ -231,7 +231,7 @@ void NodeMetadataList::remove(v3s16 p)
 	}
 }
 
-void NodeMetadataList::set(v3s16 p, NodeMetadata *d)
+void NodeMetadataList::set(v3size p, NodeMetadata *d)
 {
 	remove(p);
 	m_data.emplace(p, d);

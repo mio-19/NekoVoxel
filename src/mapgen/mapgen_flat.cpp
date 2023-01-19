@@ -174,7 +174,7 @@ void MapgenFlatParams::setDefaultSettings(Settings *settings)
 /////////////////////////////////////////////////////////////////
 
 
-int MapgenFlat::getSpawnLevelAtPoint(v2s16 p)
+int MapgenFlat::getSpawnLevelAtPoint(v2size p)
 {
 	s16 stone_level = ground_level;
 	float n_terrain =
@@ -215,12 +215,12 @@ void MapgenFlat::makeChunk(BlockMakeData *data)
 	this->ndef = data->nodedef;
 	//TimeTaker t("makeChunk");
 
-	v3s16 blockpos_min = data->blockpos_min;
-	v3s16 blockpos_max = data->blockpos_max;
+	v3size blockpos_min = data->blockpos_min;
+	v3size blockpos_max = data->blockpos_max;
 	node_min = blockpos_min * MAP_BLOCKSIZE;
-	node_max = (blockpos_max + v3s16(1, 1, 1)) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	node_max = (blockpos_max + v3size(1, 1, 1)) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 	full_node_min = (blockpos_min - 1) * MAP_BLOCKSIZE;
-	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
 	blockseed = getBlockSeed2(full_node_min, seed);
 
@@ -277,11 +277,11 @@ void MapgenFlat::makeChunk(BlockMakeData *data)
 	updateLiquid(&data->transforming_liquid, full_node_min, full_node_max);
 
 	if (flags & MG_LIGHT)
-		calcLighting(node_min - v3s16(0, 1, 0), node_max + v3s16(0, 1, 0),
+		calcLighting(node_min - v3size(0, 1, 0), node_max + v3size(0, 1, 0),
 			full_node_min, full_node_max);
 
-	//setLighting(node_min - v3s16(1, 0, 1) * MAP_BLOCKSIZE,
-	//			node_max + v3s16(1, 0, 1) * MAP_BLOCKSIZE, 0xFF);
+	//setLighting(node_min - v3size(1, 0, 1) * MAP_BLOCKSIZE,
+	//			node_max + v3size(1, 0, 1) * MAP_BLOCKSIZE, 0xFF);
 
 	this->generating = false;
 }
@@ -293,7 +293,7 @@ s16 MapgenFlat::generateTerrain()
 	MapNode n_stone(c_stone);
 	MapNode n_water(c_water_source);
 
-	const v3s16 &em = vm->m_area.getExtent();
+	const v3size &em = vm->m_area.getExtent();
 	s16 stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 ni2d = 0;
 

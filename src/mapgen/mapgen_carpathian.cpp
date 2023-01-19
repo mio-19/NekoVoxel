@@ -265,12 +265,12 @@ void MapgenCarpathian::makeChunk(BlockMakeData *data)
 	this->vm = data->vmanip;
 	this->ndef = data->nodedef;
 
-	v3s16 blockpos_min = data->blockpos_min;
-	v3s16 blockpos_max = data->blockpos_max;
+	v3size blockpos_min = data->blockpos_min;
+	v3size blockpos_max = data->blockpos_max;
 	node_min = blockpos_min * MAP_BLOCKSIZE;
-	node_max = (blockpos_max + v3s16(1, 1, 1)) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	node_max = (blockpos_max + v3size(1, 1, 1)) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 	full_node_min = (blockpos_min - 1) * MAP_BLOCKSIZE;
-	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
 	// Create a block-specific seed
 	blockseed = getBlockSeed2(full_node_min, seed);
@@ -329,7 +329,7 @@ void MapgenCarpathian::makeChunk(BlockMakeData *data)
 
 	// Calculate lighting
 	if (flags & MG_LIGHT) {
-		calcLighting(node_min - v3s16(0, 1, 0), node_max + v3s16(0, 1, 0),
+		calcLighting(node_min - v3size(0, 1, 0), node_max + v3size(0, 1, 0),
 				full_node_min, full_node_max);
 	}
 
@@ -340,7 +340,7 @@ void MapgenCarpathian::makeChunk(BlockMakeData *data)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-int MapgenCarpathian::getSpawnLevelAtPoint(v2s16 p)
+int MapgenCarpathian::getSpawnLevelAtPoint(v2size p)
 {
 	// If rivers are enabled, first check if in a river channel
 	if (spflags & MGCARPATHIAN_RIVERS) {
@@ -460,7 +460,7 @@ int MapgenCarpathian::generateTerrain()
 		noise_rivers->perlinMap2D(node_min.X, node_min.Z);
 
 	//// Place nodes
-	const v3s16 &em = vm->m_area.getExtent();
+	const v3size &em = vm->m_area.getExtent();
 	s16 stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 index2d = 0;
 

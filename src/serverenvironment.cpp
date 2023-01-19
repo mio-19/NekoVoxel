@@ -255,8 +255,8 @@ void LBMManager::applyLBMs(ServerEnvironment *env, MapBlock *block,
 	// Precondition, we need m_lbm_lookup to be initialized
 	FATAL_ERROR_IF(!m_query_mode,
 		"attempted to query on non fully set up LBMManager");
-	v3s16 pos_of_block = block->getPosRelative();
-	v3s16 pos;
+	v3size pos_of_block = block->getPosRelative();
+	v3size pos;
 	MapNode n;
 	content_t c;
 	auto it = getLBMsIntroducedAfter(stamp);
@@ -291,9 +291,9 @@ void LBMManager::applyLBMs(ServerEnvironment *env, MapBlock *block,
 	ActiveBlockList
 */
 
-void fillRadiusBlock(v3s16 p0, s16 r, std::set<v3s16> &list)
+void fillRadiusBlock(v3size p0, s16 r, std::set<v3size> &list)
 {
-	v3s16 p;
+	v3size p;
 	for(p.X=p0.X-r; p.X<=p0.X+r; p.X++)
 		for(p.Y=p0.Y-r; p.Y<=p0.Y+r; p.Y++)
 			for(p.Z=p0.Z-r; p.Z<=p0.Z+r; p.Z++)
@@ -306,14 +306,14 @@ void fillRadiusBlock(v3s16 p0, s16 r, std::set<v3s16> &list)
 			}
 }
 
-void fillViewConeBlock(v3s16 p0,
+void fillViewConeBlock(v3size p0,
 	const s16 r,
 	const v3f camera_pos,
 	const v3f camera_dir,
 	const float camera_fov,
-	std::set<v3s16> &list)
+	std::set<v3size> &list)
 {
-	v3s16 p;
+	v3size p;
 	const s16 r_nodes = r * BS * MAP_BLOCKSIZE;
 	for (p.X = p0.X - r; p.X <= p0.X+r; p.X++)
 	for (p.Y = p0.Y - r; p.Y <= p0.Y+r; p.Y++)
@@ -327,16 +327,16 @@ void fillViewConeBlock(v3s16 p0,
 void ActiveBlockList::update(std::vector<PlayerSAO*> &active_players,
 	s16 active_block_range,
 	s16 active_object_range,
-	std::set<v3s16> &blocks_removed,
-	std::set<v3s16> &blocks_added)
+	std::set<v3size> &blocks_removed,
+	std::set<v3size> &blocks_added)
 {
 	/*
 		Create the new list
 	*/
-	std::set<v3s16> newlist = m_forceloaded_list;
+	std::set<v3size> newlist = m_forceloaded_list;
 	m_abm_list = m_forceloaded_list;
 	for (const PlayerSAO *playersao : active_players) {
-		v3s16 pos = getNodeBlockPos(floatToInt(playersao->getBasePosition(), BS));
+		v3size pos = getNodeBlockPos(floatToInt(playersao->getBasePosition(), BS));
 		fillRadiusBlock(pos, active_block_range, m_abm_list);
 		fillRadiusBlock(pos, active_block_range, newlist);
 
@@ -359,7 +359,7 @@ void ActiveBlockList::update(std::vector<PlayerSAO*> &active_players,
 		Find out which blocks on the old list are not on the new list
 	*/
 	// Go through old list
-	for (v3s16 p : m_list) {
+	for (v3size p : m_list) {
 		// If not on new list, it's been removed
 		if (newlist.find(p) == newlist.end())
 			blocks_removed.insert(p);
@@ -369,7 +369,7 @@ void ActiveBlockList::update(std::vector<PlayerSAO*> &active_players,
 		Find out which blocks on the new list are not on the old list
 	*/
 	// Go through new list
-	for (v3s16 p : newlist) {
+	for (v3size p : newlist) {
 		// If not on old list, it's been added
 		if (m_list.find(p) == m_list.end())
 			blocks_added.insert(p);
@@ -388,7 +388,7 @@ void ActiveBlockList::update(std::vector<PlayerSAO*> &active_players,
 void OnMapblocksChangedReceiver::onMapEditEvent(const MapEditEvent &event)
 {
 	assert(receiving);
-	for (const v3s16 &p : event.modified_blocks) {
+	for (const v3size &p : event.modified_blocks) {
 		modified_blocks.insert(p);
 	}
 }
@@ -857,7 +857,7 @@ public:
 				for(s16 z=-1; z<=1; z++)
 				{
 					MapBlock *block2 = map->getBlockNoCreateNoEx(
-						block->getPos() + v3s16(x,y,z));
+						block->getPos() + v3size(x,y,z));
 					if(block2==NULL){
 						wider_unknown_count++;
 						continue;
@@ -901,7 +901,7 @@ public:
 		u32 active_object_count = this->countObjects(block, map, active_object_count_wider);
 		m_env->m_added_objects = 0;
 
-		v3s16 p0;
+		v3size p0;
 		for(p0.X=0; p0.X<MAP_BLOCKSIZE; p0.X++)
 		for(p0.Y=0; p0.Y<MAP_BLOCKSIZE; p0.Y++)
 		for(p0.Z=0; p0.Z<MAP_BLOCKSIZE; p0.Z++)
@@ -921,7 +921,7 @@ public:
 			if (c >= m_aabms.size() || !m_aabms[c])
 				continue;
 
-			v3s16 p = p0 + block->getPosRelative();
+			v3size p = p0 + block->getPosRelative();
 			for (ActiveABM &aabm : *m_aabms[c]) {
 				if ((p.Y < aabm.min_y) || (p.Y > aabm.max_y))
 					continue;
@@ -931,7 +931,7 @@ public:
 
 				// Check neighbors
 				if (aabm.check_required_neighbors) {
-					v3s16 p1;
+					v3size p1;
 					for(p1.X = p0.X-1; p1.X <= p0.X+1; p1.X++)
 					for(p1.Y = p0.Y-1; p1.Y <= p0.Y+1; p1.Y++)
 					for(p1.Z = p0.Z-1; p1.Z <= p0.Z+1; p1.Z++)
@@ -1018,7 +1018,7 @@ void ServerEnvironment::activateBlock(MapBlock *block, u32 additional_dtime)
 	m_lbm_mgr.applyLBMs(this, block, stamp, (float)dtime_s);
 
 	// Run node timers
-	block->step((float)dtime_s, [&](v3s16 p, MapNode n, f32 d) -> bool {
+	block->step((float)dtime_s, [&](v3size p, MapNode n, f32 d) -> bool {
 		return m_script->node_on_timer(p, n, d);
 	});
 }
@@ -1033,7 +1033,7 @@ void ServerEnvironment::addLoadingBlockModifierDef(LoadingBlockModifierDef *lbm)
 	m_lbm_mgr.addLBMDef(lbm);
 }
 
-bool ServerEnvironment::setNode(v3s16 p, const MapNode &n)
+bool ServerEnvironment::setNode(v3size p, const MapNode &n)
 {
 	const NodeDefManager *ndef = m_server->ndef();
 	MapNode n_old = m_map->getNode(p);
@@ -1066,7 +1066,7 @@ bool ServerEnvironment::setNode(v3s16 p, const MapNode &n)
 	return true;
 }
 
-bool ServerEnvironment::removeNode(v3s16 p)
+bool ServerEnvironment::removeNode(v3size p)
 {
 	const NodeDefManager *ndef = m_server->ndef();
 	MapNode n_old = m_map->getNode(p);
@@ -1091,7 +1091,7 @@ bool ServerEnvironment::removeNode(v3s16 p)
 	return true;
 }
 
-bool ServerEnvironment::swapNode(v3s16 p, const MapNode &n)
+bool ServerEnvironment::swapNode(v3size p, const MapNode &n)
 {
 	if (!m_map->addNodeWithEvent(p, n, false))
 		return false;
@@ -1102,12 +1102,12 @@ bool ServerEnvironment::swapNode(v3s16 p, const MapNode &n)
 	return true;
 }
 
-u8 ServerEnvironment::findSunlight(v3s16 pos) const
+u8 ServerEnvironment::findSunlight(v3size pos) const
 {
 	// Directions for neighboring nodes with specified order
-	static const v3s16 dirs[] = {
-		v3s16(-1, 0, 0), v3s16(1, 0, 0), v3s16(0, 0, -1), v3s16(0, 0, 1),
-		v3s16(0, -1, 0), v3s16(0, 1, 0)
+	static const v3size dirs[] = {
+		v3size(-1, 0, 0), v3size(1, 0, 0), v3size(0, 0, -1), v3size(0, 0, 1),
+		v3size(0, -1, 0), v3size(0, 1, 0)
 	};
 
 	const NodeDefManager *ndef = m_server->ndef();
@@ -1116,7 +1116,7 @@ u8 ServerEnvironment::findSunlight(v3s16 pos) const
 	u8 found_light = 0;
 
 	struct stack_entry {
-		v3s16 pos;
+		v3size pos;
 		s16 dist;
 	};
 	std::stack<stack_entry> stack;
@@ -1129,11 +1129,11 @@ u8 ServerEnvironment::findSunlight(v3s16 pos) const
 		struct stack_entry e = stack.top();
 		stack.pop();
 
-		v3s16 currentPos = e.pos;
+		v3size currentPos = e.pos;
 		s8 dist = e.dist + 1;
 
-		for (const v3s16& off : dirs) {
-			v3s16 neighborPos = currentPos + off;
+		for (const v3size& off : dirs) {
+			v3size neighborPos = currentPos + off;
 			s64 neighborHash = MapDatabase::getBlockAsInteger(neighborPos);
 
 			// Do not walk neighborPos multiple times unless the distance to the start
@@ -1219,7 +1219,7 @@ void ServerEnvironment::clearObjects(ClearObjectsMode mode)
 	m_ao_manager.clear(cb_removal);
 
 	// Get list of loaded blocks
-	std::vector<v3s16> loaded_blocks;
+	std::vector<v3size> loaded_blocks;
 	infostream << "ServerEnvironment::clearObjects(): "
 		<< "Listing all loaded blocks" << std::endl;
 	m_map->listAllLoadedBlocks(loaded_blocks);
@@ -1228,7 +1228,7 @@ void ServerEnvironment::clearObjects(ClearObjectsMode mode)
 		<< loaded_blocks.size()<<std::endl;
 
 	// Get list of loadable blocks
-	std::vector<v3s16> loadable_blocks;
+	std::vector<v3size> loadable_blocks;
 	if (mode == CLEAR_OBJECTS_MODE_FULL) {
 		infostream << "ServerEnvironment::clearObjects(): "
 			<< "Listing all loadable blocks" << std::endl;
@@ -1245,7 +1245,7 @@ void ServerEnvironment::clearObjects(ClearObjectsMode mode)
 		<< " blocks" << std::endl;
 
 	// Grab a reference on each loaded block to avoid unloading it
-	for (v3s16 p : loaded_blocks) {
+	for (v3size p : loaded_blocks) {
 		MapBlock *block = m_map->getBlockNoCreateNoEx(p);
 		assert(block != NULL);
 		block->refGrab();
@@ -1263,7 +1263,7 @@ void ServerEnvironment::clearObjects(ClearObjectsMode mode)
 	u32 num_objs_cleared = 0;
 	for (auto i = loadable_blocks.begin();
 		i != loadable_blocks.end(); ++i) {
-		v3s16 p = *i;
+		v3size p = *i;
 		MapBlock *block = m_map->emergeBlock(p, false);
 		if (!block) {
 			errorstream << "ServerEnvironment::clearObjects(): "
@@ -1294,7 +1294,7 @@ void ServerEnvironment::clearObjects(ClearObjectsMode mode)
 	m_map->unloadUnreferencedBlocks();
 
 	// Drop references that were added above
-	for (v3s16 p : loaded_blocks) {
+	for (v3size p : loaded_blocks) {
 		MapBlock *block = m_map->getBlockNoCreateNoEx(p);
 		assert(block);
 		block->refDrop();
@@ -1378,8 +1378,8 @@ void ServerEnvironment::step(float dtime)
 				g_settings->getS16("active_object_send_range_blocks");
 		static thread_local const s16 active_block_range =
 				g_settings->getS16("active_block_range");
-		std::set<v3s16> blocks_removed;
-		std::set<v3s16> blocks_added;
+		std::set<v3size> blocks_removed;
+		std::set<v3size> blocks_added;
 		m_active_blocks.update(players, active_block_range, active_object_range,
 			blocks_removed, blocks_added);
 
@@ -1390,7 +1390,7 @@ void ServerEnvironment::step(float dtime)
 		// Convert active objects that are no more in active blocks to static
 		deactivateFarObjects(false);
 
-		for (const v3s16 &p: blocks_removed) {
+		for (const v3size &p: blocks_removed) {
 			MapBlock *block = m_map->getBlockNoCreateNoEx(p);
 			if (!block)
 				continue;
@@ -1403,7 +1403,7 @@ void ServerEnvironment::step(float dtime)
 			Handle added blocks
 		*/
 
-		for (const v3s16 &p: blocks_added) {
+		for (const v3size &p: blocks_added) {
 			MapBlock *block = m_map->getBlockOrEmerge(p);
 			if (!block) {
 				// TODO: The blocks removed here will only be picked up again
@@ -1432,7 +1432,7 @@ void ServerEnvironment::step(float dtime)
 
 		float dtime = m_cache_nodetimer_interval;
 
-		for (const v3s16 &p: m_active_blocks.m_list) {
+		for (const v3size &p: m_active_blocks.m_list) {
 			MapBlock *block = m_map->getBlockNoCreateNoEx(p);
 			if (!block)
 				continue;
@@ -1449,7 +1449,7 @@ void ServerEnvironment::step(float dtime)
 					MOD_REASON_BLOCK_EXPIRED);
 
 			// Run node timers
-			block->step(dtime, [&](v3s16 p, MapNode n, f32 d) -> bool {
+			block->step(dtime, [&](v3size p, MapNode n, f32 d) -> bool {
 				return m_script->node_on_timer(p, n, d);
 			});
 		}
@@ -1469,7 +1469,7 @@ void ServerEnvironment::step(float dtime)
 		int abms_run = 0;
 		int blocks_cached = 0;
 
-		std::vector<v3s16> output(m_active_blocks.m_abm_list.size());
+		std::vector<v3size> output(m_active_blocks.m_abm_list.size());
 
 		// Shuffle the active blocks so that each block gets an equal chance
 		// of having its ABMs run.
@@ -1479,7 +1479,7 @@ void ServerEnvironment::step(float dtime)
 		int i = 0;
 		// determine the time budget for ABMs
 		u32 max_time_ms = m_cache_abm_interval * 1000 * m_cache_abm_time_budget;
-		for (const v3s16 &p : output) {
+		for (const v3size &p : output) {
 			MapBlock *block = m_map->getBlockNoCreateNoEx(p);
 			if (!block)
 				continue;
@@ -1590,7 +1590,7 @@ void ServerEnvironment::step(float dtime)
 	// Notify mods of modified mapblocks
 	if (m_on_mapblocks_changed_receiver.receiving &&
 			!m_on_mapblocks_changed_receiver.modified_blocks.empty()) {
-		std::unordered_set<v3s16> modified_blocks;
+		std::unordered_set<v3size> modified_blocks;
 		std::swap(modified_blocks, m_on_mapblocks_changed_receiver.modified_blocks);
 		m_script->on_mapblocks_changed(modified_blocks);
 	}
@@ -1599,7 +1599,7 @@ void ServerEnvironment::step(float dtime)
 	m_step_time_counter->increment(end_time - start_time);
 }
 
-ServerEnvironment::BlockStatus ServerEnvironment::getBlockStatus(v3s16 blockpos)
+ServerEnvironment::BlockStatus ServerEnvironment::getBlockStatus(v3size blockpos)
 {
 	if (m_active_blocks.contains(blockpos))
 		return BS_ACTIVE;
@@ -1732,7 +1732,7 @@ void ServerEnvironment::getRemovedActiveObjects(PlayerSAO *playersao, s16 radius
 }
 
 void ServerEnvironment::setStaticForActiveObjectsInBlock(
-	v3s16 blockpos, bool static_exists, v3s16 static_block)
+	v3size blockpos, bool static_exists, v3size static_block)
 {
 	MapBlock *block = m_map->getBlockNoCreateNoEx(blockpos);
 	if (!block)
@@ -1829,7 +1829,7 @@ u16 ServerEnvironment::addActiveObjectRaw(ServerActiveObject *object,
 		v3f objectpos = object->getBasePosition();
 		StaticObject s_obj(object, objectpos);
 		// Add to the block where the object is located in
-		v3s16 blockpos = getNodeBlockPos(floatToInt(objectpos, BS));
+		v3size blockpos = getNodeBlockPos(floatToInt(objectpos, BS));
 		MapBlock *block = m_map->emergeBlock(blockpos);
 		if (block) {
 			block->m_static_objects.setActive(object->getId(), s_obj);
@@ -1840,7 +1840,7 @@ u16 ServerEnvironment::addActiveObjectRaw(ServerActiveObject *object,
 				block->raiseModified(MOD_STATE_WRITE_NEEDED,
 					MOD_REASON_ADD_ACTIVE_OBJECT_RAW);
 		} else {
-			v3s16 p = floatToInt(objectpos, BS);
+			v3size p = floatToInt(objectpos, BS);
 			errorstream<<"ServerEnvironment::addActiveObjectRaw(): "
 				<<"could not emerge block for storing id="<<object->getId()
 				<<" statically (pos="<<PP(p)<<")"<<std::endl;
@@ -2040,7 +2040,7 @@ void ServerEnvironment::deactivateFarObjects(bool _force_delete)
 		const v3f &objectpos = obj->getBasePosition();
 
 		// The block in which the object resides in
-		v3s16 blockpos_o = getNodeBlockPos(floatToInt(objectpos, BS));
+		v3size blockpos_o = getNodeBlockPos(floatToInt(objectpos, BS));
 
 		// If object's static data is stored in a deactivated block and object
 		// is actually located in an active block, re-save to the block in
@@ -2118,7 +2118,7 @@ void ServerEnvironment::deactivateFarObjects(bool _force_delete)
 			deleteStaticFromBlock(obj, id, reason, false);
 
 			// Add to the block where the object is located in
-			v3s16 blockpos = getNodeBlockPos(floatToInt(objectpos, BS));
+			v3size blockpos = getNodeBlockPos(floatToInt(objectpos, BS));
 			u16 store_id = pending_delete ? id : 0;
 			if (!saveStaticToBlock(blockpos, store_id, obj, s_obj, reason))
 				force_delete = true;
@@ -2185,7 +2185,7 @@ void ServerEnvironment::deleteStaticFromBlock(
 }
 
 bool ServerEnvironment::saveStaticToBlock(
-		v3s16 blockpos, u16 store_id,
+		v3size blockpos, u16 store_id,
 		ServerActiveObject *obj, const StaticObject &s_obj,
 		u32 mod_reason)
 {

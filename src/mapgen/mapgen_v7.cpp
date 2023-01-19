@@ -261,7 +261,7 @@ void MapgenV7Params::setDefaultSettings(Settings *settings)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-int MapgenV7::getSpawnLevelAtPoint(v2s16 p)
+int MapgenV7::getSpawnLevelAtPoint(v2size p)
 {
 	// If rivers are enabled, first check if in a river
 	if (spflags & MGV7_RIDGES) {
@@ -324,12 +324,12 @@ void MapgenV7::makeChunk(BlockMakeData *data)
 	this->vm = data->vmanip;
 	this->ndef = data->nodedef;
 
-	v3s16 blockpos_min = data->blockpos_min;
-	v3s16 blockpos_max = data->blockpos_max;
+	v3size blockpos_min = data->blockpos_min;
+	v3size blockpos_max = data->blockpos_max;
 	node_min = blockpos_min * MAP_BLOCKSIZE;
-	node_max = (blockpos_max + v3s16(1, 1, 1)) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	node_max = (blockpos_max + v3size(1, 1, 1)) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 	full_node_min = (blockpos_min - 1) * MAP_BLOCKSIZE;
-	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3s16(1, 1, 1);
+	full_node_max = (blockpos_max + 2) * MAP_BLOCKSIZE - v3size(1, 1, 1);
 
 	blockseed = getBlockSeed2(full_node_min, seed);
 
@@ -391,7 +391,7 @@ void MapgenV7::makeChunk(BlockMakeData *data)
 		node_max.Y >= floatland_ymin - csize.Y * 2 && node_min.Y <= floatland_ymax);
 
 	if (flags & MG_LIGHT)
-		calcLighting(node_min - v3s16(0, 1, 0), node_max + v3s16(0, 1, 0),
+		calcLighting(node_min - v3size(0, 1, 0), node_max + v3size(0, 1, 0),
 			full_node_min, full_node_max, propagate_shadow);
 
 	this->generating = false;
@@ -538,7 +538,7 @@ int MapgenV7::generateTerrain()
 	}
 
 	//// Place nodes
-	const v3s16 &em = vm->m_area.getExtent();
+	const v3size &em = vm->m_area.getExtent();
 	s16 stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 index2d = 0;
 

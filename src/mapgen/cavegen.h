@@ -42,18 +42,18 @@ class CavesNoiseIntersection
 {
 public:
 	CavesNoiseIntersection(const NodeDefManager *nodedef,
-		BiomeManager *biomemgr, v3s16 chunksize, NoiseParams *np_cave1,
+		BiomeManager *biomemgr, v3size chunksize, NoiseParams *np_cave1,
 		NoiseParams *np_cave2, s32 seed, float cave_width);
 	~CavesNoiseIntersection();
 
-	void generateCaves(MMVManip *vm, v3s16 nmin, v3s16 nmax, biome_t *biomemap);
+	void generateCaves(MMVManip *vm, v3size nmin, v3size nmax, biome_t *biomemap);
 
 private:
 	const NodeDefManager *m_ndef;
 	BiomeManager *m_bmgr;
 
 	// configurable parameters
-	v3s16 m_csize;
+	v3size m_csize;
 	float m_cave_width;
 
 	// intermediate state variables
@@ -70,18 +70,18 @@ private:
 class CavernsNoise
 {
 public:
-	CavernsNoise(const NodeDefManager *nodedef, v3s16 chunksize,
+	CavernsNoise(const NodeDefManager *nodedef, v3size chunksize,
 		NoiseParams *np_cavern, s32 seed, float cavern_limit,
 		float cavern_taper, float cavern_threshold);
 	~CavernsNoise();
 
-	bool generateCaverns(MMVManip *vm, v3s16 nmin, v3s16 nmax);
+	bool generateCaverns(MMVManip *vm, v3size nmin, v3size nmax);
 
 private:
 	const NodeDefManager *m_ndef;
 
 	// configurable parameters
-	v3s16 m_csize;
+	v3size m_csize;
 	float m_cavern_limit;
 	float m_cavern_taper;
 	float m_cavern_threshold;
@@ -137,12 +137,12 @@ public:
 	bool flooded;
 	bool use_biome_liquid;
 
-	v3s16 node_min;
-	v3s16 node_max;
+	v3size node_min;
+	v3size node_max;
 
 	v3f orp;  // starting point, relative to caved space
-	v3s16 of; // absolute coordinates of caved space
-	v3s16 ar; // allowed route area
+	v3size of; // absolute coordinates of caved space
+	v3size ar; // allowed route area
 	s16 rs;   // tunnel radius size
 	v3f main_direction;
 
@@ -166,14 +166,14 @@ public:
 	// vm and ps are mandatory parameters.
 	// If heightmap is NULL, the surface level at all points is assumed to
 	// be water_level.
-	void makeCave(MMVManip *vm, v3s16 nmin, v3s16 nmax, PseudoRandom *ps,
+	void makeCave(MMVManip *vm, v3size nmin, v3size nmax, PseudoRandom *ps,
 			bool is_large_cave, int max_stone_height, s16 *heightmap);
 
 private:
 	void makeTunnel(bool dirswitch);
 	void carveRoute(v3f vec, float f, bool randomize_xz);
 
-	inline bool isPosAboveSurface(v3s16 p);
+	inline bool isPosAboveSurface(v3size p);
 };
 
 /*
@@ -215,12 +215,12 @@ public:
 	bool large_cave;
 	bool large_cave_is_flat;
 
-	v3s16 node_min;
-	v3s16 node_max;
+	v3size node_min;
+	v3size node_max;
 
 	v3f orp;  // starting point, relative to caved space
-	v3s16 of; // absolute coordinates of caved space
-	v3s16 ar; // allowed route area
+	v3size of; // absolute coordinates of caved space
+	v3size ar; // allowed route area
 	s16 rs;   // tunnel radius size
 	v3f main_direction;
 
@@ -236,7 +236,7 @@ public:
 	// vm, ps, and ps2 are mandatory parameters.
 	// If heightmap is NULL, the surface level at all points is assumed to
 	// be water_level.
-	void makeCave(MMVManip *vm, v3s16 nmin, v3s16 nmax, PseudoRandom *ps,
+	void makeCave(MMVManip *vm, v3size nmin, v3size nmax, PseudoRandom *ps,
 			PseudoRandom *ps2, bool is_large_cave, int max_stone_height,
 			s16 *heightmap = NULL);
 
@@ -244,5 +244,5 @@ private:
 	void makeTunnel(bool dirswitch);
 	void carveRoute(v3f vec, float f, bool randomize_xz, bool tunnel_above_ground);
 
-	inline s16 getSurfaceFromHeightmap(v3s16 p);
+	inline s16 getSurfaceFromHeightmap(v3size p);
 };

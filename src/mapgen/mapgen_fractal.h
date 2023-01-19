@@ -78,7 +78,7 @@ public:
 	virtual MapgenType getType() const { return MAPGEN_FRACTAL; }
 
 	virtual void makeChunk(BlockMakeData *data);
-	int getSpawnLevelAtPoint(v2s16 p);
+	int getSpawnLevelAtPoint(v2size p);
 	bool getFractalAtPoint(s16 x, s16 y, s16 z);
 	s16 generateTerrain();
 

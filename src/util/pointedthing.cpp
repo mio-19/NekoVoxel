@@ -23,8 +23,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "exceptions.h"
 #include <sstream>
 
-PointedThing::PointedThing(const v3s16 &under, const v3s16 &above,
-	const v3s16 &real_under, const v3f &point, const v3f &normal,
+PointedThing::PointedThing(const v3size &under, const v3size &above,
+	const v3size &real_under, const v3f &point, const v3f &normal,
 	u16 box_id, f32 distSq):
 	type(POINTEDTHING_NODE),
 	node_undersurface(under),
@@ -55,8 +55,8 @@ std::string PointedThing::dump() const
 		break;
 	case POINTEDTHING_NODE:
 	{
-		const v3s16 &u = node_undersurface;
-		const v3s16 &a = node_abovesurface;
+		const v3size &u = node_undersurface;
+		const v3size &a = node_abovesurface;
 		os << "[node under=" << u.X << "," << u.Y << "," << u.Z << " above="
 			<< a.X << "," << a.Y << "," << a.Z << "]";
 	}

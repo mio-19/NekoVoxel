@@ -65,7 +65,7 @@ static const char *modified_reason_strings[] = {
 	MapBlock
 */
 
-MapBlock::MapBlock(Map *parent, v3s16 pos, IGameDef *gamedef):
+MapBlock::MapBlock(Map *parent, v3size pos, IGameDef *gamedef):
 		m_parent(parent),
 		m_pos(pos),
 		m_pos_relative(pos * MAP_BLOCKSIZE),
@@ -125,13 +125,13 @@ bool MapBlock::saveStaticObject(u16 id, const StaticObject &obj, u32 reason)
 }
 
 // This method is only for Server, don't call it on client
-void MapBlock::step(float dtime, const std::function<bool(v3s16, MapNode, f32)> &on_timer_cb)
+void MapBlock::step(float dtime, const std::function<bool(v3size, MapNode, f32)> &on_timer_cb)
 {
 	// Run script callbacks for elapsed node_timers
 	std::vector<NodeTimer> elapsed_timers = m_node_timers.step(dtime);
 	if (!elapsed_timers.empty()) {
 		MapNode n;
-		v3s16 p;
+		v3size p;
 		for (const NodeTimer &elapsed_timer : elapsed_timers) {
 			n = getNodeNoEx(elapsed_timer.position);
 			p = elapsed_timer.position + getPosRelative();
@@ -141,7 +141,7 @@ void MapBlock::step(float dtime, const std::function<bool(v3s16, MapNode, f32)> 
 	}
 }
 
-bool MapBlock::isValidPositionParent(v3s16 p)
+bool MapBlock::isValidPositionParent(v3size p)
 {
 	if (isValidPosition(p)) {
 		return true;
@@ -150,7 +150,7 @@ bool MapBlock::isValidPositionParent(v3s16 p)
 	return m_parent->isValidPosition(getPosRelative() + p);
 }
 
-MapNode MapBlock::getNodeParent(v3s16 p, bool *is_valid_position)
+MapNode MapBlock::getNodeParent(v3size p, bool *is_valid_position)
 {
 	if (!isValidPosition(p))
 		return m_parent->getNode(getPosRelative() + p, is_valid_position);
@@ -184,21 +184,21 @@ std::string MapBlock::getModifiedReasonString()
 
 void MapBlock::copyTo(VoxelManipulator &dst)
 {
-	v3s16 data_size(MAP_BLOCKSIZE, MAP_BLOCKSIZE, MAP_BLOCKSIZE);
-	VoxelArea data_area(v3s16(0,0,0), data_size - v3s16(1,1,1));
+	v3size data_size(MAP_BLOCKSIZE, MAP_BLOCKSIZE, MAP_BLOCKSIZE);
+	VoxelArea data_area(v3size(0,0,0), data_size - v3size(1,1,1));
 
 	// Copy from data to VoxelManipulator
-	dst.copyFrom(data, data_area, v3s16(0,0,0),
+	dst.copyFrom(data, data_area, v3size(0,0,0),
 			getPosRelative(), data_size);
 }
 
 void MapBlock::copyFrom(VoxelManipulator &dst)
 {
-	v3s16 data_size(MAP_BLOCKSIZE, MAP_BLOCKSIZE, MAP_BLOCKSIZE);
-	VoxelArea data_area(v3s16(0,0,0), data_size - v3s16(1,1,1));
+	v3size data_size(MAP_BLOCKSIZE, MAP_BLOCKSIZE, MAP_BLOCKSIZE);
+	VoxelArea data_area(v3size(0,0,0), data_size - v3size(1,1,1));
 
 	// Copy from VoxelManipulator to data
-	dst.copyTo(data, data_area, v3s16(0,0,0),
+	dst.copyTo(data, data_area, v3size(0,0,0),
 			getPosRelative(), data_size);
 }
 
@@ -870,7 +870,7 @@ std::string analyze_block(MapBlock *block)
 
 	std::ostringstream desc;
 
-	v3s16 p = block->getPos();
+	v3size p = block->getPos();
 	char spos[25];
 	porting::mt_snprintf(spos, sizeof(spos), "(%2d,%2d,%2d), ", p.X, p.Y, p.Z);
 	desc<<spos;
@@ -910,7 +910,7 @@ std::string analyze_block(MapBlock *block)
 	for(s16 y0=0; y0<MAP_BLOCKSIZE; y0++)
 	for(s16 x0=0; x0<MAP_BLOCKSIZE; x0++)
 	{
-		v3s16 p(x0,y0,z0);
+		v3size p(x0,y0,z0);
 		MapNode n = block->getNodeNoEx(p);
 		content_t c = n.getContent();
 		if(c == CONTENT_IGNORE)
