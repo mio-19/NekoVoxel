@@ -906,9 +906,9 @@ std::vector<v3size> Map::findNodesWithMetadata(v3size p1, v3size p2)
 
 	VoxelArea area(p1, p2);
 
-	for (s16 z = bpmin.Z; z <= bpmax.Z; z++)
-	for (s16 y = bpmin.Y; y <= bpmax.Y; y++)
-	for (s16 x = bpmin.X; x <= bpmax.X; x++) {
+	for (s_size z = bpmin.Z; z <= bpmax.Z; z++)
+	for (s_size y = bpmin.Y; y <= bpmax.Y; y++)
+	for (s_size x = bpmin.X; x <= bpmax.X; x++) {
 		v3size blockpos(x, y, z);
 
 		MapBlock *block = getBlockNoCreateNoEx(blockpos);
@@ -1044,7 +1044,7 @@ void Map::removeNodeTimer(v3size p)
 }
 
 bool Map::determineAdditionalOcclusionCheck(const v3size &pos_camera,
-	const core::aabbox3d<s16> &block_bounds, v3size &check)
+	const core::aabbox3d<s_size> &block_bounds, v3size &check)
 {
 	/*
 		This functions determines the node inside the target block that is
@@ -1322,7 +1322,7 @@ u64 ServerMap::getSeed()
 
 bool ServerMap::blockpos_over_mapgen_limit(v3size p)
 {
-	const s16 mapgen_limit_bp = rangelim(
+	const auto mapgen_limit_bp = rangelim(
 		getMapgenParams()->mapgen_limit, 0, MAX_MAP_GENERATION_LIMIT) /
 		MAP_BLOCKSIZE;
 	return p.X < -mapgen_limit_bp ||
@@ -1335,7 +1335,7 @@ bool ServerMap::blockpos_over_mapgen_limit(v3size p)
 
 bool ServerMap::initBlockMake(v3size blockpos, BlockMakeData *data)
 {
-	s16 csize = getMapgenParams()->chunksize;
+	auto csize = getMapgenParams()->chunksize;
 	v3size bpmin = EmergeManager::getContainingChunk(blockpos, csize);
 	v3size bpmax = bpmin + v3size(1, 1, 1) * (csize - 1);
 
@@ -1362,14 +1362,14 @@ bool ServerMap::initBlockMake(v3size blockpos, BlockMakeData *data)
 	/*
 		Create the whole area of this and the neighboring blocks
 	*/
-	for (s16 x = full_bpmin.X; x <= full_bpmax.X; x++)
-	for (s16 z = full_bpmin.Z; z <= full_bpmax.Z; z++) {
+	for (auto x = full_bpmin.X; x <= full_bpmax.X; x++)
+	for (auto z = full_bpmin.Z; z <= full_bpmax.Z; z++) {
 		v2size sectorpos(x, z);
 		// Sector metadata is loaded from disk if not already loaded.
 		MapSector *sector = createSector(sectorpos);
 		FATAL_ERROR_IF(sector == NULL, "createSector() failed");
 
-		for (s16 y = full_bpmin.Y; y <= full_bpmax.Y; y++) {
+		for (auto y = full_bpmin.Y; y <= full_bpmax.Y; y++) {
 			v3size p(x, y, z);
 
 			MapBlock *block = emergeBlock(p, false);
@@ -1442,9 +1442,9 @@ void ServerMap::finishBlockMake(BlockMakeData *data,
 	/*
 		Set central blocks as generated
 	*/
-	for (s16 x = bpmin.X; x <= bpmax.X; x++)
-	for (s16 z = bpmin.Z; z <= bpmax.Z; z++)
-	for (s16 y = bpmin.Y; y <= bpmax.Y; y++) {
+	for (auto x = bpmin.X; x <= bpmax.X; x++)
+	for (auto z = bpmin.Z; z <= bpmax.Z; z++)
+	for (auto y = bpmin.Y; y <= bpmax.Y; y++) {
 		MapBlock *block = getBlockNoCreateNoEx(v3size(x, y, z));
 		if (!block)
 			continue;
@@ -1498,7 +1498,7 @@ MapBlock * ServerMap::createBlock(v3size p)
 		throw InvalidPositionException("createBlock(): pos. over max mapgen limit");
 
 	v2size p2d(p.X, p.Z);
-	s16 block_y = p.Y;
+	auto block_y = p.Y;
 	/*
 		This will create or load a sector if not found in memory.
 		If block exists on disk, it will be loaded.

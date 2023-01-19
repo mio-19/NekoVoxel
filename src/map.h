@@ -277,24 +277,24 @@ public:
 	template<typename F>
 	void forEachNodeInArea(v3size minp, v3size maxp, F func)
 	{
-		v3size bpmin = getNodeBlockPos(minp);
-		v3size bpmax = getNodeBlockPos(maxp);
-		for (s16 bz = bpmin.Z; bz <= bpmax.Z; bz++)
-		for (s16 bx = bpmin.X; bx <= bpmax.X; bx++)
-		for (s16 by = bpmin.Y; by <= bpmax.Y; by++) {
+		auto bpmin = getNodeBlockPos(minp);
+		auto bpmax = getNodeBlockPos(maxp);
+		for (auto bz = bpmin.Z; bz <= bpmax.Z; bz++)
+		for (auto bx = bpmin.X; bx <= bpmax.X; bx++)
+		for (auto by = bpmin.Y; by <= bpmax.Y; by++) {
 			// y is iterated innermost to make use of the sector cache.
 			v3size bp(bx, by, bz);
 			MapBlock *block = getBlockNoCreateNoEx(bp);
 			v3size basep = bp * MAP_BLOCKSIZE;
-			s16 minx_block = rangelim(minp.X - basep.X, 0, MAP_BLOCKSIZE - 1);
-			s16 miny_block = rangelim(minp.Y - basep.Y, 0, MAP_BLOCKSIZE - 1);
-			s16 minz_block = rangelim(minp.Z - basep.Z, 0, MAP_BLOCKSIZE - 1);
-			s16 maxx_block = rangelim(maxp.X - basep.X, 0, MAP_BLOCKSIZE - 1);
-			s16 maxy_block = rangelim(maxp.Y - basep.Y, 0, MAP_BLOCKSIZE - 1);
-			s16 maxz_block = rangelim(maxp.Z - basep.Z, 0, MAP_BLOCKSIZE - 1);
-			for (s16 z_block = minz_block; z_block <= maxz_block; z_block++)
-			for (s16 y_block = miny_block; y_block <= maxy_block; y_block++)
-			for (s16 x_block = minx_block; x_block <= maxx_block; x_block++) {
+			auto minx_block = rangelim(minp.X - basep.X, 0, MAP_BLOCKSIZE - 1);
+			auto miny_block = rangelim(minp.Y - basep.Y, 0, MAP_BLOCKSIZE - 1);
+			auto minz_block = rangelim(minp.Z - basep.Z, 0, MAP_BLOCKSIZE - 1);
+			auto maxx_block = rangelim(maxp.X - basep.X, 0, MAP_BLOCKSIZE - 1);
+			auto maxy_block = rangelim(maxp.Y - basep.Y, 0, MAP_BLOCKSIZE - 1);
+			auto maxz_block = rangelim(maxp.Z - basep.Z, 0, MAP_BLOCKSIZE - 1);
+			for (auto z_block = minz_block; z_block <= maxz_block; z_block++)
+			for (auto y_block = miny_block; y_block <= maxy_block; y_block++)
+			for (auto x_block = minx_block; x_block <= maxx_block; x_block++) {
 				v3size p = basep + v3size(x_block, y_block, z_block);
 				MapNode n = block ?
 						block->getNodeNoCheck(x_block, y_block, z_block) :
