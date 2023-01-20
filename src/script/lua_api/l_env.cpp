@@ -568,7 +568,7 @@ int ModApiEnvMod::l_find_nodes_with_meta(lua_State *L)
 	GET_PLAIN_ENV_PTR;
 
 	std::vector<v3s32> positions = env->getMap().findNodesWithMetadata(
-		check_v3s16(L, 1), check_v3s16(L, 2));
+		check_v3s32(L, 1), check_v3s32(L, 2));
 
 	lua_createtable(L, positions.size(), 0);
 	for (size_t i = 0; i != positions.size(); i++) {
@@ -1153,11 +1153,11 @@ int ModApiEnvMod::l_load_area(lua_State *L)
 	MAP_LOCK_REQUIRED;
 
 	Map *map = &(env->getMap());
-	v3s32 bp1 = getNodeBlockPos(check_v3s16(L, 1));
+	v3s32 bp1 = getNodeBlockPos(check_v3s32(L, 1));
 	if (!lua_istable(L, 2)) {
 		map->emergeBlock(bp1);
 	} else {
-		v3s32 bp2 = getNodeBlockPos(check_v3s16(L, 2));
+		v3s32 bp2 = getNodeBlockPos(check_v3s32(L, 2));
 		sortBoxVerticies(bp1, bp2);
 		for (s32 z = bp1.Z; z <= bp2.Z; z++)
 		for (s32 y = bp1.Y; y <= bp2.Y; y++)
@@ -1373,7 +1373,7 @@ int ModApiEnvMod::l_compare_block_status(lua_State *L)
 {
 	GET_ENV_PTR;
 
-	v3s32 nodepos = check_v3s16(L, 1);
+	v3s32 nodepos = check_v3s32(L, 1);
 	std::string condition_s = luaL_checkstring(L, 2);
 	auto status = env->getBlockStatus(getNodeBlockPos(nodepos));
 
