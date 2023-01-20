@@ -281,7 +281,7 @@ void TestSerialization::testStreamRead()
 
 	UASSERT(deSerializeString16(is) == "foobar!");
 
-	UASSERT(readV2S16(is) == v2s32(500, 500));
+	UASSERT(readV2S32(is) == v2s32(500, 500));
 	UASSERT(readV3S16(is) == v3s32(4207, 604, -30));
 	UASSERT(readV2S32(is) == v2s32(1920, 1080));
 	UASSERT(readV3S32(is) == v3s32(-400, 6400054, 290549855));

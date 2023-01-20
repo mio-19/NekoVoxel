@@ -429,17 +429,17 @@ NetworkPacket& NetworkPacket::operator>>(v3f& dst)
 	return *this;
 }
 
-NetworkPacket& NetworkPacket::operator>>(s32& dst)
+NetworkPacket& NetworkPacket::operator>>(s16& dst)
 {
 	checkReadOffset(m_read_offset, 2);
 
-	dst = readS32(&m_data[m_read_offset]);
+	dst = readS16(&m_data[m_read_offset]);
 
 	m_read_offset += 2;
 	return *this;
 }
 
-NetworkPacket& NetworkPacket::operator<<(s32 src)
+NetworkPacket& NetworkPacket::operator<<(s16 src)
 {
 	*this << (u16) src;
 	return *this;
@@ -461,7 +461,7 @@ NetworkPacket& NetworkPacket::operator<<(s32 src)
 	return *this;
 }
 
-NetworkPacket& NetworkPacket::operator>>(v3s32& dst)
+NetworkPacket& NetworkPacket::operator>>(v3s16& dst)
 {
 	checkReadOffset(m_read_offset, 6);
 
@@ -506,11 +506,11 @@ NetworkPacket& NetworkPacket::operator<<(v3f src)
 	return *this;
 }
 
-NetworkPacket& NetworkPacket::operator<<(v3s32 src)
+NetworkPacket& NetworkPacket::operator<<(v3s16 src)
 {
-	*this << (s32) src.X;
-	*this << (s32) src.Y;
-	*this << (s32) src.Z;
+	*this << (s16) src.X;
+	*this << (s16) src.Y;
+	*this << (s16) src.Z;
 	return *this;
 }
 

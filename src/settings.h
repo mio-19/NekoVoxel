@@ -159,7 +159,7 @@ public:
 	const std::string &get(const std::string &name) const;
 	bool getBool(const std::string &name) const;
 	u16 getU16(const std::string &name) const;
-	s32 getS32(const std::string &name) const;
+	s16 getS16(const std::string &name) const;
 	u32 getU32(const std::string &name) const;
 	s32 getS32(const std::string &name) const;
 	u64 getU64(const std::string &name) const;
@@ -189,7 +189,7 @@ public:
 	bool getNoEx(const std::string &name, std::string &val) const;
 	bool getFlag(const std::string &name) const;
 	bool getU16NoEx(const std::string &name, u16 &val) const;
-	bool getS32NoEx(const std::string &name, s32 &val) const;
+	bool getS16NoEx(const std::string &name, s16 &val) const;
 	bool getU32NoEx(const std::string &name, u32 &val) const;
 	bool getS32NoEx(const std::string &name, s32 &val) const;
 	bool getU64NoEx(const std::string &name, u64 &val) const;
@@ -216,7 +216,7 @@ public:
 	bool setDefault(const std::string &name, const std::string &value);
 	bool setGroup(const std::string &name, const Settings &group);
 	bool setBool(const std::string &name, bool value);
-	bool setS16(const std::string &name, s32 value);
+	bool setS16(const std::string &name, s16 value);
 	bool setU16(const std::string &name, u16 value);
 	bool setS32(const std::string &name, s32 value);
 	bool setU64(const std::string &name, u64 value);

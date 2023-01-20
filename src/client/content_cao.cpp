@@ -1754,7 +1754,7 @@ void GenericCAO::processMessage(const std::string &data)
 		}
 		updateTextures(mod);
 	} else if (cmd == AO_CMD_SET_SPRITE) {
-		v2s32 p = readV2S16(is);
+		v2s32 p = readV2S32(is);
 		int num_frames = readU16(is);
 		float framelength = readF32(is);
 		bool select_horiz_by_yawpitch = readU8(is);

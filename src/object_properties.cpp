@@ -196,8 +196,8 @@ void ObjectProperties::deSerialize(std::istream &is)
 	for (u32 i = 0; i < texture_count; i++){
 		textures.push_back(deSerializeString16(is));
 	}
-	spritediv = readV2S16(is);
-	initial_sprite_basepos = readV2S16(is);
+	spritediv = readV2S32(is);
+	initial_sprite_basepos = readV2S32(is);
 	is_visible = readU8(is);
 	makes_footstep_sound = readU8(is);
 	automatic_rotate = readF32(is);

@@ -96,8 +96,8 @@ public:
 	NetworkPacket &operator>>(v3f &dst);
 	NetworkPacket &operator<<(v3f src);
 
-	NetworkPacket &operator>>(s32 &dst);
-	NetworkPacket &operator<<(s32 src);
+	NetworkPacket &operator>>(s16 &dst);
+	NetworkPacket &operator<<(s16 src);
 
 	NetworkPacket &operator>>(s32 &dst);
 	NetworkPacket &operator<<(s32 src);
@@ -105,8 +105,8 @@ public:
 	NetworkPacket &operator>>(v2s32 &dst);
 	NetworkPacket &operator<<(v2s32 src);
 
-	NetworkPacket &operator>>(v3s32 &dst);
-	NetworkPacket &operator<<(v3s32 src);
+	NetworkPacket &operator>>(v3s16 &dst);
+	NetworkPacket &operator<<(v3s16 src);
 
 	NetworkPacket &operator>>(v3s32 &dst);
 	NetworkPacket &operator<<(v3s32 src);
