@@ -939,7 +939,7 @@
 # mg_name = v7
 
 #    Water surface level of the world.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # water_level = 1
 
 #    From how far blocks are generated for clients, stated in mapblocks (16 nodes).
@@ -1025,7 +1025,7 @@
 # mgv5_cave_width = 0.09
 
 #    Y of upper limit of large caves.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgv5_large_cave_depth = -256
 
 #    Minimum limit of random number of small caves per mapchunk.
@@ -1049,7 +1049,7 @@
 # mgv5_large_cave_flooded = 0.5
 
 #    Y-level of cavern upper limit.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgv5_cavern_limit = -256
 
 #    Y-distance over which caverns expand to full size.
@@ -1061,12 +1061,12 @@
 # mgv5_cavern_threshold = 0.7
 
 #    Lower Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgv5_dungeon_ymin = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgv5_dungeon_ymin = -2100000000
 
 #    Upper Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgv5_dungeon_ymax = 31000
+#    type: int min: -2100000000 max: 2100000000
+# mgv5_dungeon_ymax = 2100000000
 
 ### Noises
 
@@ -1194,12 +1194,12 @@
 # mgv6_freq_beach = 0.15
 
 #    Lower Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgv6_dungeon_ymin = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgv6_dungeon_ymin = -2100000000
 
 #    Upper Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgv6_dungeon_ymax = 31000
+#    type: int min: -2100000000 max: 2100000000
+# mgv6_dungeon_ymax = 2100000000
 
 ### Noises
 
@@ -1356,15 +1356,15 @@
 # mgv7_spflags = mountains,ridges,nofloatlands,caverns
 
 #    Y of mountain density gradient zero level. Used to shift mountains vertically.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgv7_mount_zero_level = 0
 
 #    Lower Y limit of floatlands.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgv7_floatland_ymin = 1024
 
 #    Upper Y limit of floatlands.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgv7_floatland_ymax = 4096
 
 #    Y-distance over which floatlands taper from full density to nothing.
@@ -1401,8 +1401,8 @@
 #    required value depending on 'mgv7_np_floatland'), to avoid
 #    server-intensive extreme water flow and to avoid vast flooding of the
 #    world surface below.
-#    type: int min: -31000 max: 31000
-# mgv7_floatland_ywater = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgv7_floatland_ywater = -2100000000
 
 #    Controls width of tunnels, a smaller value creates wider tunnels.
 #    Value >= 10.0 completely disables generation of tunnels and avoids the
@@ -1411,7 +1411,7 @@
 # mgv7_cave_width = 0.09
 
 #    Y of upper limit of large caves.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgv7_large_cave_depth = -33
 
 #    Minimum limit of random number of small caves per mapchunk.
@@ -1435,7 +1435,7 @@
 # mgv7_large_cave_flooded = 0.5
 
 #    Y-level of cavern upper limit.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgv7_cavern_limit = -256
 
 #    Y-distance over which caverns expand to full size.
@@ -1447,12 +1447,12 @@
 # mgv7_cavern_threshold = 0.7
 
 #    Lower Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgv7_dungeon_ymin = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgv7_dungeon_ymin = -2100000000
 
 #    Upper Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgv7_dungeon_ymax = 31000
+#    type: int min: -2100000000 max: 2100000000
+# mgv7_dungeon_ymax = 2100000000
 
 ### Noises
 
@@ -1672,7 +1672,7 @@
 # mgcarpathian_cave_width = 0.09
 
 #    Y of upper limit of large caves.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgcarpathian_large_cave_depth = -33
 
 #    Minimum limit of random number of small caves per mapchunk.
@@ -1696,7 +1696,7 @@
 # mgcarpathian_large_cave_flooded = 0.5
 
 #    Y-level of cavern upper limit.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgcarpathian_cavern_limit = -256
 
 #    Y-distance over which caverns expand to full size.
@@ -1708,12 +1708,12 @@
 # mgcarpathian_cavern_threshold = 0.7
 
 #    Lower Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgcarpathian_dungeon_ymin = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgcarpathian_dungeon_ymin = -2100000000
 
 #    Upper Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgcarpathian_dungeon_ymax = 31000
+#    type: int min: -2100000000 max: 2100000000
+# mgcarpathian_dungeon_ymax = 2100000000
 
 ### Noises
 
@@ -1946,11 +1946,11 @@
 # mgflat_spflags = nolakes,nohills,nocaverns
 
 #    Y of flat ground.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgflat_ground_level = 8
 
 #    Y of upper limit of large caves.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgflat_large_cave_depth = -33
 
 #    Minimum limit of random number of small caves per mapchunk.
@@ -2000,7 +2000,7 @@
 # mgflat_hill_steepness = 64.0
 
 #    Y-level of cavern upper limit.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgflat_cavern_limit = -256
 
 #    Y-distance over which caverns expand to full size.
@@ -2012,12 +2012,12 @@
 # mgflat_cavern_threshold = 0.7
 
 #    Lower Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgflat_dungeon_ymin = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgflat_dungeon_ymin = -2100000000
 
 #    Upper Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgflat_dungeon_ymax = 31000
+#    type: int min: -2100000000 max: 2100000000
+# mgflat_dungeon_ymax = 2100000000
 
 ### Noises
 
@@ -2114,7 +2114,7 @@
 # mgfractal_cave_width = 0.09
 
 #    Y of upper limit of large caves.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgfractal_large_cave_depth = -33
 
 #    Minimum limit of random number of small caves per mapchunk.
@@ -2138,12 +2138,12 @@
 # mgfractal_large_cave_flooded = 0.5
 
 #    Lower Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgfractal_dungeon_ymin = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgfractal_dungeon_ymin = -2100000000
 
 #    Upper Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgfractal_dungeon_ymax = 31000
+#    type: int min: -2100000000 max: 2100000000
+# mgfractal_dungeon_ymax = 2100000000
 
 #    Selects one of 18 fractal types.
 #    1 = 4D "Roundy" Mandelbrot set.
@@ -2317,7 +2317,7 @@
 # mgvalleys_altitude_chill = 90
 
 #    Depth below which you'll find large caves.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgvalleys_large_cave_depth = -33
 
 #    Minimum limit of random number of small caves per mapchunk.
@@ -2341,7 +2341,7 @@
 # mgvalleys_large_cave_flooded = 0.5
 
 #    Depth below which you'll find giant caverns.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgvalleys_cavern_limit = -256
 
 #    Y-distance over which caverns expand to full size.
@@ -2367,11 +2367,11 @@
 # mgvalleys_cave_width = 0.09
 
 #    Lower Y limit of dungeons.
-#    type: int min: -31000 max: 31000
-# mgvalleys_dungeon_ymin = -31000
+#    type: int min: -2100000000 max: 2100000000
+# mgvalleys_dungeon_ymin = -2100000000
 
 #    Upper Y limit of dungeons.
-#    type: int min: -31000 max: 31000
+#    type: int min: -2100000000 max: 2100000000
 # mgvalleys_dungeon_ymax = 63
 
 ### Noises

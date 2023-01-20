@@ -381,7 +381,7 @@ Biome *read_biome_def(lua_State *L, int index, const NodeDefManager *ndef)
 
 	b->name            = getstringfield_default(L, index, "name", "");
 	b->depth_top       = getintfield_default(L,    index, "depth_top",       0);
-	b->depth_filler    = getintfield_default(L,    index, "depth_filler",    -31000);
+	b->depth_filler    = getintfield_default(L,    index, "depth_filler",    -2100000000);
 	b->depth_water_top = getintfield_default(L,    index, "depth_water_top", 0);
 	b->depth_riverbed  = getintfield_default(L,    index, "depth_riverbed",  0);
 	b->heat_point      = getfloatfield_default(L,  index, "heat_point",      0.f);
@@ -390,10 +390,10 @@ Biome *read_biome_def(lua_State *L, int index, const NodeDefManager *ndef)
 	b->flags           = 0; // reserved
 
 	b->min_pos = getv3s32field_default(
-		L, index, "min_pos", v3s32(-31000, -31000, -31000));
+		L, index, "min_pos", v3s32(-2100000000, -2100000000, -2100000000));
 	getintfield(L, index, "y_min", b->min_pos.Y);
 	b->max_pos = getv3s32field_default(
-		L, index, "max_pos", v3s32(31000, 31000, 31000));
+		L, index, "max_pos", v3s32(2100000000, 2100000000, 2100000000));
 	getintfield(L, index, "y_max", b->max_pos.Y);
 
 	std::vector<std::string> &nn = b->m_nodenames;
@@ -1093,8 +1093,8 @@ int ModApiMapgen::l_register_decoration(lua_State *L)
 
 	deco->name           = getstringfield_default(L, index, "name", "");
 	deco->fill_ratio     = getfloatfield_default(L, index, "fill_ratio", 0.02);
-	deco->y_min          = getintfield_default(L, index, "y_min", -31000);
-	deco->y_max          = getintfield_default(L, index, "y_max", 31000);
+	deco->y_min          = getintfield_default(L, index, "y_min", -2100000000);
+	deco->y_max          = getintfield_default(L, index, "y_max", 2100000000);
 	deco->nspawnby       = getintfield_default(L, index, "num_spawn_by", -1);
 	deco->place_offset_y = getintfield_default(L, index, "place_offset_y", 0);
 	deco->sidelen        = getintfield_default(L, index, "sidelen", 8);
@@ -1273,10 +1273,10 @@ int ModApiMapgen::l_register_ore(lua_State *L)
 	int ymin, ymax;
 	if (!getintfield(L, index, "y_min", ymin) &&
 		!getintfield(L, index, "height_min", ymin))
-		ymin = -31000;
+		ymin = -2100000000;
 	if (!getintfield(L, index, "y_max", ymax) &&
 		!getintfield(L, index, "height_max", ymax))
-		ymax = 31000;
+		ymax = 2100000000;
 	ore->y_min = ymin;
 	ore->y_max = ymax;
 

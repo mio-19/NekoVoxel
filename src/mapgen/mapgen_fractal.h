@@ -42,8 +42,8 @@ struct MapgenFractalParams : public MapgenParams
 	u16 large_cave_num_min = 0;
 	u16 large_cave_num_max = 2;
 	float large_cave_flooded = 0.5f;
-	s32 dungeon_ymin = -31000;
-	s32 dungeon_ymax = 31000;
+	s32 dungeon_ymin = -2100000000;
+	s32 dungeon_ymax = 2100000000;
 	u16 fractal = 1;
 	u16 iterations = 11;
 	v3f scale = v3f(4096.0, 1024.0, 4096.0);

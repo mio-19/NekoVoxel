@@ -41,7 +41,7 @@ struct MapgenV7Params : public MapgenParams {
 	s32 floatland_taper = 256;
 	float float_taper_exp = 2.0f;
 	float floatland_density = -0.6f;
-	s32 floatland_ywater = -31000;
+	s32 floatland_ywater = -2100000000;
 
 	float cave_width = 0.09f;
 	s32 large_cave_depth = -33;
@@ -53,8 +53,8 @@ struct MapgenV7Params : public MapgenParams {
 	s32 cavern_limit = -256;
 	s32 cavern_taper = 256;
 	float cavern_threshold = 0.7f;
-	s32 dungeon_ymin = -31000;
-	s32 dungeon_ymax = 31000;
+	s32 dungeon_ymin = -2100000000;
+	s32 dungeon_ymax = 2100000000;
 
 	NoiseParams np_terrain_base;
 	NoiseParams np_terrain_alt;

@@ -55,7 +55,7 @@ struct MapgenValleysParams : public MapgenParams {
 	s32 cavern_limit = -256;
 	s32 cavern_taper = 192;
 	float cavern_threshold = 0.6f;
-	s32 dungeon_ymin = -31000;
+	s32 dungeon_ymin = -2100000000;
 	s32 dungeon_ymax = 63;
 
 	NoiseParams np_filler_depth;

@@ -8974,8 +8974,8 @@ See [Ores] section above for essential information.
         -- In this example, there is a 3 * 3 * 3 cluster where 8 out of the 27
         -- nodes are coal ore.
 
-        y_min = -31000,
-        y_max = 31000,
+        y_min = -2100000000,
+        y_max = 2100000000,
         -- Lower and upper limits for ore (inclusive)
 
         flags = "",
@@ -9111,17 +9111,17 @@ performance and computing power the practical limit is much lower.
         -- Node used for dungeon stairs.
         -- If absent, stairs fall back to 'node_dungeon'.
 
-        y_max = 31000,
+        y_max = 2100000000,
         y_min = 1,
         -- Upper and lower limits for biome.
         -- Alternatively you can use xyz limits as shown below.
 
-        max_pos = {x = 31000, y = 128, z = 31000},
-        min_pos = {x = -31000, y = 9, z = -31000},
+        max_pos = {x = 2100000000, y = 128, z = 2100000000},
+        min_pos = {x = -2100000000, y = 9, z = -2100000000},
         -- xyz limits for biome, an alternative to using 'y_min' and 'y_max'.
         -- Biome is limited to a cuboid defined by these positions.
-        -- Any x, y or z field left undefined defaults to -31000 in 'min_pos' or
-        -- 31000 in 'max_pos'.
+        -- Any x, y or z field left undefined defaults to -2100000000 in 'min_pos' or
+        -- 2100000000 in 'max_pos'.
 
         vertical_blend = 8,
         -- Vertical distance in nodes above 'y_max' over which the biome will
@@ -9185,8 +9185,8 @@ See [Decoration types]. Used by `minetest.register_decoration`.
         -- support biomes.
         -- Can be a list of (or a single) biome names, IDs, or definitions.
 
-        y_min = -31000,
-        y_max = 31000,
+        y_min = -2100000000,
+        y_max = 2100000000,
         -- Lower and upper limits for decoration (inclusive).
         -- These parameters refer to the Y co-ordinate of the 'place_on' node.
 

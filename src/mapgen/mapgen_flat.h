@@ -49,8 +49,8 @@ struct MapgenFlatParams : public MapgenParams
 	s32 cavern_limit = -256;
 	s32 cavern_taper = 256;
 	float cavern_threshold = 0.7f;
-	s32 dungeon_ymin = -31000;
-	s32 dungeon_ymax = 31000;
+	s32 dungeon_ymin = -2100000000;
+	s32 dungeon_ymax = 2100000000;
 
 	NoiseParams np_terrain;
 	NoiseParams np_filler_depth;

@@ -66,7 +66,7 @@ if minetest.settings:get_bool("devtest_register_biomes", true) then
 		node_dungeon = "basenodes:cobble",
 		node_dungeon_alt = "basenodes:mossycobble",
 		node_dungeon_stair = "stairs:stair_cobble",
-		y_max = 31000,
+		y_max = 2100000000,
 		y_min = 4,
 		heat_point = 50,
 		humidity_point = 50,
@@ -97,7 +97,7 @@ if minetest.settings:get_bool("devtest_register_biomes", true) then
 		node_dungeon_alt = "basenodes:mossycobble",
 		node_dungeon_stair = "stairs:stair_cobble",
 		y_max = -256,
-		y_min = -31000,
+		y_min = -2100000000,
 		heat_point = 50,
 		humidity_point = 50,
 	})
