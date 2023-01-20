@@ -95,7 +95,7 @@ private:
 	SmoothTranslatorWrappedv3f rot_translator;
 	// Spritesheet/animation stuff
 	v2f m_tx_size = v2f(1,1);
-	v2size m_tx_basepos;
+	v2s16 m_tx_basepos;
 	bool m_initial_tx_basepos_set = false;
 	bool m_tx_select_horiz_by_yawpitch = false;
 	v2s32 m_animation_range;

@@ -1034,7 +1034,7 @@ void MapgenParams::readParams(const Settings *settings)
 	}
 
 	settings->getS16NoEx("water_level", water_level);
-	settings->getS16NoEx("mapgen_limit", mapgen_limit);
+	settings->getSSizeNoEx("mapgen_limit", mapgen_limit);
 	settings->getS16NoEx("chunksize", chunksize);
 	settings->getFlagStrNoEx("mg_flags", flags, flagdesc_mapgen);
 

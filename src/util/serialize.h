@@ -224,9 +224,9 @@ inline v2s16 readV2S16(const u8 *data)
 	return p;
 }
 
-inline v3size readV3S16(const u8 *data)
+inline v3s16 readV3S16(const u8 *data)
 {
-	v3size p;
+	v3s16 p;
 	p.X = readS16(&data[0]);
 	p.Y = readS16(&data[2]);
 	p.Z = readS16(&data[4]);
@@ -408,7 +408,7 @@ MAKE_STREAM_READ_FXN(s64,   S64,      8);
 MAKE_STREAM_READ_FXN(f32,   F1000,    4);
 MAKE_STREAM_READ_FXN(f32,   F32,      4);
 MAKE_STREAM_READ_FXN(v2s16, V2S16,    4);
-MAKE_STREAM_READ_FXN(v3size, V3S16,    6);
+MAKE_STREAM_READ_FXN(v3s16, V3S16,    6);
 MAKE_STREAM_READ_FXN(v2s32, V2S32,    8);
 MAKE_STREAM_READ_FXN(v3s32, V3S32,   12);
 MAKE_STREAM_READ_FXN(v3f,   V3F1000, 12);

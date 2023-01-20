@@ -517,7 +517,6 @@ s16 Settings::getS16(const std::string &name) const
 	return stoi(get(name), -32768, 32767);
 }
 
-
 u32 Settings::getU32(const std::string &name) const
 {
 	return (u32) stoi(get(name));
@@ -526,6 +525,12 @@ u32 Settings::getU32(const std::string &name) const
 s32 Settings::getS32(const std::string &name) const
 {
 	return stoi(get(name));
+}
+
+
+inline s32 Settings::getSSize(const std::string &name) const
+{
+	return getS32(name);
 }
 
 
@@ -759,6 +764,17 @@ bool Settings::getS16NoEx(const std::string &name, s16 &val) const
 {
 	try {
 		val = getS16(name);
+		return true;
+	} catch (SettingNotFoundException &e) {
+		return false;
+	}
+}
+
+
+bool Settings::getSSizeNoEx(const std::string &name, s_size &val) const
+{
+	try {
+		val = getSSize(name);
 		return true;
 	} catch (SettingNotFoundException &e) {
 		return false;

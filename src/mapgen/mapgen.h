@@ -122,15 +122,15 @@ struct MapgenParams {
 	s16 chunksize = 5;
 	u64 seed = 0;
 	s16 water_level = 1;
-	s16 mapgen_limit = MAX_MAP_GENERATION_LIMIT;
+	s_size mapgen_limit = MAX_MAP_GENERATION_LIMIT;
 	// Flags set in readParams
 	u32 flags = 0;
 	u32 spflags = 0;
 
 	BiomeParams *bparams = nullptr;
 
-	s16 mapgen_edge_min = -MAX_MAP_GENERATION_LIMIT;
-	s16 mapgen_edge_max = MAX_MAP_GENERATION_LIMIT;
+	s_size mapgen_edge_min = -MAX_MAP_GENERATION_LIMIT;
+	s_size mapgen_edge_max = MAX_MAP_GENERATION_LIMIT;
 
 	virtual void readParams(const Settings *settings);
 	virtual void writeParams(Settings *settings) const;
