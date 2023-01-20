@@ -116,7 +116,7 @@ public:
 
 	void applyProbabilities(v3size p0,
 		std::vector<std::pair<v3size, u8> > *plist,
-		std::vector<std::pair<s16, u8> > *splist);
+		std::vector<std::pair<s_size, u8> > *splist);
 
 	std::vector<content_t> c_nodes;
 	u32 flags = 0;

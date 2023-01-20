@@ -250,6 +250,8 @@ inline v3s32 readV3S32(const u8 *data)
 	return p;
 }
 
+#define readV3SSize(data) readV3S32(data)
+
 inline v3f readV3F1000(const u8 *data)
 {
 	v3f p;
@@ -356,6 +358,8 @@ inline void writeV3S32(u8 *data, v3s32 p)
 	writeS32(&data[4], p.Y);
 	writeS32(&data[8], p.Z);
 }
+
+#define writeV3SSize(data, p) writeV3S32(data, p)
 
 inline void writeV3F1000(u8 *data, v3f p)
 {

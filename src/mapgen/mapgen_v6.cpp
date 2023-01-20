@@ -60,7 +60,7 @@ MapgenV6::MapgenV6(MapgenV6Params *params, EmergeParams *emerge)
 	m_emerge = emerge;
 	ystride = csize.X;
 
-	heightmap = new s16[csize.X * csize.Z];
+	heightmap = new s_size[csize.X * csize.Z];
 
 	spflags      = params->spflags;
 	freq_desert  = params->freq_desert;

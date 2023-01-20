@@ -220,6 +220,7 @@ public:
 	bool setS16(const std::string &name, s16 value);
 	bool setU16(const std::string &name, u16 value);
 	bool setS32(const std::string &name, s32 value);
+	#define setSSize(name, value) setS32(name, value)
 	bool setU64(const std::string &name, u64 value);
 	bool setFloat(const std::string &name, float value);
 	bool setV2F(const std::string &name, v2f value);

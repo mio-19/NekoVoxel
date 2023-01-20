@@ -233,7 +233,7 @@ void MapgenValleys::makeChunk(BlockMakeData *data)
 	m_bgen->calcBiomeNoise(node_min);
 
 	// Generate terrain
-	s16 stone_surface_max_y = generateTerrain();
+	s_size stone_surface_max_y = generateTerrain();
 
 	// Create heightmap
 	updateHeightmap(node_min, node_max);
@@ -314,14 +314,14 @@ int MapgenValleys::getSpawnLevelAtPoint(v2size p)
 
 	// Raising the maximum spawn level above 'water_level + 16' is necessary for custom
 	// parameters that set average terrain level much higher than water_level.
-	s16 max_spawn_y = std::fmax(
+	s_size max_spawn_y = std::fmax(
 		noise_terrain_height->np.offset +
 		noise_valley_depth->np.offset * noise_valley_depth->np.offset,
 		water_level + 16);
 
 	// Starting spawn search at max_spawn_y + 128 ensures 128 nodes of open
 	// space above spawn position. Avoids spawning in possibly sealed voids.
-	for (s16 y = max_spawn_y + 128; y >= water_level; y--) {
+	for (s_size y = max_spawn_y + 128; y >= water_level; y--) {
 		float n_fill = NoisePerlin3D(&noise_inter_valley_fill->np, p.X, y, p.Y, seed);
 		float surface_delta = (float)y - surface_y;
 		float density = slope * n_fill - surface_delta;
@@ -329,7 +329,7 @@ int MapgenValleys::getSpawnLevelAtPoint(v2size p)
 		if (density > 0.0f) {  // If solid
 			// Sometimes surface level is below river water level in places that are not
 			// river channels.
-			if (y < water_level || y > max_spawn_y || y < (s16)river_y)
+			if (y < water_level || y > max_spawn_y || y < (s_size)river_y)
 				// Unsuitable spawn point
 				return MAX_MAP_GENERATION_LIMIT;
 
@@ -358,11 +358,11 @@ int MapgenValleys::generateTerrain()
 	noise_inter_valley_fill->perlinMap3D(node_min.X, node_min.Y - 1, node_min.Z);
 
 	const v3size &em = vm->m_area.getExtent();
-	s16 surface_max_y = -MAX_MAP_GENERATION_LIMIT;
+	s_size surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 index_2d = 0;
 
-	for (s16 z = node_min.Z; z <= node_max.Z; z++)
-	for (s16 x = node_min.X; x <= node_max.X; x++, index_2d++) {
+	for (s_size z = node_min.Z; z <= node_max.Z; z++)
+	for (s_size x = node_min.X; x <= node_max.X; x++, index_2d++) {
 		float n_slope          = noise_inter_valley_slope->result[index_2d];
 		float n_rivers         = noise_rivers->result[index_2d];
 		float n_terrain_height = noise_terrain_height->result[index_2d];
@@ -415,11 +415,11 @@ int MapgenValleys::generateTerrain()
 		}
 
 		// Highest solid node in column
-		s16 column_max_y = surface_y;
+		s_size column_max_y = surface_y;
 		u32 index_3d = (z - node_min.Z) * zstride_1u1d + (x - node_min.X);
 		u32 index_data = vm->m_area.index(x, node_min.Y - 1, z);
 
-		for (s16 y = node_min.Y - 1; y <= node_max.Y + 1; y++) {
+		for (s_size y = node_min.Y - 1; y <= node_max.Y + 1; y++) {
 			if (vm->m_data[index_data].getContent() == CONTENT_IGNORE) {
 				float n_fill = noise_inter_valley_fill->result[index_3d];
 				float surface_delta = (float)y - surface_y;
@@ -434,7 +434,7 @@ int MapgenValleys::generateTerrain()
 						column_max_y = y;
 				} else if (y <= water_level) {
 					vm->m_data[index_data] = n_water; // Water
-				} else if (y <= (s16)river_y) {
+				} else if (y <= (s_size)river_y) {
 					vm->m_data[index_data] = n_river_water; // River water
 				} else {
 					vm->m_data[index_data] = n_air; // Air

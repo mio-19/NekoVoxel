@@ -121,7 +121,7 @@ struct MapgenParams {
 	MapgenType mgtype = MAPGEN_DEFAULT;
 	s16 chunksize = 5;
 	u64 seed = 0;
-	s16 water_level = 1;
+	s_size water_level = 1;
 	s_size mapgen_limit = MAX_MAP_GENERATION_LIMIT;
 	// Flags set in readParams
 	u32 flags = 0;
@@ -166,7 +166,7 @@ public:
 	const NodeDefManager *ndef = nullptr;
 
 	u32 blockseed;
-	s16 *heightmap = nullptr;
+	s_size *heightmap = nullptr;
 	biome_t *biomemap = nullptr;
 	v3size csize;
 
@@ -182,11 +182,11 @@ public:
 
 	static u32 getBlockSeed(v3size p, s32 seed);
 	static u32 getBlockSeed2(v3size p, s32 seed);
-	s16 findGroundLevel(v2size p2d, s16 ymin, s16 ymax);
-	s16 findLiquidSurface(v2size p2d, s16 ymin, s16 ymax);
+	s_size findGroundLevel(v2size p2d, s_size ymin, s_size ymax);
+	s_size findLiquidSurface(v2size p2d, s_size ymin, s_size ymax);
 	void updateHeightmap(v3size nmin, v3size nmax);
-	void getSurfaces(v2size p2d, s16 ymin, s16 ymax,
-		std::vector<s16> &floors, std::vector<s16> &ceilings);
+	void getSurfaces(v2size p2d, s_size ymin, s_size ymax,
+		std::vector<s_size> &floors, std::vector<s_size> &ceilings);
 
 	void updateLiquid(UniqueQueue<v3size> *trans_liquid, v3size nmin, v3size nmax);
 
@@ -283,10 +283,10 @@ public:
 
 	virtual void generateBiomes();
 	virtual void dustTopNodes();
-	virtual void generateCavesNoiseIntersection(s16 max_stone_y);
-	virtual void generateCavesRandomWalk(s16 max_stone_y, s16 large_cave_ymax);
-	virtual bool generateCavernsNoise(s16 max_stone_y);
-	virtual void generateDungeons(s16 max_stone_y);
+	virtual void generateCavesNoiseIntersection(s_size max_stone_y);
+	virtual void generateCavesRandomWalk(s_size max_stone_y, s_size large_cave_ymax);
+	virtual bool generateCavernsNoise(s_size max_stone_y);
+	virtual void generateDungeons(s_size max_stone_y);
 
 protected:
 	EmergeParams *m_emerge;
@@ -325,11 +325,11 @@ protected:
 	int large_cave_num_min;
 	int large_cave_num_max;
 	float large_cave_flooded;
-	s16 large_cave_depth;
-	s16 dungeon_ymin;
-	s16 dungeon_ymax;
+	s_size large_cave_depth;
+	s_size dungeon_ymin;
+	s_size dungeon_ymax;
 };
 
 // Calculate exact edges of the outermost mapchunks that are within the set
 // mapgen_limit. Returns the minimum and maximum edges in nodes in that order.
-std::pair<s16, s16> get_mapgen_edges(s16 mapgen_limit, s16 chunksize);
+std::pair<s_size, s_size> get_mapgen_edges(s_size mapgen_limit, s_size chunksize);

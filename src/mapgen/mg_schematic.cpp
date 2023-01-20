@@ -130,9 +130,9 @@ void Schematic::blitToVManip(MMVManip *vm, v3size p, Rotation rot, bool force_pl
 	int ystride = size.X;
 	int zstride = size.X * size.Y;
 
-	s16 sx = size.X;
-	s16 sy = size.Y;
-	s16 sz = size.Z;
+	s_size sx = size.X;
+	s_size sy = size.Y;
+	s_size sz = size.Z;
 
 	int i_start, i_step_x, i_step_z;
 	switch (rot) {
@@ -140,7 +140,7 @@ void Schematic::blitToVManip(MMVManip *vm, v3size p, Rotation rot, bool force_pl
 			i_start  = sx - 1;
 			i_step_x = zstride;
 			i_step_z = -xstride;
-			SWAP(s16, sx, sz);
+			SWAP(s_size, sx, sz);
 			break;
 		case ROTATE_180:
 			i_start  = zstride * (sz - 1) + sx - 1;
@@ -151,7 +151,7 @@ void Schematic::blitToVManip(MMVManip *vm, v3size p, Rotation rot, bool force_pl
 			i_start  = zstride * (sz - 1);
 			i_step_x = -zstride;
 			i_step_z = xstride;
-			SWAP(s16, sx, sz);
+			SWAP(s_size, sx, sz);
 			break;
 		default:
 			i_start  = 0;
@@ -159,15 +159,15 @@ void Schematic::blitToVManip(MMVManip *vm, v3size p, Rotation rot, bool force_pl
 			i_step_z = zstride;
 	}
 
-	s16 y_map = p.Y;
-	for (s16 y = 0; y != sy; y++) {
+	s_size y_map = p.Y;
+	for (s_size y = 0; y != sy; y++) {
 		if ((slice_probs[y] != MTSCHEM_PROB_ALWAYS) &&
 			(slice_probs[y] <= myrand_range(1, MTSCHEM_PROB_ALWAYS)))
 			continue;
 
-		for (s16 z = 0; z != sz; z++) {
+		for (s_size z = 0; z != sz; z++) {
 			u32 i = z * i_step_z + y * ystride + i_start;
-			for (s16 x = 0; x != sx; x++, i += i_step_x) {
+			for (s_size x = 0; x != sx; x++, i += i_step_x) {
 				v3size pos(p.X + x, y_map, p.Z + z);
 				if (!vm->m_area.contains(pos))
 					continue;
@@ -302,7 +302,7 @@ bool Schematic::deserializeFromMts(std::istream *is)
 	}
 
 	//// Read size
-	size = readV3S16(ss);
+	size = readV3SSize(ss);
 
 	//// Read Y-slice probability values
 	delete []slice_probs;
@@ -354,7 +354,7 @@ bool Schematic::deserializeFromMts(std::istream *is)
 
 	// Fix probability values for probability range truncation introduced in v4
 	if (version < 4) {
-		for (s16 y = 0; y != size.Y; y++)
+		for (s_size y = 0; y != size.Y; y++)
 			slice_probs[y] >>= 1;
 		for (size_t i = 0; i != nodecount; i++)
 			schemdata[i].param1 >>= 1;
@@ -373,7 +373,7 @@ bool Schematic::serializeToMts(std::ostream *os) const
 
 	writeU32(ss, MTSCHEM_FILE_SIGNATURE);         // signature
 	writeU16(ss, MTSCHEM_FILE_VER_HIGHEST_WRITE); // version
-	writeV3S16(ss, size);                         // schematic size
+	writeV3SSize(ss, size);                         // schematic size
 
 	for (int y = 0; y != size.Y; y++)             // Y slice probabilities
 		writeU8(ss, slice_probs[y]);
@@ -557,16 +557,16 @@ bool Schematic::getSchematicFromMap(Map *map, v3size p1, v3size p2)
 	size = p2 - p1 + 1;
 
 	slice_probs = new u8[size.Y];
-	for (s16 y = 0; y != size.Y; y++)
+	for (s_size y = 0; y != size.Y; y++)
 		slice_probs[y] = MTSCHEM_PROB_ALWAYS;
 
 	schemdata = new MapNode[size.X * size.Y * size.Z];
 
 	u32 i = 0;
-	for (s16 z = p1.Z; z <= p2.Z; z++)
-	for (s16 y = p1.Y; y <= p2.Y; y++) {
+	for (s_size z = p1.Z; z <= p2.Z; z++)
+	for (s_size y = p1.Y; y <= p2.Y; y++) {
 		u32 vi = vm->m_area.index(p1.X, y, z);
-		for (s16 x = p1.X; x <= p2.X; x++, i++, vi++) {
+		for (s_size x = p1.X; x <= p2.X; x++, i++, vi++) {
 			schemdata[i] = vm->m_data[vi];
 			schemdata[i].param1 = MTSCHEM_PROB_ALWAYS;
 		}
@@ -583,7 +583,7 @@ bool Schematic::getSchematicFromMap(Map *map, v3size p1, v3size p2)
 
 void Schematic::applyProbabilities(v3size p0,
 	std::vector<std::pair<v3size, u8> > *plist,
-	std::vector<std::pair<s16, u8> > *splist)
+	std::vector<std::pair<s_size, u8> > *splist)
 {
 	for (size_t i = 0; i != plist->size(); i++) {
 		v3size p = (*plist)[i].first - p0;
@@ -599,7 +599,7 @@ void Schematic::applyProbabilities(v3size p0,
 	}
 
 	for (size_t i = 0; i != splist->size(); i++) {
-		s16 slice = (*splist)[i].first;
+		s_size slice = (*splist)[i].first;
 		if (slice < size.Y)
 			slice_probs[slice] = (*splist)[i].second;
 	}
