@@ -125,7 +125,7 @@ size_t write_array_slice_float(lua_State *L, int table_index, float *data,
 
 // This must match the implementation in builtin/game/misc_s.lua
 // Note that this returns a floating point result as Lua integers are 32-bit
-inline lua_Number hash_node_position(v3s16 pos)
+inline lua_Number hash_node_position(v3s32 pos)
 {
 	return (((s64)pos.Z + 0x8000L) << 32)
 			| (((s64)pos.Y + 0x8000L) << 16)

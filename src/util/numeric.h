@@ -287,6 +287,17 @@ inline v3s32 floatToInt(v3f p, f32 d)
 /*
 	Returns integer position of node in given double precision position
  */
+inline v3s16 doubleToInt16(v3d p, double d)
+{
+	return v3s16(
+		(p.X + (p.X > 0 ? d / 2 : -d / 2)) / d,
+		(p.Y + (p.Y > 0 ? d / 2 : -d / 2)) / d,
+		(p.Z + (p.Z > 0 ? d / 2 : -d / 2)) / d);
+}
+
+/*
+	Returns integer position of node in given double precision position
+ */
 inline v3s32 doubleToInt(v3d p, double d)
 {
 	return v3s32(
