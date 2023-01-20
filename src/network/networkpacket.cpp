@@ -403,7 +403,7 @@ NetworkPacket& NetworkPacket::operator>>(float& dst)
 {
 	checkReadOffset(m_read_offset, 4);
 
-	dst = readF64(&m_data[m_read_offset]);
+	dst = readF32(&m_data[m_read_offset]);
 
 	m_read_offset += 4;
 	return *this;
