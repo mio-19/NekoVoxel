@@ -97,8 +97,8 @@ void PointedThing::deSerialize(std::istream &is)
 	case POINTEDTHING_NOTHING:
 		break;
 	case POINTEDTHING_NODE:
-		node_undersurface = readV3S16(is);
-		node_abovesurface = readV3S16(is);
+		node_undersurface = readV3S32(is);
+		node_abovesurface = readV3S32(is);
 		break;
 	case POINTEDTHING_OBJECT:
 		object_id = readU16(is);

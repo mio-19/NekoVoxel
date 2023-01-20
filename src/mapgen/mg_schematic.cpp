@@ -302,7 +302,7 @@ bool Schematic::deserializeFromMts(std::istream *is)
 	}
 
 	//// Read size
-	size = readV3S16(ss);
+	size = readV3S32(ss);
 
 	//// Read Y-slice probability values
 	delete []slice_probs;
