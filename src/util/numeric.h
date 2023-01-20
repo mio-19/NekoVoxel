@@ -41,20 +41,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // sqrt(3.0) / 2.0 in literal form.
 static constexpr const f32 BLOCK_MAX_RADIUS = 0.866025403784f * MAP_BLOCKSIZE * BS;
 
-inline s16 getContainerPos(s16 p, s16 d)
+inline s_size getContainerPos(s_size p, s_size d)
 {
 	return (p >= 0 ? p : p - d + 1) / d;
 }
 
-inline v2s16 getContainerPos(v2s16 p, s16 d)
+inline v2size getContainerPos(v2size p, s_size d)
 {
-	return v2s16(
+	return v2size(
 		getContainerPos(p.X, d),
 		getContainerPos(p.Y, d)
 	);
 }
 
-inline v3size getContainerPos(v3size p, s16 d)
+inline v3size getContainerPos(v3size p, s_size d)
 {
 	return v3size(
 		getContainerPos(p.X, d),
@@ -63,9 +63,9 @@ inline v3size getContainerPos(v3size p, s16 d)
 	);
 }
 
-inline v2s16 getContainerPos(v2s16 p, v2s16 d)
+inline v2size getContainerPos(v2size p, v2size d)
 {
-	return v2s16(
+	return v2size(
 		getContainerPos(p.X, d.X),
 		getContainerPos(p.Y, d.Y)
 	);
@@ -80,19 +80,19 @@ inline v3size getContainerPos(v3size p, v3size d)
 	);
 }
 
-inline void getContainerPosWithOffset(s16 p, s16 d, s16 &container, s16 &offset)
+inline void getContainerPosWithOffset(s_size p, s_size d, s_size &container, s_size &offset)
 {
 	container = (p >= 0 ? p : p - d + 1) / d;
 	offset = p & (d - 1);
 }
 
-inline void getContainerPosWithOffset(const v2s16 &p, s16 d, v2s16 &container, v2s16 &offset)
+inline void getContainerPosWithOffset(const v2size &p, s_size d, v2size &container, v2size &offset)
 {
 	getContainerPosWithOffset(p.X, d, container.X, offset.X);
 	getContainerPosWithOffset(p.Y, d, container.Y, offset.Y);
 }
 
-inline void getContainerPosWithOffset(const v3size &p, s16 d, v3size &container, v3size &offset)
+inline void getContainerPosWithOffset(const v3size &p, s_size d, v3size &container, v3size &offset)
 {
 	getContainerPosWithOffset(p.X, d, container.X, offset.X);
 	getContainerPosWithOffset(p.Y, d, container.Y, offset.Y);
@@ -100,7 +100,7 @@ inline void getContainerPosWithOffset(const v3size &p, s16 d, v3size &container,
 }
 
 
-inline bool isInArea(v3size p, s16 d)
+inline bool isInArea(v3size p, s_size d)
 {
 	return (
 		p.X >= 0 && p.X < d &&
@@ -109,7 +109,7 @@ inline bool isInArea(v3size p, s16 d)
 	);
 }
 
-inline bool isInArea(v2s16 p, s16 d)
+inline bool isInArea(v2size p, s_size d)
 {
 	return (
 		p.X >= 0 && p.X < d &&
@@ -128,11 +128,11 @@ inline bool isInArea(v3size p, v3size d)
 
 inline void sortBoxVerticies(v3size &p1, v3size &p2) {
 	if (p1.X > p2.X)
-		SWAP(s16, p1.X, p2.X);
+		SWAP(s_size, p1.X, p2.X);
 	if (p1.Y > p2.Y)
-		SWAP(s16, p1.Y, p2.Y);
+		SWAP(s_size, p1.Y, p2.Y);
 	if (p1.Z > p2.Z)
-		SWAP(s16, p1.Z, p2.Z);
+		SWAP(s_size, p1.Z, p2.Z);
 }
 
 inline v3size componentwise_min(const v3size &a, const v3size &b)
@@ -257,7 +257,7 @@ u64 murmur_hash_64_ua(const void *key, int len, unsigned int seed);
 bool isBlockInSight(v3size blockpos_b, v3f camera_pos, v3f camera_dir,
 		f32 camera_fov, f32 range, f32 *distance_ptr=NULL);
 
-s16 adjustDist(s16 dist, float zoom_fov);
+s_size adjustDist(s_size dist, float zoom_fov);
 
 /*
 	Returns nearest 32-bit integer for given floating point number.
