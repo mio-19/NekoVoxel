@@ -66,6 +66,12 @@ v2s16 LuaHelper::readParam(lua_State *L, int index)
 }
 
 template <>
+v2s32 LuaHelper::readParam(lua_State *L, int index)
+{
+	return read_v2s32(L, index);
+}
+
+template <>
 v2f LuaHelper::readParam(lua_State *L, int index)
 {
 	return check_v2f(L, index);
