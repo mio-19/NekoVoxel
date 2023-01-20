@@ -268,7 +268,7 @@ std::string UnitSAO::generateUpdateAttachmentCommand() const
 	// command
 	writeU8(os, AO_CMD_ATTACH_TO);
 	// parameters
-	writeS16(os, m_attachment_parent_id);
+	writeS32(os, m_attachment_parent_id);
 	os << serializeString16(m_attachment_bone);
 	writeV3F32(os, m_attachment_position);
 	writeV3F32(os, m_attachment_rotation);
@@ -320,7 +320,7 @@ std::string UnitSAO::generateUpdateArmorGroupsCommand() const
 	writeU16(os, m_armor_groups.size());
 	for (const auto &armor_group : m_armor_groups) {
 		os << serializeString16(armor_group.first);
-		writeS16(os, armor_group.second);
+		writeS32(os, armor_group.second);
 	}
 	return os.str();
 }

@@ -109,7 +109,7 @@ Hud::Hud(Client *client, LocalPlayer *player,
 
 	if (m_mode == HIGHLIGHT_BOX) {
 		m_selection_material.Thickness =
-			rangelim(g_settings->getS16("selectionbox_width"), 1, 5);
+			rangelim(g_settings->getS32("selectionbox_width"), 1, 5);
 	} else if (m_mode == HIGHLIGHT_HALO) {
 		m_selection_material.setTexture(0, tsrc->getTextureForMesh("halo.png"));
 		m_selection_material.setFlag(video::EMF_BACK_FACE_CULLING, true);
@@ -314,7 +314,7 @@ bool Hud::hasElementOfType(HudElementType type)
 }
 
 // Calculates screen position of waypoint. Returns true if waypoint is visible (in front of the player), else false.
-bool Hud::calculateScreenPos(const v3s16 &camera_offset, HudElement *e, v2s32 *pos)
+bool Hud::calculateScreenPos(const v3s32 &camera_offset, HudElement *e, v2s32 *pos)
 {
 	v3f w_pos = e->world_pos * BS;
 	scene::ICameraSceneNode* camera =
@@ -333,7 +333,7 @@ bool Hud::calculateScreenPos(const v3s16 &camera_offset, HudElement *e, v2s32 *p
 	return true;
 }
 
-void Hud::drawLuaElements(const v3s16 &camera_offset)
+void Hud::drawLuaElements(const v3s32 &camera_offset)
 {
 	const u32 text_height = g_fontengine->getTextHeight();
 	gui::IGUIFont *const font = g_fontengine->getFont();
@@ -817,7 +817,7 @@ void Hud::drawCrosshair()
 	}
 }
 
-void Hud::setSelectionPos(const v3f &pos, const v3s16 &camera_offset)
+void Hud::setSelectionPos(const v3f &pos, const v3s32 &camera_offset)
 {
 	m_camera_offset = camera_offset;
 	m_selection_pos = pos;
@@ -892,9 +892,9 @@ void Hud::drawBlockBounds()
 	video::SMaterial old_material = driver->getMaterial2D();
 	driver->setMaterial(m_selection_material);
 
-	v3s16 pos = player->getStandingNodePos();
+	v3s32 pos = player->getStandingNodePos();
 
-	v3s16 blockPos(
+	v3s32 blockPos(
 		floorf((float) pos.X / MAP_BLOCKSIZE),
 		floorf((float) pos.Y / MAP_BLOCKSIZE),
 		floorf((float) pos.Z / MAP_BLOCKSIZE)
@@ -909,7 +909,7 @@ void Hud::drawBlockBounds()
 	for (s8 x = -radius; x <= radius; x++)
 	for (s8 y = -radius; y <= radius; y++)
 	for (s8 z = -radius; z <= radius; z++) {
-		v3s16 blockOffset(x, y, z);
+		v3s32 blockOffset(x, y, z);
 
 		aabb3f box(
 			intToFloat((blockPos + blockOffset) * MAP_BLOCKSIZE, BS) - offset - halfNode,
@@ -922,7 +922,7 @@ void Hud::drawBlockBounds()
 	driver->setMaterial(old_material);
 }
 
-void Hud::updateSelectionMesh(const v3s16 &camera_offset)
+void Hud::updateSelectionMesh(const v3s32 &camera_offset)
 {
 	m_camera_offset = camera_offset;
 	if (m_mode != HIGHLIGHT_HALO)
@@ -993,8 +993,8 @@ void drawItemStack(
 		const core::rect<s32> *clip,
 		Client *client,
 		ItemRotationKind rotation_kind,
-		const v3s16 &angle,
-		const v3s16 &rotation_speed)
+		const v3s32 &angle,
+		const v3s32 &rotation_speed)
 {
 	static MeshTimeInfo rotation_time_infos[IT_ROT_NONE];
 
@@ -1258,5 +1258,5 @@ void drawItemStack(
 		ItemRotationKind rotation_kind)
 {
 	drawItemStack(driver, font, item, rect, clip, client, rotation_kind,
-		v3s16(0, 0, 0), v3s16(0, 100, 0));
+		v3s32(0, 0, 0), v3s32(0, 100, 0));
 }

@@ -137,7 +137,7 @@ void ItemDefinition::serialize(std::ostream &os, u16 protocol_version) const
 	os << serializeString16(inventory_image);
 	os << serializeString16(wield_image);
 	writeV3F32(os, wield_scale);
-	writeS16(os, stack_max);
+	writeS32(os, stack_max);
 	writeU8(os, usable);
 	writeU8(os, liquids_pointable);
 
@@ -152,7 +152,7 @@ void ItemDefinition::serialize(std::ostream &os, u16 protocol_version) const
 	writeU16(os, groups.size());
 	for (const auto &group : groups) {
 		os << serializeString16(group.first);
-		writeS16(os, group.second);
+		writeS32(os, group.second);
 	}
 
 	os << serializeString16(node_placement_prediction);
@@ -191,7 +191,7 @@ void ItemDefinition::deSerialize(std::istream &is, u16 protocol_version)
 	inventory_image = deSerializeString16(is);
 	wield_image = deSerializeString16(is);
 	wield_scale = readV3F32(is);
-	stack_max = readS16(is);
+	stack_max = readS32(is);
 	usable = readU8(is);
 	liquids_pointable = readU8(is);
 
@@ -206,7 +206,7 @@ void ItemDefinition::deSerialize(std::istream &is, u16 protocol_version)
 	u32 groups_size = readU16(is);
 	for(u32 i=0; i<groups_size; i++){
 		std::string name = deSerializeString16(is);
-		int value = readS16(is);
+		int value = readS32(is);
 		groups[name] = value;
 	}
 

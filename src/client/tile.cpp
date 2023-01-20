@@ -846,17 +846,17 @@ static video::IImage *createInventoryCubeImage(
 	// (xu, xv, x1; yu, yv, y1) form coordinate transformation matrix
 	// `offsets` list pixels to be drawn for single source pixel
 	auto draw_image = [=] (video::IImage *image, float shade_factor,
-			s16 xu, s16 xv, s16 x1,
-			s16 yu, s16 yv, s16 y1,
-			std::initializer_list<v2s16> offsets) -> void {
+			s32 xu, s32 xv, s32 x1,
+			s32 yu, s32 yv, s32 y1,
+			std::initializer_list<v2s32> offsets) -> void {
 		u32 brightness = core::clamp<u32>(256 * shade_factor, 0, 256);
 		const u32 *source = lock_image(image);
 		for (u16 v = 0; v < size; v++) {
 			for (u16 u = 0; u < size; u++) {
 				video::SColor pixel(*source);
 				applyShadeFactor(pixel, brightness);
-				s16 x = xu * u + xv * v + x1;
-				s16 y = yu * u + yv * v + y1;
+				s32 x = xu * u + xv * v + x1;
+				s32 y = yu * u + yv * v + y1;
 				for (const auto &off : offsets)
 					target[(y + off.Y) * cube_size + (x + off.X) + offset] = pixel.color;
 				source++;

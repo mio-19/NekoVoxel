@@ -38,7 +38,7 @@ bool LuaHelper::readParam(lua_State *L, int index)
 }
 
 template <>
-s16 LuaHelper::readParam(lua_State *L, int index)
+s32 LuaHelper::readParam(lua_State *L, int index)
 {
 	return luaL_checkinteger(L, index);
 }
@@ -60,9 +60,9 @@ float LuaHelper::readParam(lua_State *L, int index)
 }
 
 template <>
-v2s16 LuaHelper::readParam(lua_State *L, int index)
+v2s32 LuaHelper::readParam(lua_State *L, int index)
 {
-	return read_v2s16(L, index);
+	return read_v2s32(L, index);
 }
 
 template <>

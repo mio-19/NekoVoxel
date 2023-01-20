@@ -696,7 +696,7 @@ void Server::AsyncRunStep(bool initial_step)
 
 		ScopeProfiler sp(g_profiler, "Server: liquid transform");
 
-		std::map<v3s16, MapBlock*> modified_blocks;
+		std::map<v3s32, MapBlock*> modified_blocks;
 		m_env->getServerMap().transformLiquids(modified_blocks, m_env);
 
 		if (!modified_blocks.empty()) {
@@ -907,7 +907,7 @@ void Server::AsyncRunStep(bool initial_step)
 		// We'll log the amount of each
 		Profiler prof;
 
-		std::unordered_set<v3s16> node_meta_updates;
+		std::unordered_set<v3s32> node_meta_updates;
 
 		while (!m_unsent_map_edit_queue.empty()) {
 			MapEditEvent* event = m_unsent_map_edit_queue.front();
@@ -946,7 +946,7 @@ void Server::AsyncRunStep(bool initial_step)
 			}
 			case MEET_OTHER:
 				prof.add("MEET_OTHER", 1);
-				for (const v3s16 &modified_block : event->modified_blocks) {
+				for (const v3s32 &modified_block : event->modified_blocks) {
 					m_clients.markBlockposAsNotSent(modified_block);
 				}
 				break;
@@ -962,8 +962,8 @@ void Server::AsyncRunStep(bool initial_step)
 			*/
 			if (!far_players.empty()) {
 				// Convert list format to that wanted by SetBlocksNotSent
-				std::map<v3s16, MapBlock*> modified_blocks2;
-				for (const v3s16 &modified_block : event->modified_blocks) {
+				std::map<v3s32, MapBlock*> modified_blocks2;
+				for (const v3s32 &modified_block : event->modified_blocks) {
 					modified_blocks2[modified_block] =
 							m_env->getMap().getBlockNoCreateNoEx(modified_block);
 				}
@@ -1549,7 +1549,7 @@ void Server::SendSpawnParticle(session_t peer_id, u16 protocol_version,
 	const ParticleParameters &p)
 {
 	static thread_local const float radius =
-			g_settings->getS16("max_block_send_distance") * MAP_BLOCKSIZE * BS;
+			g_settings->getS32("max_block_send_distance") * MAP_BLOCKSIZE * BS;
 
 	if (peer_id == PEER_ID_INEXISTENT) {
 		std::vector<session_t> clients = m_clients.getClientIDs();
@@ -1592,7 +1592,7 @@ void Server::SendAddParticleSpawner(session_t peer_id, u16 protocol_version,
 	const ParticleSpawnerParameters &p, u16 attached_id, u32 id)
 {
 	static thread_local const float radius =
-			g_settings->getS16("max_block_send_distance") * MAP_BLOCKSIZE * BS;
+			g_settings->getS32("max_block_send_distance") * MAP_BLOCKSIZE * BS;
 
 	if (peer_id == PEER_ID_INEXISTENT) {
 		std::vector<session_t> clients = m_clients.getClientIDs();
@@ -2002,21 +2002,21 @@ void Server::SendPlayerFormspecPrepend(session_t peer_id)
 void Server::SendActiveObjectRemoveAdd(RemoteClient *client, PlayerSAO *playersao)
 {
 	// Radius inside which objects are active
-	static thread_local const s16 radius =
-		g_settings->getS16("active_object_send_range_blocks") * MAP_BLOCKSIZE;
+	static thread_local const s32 radius =
+		g_settings->getS32("active_object_send_range_blocks") * MAP_BLOCKSIZE;
 
 	// Radius inside which players are active
 	static thread_local const bool is_transfer_limited =
 		g_settings->exists("unlimited_player_transfer_distance") &&
 		!g_settings->getBool("unlimited_player_transfer_distance");
 
-	static thread_local const s16 player_transfer_dist =
-		g_settings->getS16("player_transfer_distance") * MAP_BLOCKSIZE;
+	static thread_local const s32 player_transfer_dist =
+		g_settings->getS32("player_transfer_distance") * MAP_BLOCKSIZE;
 
-	s16 player_radius = player_transfer_dist == 0 && is_transfer_limited ?
+	s32 player_radius = player_transfer_dist == 0 && is_transfer_limited ?
 		radius : player_transfer_dist;
 
-	s16 my_radius = MYMIN(radius, playersao->getWantedRange() * MAP_BLOCKSIZE);
+	s32 my_radius = MYMIN(radius, playersao->getWantedRange() * MAP_BLOCKSIZE);
 	if (my_radius <= 0)
 		my_radius = radius;
 
@@ -2251,11 +2251,11 @@ void Server::fadeSound(s32 handle, float step, float gain)
 		m_playing_sounds.erase(it);
 }
 
-void Server::sendRemoveNode(v3s16 p, std::unordered_set<u16> *far_players,
+void Server::sendRemoveNode(v3s32 p, std::unordered_set<u16> *far_players,
 		float far_d_nodes)
 {
 	v3f p_f = intToFloat(p, BS);
-	v3s16 block_pos = getNodeBlockPos(p);
+	v3s32 block_pos = getNodeBlockPos(p);
 
 	NetworkPacket pkt(TOCLIENT_REMOVENODE, 6);
 	pkt << p;
@@ -2263,11 +2263,11 @@ void Server::sendRemoveNode(v3s16 p, std::unordered_set<u16> *far_players,
 	sendNodeChangePkt(pkt, block_pos, p_f, far_d_nodes, far_players);
 }
 
-void Server::sendAddNode(v3s16 p, MapNode n, std::unordered_set<u16> *far_players,
+void Server::sendAddNode(v3s32 p, MapNode n, std::unordered_set<u16> *far_players,
 		float far_d_nodes, bool remove_metadata)
 {
 	v3f p_f = intToFloat(p, BS);
-	v3s16 block_pos = getNodeBlockPos(p);
+	v3s32 block_pos = getNodeBlockPos(p);
 
 	NetworkPacket pkt(TOCLIENT_ADDNODE, 6 + 2 + 1 + 1 + 1);
 	pkt << p << n.param0 << n.param1 << n.param2
@@ -2275,7 +2275,7 @@ void Server::sendAddNode(v3s16 p, MapNode n, std::unordered_set<u16> *far_player
 	sendNodeChangePkt(pkt, block_pos, p_f, far_d_nodes, far_players);
 }
 
-void Server::sendNodeChangePkt(NetworkPacket &pkt, v3s16 block_pos,
+void Server::sendNodeChangePkt(NetworkPacket &pkt, v3s32 block_pos,
 		v3f p, float far_d_nodes, std::unordered_set<u16> *far_players)
 {
 	float maxd = far_d_nodes * BS;
@@ -2305,7 +2305,7 @@ void Server::sendNodeChangePkt(NetworkPacket &pkt, v3s16 block_pos,
 	}
 }
 
-void Server::sendMetadataChanged(const std::unordered_set<v3s16> &positions, float far_d_nodes)
+void Server::sendMetadataChanged(const std::unordered_set<v3s32> &positions, float far_d_nodes)
 {
 	NodeMetadataList meta_updates_list(false);
 	std::ostringstream os(std::ios::binary);
@@ -2319,17 +2319,17 @@ void Server::sendMetadataChanged(const std::unordered_set<v3s16> &positions, flo
 			continue;
 
 		ServerActiveObject *player = getPlayerSAO(i);
-		v3s16 player_pos;
+		v3s32 player_pos;
 		if (player)
 			player_pos = floatToInt(player->getBasePosition(), BS);
 
-		for (const v3s16 pos : positions) {
+		for (const v3s32 pos : positions) {
 			NodeMetadata *meta = m_env->getMap().getNodeMetadata(pos);
 
 			if (!meta)
 				continue;
 
-			v3s16 block_pos = getNodeBlockPos(pos);
+			v3s32 block_pos = getNodeBlockPos(pos);
 			if (!client->isBlockSent(block_pos) ||
 					player_pos.getDistanceFrom(pos) > far_d_nodes) {
 				client->SetBlockNotSent(block_pos);
@@ -2360,7 +2360,7 @@ void Server::sendMetadataChanged(const std::unordered_set<v3s16> &positions, flo
 void Server::SendBlockNoLock(session_t peer_id, MapBlock *block, u8 ver,
 		u16 net_proto_version, SerializedBlockCache *cache)
 {
-	thread_local const int net_compression_level = rangelim(g_settings->getS16("map_compression_level_net"), -1, 9);
+	thread_local const int net_compression_level = rangelim(g_settings->getS32("map_compression_level_net"), -1, 9);
 	std::string s, *sptr = nullptr;
 
 	if (cache) {
@@ -2458,7 +2458,7 @@ void Server::SendBlocks(float dtime)
 	}
 }
 
-bool Server::SendBlock(session_t peer_id, const v3s16 &blockpos)
+bool Server::SendBlock(session_t peer_id, const v3s32 &blockpos)
 {
 	MapBlock *block = m_env->getMap().getBlockNoCreateNoEx(blockpos);
 	if (!block)
@@ -3735,18 +3735,18 @@ v3f Server::findSpawnPos()
 	for (s32 i = 0; i < 4000 && !is_good; i++) {
 		s32 range = MYMIN(1 + i, range_max);
 		// We're going to try to throw the player to this position
-		v2s16 nodepos2d = v2s16(
+		v2s32 nodepos2d = v2s32(
 			-range + myrand_range(0, range*2),
 			-range + myrand_range(0, range*2));
 		// Get spawn level at point
-		s16 spawn_level = m_emerge->getSpawnLevelAtPoint(nodepos2d);
+		s32 spawn_level = m_emerge->getSpawnLevelAtPoint(nodepos2d);
 		// Continue if MAX_MAP_GENERATION_LIMIT was returned by the mapgen to
 		// signify an unsuitable spawn position, or if outside limits.
 		if (spawn_level >= MAX_MAP_GENERATION_LIMIT ||
 				spawn_level <= -MAX_MAP_GENERATION_LIMIT)
 			continue;
 
-		v3s16 nodepos(nodepos2d.X, spawn_level, nodepos2d.Y);
+		v3s32 nodepos(nodepos2d.X, spawn_level, nodepos2d.Y);
 		// Consecutive empty nodes
 		s32 air_count = 0;
 
@@ -3756,7 +3756,7 @@ v3f Server::findSpawnPos()
 		// no obstructions, but mapgen decorations are generated after spawn so
 		// the player may end up inside one.
 		for (s32 i = 0; i < 8; i++) {
-			v3s16 blockpos = getNodeBlockPos(nodepos);
+			v3s32 blockpos = getNodeBlockPos(nodepos);
 			map.emergeBlock(blockpos, true);
 			content_t c = map.getNode(nodepos).getContent();
 

@@ -57,14 +57,14 @@ RemoteClient::RemoteClient() :
 	m_max_simul_sends(g_settings->getU16("max_simultaneous_block_sends_per_client")),
 	m_min_time_from_building(
 		g_settings->getFloat("full_block_send_enable_min_time_from_building")),
-	m_max_send_distance(g_settings->getS16("max_block_send_distance")),
-	m_block_optimize_distance(g_settings->getS16("block_send_optimize_distance")),
-	m_max_gen_distance(g_settings->getS16("max_block_generate_distance")),
+	m_max_send_distance(g_settings->getS32("max_block_send_distance")),
+	m_block_optimize_distance(g_settings->getS32("block_send_optimize_distance")),
+	m_max_gen_distance(g_settings->getS32("max_block_generate_distance")),
 	m_occ_cull(g_settings->getBool("server_side_occlusion_culling"))
 {
 }
 
-void RemoteClient::ResendBlockIfOnWire(v3s16 p)
+void RemoteClient::ResendBlockIfOnWire(v3s32 p)
 {
 	// if this block is on wire, mark it for sending again as soon as possible
 	if (m_blocks_sending.find(p) != m_blocks_sending.end()) {
@@ -128,9 +128,9 @@ void RemoteClient::GetNextBlocks (
 	// Predict to next block
 	v3f playerpos_predicted = playerpos + playerspeeddir * (MAP_BLOCKSIZE * BS);
 
-	v3s16 center_nodepos = floatToInt(playerpos_predicted, BS);
+	v3s32 center_nodepos = floatToInt(playerpos_predicted, BS);
 
-	v3s16 center = getNodeBlockPos(center_nodepos);
+	v3s32 center = getNodeBlockPos(center_nodepos);
 
 	// Camera position and direction
 	v3f camera_pos = sao->getEyePosition();
@@ -166,7 +166,7 @@ void RemoteClient::GetNextBlocks (
 	s32 new_nearest_unsent_d = -1;
 
 	// Get view range and camera fov (radians) from the client
-	s16 wanted_range = sao->getWantedRange() + 1;
+	s32 wanted_range = sao->getWantedRange() + 1;
 	float camera_fov = sao->getFov();
 
 	/*
@@ -184,13 +184,13 @@ void RemoteClient::GetNextBlocks (
 	}
 	if (m_nearest_unsent_d > 0) {
 		// make sure any blocks modified since the last time we sent blocks are resent
-		for (const v3s16 &p : m_blocks_modified) {
+		for (const v3s32 &p : m_blocks_modified) {
 			m_nearest_unsent_d = std::min(m_nearest_unsent_d, center.getDistanceFrom(p));
 		}
 	}
 	m_blocks_modified.clear();
 
-	s16 d_start = m_nearest_unsent_d;
+	s32 d_start = m_nearest_unsent_d;
 
 	// Distrust client-sent FOV and get server-set player object property
 	// zoom FOV (degrees) as a check to avoid hacked clients using FOV to load
@@ -200,19 +200,19 @@ void RemoteClient::GetNextBlocks (
 		0.0f :
 		std::max(camera_fov, sao->getZoomFOV() * core::DEGTORAD);
 
-	const s16 full_d_max = std::min(adjustDist(m_max_send_distance, prop_zoom_fov),
+	const s32 full_d_max = std::min(adjustDist(m_max_send_distance, prop_zoom_fov),
 		wanted_range);
-	const s16 d_opt = std::min(adjustDist(m_block_optimize_distance, prop_zoom_fov),
+	const s32 d_opt = std::min(adjustDist(m_block_optimize_distance, prop_zoom_fov),
 		wanted_range);
-	const s16 d_blocks_in_sight = full_d_max * BS * MAP_BLOCKSIZE;
+	const s32 d_blocks_in_sight = full_d_max * BS * MAP_BLOCKSIZE;
 
-	s16 d_max_gen = std::min(adjustDist(m_max_gen_distance, prop_zoom_fov),
+	s32 d_max_gen = std::min(adjustDist(m_max_gen_distance, prop_zoom_fov),
 		wanted_range);
 
-	s16 d_max = full_d_max;
+	s32 d_max = full_d_max;
 
 	// Don't loop very much at a time
-	s16 max_d_increment_at_time = 2;
+	s32 max_d_increment_at_time = 2;
 	if (d_max > d_start + max_d_increment_at_time)
 		d_max = d_start + max_d_increment_at_time;
 
@@ -229,19 +229,19 @@ void RemoteClient::GetNextBlocks (
 	s32 nearest_sent_d = -1;
 	//bool queue_is_full = false;
 
-	const v3s16 cam_pos_nodes = floatToInt(camera_pos, BS);
+	const v3s32 cam_pos_nodes = floatToInt(camera_pos, BS);
 
-	s16 d;
+	s32 d;
 	for (d = d_start; d <= d_max; d++) {
 		/*
 			Get the border/face dot coordinates of a "d-radiused"
 			box
 		*/
-		std::vector<v3s16> list = FacePositionCache::getFacePositions(d);
+		std::vector<v3s32> list = FacePositionCache::getFacePositions(d);
 
-		std::vector<v3s16>::iterator li;
+		std::vector<v3s32>::iterator li;
 		for (li = list.begin(); li != list.end(); ++li) {
-			v3s16 p = *li + center;
+			v3s32 p = *li + center;
 
 			/*
 				Send throttling
@@ -395,7 +395,7 @@ queue_full_break:
 		m_nearest_unsent_d = new_nearest_unsent_d;
 }
 
-void RemoteClient::GotBlock(v3s16 p)
+void RemoteClient::GotBlock(v3s32 p)
 {
 	if (m_blocks_sending.find(p) != m_blocks_sending.end()) {
 		m_blocks_sending.erase(p);
@@ -407,7 +407,7 @@ void RemoteClient::GotBlock(v3s16 p)
 	}
 }
 
-void RemoteClient::SentBlock(v3s16 p)
+void RemoteClient::SentBlock(v3s32 p)
 {
 	if (m_blocks_sending.find(p) == m_blocks_sending.end())
 		m_blocks_sending[p] = 0.0f;
@@ -416,7 +416,7 @@ void RemoteClient::SentBlock(v3s16 p)
 				" already in m_blocks_sending"<<std::endl;
 }
 
-void RemoteClient::SetBlockNotSent(v3s16 p)
+void RemoteClient::SetBlockNotSent(v3s32 p)
 {
 	m_nothing_to_send_pause_timer = 0;
 
@@ -426,12 +426,12 @@ void RemoteClient::SetBlockNotSent(v3s16 p)
 		m_blocks_modified.insert(p);
 }
 
-void RemoteClient::SetBlocksNotSent(std::map<v3s16, MapBlock*> &blocks)
+void RemoteClient::SetBlocksNotSent(std::map<v3s32, MapBlock*> &blocks)
 {
 	m_nothing_to_send_pause_timer = 0;
 
 	for (auto &block : blocks) {
-		v3s16 p = block.first;
+		v3s32 p = block.first;
 		// remove the block from sending and sent sets,
 		// and mark as modified if found
 		if (m_blocks_sending.erase(p) + m_blocks_sent.erase(p) > 0)
@@ -638,7 +638,7 @@ std::vector<session_t> ClientInterface::getClientIDs(ClientState min_state)
 	return reply;
 }
 
-void ClientInterface::markBlockposAsNotSent(const v3s16 &pos)
+void ClientInterface::markBlockposAsNotSent(const v3s32 &pos)
 {
 	RecursiveMutexAutoLock clientslock(m_clients_mutex);
 	for (const auto &client : m_clients) {

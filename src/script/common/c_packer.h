@@ -43,7 +43,7 @@ extern "C" {
  */
 struct PackedInstr
 {
-	s16 type; // LUA_T* or INSTR_*
+	s32 type; // LUA_T* or INSTR_*
 	u16 set_into; // set into table on stack
 	bool keep_ref; // is referenced later by INSTR_PUSHREF?
 	bool pop; // remove from stack?

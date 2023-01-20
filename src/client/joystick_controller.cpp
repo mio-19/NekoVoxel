@@ -36,7 +36,7 @@ bool JoystickButtonCmb::isTriggered(const irr::SEvent::SJoystickEvent &ev) const
 
 bool JoystickAxisCmb::isTriggered(const irr::SEvent::SJoystickEvent &ev) const
 {
-	s16 ax_val = ev.Axis[axis_to_compare];
+	s32 ax_val = ev.Axis[axis_to_compare];
 
 	return (ax_val * direction < -thresh);
 }
@@ -306,7 +306,7 @@ void JoystickController::clear()
 
 float JoystickController::getAxisWithoutDead(JoystickAxis axis)
 {
-	s16 v = m_axes_vals[axis];
+	s32 v = m_axes_vals[axis];
 
 	if (abs(v) < m_layout.axes_deadzone)
 		return 0.0f;

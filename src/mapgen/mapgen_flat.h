@@ -33,7 +33,7 @@ extern FlagDesc flagdesc_mapgen_flat[];
 
 struct MapgenFlatParams : public MapgenParams
 {
-	s16 ground_level = 8;
+	s32 ground_level = 8;
 	float lake_threshold = -0.45f;
 	float lake_steepness = 48.0f;
 	float hill_threshold = 0.45f;
@@ -44,13 +44,13 @@ struct MapgenFlatParams : public MapgenParams
 	u16 small_cave_num_max = 0;
 	u16 large_cave_num_min = 0;
 	u16 large_cave_num_max = 2;
-	s16 large_cave_depth = -33;
+	s32 large_cave_depth = -33;
 	float large_cave_flooded = 0.5f;
-	s16 cavern_limit = -256;
-	s16 cavern_taper = 256;
+	s32 cavern_limit = -256;
+	s32 cavern_taper = 256;
 	float cavern_threshold = 0.7f;
-	s16 dungeon_ymin = -31000;
-	s16 dungeon_ymax = 31000;
+	s32 dungeon_ymin = -31000;
+	s32 dungeon_ymax = 31000;
 
 	NoiseParams np_terrain;
 	NoiseParams np_filler_depth;
@@ -76,11 +76,11 @@ public:
 	virtual MapgenType getType() const { return MAPGEN_FLAT; }
 
 	virtual void makeChunk(BlockMakeData *data);
-	int getSpawnLevelAtPoint(v2s16 p);
-	s16 generateTerrain();
+	int getSpawnLevelAtPoint(v2s32 p);
+	s32 generateTerrain();
 
 private:
-	s16 ground_level;
+	s32 ground_level;
 	float lake_threshold;
 	float lake_steepness;
 	float hill_threshold;

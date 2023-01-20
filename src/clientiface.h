@@ -207,7 +207,7 @@ enum ClientStateEvent
 */
 struct PrioritySortedBlockTransfer
 {
-	PrioritySortedBlockTransfer(float a_priority, const v3s16 &a_pos, session_t a_peer_id)
+	PrioritySortedBlockTransfer(float a_priority, const v3s32 &a_pos, session_t a_peer_id)
 	{
 		priority = a_priority;
 		pos = a_pos;
@@ -218,7 +218,7 @@ struct PrioritySortedBlockTransfer
 		return priority < other.priority;
 	}
 	float priority;
-	v3s16 pos;
+	v3s32 pos;
 	session_t peer_id;
 };
 
@@ -261,12 +261,12 @@ public:
 	void GetNextBlocks(ServerEnvironment *env, EmergeManager* emerge,
 			float dtime, std::vector<PrioritySortedBlockTransfer> &dest);
 
-	void GotBlock(v3s16 p);
+	void GotBlock(v3s32 p);
 
-	void SentBlock(v3s16 p);
+	void SentBlock(v3s32 p);
 
-	void SetBlockNotSent(v3s16 p);
-	void SetBlocksNotSent(std::map<v3s16, MapBlock*> &blocks);
+	void SetBlockNotSent(v3s32 p);
+	void SetBlocksNotSent(std::map<v3s32, MapBlock*> &blocks);
 
 	/**
 	 * tell client about this block being modified right now.
@@ -274,11 +274,11 @@ public:
 	 * while modification is processed by server
 	 * @param p position of modified block
 	 */
-	void ResendBlockIfOnWire(v3s16 p);
+	void ResendBlockIfOnWire(v3s32 p);
 
 	u32 getSendingCount() const { return m_blocks_sending.size(); }
 
-	bool isBlockSent(v3s16 p) const
+	bool isBlockSent(v3s32 p) const
 	{
 		return m_blocks_sent.find(p) != m_blocks_sent.end();
 	}
@@ -372,16 +372,16 @@ private:
 		List of block positions.
 		No MapBlock* is stored here because the blocks can get deleted.
 	*/
-	std::set<v3s16> m_blocks_sent;
-	s16 m_nearest_unsent_d = 0;
-	v3s16 m_last_center;
+	std::set<v3s32> m_blocks_sent;
+	s32 m_nearest_unsent_d = 0;
+	v3s32 m_last_center;
 	v3f m_last_camera_dir;
 
 	const u16 m_max_simul_sends;
 	const float m_min_time_from_building;
-	const s16 m_max_send_distance;
-	const s16 m_block_optimize_distance;
-	const s16 m_max_gen_distance;
+	const s32 m_max_send_distance;
+	const s32 m_block_optimize_distance;
+	const s32 m_max_gen_distance;
 	const bool m_occ_cull;
 
 	/*
@@ -392,7 +392,7 @@ private:
 		Block is removed when GOTBLOCKS is received.
 		Value is time from sending. (not used at the moment)
 	*/
-	std::map<v3s16, float> m_blocks_sending;
+	std::map<v3s32, float> m_blocks_sending;
 
 	/*
 		Blocks that have been modified since blocks were
@@ -402,7 +402,7 @@ private:
 
 		List of block positions.
 	*/
-	std::set<v3s16> m_blocks_modified;
+	std::set<v3s32> m_blocks_modified;
 
 	/*
 		Count of excess GotBlocks().
@@ -455,7 +455,7 @@ public:
 	std::vector<session_t> getClientIDs(ClientState min_state=CS_Active);
 
 	/* mark block as not sent to active client sessions */
-	void markBlockposAsNotSent(const v3s16 &pos);
+	void markBlockposAsNotSent(const v3s32 &pos);
 
 	/* verify is server user limit was reached */
 	bool isUserLimitReached();

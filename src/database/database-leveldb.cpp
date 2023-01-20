@@ -55,7 +55,7 @@ Database_LevelDB::~Database_LevelDB()
 	delete m_database;
 }
 
-bool Database_LevelDB::saveBlock(const v3s16 &pos, const std::string &data)
+bool Database_LevelDB::saveBlock(const v3s32 &pos, const std::string &data)
 {
 	leveldb::Status status = m_database->Put(leveldb::WriteOptions(),
 			i64tos(getBlockAsInteger(pos)), data);
@@ -68,7 +68,7 @@ bool Database_LevelDB::saveBlock(const v3s16 &pos, const std::string &data)
 	return true;
 }
 
-void Database_LevelDB::loadBlock(const v3s16 &pos, std::string *block)
+void Database_LevelDB::loadBlock(const v3s32 &pos, std::string *block)
 {
 	leveldb::Status status = m_database->Get(leveldb::ReadOptions(),
 		i64tos(getBlockAsInteger(pos)), block);
@@ -77,7 +77,7 @@ void Database_LevelDB::loadBlock(const v3s16 &pos, std::string *block)
 		block->clear();
 }
 
-bool Database_LevelDB::deleteBlock(const v3s16 &pos)
+bool Database_LevelDB::deleteBlock(const v3s32 &pos)
 {
 	leveldb::Status status = m_database->Delete(leveldb::WriteOptions(),
 			i64tos(getBlockAsInteger(pos)));
@@ -90,7 +90,7 @@ bool Database_LevelDB::deleteBlock(const v3s16 &pos)
 	return true;
 }
 
-void Database_LevelDB::listAllLoadableBlocks(std::vector<v3s16> &dst)
+void Database_LevelDB::listAllLoadableBlocks(std::vector<v3s32> &dst)
 {
 	leveldb::Iterator* it = m_database->NewIterator(leveldb::ReadOptions());
 	for (it->SeekToFirst(); it->Valid(); it->Next()) {

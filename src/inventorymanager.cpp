@@ -279,7 +279,7 @@ void IMoveAction::apply(InventoryManager *mgr, ServerActiveObject *player, IGame
 	}
 
 	if (move_somewhere) {
-		s16 old_to_i = to_i;
+		s32 old_to_i = to_i;
 		u16 old_count = count;
 		caused_by_move_somewhere = true;
 		move_somewhere = false;
@@ -295,9 +295,9 @@ void IMoveAction::apply(InventoryManager *mgr, ServerActiveObject *player, IGame
 			<< std::endl;
 
 		// Try to add the item to destination list
-		s16 dest_size = list_to->getSize();
+		s32 dest_size = list_to->getSize();
 		// First try all the non-empty slots
-		for (s16 dest_i = 0; dest_i < dest_size && count > 0; dest_i++) {
+		for (s32 dest_i = 0; dest_i < dest_size && count > 0; dest_i++) {
 			if (!list_to->getItem(dest_i).empty()) {
 				to_i = dest_i;
 				apply(mgr, player, gamedef);
@@ -307,7 +307,7 @@ void IMoveAction::apply(InventoryManager *mgr, ServerActiveObject *player, IGame
 		}
 
 		// Then try all the empty ones
-		for (s16 dest_i = 0; dest_i < dest_size && count > 0; dest_i++) {
+		for (s32 dest_i = 0; dest_i < dest_size && count > 0; dest_i++) {
 			if (list_to->getItem(dest_i).empty()) {
 				to_i = dest_i;
 				apply(mgr, player, gamedef);

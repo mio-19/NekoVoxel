@@ -31,10 +31,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 struct QueuedMeshUpdate
 {
-	v3s16 p = v3s16(-1337, -1337, -1337);
+	v3s32 p = v3s32(-1337, -1337, -1337);
 	bool ack_block_to_server = false;
 	int crack_level = -1;
-	v3s16 crack_pos;
+	v3s32 crack_pos;
 	MeshMakeData *data = nullptr; // This is generated in MeshUpdateQueue::pop()
 	std::vector<MapBlock *> map_blocks;
 	bool urgent = false;
@@ -61,14 +61,14 @@ public:
 
 	// Caches the block at p and its neighbors (if needed) and queues a mesh
 	// update for the block at p
-	bool addBlock(Map *map, v3s16 p, bool ack_block_to_server, bool urgent);
+	bool addBlock(Map *map, v3s32 p, bool ack_block_to_server, bool urgent);
 
 	// Returned pointer must be deleted
 	// Returns NULL if queue is empty
 	QueuedMeshUpdate *pop();
 
 	// Marks a position as finished, unblocking the next update
-	void done(v3s16 pos);
+	void done(v3s32 pos);
 
 	u32 size()
 	{
@@ -79,8 +79,8 @@ public:
 private:
 	Client *m_client;
 	std::vector<QueuedMeshUpdate *> m_queue;
-	std::unordered_set<v3s16> m_urgents;
-	std::unordered_set<v3s16> m_inflight_blocks;
+	std::unordered_set<v3s32> m_urgents;
+	std::unordered_set<v3s32> m_inflight_blocks;
 	std::mutex m_mutex;
 
 	// TODO: Add callback to update these when g_settings changes
@@ -94,7 +94,7 @@ private:
 
 struct MeshUpdateResult
 {
-	v3s16 p = v3s16(-1338, -1338, -1338);
+	v3s32 p = v3s32(-1338, -1338, -1338);
 	MapBlockMesh *mesh = nullptr;
 	u8 solid_sides = 0;
 	bool ack_block_to_server = false;
@@ -109,7 +109,7 @@ class MeshUpdateManager;
 class MeshUpdateWorkerThread : public UpdateThread
 {
 public:
-	MeshUpdateWorkerThread(MeshUpdateQueue *queue_in, MeshUpdateManager *manager, v3s16 *camera_offset);
+	MeshUpdateWorkerThread(MeshUpdateQueue *queue_in, MeshUpdateManager *manager, v3s32 *camera_offset);
 
 protected:
 	virtual void doUpdate();
@@ -117,7 +117,7 @@ protected:
 private:
 	MeshUpdateQueue *m_queue_in;
 	MeshUpdateManager *m_manager;
-	v3s16 *m_camera_offset;
+	v3s32 *m_camera_offset;
 
 	// TODO: Add callback to update these when g_settings changes
 	int m_generation_interval;
@@ -130,13 +130,13 @@ public:
 
 	// Caches the block at p and its neighbors (if needed) and queues a mesh
 	// update for the block at p
-	void updateBlock(Map *map, v3s16 p, bool ack_block_to_server, bool urgent,
+	void updateBlock(Map *map, v3s32 p, bool ack_block_to_server, bool urgent,
 			bool update_neighbors = false);
 	void putResult(const MeshUpdateResult &r);
 	bool getNextResult(MeshUpdateResult &r);
 
 
-	v3s16 m_camera_offset;
+	v3s32 m_camera_offset;
 
 	void start();
 	void stop();

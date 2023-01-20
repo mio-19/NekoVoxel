@@ -27,10 +27,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class Database_Dummy : public MapDatabase, public PlayerDatabase, public ModStorageDatabase
 {
 public:
-	bool saveBlock(const v3s16 &pos, const std::string &data);
-	void loadBlock(const v3s16 &pos, std::string *block);
-	bool deleteBlock(const v3s16 &pos);
-	void listAllLoadableBlocks(std::vector<v3s16> &dst);
+	bool saveBlock(const v3s32 &pos, const std::string &data);
+	void loadBlock(const v3s32 &pos, std::string *block);
+	bool deleteBlock(const v3s32 &pos);
+	void listAllLoadableBlocks(std::vector<v3s32> &dst);
 
 	void savePlayer(RemotePlayer *player);
 	bool loadPlayer(RemotePlayer *player, PlayerSAO *sao);

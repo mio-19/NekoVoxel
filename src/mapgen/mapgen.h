@@ -81,7 +81,7 @@ enum GenNotifyType {
 
 struct GenNotifyEvent {
 	GenNotifyType type;
-	v3s16 pos;
+	v3s32 pos;
 	u32 id;
 };
 
@@ -91,8 +91,8 @@ public:
 	GenerateNotifier() = default;
 	GenerateNotifier(u32 notify_on, const std::set<u32> *notify_on_deco_ids);
 
-	bool addEvent(GenNotifyType type, v3s16 pos, u32 id=0);
-	void getEvents(std::map<std::string, std::vector<v3s16> > &event_map);
+	bool addEvent(GenNotifyType type, v3s32 pos, u32 id=0);
+	void getEvents(std::map<std::string, std::vector<v3s32> > &event_map);
 	void clearEvents();
 
 private:
@@ -119,18 +119,18 @@ struct MapgenParams {
 	virtual ~MapgenParams();
 
 	MapgenType mgtype = MAPGEN_DEFAULT;
-	s16 chunksize = 5;
+	s32 chunksize = 5;
 	u64 seed = 0;
-	s16 water_level = 1;
-	s16 mapgen_limit = MAX_MAP_GENERATION_LIMIT;
+	s32 water_level = 1;
+	s32 mapgen_limit = MAX_MAP_GENERATION_LIMIT;
 	// Flags set in readParams
 	u32 flags = 0;
 	u32 spflags = 0;
 
 	BiomeParams *bparams = nullptr;
 
-	s16 mapgen_edge_min = -MAX_MAP_GENERATION_LIMIT;
-	s16 mapgen_edge_max = MAX_MAP_GENERATION_LIMIT;
+	s32 mapgen_edge_min = -MAX_MAP_GENERATION_LIMIT;
+	s32 mapgen_edge_max = MAX_MAP_GENERATION_LIMIT;
 
 	virtual void readParams(const Settings *settings);
 	virtual void writeParams(Settings *settings) const;
@@ -166,9 +166,9 @@ public:
 	const NodeDefManager *ndef = nullptr;
 
 	u32 blockseed;
-	s16 *heightmap = nullptr;
+	s32 *heightmap = nullptr;
 	biome_t *biomemap = nullptr;
-	v3s16 csize;
+	v3s32 csize;
 
 	BiomeGen *biomegen = nullptr;
 	GenerateNotifier gennotify;
@@ -180,15 +180,15 @@ public:
 
 	virtual MapgenType getType() const { return MAPGEN_INVALID; }
 
-	static u32 getBlockSeed(v3s16 p, s32 seed);
-	static u32 getBlockSeed2(v3s16 p, s32 seed);
-	s16 findGroundLevel(v2s16 p2d, s16 ymin, s16 ymax);
-	s16 findLiquidSurface(v2s16 p2d, s16 ymin, s16 ymax);
-	void updateHeightmap(v3s16 nmin, v3s16 nmax);
-	void getSurfaces(v2s16 p2d, s16 ymin, s16 ymax,
-		std::vector<s16> &floors, std::vector<s16> &ceilings);
+	static u32 getBlockSeed(v3s32 p, s32 seed);
+	static u32 getBlockSeed2(v3s32 p, s32 seed);
+	s32 findGroundLevel(v2s32 p2d, s32 ymin, s32 ymax);
+	s32 findLiquidSurface(v2s32 p2d, s32 ymin, s32 ymax);
+	void updateHeightmap(v3s32 nmin, v3s32 nmax);
+	void getSurfaces(v2s32 p2d, s32 ymin, s32 ymax,
+		std::vector<s32> &floors, std::vector<s32> &ceilings);
 
-	void updateLiquid(UniqueQueue<v3s16> *trans_liquid, v3s16 nmin, v3s16 nmax);
+	void updateLiquid(UniqueQueue<v3s32> *trans_liquid, v3s32 nmin, v3s32 nmax);
 
 	/**
 	 * Set light in entire area to fixed value.
@@ -196,7 +196,7 @@ public:
 	 * @param nmin Area to operate on
 	 * @param nmax ^
 	 */
-	void setLighting(u8 light, v3s16 nmin, v3s16 nmax);
+	void setLighting(u8 light, v3s32 nmin, v3s32 nmax);
 	/**
 	 * Run all lighting calculations.
 	 * @param nmin Area to spread sunlight in
@@ -205,7 +205,7 @@ public:
 	 * @param full_nmax ^
 	 * @param propagate_shadow see propagateSunlight()
 	 */
-	void calcLighting(v3s16 nmin, v3s16 nmax, v3s16 full_nmin, v3s16 full_nmax,
+	void calcLighting(v3s32 nmin, v3s32 nmax, v3s32 full_nmin, v3s32 full_nmax,
 		bool propagate_shadow = true);
 	/**
 	 * Spread sunlight from the area above downwards.
@@ -215,24 +215,24 @@ public:
 	 * @param nmax ^
 	 * @param propagate_shadow Ignore obstructions above and spread sun anyway
 	 */
-	void propagateSunlight(v3s16 nmin, v3s16 nmax, bool propagate_shadow);
+	void propagateSunlight(v3s32 nmin, v3s32 nmax, bool propagate_shadow);
 	/**
 	 * Spread light in the given area.
 	 * Artificial light is taken from nodedef, sunlight must already be set.
 	 * @param nmin Area to operate on
 	 * @param nmax ^
 	 */
-	void spreadLight(const v3s16 &nmin, const v3s16 &nmax);
+	void spreadLight(const v3s32 &nmin, const v3s32 &nmax);
 
 	virtual void makeChunk(BlockMakeData *data) {}
-	virtual int getGroundLevelAtPoint(v2s16 p) { return 0; }
+	virtual int getGroundLevelAtPoint(v2s32 p) { return 0; }
 
 	// getSpawnLevelAtPoint() is a function within each mapgen that returns a
 	// suitable y co-ordinate for player spawn ('suitable' usually meaning
 	// within 16 nodes of water_level). If a suitable spawn level cannot be
 	// found at the specified (X, Z) 'MAX_MAP_GENERATION_LIMIT' is returned to
 	// signify this and to cause Server::findSpawnPos() to try another (X, Z).
-	virtual int getSpawnLevelAtPoint(v2s16 p) { return 0; }
+	virtual int getSpawnLevelAtPoint(v2s32 p) { return 0; }
 
 	// Mapgen management functions
 	static MapgenType getMapgenType(const std::string &mgname);
@@ -253,13 +253,13 @@ private:
 	 * @param light Light value (contains both banks)
 	 *
 	 */
-	void lightSpread(VoxelArea &a, std::queue<std::pair<v3s16, u8>> &queue,
-		const v3s16 &p, u8 light);
+	void lightSpread(VoxelArea &a, std::queue<std::pair<v3s32, u8>> &queue,
+		const v3s32 &p, u8 light);
 
 	// isLiquidHorizontallyFlowable() is a helper function for updateLiquid()
 	// that checks whether there are floodable nodes without liquid beneath
 	// the node at index vi.
-	inline bool isLiquidHorizontallyFlowable(u32 vi, v3s16 em);
+	inline bool isLiquidHorizontallyFlowable(u32 vi, v3s32 em);
 };
 
 /*
@@ -283,10 +283,10 @@ public:
 
 	virtual void generateBiomes();
 	virtual void dustTopNodes();
-	virtual void generateCavesNoiseIntersection(s16 max_stone_y);
-	virtual void generateCavesRandomWalk(s16 max_stone_y, s16 large_cave_ymax);
-	virtual bool generateCavernsNoise(s16 max_stone_y);
-	virtual void generateDungeons(s16 max_stone_y);
+	virtual void generateCavesNoiseIntersection(s32 max_stone_y);
+	virtual void generateCavesRandomWalk(s32 max_stone_y, s32 large_cave_ymax);
+	virtual bool generateCavernsNoise(s32 max_stone_y);
+	virtual void generateDungeons(s32 max_stone_y);
 
 protected:
 	EmergeParams *m_emerge;
@@ -294,10 +294,10 @@ protected:
 
 	Noise *noise_filler_depth;
 
-	v3s16 node_min;
-	v3s16 node_max;
-	v3s16 full_node_min;
-	v3s16 full_node_max;
+	v3s32 node_min;
+	v3s32 node_max;
+	v3s32 full_node_min;
+	v3s32 full_node_max;
 
 	content_t c_stone;
 	content_t c_water_source;
@@ -325,11 +325,11 @@ protected:
 	int large_cave_num_min;
 	int large_cave_num_max;
 	float large_cave_flooded;
-	s16 large_cave_depth;
-	s16 dungeon_ymin;
-	s16 dungeon_ymax;
+	s32 large_cave_depth;
+	s32 dungeon_ymin;
+	s32 dungeon_ymax;
 };
 
 // Calculate exact edges of the outermost mapchunks that are within the set
 // mapgen_limit. Returns the minimum and maximum edges in nodes in that order.
-std::pair<s16, s16> get_mapgen_edges(s16 mapgen_limit, s16 chunksize);
+std::pair<s32, s32> get_mapgen_edges(s32 mapgen_limit, s32 chunksize);

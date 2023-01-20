@@ -236,9 +236,9 @@ void TestMapSettingsManager::testMapMetaSaveLoad()
 
 	// Check that both results are correct
 	UASSERTEQ(u64, params1.seed, 12345);
-	UASSERTEQ(s16, params1.water_level, 5);
+	UASSERTEQ(s32, params1.water_level, 5);
 	UASSERTEQ(u64, params2.seed, 12345);
-	UASSERTEQ(s16, params2.water_level, 5);
+	UASSERTEQ(s32, params2.water_level, 5);
 }
 
 

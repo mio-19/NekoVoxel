@@ -120,7 +120,7 @@ void Clouds::render()
 	// The center point of drawing in the noise
 	v2f center_of_drawing_in_noise_f = -cloud_origin_from_camera_f;
 	// The integer center point of drawing in the noise
-	v2s16 center_of_drawing_in_noise_i(
+	v2s32 center_of_drawing_in_noise_i(
 		std::floor(center_of_drawing_in_noise_f.X / cloud_size),
 		std::floor(center_of_drawing_in_noise_f.Y / cloud_size)
 	);
@@ -174,10 +174,10 @@ void Clouds::render()
 	std::vector<video::S3DVertex> vertices;
 	vertices.reserve(16 * m_cloud_radius_i * m_cloud_radius_i);
 
-	for(s16 zi = -m_cloud_radius_i; zi < m_cloud_radius_i; zi++) {
+	for(s32 zi = -m_cloud_radius_i; zi < m_cloud_radius_i; zi++) {
 		u32 si = (zi + m_cloud_radius_i) * m_cloud_radius_i * 2 + m_cloud_radius_i;
 
-		for (s16 xi = -m_cloud_radius_i; xi < m_cloud_radius_i; xi++) {
+		for (s32 xi = -m_cloud_radius_i; xi < m_cloud_radius_i; xi++) {
 			u32 i = si + xi;
 
 			grid[i] = gridFilled(
@@ -191,11 +191,11 @@ void Clouds::render()
 #define INAREA(x, z, radius) \
 	((x) >= -(radius) && (x) < (radius) && (z) >= -(radius) && (z) < (radius))
 
-	for (s16 zi0= -m_cloud_radius_i; zi0 < m_cloud_radius_i; zi0++)
-	for (s16 xi0= -m_cloud_radius_i; xi0 < m_cloud_radius_i; xi0++)
+	for (s32 zi0= -m_cloud_radius_i; zi0 < m_cloud_radius_i; zi0++)
+	for (s32 xi0= -m_cloud_radius_i; xi0 < m_cloud_radius_i; xi0++)
 	{
-		s16 zi = zi0;
-		s16 xi = xi0;
+		s32 zi = zi0;
+		s32 xi = xi0;
 		// Draw from back to front for proper transparency
 		if(zi >= 0)
 			zi = m_cloud_radius_i - zi - 1;

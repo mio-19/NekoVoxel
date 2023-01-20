@@ -62,17 +62,17 @@ void ToolCapabilities::serialize(std::ostream &os, u16 protocol_version) const
 	else
 		writeU8(os, 4); // proto == 37
 	writeF32(os, full_punch_interval);
-	writeS16(os, max_drop_level);
+	writeS32(os, max_drop_level);
 	writeU32(os, groupcaps.size());
 	for (const auto &groupcap : groupcaps) {
 		const std::string *name = &groupcap.first;
 		const ToolGroupCap *cap = &groupcap.second;
 		os << serializeString16(*name);
-		writeS16(os, cap->uses);
-		writeS16(os, cap->maxlevel);
+		writeS32(os, cap->uses);
+		writeS32(os, cap->maxlevel);
 		writeU32(os, cap->times.size());
 		for (const auto &time : cap->times) {
-			writeS16(os, time.first);
+			writeS32(os, time.first);
 			writeF32(os, time.second);
 		}
 	}
@@ -81,7 +81,7 @@ void ToolCapabilities::serialize(std::ostream &os, u16 protocol_version) const
 
 	for (const auto &damageGroup : damageGroups) {
 		os << serializeString16(damageGroup.first);
-		writeS16(os, damageGroup.second);
+		writeS32(os, damageGroup.second);
 	}
 
 	if (protocol_version >= 38)
@@ -95,17 +95,17 @@ void ToolCapabilities::deSerialize(std::istream &is)
 		throw SerializationError("unsupported ToolCapabilities version");
 
 	full_punch_interval = readF32(is);
-	max_drop_level = readS16(is);
+	max_drop_level = readS32(is);
 	groupcaps.clear();
 	u32 groupcaps_size = readU32(is);
 	for (u32 i = 0; i < groupcaps_size; i++) {
 		std::string name = deSerializeString16(is);
 		ToolGroupCap cap;
-		cap.uses = readS16(is);
-		cap.maxlevel = readS16(is);
+		cap.uses = readS32(is);
+		cap.maxlevel = readS32(is);
 		u32 times_size = readU32(is);
 		for(u32 i = 0; i < times_size; i++) {
-			int level = readS16(is);
+			int level = readS32(is);
 			float time = readF32(is);
 			cap.times[level] = time;
 		}
@@ -115,7 +115,7 @@ void ToolCapabilities::deSerialize(std::istream &is)
 	u32 damage_groups_size = readU32(is);
 	for (u32 i = 0; i < damage_groups_size; i++) {
 		std::string name = deSerializeString16(is);
-		s16 rating = readS16(is);
+		s32 rating = readS32(is);
 		damageGroups[name] = rating;
 	}
 
@@ -311,7 +311,7 @@ HitParams getHitParams(const ItemGroupList &armor_groups,
 			rangelim(time_from_last_punch / tp->full_punch_interval, 0.0f, 1.0f);
 
 	for (const auto &damageGroup : tp->damageGroups) {
-		s16 armor = itemgroup_get(armor_groups, damageGroup.first);
+		s32 armor = itemgroup_get(armor_groups, damageGroup.first);
 		damage += damageGroup.second * punch_interval_multiplier * armor / 100.0;
 	}
 

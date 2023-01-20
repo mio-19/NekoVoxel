@@ -83,7 +83,7 @@ float Environment::getTimeOfDayF()
 	return m_time_of_day_f;
 }
 
-bool Environment::line_of_sight(v3f pos1, v3f pos2, v3s16 *p)
+bool Environment::line_of_sight(v3f pos1, v3f pos2, v3s32 *p)
 {
 	// Iterate trough nodes on the line
 	voxalgo::VoxelLineIterator iterator(pos1 / BS, (pos2 - pos1) / BS);
@@ -125,7 +125,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 			}
 		}
 		// Set search range
-		core::aabbox3d<s16> maximal_exceed = nodedef->getSelectionBoxIntUnion();
+		core::aabbox3d<s32> maximal_exceed = nodedef->getSelectionBoxIntUnion();
 		state->m_search_range.MinEdge = -maximal_exceed.MaxEdge;
 		state->m_search_range.MaxEdge = -maximal_exceed.MinEdge;
 		// Setting is done
@@ -134,7 +134,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 
 	// The index of the first pointed thing that was not returned
 	// before. The last index which needs to be tested.
-	s16 lastIndex = state->m_iterator.m_last_index;
+	s32 lastIndex = state->m_iterator.m_last_index;
 	if (!state->m_found.empty()) {
 		lastIndex = state->m_iterator.getIndex(
 			floatToInt(state->m_found.top().intersection_point, BS));
@@ -145,7 +145,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 	// first nodebox the shootline meets.
 	v3f found_boxcenter(0, 0, 0);
 	// The untested nodes are in this range.
-	core::aabbox3d<s16> new_nodes;
+	core::aabbox3d<s32> new_nodes;
 	while (state->m_iterator.m_current_index <= lastIndex) {
 		// Test the nodes around the current node in search_range.
 		new_nodes = state->m_search_range;
@@ -153,7 +153,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 		new_nodes.MaxEdge += state->m_iterator.m_current_node_pos;
 
 		// Only check new nodes
-		v3s16 delta = state->m_iterator.m_current_node_pos
+		v3s32 delta = state->m_iterator.m_current_node_pos
 			- state->m_previous_node;
 		if (delta.X > 0) {
 			new_nodes.MinEdge.X = new_nodes.MaxEdge.X;
@@ -169,18 +169,18 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 			new_nodes.MaxEdge.Z = new_nodes.MinEdge.Z;
 		}
 
-		if (new_nodes.MaxEdge.X == S16_MAX ||
-			new_nodes.MaxEdge.Y == S16_MAX ||
-			new_nodes.MaxEdge.Z == S16_MAX) {
+		if (new_nodes.MaxEdge.X == S32_MAX ||
+			new_nodes.MaxEdge.Y == S32_MAX ||
+			new_nodes.MaxEdge.Z == S32_MAX) {
 			break; // About to go out of bounds
 		}
 
 		// For each untested node
-		for (s16 x = new_nodes.MinEdge.X; x <= new_nodes.MaxEdge.X; x++)
-		for (s16 y = new_nodes.MinEdge.Y; y <= new_nodes.MaxEdge.Y; y++)
-		for (s16 z = new_nodes.MinEdge.Z; z <= new_nodes.MaxEdge.Z; z++) {
+		for (s32 x = new_nodes.MinEdge.X; x <= new_nodes.MaxEdge.X; x++)
+		for (s32 y = new_nodes.MinEdge.Y; y <= new_nodes.MaxEdge.Y; y++)
+		for (s32 z = new_nodes.MinEdge.Z; z <= new_nodes.MaxEdge.Z; z++) {
 			MapNode n;
-			v3s16 np(x, y, z);
+			v3s32 np(x, y, z);
 			bool is_valid_position;
 
 			n = map.getNode(np, &is_valid_position);
@@ -265,7 +265,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 			state->m_found.push(result);
 			// If this is nearer than the old nearest object,
 			// the search can be shorter
-			s16 newIndex = state->m_iterator.getIndex(
+			s32 newIndex = state->m_iterator.getIndex(
 				result.node_real_undersurface);
 			if (newIndex < lastIndex) {
 				lastIndex = newIndex;

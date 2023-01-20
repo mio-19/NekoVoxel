@@ -78,7 +78,7 @@ void sendAnnounce(AnnounceAction action,
 		server["rollback"]          = g_settings->getBool("enable_rollback_recording");
 		server["mapgen"]            = mg_name;
 		server["privs"]             = g_settings->get("default_privs");
-		server["can_see_far_names"] = g_settings->getS16("player_transfer_distance") <= 0;
+		server["can_see_far_names"] = g_settings->getS32("player_transfer_distance") <= 0;
 		server["mods"]              = Json::Value(Json::arrayValue);
 		for (const ModSpec &mod : mods) {
 			server["mods"].append(mod.name);

@@ -295,12 +295,12 @@ void read_object_properties(lua_State *L, int index,
 
 	lua_getfield(L, -1, "spritediv");
 	if(lua_istable(L, -1))
-		prop->spritediv = read_v2s16(L, -1);
+		prop->spritediv = read_v2s32(L, -1);
 	lua_pop(L, 1);
 
 	lua_getfield(L, -1, "initial_sprite_basepos");
 	if(lua_istable(L, -1))
-		prop->initial_sprite_basepos = read_v2s16(L, -1);
+		prop->initial_sprite_basepos = read_v2s32(L, -1);
 	lua_pop(L, 1);
 
 	getboolfield(L, -1, "is_visible", prop->is_visible);
@@ -407,9 +407,9 @@ void push_object_properties(lua_State *L, ObjectProperties *prop)
 	}
 	lua_setfield(L, -2, "colors");
 
-	push_v2s16(L, prop->spritediv);
+	push_v2s32(L, prop->spritediv);
 	lua_setfield(L, -2, "spritediv");
-	push_v2s16(L, prop->initial_sprite_basepos);
+	push_v2s32(L, prop->initial_sprite_basepos);
 	lua_setfield(L, -2, "initial_sprite_basepos");
 	lua_pushboolean(L, prop->is_visible);
 	lua_setfield(L, -2, "is_visible");
@@ -1932,7 +1932,7 @@ void read_hud_element(lua_State *L, HudElement *elem)
 	else
 		elem->item = getintfield_default(L, 2, "item", 0);
 	elem->dir     = getintfield_default(L, 2, "direction", 0);
-	elem->z_index = MYMAX(S16_MIN, MYMIN(S16_MAX,
+	elem->z_index = MYMAX(S32_MIN, MYMIN(S32_MAX,
 			getintfield_default(L, 2, "z_index", 0)));
 	elem->text2   = getstringfield_default(L, 2, "text2", "");
 
@@ -2080,7 +2080,7 @@ bool read_hud_change(lua_State *L, HudElementStat &stat, HudElement *elem, void 
 			*value = &elem->size;
 			break;
 		case HUD_STAT_Z_INDEX:
-			elem->z_index = MYMAX(S16_MIN, MYMIN(S16_MAX, luaL_checknumber(L, 4)));
+			elem->z_index = MYMAX(S32_MIN, MYMIN(S32_MAX, luaL_checknumber(L, 4)));
 			*value = &elem->z_index;
 			break;
 		case HUD_STAT_TEXT2:

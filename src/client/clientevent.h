@@ -63,7 +63,7 @@ struct ClientEventHudAdd
 	v2f align, offset;
 	v3f world_pos;
 	v2s32 size;
-	s16 z_index;
+	s32 z_index;
 };
 
 struct ClientEventHudChange

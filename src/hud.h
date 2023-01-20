@@ -106,7 +106,7 @@ struct HudElement {
 	v2f offset;
 	v3f world_pos;
 	v2s32 size;
-	s16 z_index = 0;
+	s32 z_index = 0;
 	std::string text2;
 	u32 style;
 };

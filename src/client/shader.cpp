@@ -833,7 +833,7 @@ void dumpShaderProgram(std::ostream &output_stream,
 		"----------------------------------" << std::endl;
 	size_t pos = 0;
 	size_t prev = 0;
-	s16 line = 1;
+	s32 line = 1;
 	while ((pos = program.find('\n', prev)) != std::string::npos) {
 		output_stream << line++ << ": "<< program.substr(prev, pos - prev) <<
 			std::endl;

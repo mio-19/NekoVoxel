@@ -459,11 +459,11 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 
 	// Update offset if too far away from the center of the map
 	m_camera_offset.X += CAMERA_OFFSET_STEP*
-			(((s16)(my_cp.X/BS) - m_camera_offset.X)/CAMERA_OFFSET_STEP);
+			(((s32)(my_cp.X/BS) - m_camera_offset.X)/CAMERA_OFFSET_STEP);
 	m_camera_offset.Y += CAMERA_OFFSET_STEP*
-			(((s16)(my_cp.Y/BS) - m_camera_offset.Y)/CAMERA_OFFSET_STEP);
+			(((s32)(my_cp.Y/BS) - m_camera_offset.Y)/CAMERA_OFFSET_STEP);
 	m_camera_offset.Z += CAMERA_OFFSET_STEP*
-			(((s16)(my_cp.Z/BS) - m_camera_offset.Z)/CAMERA_OFFSET_STEP);
+			(((s32)(my_cp.Z/BS) - m_camera_offset.Z)/CAMERA_OFFSET_STEP);
 
 	// Set camera node transformation
 	m_cameranode->setPosition(my_cp-intToFloat(m_camera_offset, BS));

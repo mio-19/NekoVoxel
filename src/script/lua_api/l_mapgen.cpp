@@ -228,7 +228,7 @@ bool read_schematic_def(lua_State *L, int index,
 
 	//// Get schematic size
 	lua_getfield(L, index, "size");
-	v3s16 size = check_v3s16(L, -1);
+	v3s32 size = check_v3s16(L, -1);
 	lua_pop(L, 1);
 
 	schem->size = size;
@@ -390,10 +390,10 @@ Biome *read_biome_def(lua_State *L, int index, const NodeDefManager *ndef)
 	b->flags           = 0; // reserved
 
 	b->min_pos = getv3s16field_default(
-		L, index, "min_pos", v3s16(-31000, -31000, -31000));
+		L, index, "min_pos", v3s32(-31000, -31000, -31000));
 	getintfield(L, index, "y_min", b->min_pos.Y);
 	b->max_pos = getv3s16field_default(
-		L, index, "max_pos", v3s16(31000, 31000, 31000));
+		L, index, "max_pos", v3s32(31000, 31000, 31000));
 	getintfield(L, index, "y_max", b->max_pos.Y);
 
 	std::vector<std::string> &nn = b->m_nodenames;
@@ -523,7 +523,7 @@ int ModApiMapgen::l_get_heat(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	v3s16 pos = read_v3s16(L, 1);
+	v3s32 pos = read_v3s16(L, 1);
 
 	const BiomeGen *biomegen = getServer(L)->getEmergeManager()->getBiomeGen();
 
@@ -544,7 +544,7 @@ int ModApiMapgen::l_get_humidity(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	v3s16 pos = read_v3s16(L, 1);
+	v3s32 pos = read_v3s16(L, 1);
 
 	const BiomeGen *biomegen = getServer(L)->getEmergeManager()->getBiomeGen();
 
@@ -565,7 +565,7 @@ int ModApiMapgen::l_get_biome_data(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	v3s16 pos = read_v3s16(L, 1);
+	v3s32 pos = read_v3s16(L, 1);
 
 	const BiomeGen *biomegen = getServer(L)->getEmergeManager()->getBiomeGen();
 	if (!biomegen)
@@ -688,7 +688,7 @@ int ModApiMapgen::l_get_mapgen_object(lua_State *L)
 		return 1;
 	}
 	case MGOBJ_GENNOTIFY: {
-		std::map<std::string, std::vector<v3s16> >event_map;
+		std::map<std::string, std::vector<v3s32> >event_map;
 
 		mg->gennotify.getEvents(event_map);
 
@@ -717,11 +717,11 @@ int ModApiMapgen::l_get_spawn_level(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	s16 x = luaL_checkinteger(L, 1);
-	s16 z = luaL_checkinteger(L, 2);
+	s32 x = luaL_checkinteger(L, 1);
+	s32 z = luaL_checkinteger(L, 2);
 
 	EmergeManager *emerge = getServer(L)->getEmergeManager();
-	int spawn_level = emerge->getSpawnLevelAtPoint(v2s16(x, z));
+	int spawn_level = emerge->getSpawnLevelAtPoint(v2s32(x, z));
 	// Unsuitable spawn point
 	if (spawn_level == MAX_MAP_GENERATION_LIMIT)
 		return 0;
@@ -821,7 +821,7 @@ int ModApiMapgen::l_get_mapgen_edges(lua_State *L)
 	// make mapgen settings immutable from then on. Mapgen settings should stay
 	// mutable until after mod loading ends.
 
-	s16 mapgen_limit;
+	s32 mapgen_limit;
 	if (lua_isnumber(L, 1)) {
 		 mapgen_limit = lua_tointeger(L, 1);
 	} else {
@@ -830,7 +830,7 @@ int ModApiMapgen::l_get_mapgen_edges(lua_State *L)
 		mapgen_limit = stoi(mapgen_limit_str, 0, MAX_MAP_GENERATION_LIMIT);
 	}
 
-	s16 chunksize;
+	s32 chunksize;
 	if (lua_isnumber(L, 2)) {
 		chunksize = lua_tointeger(L, 2);
 	} else {
@@ -839,9 +839,9 @@ int ModApiMapgen::l_get_mapgen_edges(lua_State *L)
 		chunksize = stoi(chunksize_str, -32768, 32767);
 	}
 
-	std::pair<s16, s16> edges = get_mapgen_edges(mapgen_limit, chunksize);
-	push_v3s16(L, v3s16(1, 1, 1) * edges.first);
-	push_v3s16(L, v3s16(1, 1, 1) * edges.second);
+	std::pair<s32, s32> edges = get_mapgen_edges(mapgen_limit, chunksize);
+	push_v3s16(L, v3s32(1, 1, 1) * edges.first);
+	push_v3s16(L, v3s32(1, 1, 1) * edges.second);
 	return 2;
 }
 
@@ -1467,10 +1467,10 @@ int ModApiMapgen::l_generate_ores(lua_State *L)
 	mg.vm   = checkObject<LuaVoxelManip>(L, 1)->vm;
 	mg.ndef = getServer(L)->getNodeDefManager();
 
-	v3s16 pmin = lua_istable(L, 2) ? check_v3s16(L, 2) :
-			mg.vm->m_area.MinEdge + v3s16(1,1,1) * MAP_BLOCKSIZE;
-	v3s16 pmax = lua_istable(L, 3) ? check_v3s16(L, 3) :
-			mg.vm->m_area.MaxEdge - v3s16(1,1,1) * MAP_BLOCKSIZE;
+	v3s32 pmin = lua_istable(L, 2) ? check_v3s16(L, 2) :
+			mg.vm->m_area.MinEdge + v3s32(1,1,1) * MAP_BLOCKSIZE;
+	v3s32 pmax = lua_istable(L, 3) ? check_v3s16(L, 3) :
+			mg.vm->m_area.MaxEdge - v3s32(1,1,1) * MAP_BLOCKSIZE;
 	sortBoxVerticies(pmin, pmax);
 
 	u32 blockseed = Mapgen::getBlockSeed(pmin, mg.seed);
@@ -1496,10 +1496,10 @@ int ModApiMapgen::l_generate_decorations(lua_State *L)
 	mg.vm   = checkObject<LuaVoxelManip>(L, 1)->vm;
 	mg.ndef = getServer(L)->getNodeDefManager();
 
-	v3s16 pmin = lua_istable(L, 2) ? check_v3s16(L, 2) :
-			mg.vm->m_area.MinEdge + v3s16(1,1,1) * MAP_BLOCKSIZE;
-	v3s16 pmax = lua_istable(L, 3) ? check_v3s16(L, 3) :
-			mg.vm->m_area.MaxEdge - v3s16(1,1,1) * MAP_BLOCKSIZE;
+	v3s32 pmin = lua_istable(L, 2) ? check_v3s16(L, 2) :
+			mg.vm->m_area.MinEdge + v3s32(1,1,1) * MAP_BLOCKSIZE;
+	v3s32 pmax = lua_istable(L, 3) ? check_v3s16(L, 3) :
+			mg.vm->m_area.MaxEdge - v3s32(1,1,1) * MAP_BLOCKSIZE;
 	sortBoxVerticies(pmin, pmax);
 
 	u32 blockseed = Mapgen::getBlockSeed(pmin, mg.seed);
@@ -1523,17 +1523,17 @@ int ModApiMapgen::l_create_schematic(lua_State *L)
 	Map *map = &(getEnv(L)->getMap());
 	Schematic schem;
 
-	v3s16 p1 = check_v3s16(L, 1);
-	v3s16 p2 = check_v3s16(L, 2);
+	v3s32 p1 = check_v3s16(L, 1);
+	v3s32 p2 = check_v3s16(L, 2);
 	sortBoxVerticies(p1, p2);
 
-	std::vector<std::pair<v3s16, u8> > prob_list;
+	std::vector<std::pair<v3s32, u8> > prob_list;
 	if (lua_istable(L, 3)) {
 		lua_pushnil(L);
 		while (lua_next(L, 3)) {
 			if (lua_istable(L, -1)) {
 				lua_getfield(L, -1, "pos");
-				v3s16 pos = check_v3s16(L, -1);
+				v3s32 pos = check_v3s16(L, -1);
 				lua_pop(L, 1);
 
 				u8 prob = getintfield_default(L, -1, "prob", MTSCHEM_PROB_ALWAYS);
@@ -1544,12 +1544,12 @@ int ModApiMapgen::l_create_schematic(lua_State *L)
 		}
 	}
 
-	std::vector<std::pair<s16, u8> > slice_prob_list;
+	std::vector<std::pair<s32, u8> > slice_prob_list;
 	if (lua_istable(L, 5)) {
 		lua_pushnil(L);
 		while (lua_next(L, 5)) {
 			if (lua_istable(L, -1)) {
-				s16 ypos = getintfield_default(L, -1, "ypos", 0);
+				s32 ypos = getintfield_default(L, -1, "ypos", 0);
 				u8 prob  = getintfield_default(L, -1, "prob", MTSCHEM_PROB_ALWAYS);
 				slice_prob_list.emplace_back(ypos, prob);
 			}
@@ -1587,7 +1587,7 @@ int ModApiMapgen::l_place_schematic(lua_State *L)
 	SchematicManager *schemmgr = getServer(L)->getEmergeManager()->schemmgr;
 
 	//// Read position
-	v3s16 p = check_v3s16(L, 1);
+	v3s32 p = check_v3s16(L, 1);
 
 	//// Read rotation
 	int rot = ROTATE_0;
@@ -1635,7 +1635,7 @@ int ModApiMapgen::l_place_schematic_on_vmanip(lua_State *L)
 	MMVManip *vm = checkObject<LuaVoxelManip>(L, 1)->vm;
 
 	//// Read position
-	v3s16 p = check_v3s16(L, 2);
+	v3s32 p = check_v3s16(L, 2);
 
 	//// Read rotation
 	int rot = ROTATE_0;

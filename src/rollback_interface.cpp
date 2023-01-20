@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "mapblock.h"
 
 
-RollbackNode::RollbackNode(Map *map, v3s16 p, IGameDef *gamedef)
+RollbackNode::RollbackNode(Map *map, v3s32 p, IGameDef *gamedef)
 {
 	const NodeDefManager *ndef = gamedef->ndef();
 	MapNode n = map->getNode(p);
@@ -101,7 +101,7 @@ bool RollbackAction::isImportant(IGameDef *gamedef) const
 }
 
 
-bool RollbackAction::getPosition(v3s16 *dst) const
+bool RollbackAction::getPosition(v3s32 *dst) const
 {
 	switch (type) {
 	case TYPE_SET_NODE:

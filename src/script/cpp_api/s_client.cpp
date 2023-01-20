@@ -182,7 +182,7 @@ void ScriptApiClient::on_formspec_input(const std::string &formname,
 	}
 }
 
-bool ScriptApiClient::on_dignode(v3s16 p, MapNode node)
+bool ScriptApiClient::on_dignode(v3s32 p, MapNode node)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -204,7 +204,7 @@ bool ScriptApiClient::on_dignode(v3s16 p, MapNode node)
 	return lua_toboolean(L, -1);
 }
 
-bool ScriptApiClient::on_punchnode(v3s16 p, MapNode node)
+bool ScriptApiClient::on_punchnode(v3s32 p, MapNode node)
 {
 	SCRIPTAPI_PRECHECKHEADER
 

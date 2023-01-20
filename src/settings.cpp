@@ -512,7 +512,7 @@ u16 Settings::getU16(const std::string &name) const
 }
 
 
-s16 Settings::getS16(const std::string &name) const
+s32 Settings::getS32(const std::string &name) const
 {
 	return stoi(get(name), -32768, 32767);
 }
@@ -755,10 +755,10 @@ bool Settings::getU16NoEx(const std::string &name, u16 &val) const
 }
 
 
-bool Settings::getS16NoEx(const std::string &name, s16 &val) const
+bool Settings::getS32NoEx(const std::string &name, s32 &val) const
 {
 	try {
-		val = getS16(name);
+		val = getS32(name);
 		return true;
 	} catch (SettingNotFoundException &e) {
 		return false;
@@ -904,7 +904,7 @@ bool Settings::setBool(const std::string &name, bool value)
 }
 
 
-bool Settings::setS16(const std::string &name, s16 value)
+bool Settings::setS16(const std::string &name, s32 value)
 {
 	return set(name, itos(value));
 }

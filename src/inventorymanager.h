@@ -35,7 +35,7 @@ struct InventoryLocation
 	} type;
 
 	std::string name; // PLAYER, DETACHED
-	v3s16 p; // NODEMETA
+	v3s32 p; // NODEMETA
 
 	InventoryLocation()
 	{
@@ -54,7 +54,7 @@ struct InventoryLocation
 		type = PLAYER;
 		name = name_;
 	}
-	void setNodeMeta(const v3s16 &p_)
+	void setNodeMeta(const v3s32 &p_)
 	{
 		type = NODEMETA;
 		p = p_;
@@ -138,10 +138,10 @@ struct MoveAction
 {
 	InventoryLocation from_inv;
 	std::string from_list;
-	s16 from_i = -1;
+	s32 from_i = -1;
 	InventoryLocation to_inv;
 	std::string to_list;
-	s16 to_i = -1;
+	s32 to_i = -1;
 };
 
 struct IMoveAction : public InventoryAction, public MoveAction

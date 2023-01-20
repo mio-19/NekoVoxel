@@ -149,8 +149,8 @@ void TestSettings::testAllSettings()
 	s.parseConfigLines(is);
 
 	UASSERT(s.getS32("leet") == 1337);
-	UASSERT(s.getS16("leetleet") == 32767);
-	UASSERT(s.getS16("leetleet_neg") == -32768);
+	UASSERT(s.getS32("leetleet") == 32767);
+	UASSERT(s.getS32("leetleet_neg") == -32768);
 
 	// Not sure if 1.1 is an exact value as a float, but doesn't matter
 	UASSERT(fabs(s.getFloat("floaty_thing") - 1.1) < 0.001);
@@ -172,7 +172,7 @@ void TestSettings::testAllSettings()
 	Settings *group = s.getGroup("asdf");
 	UASSERT(group != NULL);
 	UASSERT(s.getGroupNoEx("zoop", group) == false);
-	UASSERT(group->getS16("a") == 5);
+	UASSERT(group->getS32("a") == 5);
 	UASSERT(fabs(group->getFloat("bb") - 2.5) < 0.001);
 
 	Settings group3;

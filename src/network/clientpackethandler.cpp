@@ -239,7 +239,7 @@ void Client::handleCommand_RemoveNode(NetworkPacket* pkt)
 	if (pkt->getSize() < 6)
 		return;
 
-	v3s16 p;
+	v3s32 p;
 	*pkt >> p;
 	removeNode(p);
 }
@@ -249,7 +249,7 @@ void Client::handleCommand_AddNode(NetworkPacket* pkt)
 	if (pkt->getSize() < 6 + MapNode::serializedLength(m_server_ser_ver))
 		return;
 
-	v3s16 p;
+	v3s32 p;
 	*pkt >> p;
 
 	MapNode n;
@@ -279,7 +279,7 @@ void Client::handleCommand_NodemetaChanged(NetworkPacket *pkt)
 	Map &map = m_env.getMap();
 	for (NodeMetadataMap::const_iterator i = meta_updates_list.begin();
 			i != meta_updates_list.end(); ++i) {
-		v3s16 pos = i->first;
+		v3s32 pos = i->first;
 
 		if (map.isValidPosition(pos) &&
 				map.setNodeMetadata(pos, i->second))
@@ -296,7 +296,7 @@ void Client::handleCommand_BlockData(NetworkPacket* pkt)
 	if (pkt->getSize() < 6)
 		return;
 
-	v3s16 p;
+	v3s32 p;
 	*pkt >> p;
 
 	std::string datastring(pkt->getString(6), pkt->getSize() - 6);
@@ -305,7 +305,7 @@ void Client::handleCommand_BlockData(NetworkPacket* pkt)
 	MapSector *sector;
 	MapBlock *block;
 
-	v2s16 p2d(p.X, p.Z);
+	v2s32 p2d(p.X, p.Z);
 	sector = m_env.getMap().emergeSector(p2d);
 
 	assert(sector->getPos() == p2d);
@@ -1129,7 +1129,7 @@ void Client::handleCommand_HudAdd(NetworkPacket* pkt)
 	v2f offset;
 	v3f world_pos;
 	v2s32 size;
-	s16 z_index = 0;
+	s32 z_index = 0;
 	std::string text2;
 	u32 style = 0;
 

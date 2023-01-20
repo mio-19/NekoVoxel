@@ -67,12 +67,12 @@ public:
 	// Whether to modify chance to simulate time lost by an unnattended block
 	virtual bool getSimpleCatchUp() = 0;
 	// get min Y for apply abm
-	virtual s16 getMinY() = 0;
+	virtual s32 getMinY() = 0;
 	// get max Y for apply abm
-	virtual s16 getMaxY() = 0;
+	virtual s32 getMaxY() = 0;
 	// This is called usually at interval for 1/chance of the nodes
-	virtual void trigger(ServerEnvironment *env, v3s16 p, MapNode n){};
-	virtual void trigger(ServerEnvironment *env, v3s16 p, MapNode n,
+	virtual void trigger(ServerEnvironment *env, v3s32 p, MapNode n){};
+	virtual void trigger(ServerEnvironment *env, v3s32 p, MapNode n,
 		u32 active_object_count, u32 active_object_count_wider){};
 };
 
@@ -93,7 +93,7 @@ struct LoadingBlockModifierDef
 
 	virtual ~LoadingBlockModifierDef() = default;
 
-	virtual void trigger(ServerEnvironment *env, v3s16 p,
+	virtual void trigger(ServerEnvironment *env, v3s32 p,
 			MapNode n, float dtime_s) {};
 };
 
@@ -163,12 +163,12 @@ class ActiveBlockList
 {
 public:
 	void update(std::vector<PlayerSAO*> &active_players,
-		s16 active_block_range,
-		s16 active_object_range,
-		std::set<v3s16> &blocks_removed,
-		std::set<v3s16> &blocks_added);
+		s32 active_block_range,
+		s32 active_object_range,
+		std::set<v3s32> &blocks_removed,
+		std::set<v3s32> &blocks_added);
 
-	bool contains(v3s16 p) const {
+	bool contains(v3s32 p) const {
 		return (m_list.find(p) != m_list.end());
 	}
 
@@ -180,22 +180,22 @@ public:
 		m_list.clear();
 	}
 
-	void remove(v3s16 p) {
+	void remove(v3s32 p) {
 		m_list.erase(p);
 		m_abm_list.erase(p);
 	}
 
-	std::set<v3s16> m_list;
-	std::set<v3s16> m_abm_list;
+	std::set<v3s32> m_list;
+	std::set<v3s32> m_abm_list;
 	// list of blocks that are always active, not modified by this class
-	std::set<v3s16> m_forceloaded_list;
+	std::set<v3s32> m_forceloaded_list;
 };
 
 /*
 	ServerEnvironment::m_on_mapblocks_changed_receiver
 */
 struct OnMapblocksChangedReceiver : public MapEventReceiver {
-	std::unordered_set<v3s16> modified_blocks;
+	std::unordered_set<v3s32> modified_blocks;
 	bool receiving = false;
 
 	void onMapEditEvent(const MapEditEvent &event) override;
@@ -290,8 +290,8 @@ public:
 		Find out what new objects have been added to
 		inside a radius around a position
 	*/
-	void getAddedActiveObjects(PlayerSAO *playersao, s16 radius,
-		s16 player_radius,
+	void getAddedActiveObjects(PlayerSAO *playersao, s32 radius,
+		s32 player_radius,
 		std::set<u16> &current_objects,
 		std::queue<u16> &added_objects);
 
@@ -299,8 +299,8 @@ public:
 		Find out what new objects have been removed from
 		inside a radius around a position
 	*/
-	void getRemovedActiveObjects(PlayerSAO *playersao, s16 radius,
-		s16 player_radius,
+	void getRemovedActiveObjects(PlayerSAO *playersao, s32 radius,
+		s32 player_radius,
 		std::set<u16> &current_objects,
 		std::queue<u16> &removed_objects);
 
@@ -335,12 +335,12 @@ public:
 	*/
 
 	// Script-aware node setters
-	bool setNode(v3s16 p, const MapNode &n);
-	bool removeNode(v3s16 p);
-	bool swapNode(v3s16 p, const MapNode &n);
+	bool setNode(v3s32 p, const MapNode &n);
+	bool removeNode(v3s32 p);
+	bool swapNode(v3s32 p, const MapNode &n);
 
 	// Find the daylight value at pos with a Depth First Search
-	u8 findSunlight(v3s16 pos) const;
+	u8 findSunlight(v3s32 pos) const;
 
 	// Find all active objects inside a radius around a point
 	void getObjectsInsideRadius(std::vector<ServerActiveObject *> &objects, const v3f &pos, float radius,
@@ -367,7 +367,7 @@ public:
 	void reportMaxLagEstimate(float f) { m_max_lag_estimate = f; }
 	float getMaxLagEstimate() { return m_max_lag_estimate; }
 
-	std::set<v3s16>* getForceloadedBlocks() { return &m_active_blocks.m_forceloaded_list; }
+	std::set<v3s32>* getForceloadedBlocks() { return &m_active_blocks.m_forceloaded_list; }
 
 	// Sorted by how ready a mapblock is
 	enum BlockStatus {
@@ -376,12 +376,12 @@ public:
 		BS_LOADED,
 		BS_ACTIVE // always highest value
 	};
-	BlockStatus getBlockStatus(v3s16 blockpos);
+	BlockStatus getBlockStatus(v3s32 blockpos);
 
 	// Sets the static object status all the active objects in the specified block
 	// This is only really needed for deleting blocks from the map
-	void setStaticForActiveObjectsInBlock(v3s16 blockpos,
-		bool static_exists, v3s16 static_block=v3s16(0,0,0));
+	void setStaticForActiveObjectsInBlock(v3s32 blockpos,
+		bool static_exists, v3s32 static_block=v3s32(0,0,0));
 
 	RemotePlayer *getPlayer(const session_t peer_id);
 	RemotePlayer *getPlayer(const char* name);
@@ -448,7 +448,7 @@ private:
 	*/
 	void deleteStaticFromBlock(
 			ServerActiveObject *obj, u16 id, u32 mod_reason, bool no_emerge);
-	bool saveStaticToBlock(v3s16 blockpos, u16 store_id,
+	bool saveStaticToBlock(v3s32 blockpos, u16 store_id,
 			ServerActiveObject *obj, const StaticObject &s_obj, u32 mod_reason);
 
 	/*

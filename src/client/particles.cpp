@@ -249,7 +249,7 @@ void Particle::step(float dtime)
 	updateVertices();
 
 	// Update position -- see #10398
-	v3s16 camera_offset = m_env->getCameraOffset();
+	v3s32 camera_offset = m_env->getCameraOffset();
 	setPosition(m_pos*BS - intToFloat(camera_offset, BS));
 }
 
@@ -258,7 +258,7 @@ void Particle::updateLight()
 	u8 light = 0;
 	bool pos_ok;
 
-	v3s16 p = v3s16(
+	v3s32 p = v3s32(
 		floor(m_pos.X+0.5),
 		floor(m_pos.Y+0.5),
 		floor(m_pos.Z+0.5)
@@ -320,7 +320,7 @@ void Particle::updateVertices()
 
 
 	// see #10398
-	// v3s16 camera_offset = m_env->getCameraOffset();
+	// v3s32 camera_offset = m_env->getCameraOffset();
 	// particle position is now handled by step()
 	m_box.reset(v3f());
 
@@ -422,7 +422,7 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 		pos *= BS;
 		attached_absolute_pos_rot_matrix->transformVect(pos);
 		pos /= BS;
-		v3s16 camera_offset = m_particlemanager->m_env->getCameraOffset();
+		v3s32 camera_offset = m_particlemanager->m_env->getCameraOffset();
 		pos.X += camera_offset.X;
 		pos.Y += camera_offset.Y;
 		pos.Z += camera_offset.Z;
@@ -597,7 +597,7 @@ void ParticleSpawner::step(float dtime, ClientEnvironment *env)
 	m_time += dtime;
 
 	static thread_local const float radius =
-			g_settings->getS16("max_block_send_distance") * MAP_BLOCKSIZE;
+			g_settings->getS32("max_block_send_distance") * MAP_BLOCKSIZE;
 
 	bool unloaded = false;
 	const core::matrix4 *attached_absolute_pos_rot_matrix = nullptr;
@@ -843,7 +843,7 @@ bool ParticleManager::getNodeParticleParams(const MapNode &n,
 // spawned during the digging of a node.
 
 void ParticleManager::addDiggingParticles(IGameDef *gamedef,
-	LocalPlayer *player, v3s16 pos, const MapNode &n, const ContentFeatures &f)
+	LocalPlayer *player, v3s32 pos, const MapNode &n, const ContentFeatures &f)
 {
 	// No particles for "airlike" nodes
 	if (f.drawtype == NDT_AIRLIKE)
@@ -858,7 +858,7 @@ void ParticleManager::addDiggingParticles(IGameDef *gamedef,
 // function, called from Game::handleDigging() in game.cpp.
 
 void ParticleManager::addNodeParticle(IGameDef *gamedef,
-	LocalPlayer *player, v3s16 pos, const MapNode &n, const ContentFeatures &f)
+	LocalPlayer *player, v3s32 pos, const MapNode &n, const ContentFeatures &f)
 {
 	ParticleParameters p;
 	video::ITexture *ref = nullptr;

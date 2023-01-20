@@ -52,7 +52,7 @@ struct ToolGroupCap
 
 
 typedef std::unordered_map<std::string, struct ToolGroupCap> ToolGCMap;
-typedef std::unordered_map<std::string, s16> DamageGroup;
+typedef std::unordered_map<std::string, s32> DamageGroup;
 
 struct ToolCapabilities
 {

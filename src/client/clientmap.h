@@ -40,7 +40,7 @@ struct MapDrawControl
 struct MeshBufList
 {
 	video::SMaterial m;
-	std::vector<std::pair<v3s16,scene::IMeshBuffer*>> bufs;
+	std::vector<std::pair<v3s32,scene::IMeshBuffer*>> bufs;
 };
 
 struct MeshBufListList
@@ -53,7 +53,7 @@ struct MeshBufListList
 	std::vector<MeshBufList> lists[MAX_TILE_LAYERS];
 
 	void clear();
-	void add(scene::IMeshBuffer *buf, v3s16 position, u8 layer);
+	void add(scene::IMeshBuffer *buf, v3s32 position, u8 layer);
 };
 
 class Client;
@@ -88,12 +88,12 @@ public:
 		ISceneNode::drop(); // calls destructor
 	}
 
-	void updateCamera(v3f pos, v3f dir, f32 fov, v3s16 offset);
+	void updateCamera(v3f pos, v3f dir, f32 fov, v3s32 offset);
 
 	/*
 		Forcefully get a sector from somewhere
 	*/
-	MapSector * emergeSector(v2s16 p) override;
+	MapSector * emergeSector(v2s32 p) override;
 
 	/*
 		ISceneNode methods
@@ -113,8 +113,8 @@ public:
 		return m_box;
 	}
 
-	void getBlocksInViewRange(v3s16 cam_pos_nodes,
-		v3s16 *p_blocks_min, v3s16 *p_blocks_max, float range=-1.0f);
+	void getBlocksInViewRange(v3s32 cam_pos_nodes,
+		v3s32 *p_blocks_min, v3s32 *p_blocks_max, float range=-1.0f);
 	void updateDrawList();
 	// @brief Calculate statistics about the map and keep the blocks alive
 	void touchMapBlocks();
@@ -150,9 +150,9 @@ private:
 	class MapBlockComparer
 	{
 	public:
-		MapBlockComparer(const v3s16 &camera_block) : m_camera_block(camera_block) {}
+		MapBlockComparer(const v3s32 &camera_block) : m_camera_block(camera_block) {}
 
-		bool operator() (const v3s16 &left, const v3s16 &right) const
+		bool operator() (const v3s32 &left, const v3s32 &right) const
 		{
 			auto distance_left = left.getDistanceFromSQ(m_camera_block);
 			auto distance_right = right.getDistanceFromSQ(m_camera_block);
@@ -160,13 +160,13 @@ private:
 		}
 
 	private:
-		v3s16 m_camera_block;
+		v3s32 m_camera_block;
 	};
 
 
 	// reference to a mesh buffer used when rendering the map.
 	struct DrawDescriptor {
-		v3s16 m_pos;
+		v3s32 m_pos;
 		union {
 			scene::IMeshBuffer *m_buffer;
 			const PartialMeshBuffer *m_partial_buffer;
@@ -174,11 +174,11 @@ private:
 		bool m_reuse_material:1;
 		bool m_use_partial_buffer:1;
 
-		DrawDescriptor(v3s16 pos, scene::IMeshBuffer *buffer, bool reuse_material) :
+		DrawDescriptor(v3s32 pos, scene::IMeshBuffer *buffer, bool reuse_material) :
 			m_pos(pos), m_buffer(buffer), m_reuse_material(reuse_material), m_use_partial_buffer(false)
 		{}
 
-		DrawDescriptor(v3s16 pos, const PartialMeshBuffer *buffer) :
+		DrawDescriptor(v3s32 pos, const PartialMeshBuffer *buffer) :
 			m_pos(pos), m_partial_buffer(buffer), m_reuse_material(false), m_use_partial_buffer(true)
 		{}
 
@@ -197,14 +197,14 @@ private:
 	v3f m_camera_position = v3f(0,0,0);
 	v3f m_camera_direction = v3f(0,0,1);
 	f32 m_camera_fov = M_PI;
-	v3s16 m_camera_offset;
+	v3s32 m_camera_offset;
 	bool m_needs_update_transparent_meshes = true;
 
-	std::map<v3s16, MapBlock*, MapBlockComparer> m_drawlist;
-	std::map<v3s16, MapBlock*> m_drawlist_shadow;
+	std::map<v3s32, MapBlock*, MapBlockComparer> m_drawlist;
+	std::map<v3s32, MapBlock*> m_drawlist_shadow;
 	bool m_needs_update_drawlist;
 
-	std::set<v2s16> m_last_drawn_sectors;
+	std::set<v2s32> m_last_drawn_sectors;
 
 	bool m_cache_trilinear_filter;
 	bool m_cache_bilinear_filter;

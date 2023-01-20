@@ -480,7 +480,7 @@ int ObjectRef::l_send_mapblock(lua_State *L)
 	if (player == nullptr)
 		return 0;
 
-	v3s16 pos = read_v3s16(L, 2);
+	v3s32 pos = read_v3s16(L, 2);
 
 	session_t peer_id = player->getPeerId();
 	bool r = getServer(L)->SendBlock(peer_id, pos);
@@ -955,7 +955,7 @@ int ObjectRef::l_set_sprite(lua_State *L)
 	if (entitysao == nullptr)
 		return 0;
 
-	v2s16 start_frame = readParam<v2s16>(L, 2, v2s16(0,0));
+	v2s32 start_frame = readParam<v2s32>(L, 2, v2s32(0,0));
 	int num_frames    = readParam<int>(L, 3, 1);
 	float framelength = readParam<float>(L, 4, 0.2f);
 	bool select_x_by_camera = readParam<bool>(L, 5, false);
@@ -1898,7 +1898,7 @@ int ObjectRef::l_get_sky(lua_State *L)
 		lua_pushlstring(L, skybox_params.type.c_str(), skybox_params.type.size());
 
 		lua_newtable(L);
-		s16 i = 1;
+		s32 i = 1;
 		for (const std::string &texture : skybox_params.textures) {
 			lua_pushlstring(L, texture.c_str(), texture.size());
 			lua_rawseti(L, -2, i++);
@@ -1914,7 +1914,7 @@ int ObjectRef::l_get_sky(lua_State *L)
 	lua_setfield(L, -2, "type");
 
 	lua_newtable(L);
-	s16 i = 1;
+	s32 i = 1;
 	for (const std::string &texture : skybox_params.textures) {
 		lua_pushlstring(L, texture.c_str(), texture.size());
 		lua_rawseti(L, -2, i++);
@@ -2239,7 +2239,7 @@ int ObjectRef::l_set_minimap_modes(lua_State *L)
 
 	luaL_checktype(L, 2, LUA_TTABLE);
 	std::vector<MinimapMode> modes;
-	s16 selected_mode = readParam<s16>(L, 3);
+	s32 selected_mode = readParam<s32>(L, 3);
 
 	lua_pushnil(L);
 	while (lua_next(L, 2) != 0) {

@@ -50,7 +50,7 @@ namespace ParticleParamTypes
 		type pickParameterValue       (float* facs, const type a, const type b);
 
 	DECL_PARAM_OVERLOADS(u8);  DECL_PARAM_OVERLOADS(s8);
-	DECL_PARAM_OVERLOADS(u16); DECL_PARAM_OVERLOADS(s16);
+	DECL_PARAM_OVERLOADS(u16); DECL_PARAM_OVERLOADS(s32);
 	DECL_PARAM_OVERLOADS(u32); DECL_PARAM_OVERLOADS(s32);
 	DECL_PARAM_OVERLOADS(f32);
 	DECL_PARAM_OVERLOADS(v2f);
@@ -147,7 +147,7 @@ namespace ParticleParamTypes
 	}
 
 	using u8Parameter  = Parameter<u8,  1>; using s8Parameter  = Parameter<s8,  1>;
-	using u16Parameter = Parameter<u16, 1>; using s16Parameter = Parameter<s16, 1>;
+	using u16Parameter = Parameter<u16, 1>; using s16Parameter = Parameter<s32, 1>;
 	using u32Parameter = Parameter<u32, 1>; using s32Parameter = Parameter<s32, 1>;
 
 	using f32Parameter = Parameter<f32, 1>;

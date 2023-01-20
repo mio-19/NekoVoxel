@@ -546,7 +546,7 @@ Object types:
   u8[len] entity name
   u32 len
   u8[len] static data
-  s16 hp
+  s32 hp
   s32 velocity.x * 10000
   s32 velocity.y * 10000
   s32 velocity.z * 10000

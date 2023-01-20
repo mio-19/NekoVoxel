@@ -102,8 +102,8 @@ public:
 	f32 getRadLookPitchDep() const { return -1.0 * m_pitch * core::DEGTORAD; }
 	void setFov(const float pitch);
 	f32 getFov() const { return m_fov; }
-	void setWantedRange(const s16 range);
-	s16 getWantedRange() const { return m_wanted_range; }
+	void setWantedRange(const s32 range);
+	s32 getWantedRange() const { return m_wanted_range; }
 
 	/*
 		Interaction interface
@@ -150,14 +150,14 @@ public:
 		m_time_from_last_punch = 0.0;
 		return r;
 	}
-	void noCheatDigStart(const v3s16 &p)
+	void noCheatDigStart(const v3s32 &p)
 	{
 		m_nocheat_dig_pos = p;
 		m_nocheat_dig_time = 0;
 	}
-	v3s16 getNoCheatDigPos() { return m_nocheat_dig_pos; }
+	v3s32 getNoCheatDigPos() { return m_nocheat_dig_pos; }
 	float getNoCheatDigTime() { return m_nocheat_dig_time; }
-	void noCheatDigEnd() { m_nocheat_dig_pos = v3s16(32767, 32767, 32767); }
+	void noCheatDigEnd() { m_nocheat_dig_pos = v3s32(32767, 32767, 32767); }
 	LagPool &getDigPool() { return m_dig_pool; }
 	void setMaxSpeedOverride(const v3f &vel);
 	// Returns true if cheated
@@ -197,7 +197,7 @@ private:
 	v3f m_last_good_position;
 	float m_time_from_last_teleport = 0.0f;
 	float m_time_from_last_punch = 0.0f;
-	v3s16 m_nocheat_dig_pos = v3s16(32767, 32767, 32767);
+	v3s32 m_nocheat_dig_pos = v3s32(32767, 32767, 32767);
 	float m_nocheat_dig_time = 0.0f;
 	float m_max_speed_override_time = 0.0f;
 	v3f m_max_speed_override = v3f(0.0f, 0.0f, 0.0f);
@@ -216,7 +216,7 @@ private:
 	u16 m_breath = PLAYER_MAX_BREATH_DEFAULT;
 	f32 m_pitch = 0.0f;
 	f32 m_fov = 0.0f;
-	s16 m_wanted_range = 0.0f;
+	s32 m_wanted_range = 0.0f;
 
 	SimpleMetadata m_meta;
 

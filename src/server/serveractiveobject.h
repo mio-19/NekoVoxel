@@ -233,7 +233,7 @@ public:
 		The block from which the object was loaded from, and in which
 		a copy of the static data resides.
 	*/
-	v3s16 m_static_block = v3s16(1337,1337,1337);
+	v3s32 m_static_block = v3s32(1337,1337,1337);
 
 protected:
 	virtual void onMarkedForDeactivation() {}

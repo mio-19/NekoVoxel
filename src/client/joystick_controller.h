@@ -72,7 +72,7 @@ struct JoystickAxisCmb : public JoystickCombination {
 
 	JoystickAxisCmb() = default;
 
-	JoystickAxisCmb(GameKeyType key, u16 axis_to_compare, int direction, s16 thresh) :
+	JoystickAxisCmb(GameKeyType key, u16 axis_to_compare, int direction, s32 thresh) :
 		axis_to_compare(axis_to_compare),
 		direction(direction),
 		thresh(thresh)
@@ -89,14 +89,14 @@ struct JoystickAxisCmb : public JoystickCombination {
 	// if -1, thresh must be smaller than the axis value in order to trigger
 	// if  1, thresh must be bigger  than the axis value in order to trigger
 	int direction;
-	s16 thresh;
+	s32 thresh;
 };
 
 struct JoystickLayout {
 	std::vector<JoystickButtonCmb> button_keys;
 	std::vector<JoystickAxisCmb> axis_keys;
 	JoystickAxisLayout axes[JA_COUNT];
-	s16 axes_deadzone;
+	s32 axes_deadzone;
 };
 
 class JoystickController {
@@ -139,7 +139,7 @@ public:
 		return m_keys_down[b];
 	}
 
-	s16 getAxis(JoystickAxis axis)
+	s32 getAxis(JoystickAxis axis)
 	{
 		return m_axes_vals[axis];
 	}
@@ -156,7 +156,7 @@ private:
 
 	JoystickLayout m_layout;
 
-	s16 m_axes_vals[JA_COUNT];
+	s32 m_axes_vals[JA_COUNT];
 
 	u8 m_joystick_id = 0;
 

@@ -45,7 +45,7 @@ public:
 	//! Iterator to store the progress of the raycast.
 	voxalgo::VoxelLineIterator m_iterator;
 	//! Previous tested node during the raycast.
-	v3s16 m_previous_node;
+	v3s32 m_previous_node;
 
 	/*!
 	 * This priority queue stores the found pointed things
@@ -57,7 +57,7 @@ public:
 	bool m_liquids_pointable;
 
 	//! The code needs to search these nodes around the center node.
-	core::aabbox3d<s16> m_search_range { 0, 0, 0, 0, 0, 0 };
+	core::aabbox3d<s32> m_search_range { 0, 0, 0, 0, 0, 0 };
 
 	//! If true, the Environment will initialize this state.
 	bool m_initialization_needed = true;

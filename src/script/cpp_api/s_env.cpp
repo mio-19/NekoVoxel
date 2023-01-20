@@ -28,7 +28,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "script/common/c_content.h"
 
 
-void ScriptApiEnv::environment_OnGenerated(v3s16 minp, v3s16 maxp,
+void ScriptApiEnv::environment_OnGenerated(v3s32 minp, v3s32 maxp,
 	u32 blockseed)
 {
 	SCRIPTAPI_PRECHECKHEADER
@@ -141,10 +141,10 @@ void ScriptApiEnv::initializeEnvironment(ServerEnvironment *env)
 		bool simple_catch_up = true;
 		getboolfield(L, current_abm, "catch_up", simple_catch_up);
 
-		s16 min_y = INT16_MIN;
+		s32 min_y = INT16_MIN;
 		getintfield(L, current_abm, "min_y", min_y);
 
-		s16 max_y = INT16_MAX;
+		s32 max_y = INT16_MAX;
 		getintfield(L, current_abm, "max_y", max_y);
 
 		lua_getfield(L, current_abm, "action");
@@ -216,7 +216,7 @@ void ScriptApiEnv::initializeEnvironment(ServerEnvironment *env)
 }
 
 void ScriptApiEnv::on_emerge_area_completion(
-	v3s16 blockpos, int action, ScriptCallbackState *state)
+	v3s32 blockpos, int action, ScriptCallbackState *state)
 {
 	Server *server = getServer();
 
@@ -257,7 +257,7 @@ void ScriptApiEnv::on_emerge_area_completion(
 	}
 }
 
-void ScriptApiEnv::check_for_falling(v3s16 p)
+void ScriptApiEnv::check_for_falling(v3s32 p)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -270,7 +270,7 @@ void ScriptApiEnv::check_for_falling(v3s16 p)
 }
 
 void ScriptApiEnv::on_liquid_transformed(
-	const std::vector<std::pair<v3s16, MapNode>> &list)
+	const std::vector<std::pair<v3s32, MapNode>> &list)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -288,7 +288,7 @@ void ScriptApiEnv::on_liquid_transformed(
 	int index = 1;
 	lua_createtable(L, list.size(), 0);
 	lua_createtable(L, list.size(), 0);
-	for(std::pair<v3s16, MapNode> p : list) {
+	for(std::pair<v3s32, MapNode> p : list) {
 		lua_pushnumber(L, index);
 		push_v3s16(L, p.first);
 		lua_rawset(L, -4);
@@ -300,7 +300,7 @@ void ScriptApiEnv::on_liquid_transformed(
 	runCallbacks(2, RUN_CALLBACKS_MODE_FIRST);
 }
 
-void ScriptApiEnv::on_mapblocks_changed(const std::unordered_set<v3s16> &set)
+void ScriptApiEnv::on_mapblocks_changed(const std::unordered_set<v3s32> &set)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -312,7 +312,7 @@ void ScriptApiEnv::on_mapblocks_changed(const std::unordered_set<v3s16> &set)
 
 	// Convert the set to a set of position hashes
 	lua_createtable(L, 0, set.size());
-	for(const v3s16 &p : set) {
+	for(const v3s32 &p : set) {
 		lua_pushnumber(L, hash_node_position(p));
 		lua_pushboolean(L, true);
 		lua_rawset(L, -3);

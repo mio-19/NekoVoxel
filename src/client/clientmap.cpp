@@ -39,7 +39,7 @@ void MeshBufListList::clear()
 		list.clear();
 }
 
-void MeshBufListList::add(scene::IMeshBuffer *buf, v3s16 position, u8 layer)
+void MeshBufListList::add(scene::IMeshBuffer *buf, v3s32 position, u8 layer)
 {
 	// Append to the correct layer
 	std::vector<MeshBufList> &list = lists[layer];
@@ -79,7 +79,7 @@ ClientMap::ClientMap(
 	m_client(client),
 	m_rendering_engine(rendering_engine),
 	m_control(control),
-	m_drawlist(MapBlockComparer(v3s16(0,0,0)))
+	m_drawlist(MapBlockComparer(v3s32(0,0,0)))
 {
 
 	/*
@@ -123,18 +123,18 @@ ClientMap::~ClientMap()
 	g_settings->deregisterChangedCallback("enable_raytraced_culling", on_settings_changed, this);
 }
 
-void ClientMap::updateCamera(v3f pos, v3f dir, f32 fov, v3s16 offset)
+void ClientMap::updateCamera(v3f pos, v3f dir, f32 fov, v3s32 offset)
 {
-	v3s16 previous_node = floatToInt(m_camera_position, BS) + m_camera_offset;
-	v3s16 previous_block = getContainerPos(previous_node, MAP_BLOCKSIZE);
+	v3s32 previous_node = floatToInt(m_camera_position, BS) + m_camera_offset;
+	v3s32 previous_block = getContainerPos(previous_node, MAP_BLOCKSIZE);
 
 	m_camera_position = pos;
 	m_camera_direction = dir;
 	m_camera_fov = fov;
 	m_camera_offset = offset;
 
-	v3s16 current_node = floatToInt(m_camera_position, BS) + m_camera_offset;
-	v3s16 current_block = getContainerPos(current_node, MAP_BLOCKSIZE);
+	v3s32 current_node = floatToInt(m_camera_position, BS) + m_camera_offset;
+	v3s32 current_block = getContainerPos(current_node, MAP_BLOCKSIZE);
 
 	// reorder the blocks when camera crosses block boundary
 	if (previous_block != current_block)
@@ -145,7 +145,7 @@ void ClientMap::updateCamera(v3f pos, v3f dir, f32 fov, v3s16 offset)
 		m_needs_update_transparent_meshes = true;
 }
 
-MapSector * ClientMap::emergeSector(v2s16 p2d)
+MapSector * ClientMap::emergeSector(v2s32 p2d)
 {
 	// Check that it doesn't exist already
 	MapSector *sector = getSectorNoGenerate(p2d);
@@ -172,15 +172,15 @@ void ClientMap::OnRegisterSceneNode()
 	// we have other way to find it
 }
 
-void ClientMap::getBlocksInViewRange(v3s16 cam_pos_nodes,
-		v3s16 *p_blocks_min, v3s16 *p_blocks_max, float range)
+void ClientMap::getBlocksInViewRange(v3s32 cam_pos_nodes,
+		v3s32 *p_blocks_min, v3s32 *p_blocks_max, float range)
 {
 	if (range <= 0.0f)
 		range = m_control.wanted_range;
 
-	v3s16 box_nodes_d = range * v3s16(1, 1, 1);
+	v3s32 box_nodes_d = range * v3s32(1, 1, 1);
 	// Define p_nodes_min/max as v3s32 because 'cam_pos_nodes -/+ box_nodes_d'
-	// can exceed the range of v3s16 when a large view range is used near the
+	// can exceed the range of v3s32 when a large view range is used near the
 	// world edges.
 	v3s32 p_nodes_min(
 		cam_pos_nodes.X - box_nodes_d.X,
@@ -192,11 +192,11 @@ void ClientMap::getBlocksInViewRange(v3s16 cam_pos_nodes,
 		cam_pos_nodes.Z + box_nodes_d.Z);
 	// Take a fair amount as we will be dropping more out later
 	// Umm... these additions are a bit strange but they are needed.
-	*p_blocks_min = v3s16(
+	*p_blocks_min = v3s32(
 			p_nodes_min.X / MAP_BLOCKSIZE - 3,
 			p_nodes_min.Y / MAP_BLOCKSIZE - 3,
 			p_nodes_min.Z / MAP_BLOCKSIZE - 3);
-	*p_blocks_max = v3s16(
+	*p_blocks_max = v3s32(
 			p_nodes_max.X / MAP_BLOCKSIZE + 1,
 			p_nodes_max.Y / MAP_BLOCKSIZE + 1,
 			p_nodes_max.Z / MAP_BLOCKSIZE + 1);
@@ -209,7 +209,7 @@ public:
 	static constexpr u16 CHUNK_MASK = CHUNK_EDGE - 1;
 	static constexpr std::size_t CHUNK_VOLUME = CHUNK_EDGE * CHUNK_EDGE * CHUNK_EDGE; // volume of a chunk
 
-	MapBlockFlags(v3s16 min_pos, v3s16 max_pos)
+	MapBlockFlags(v3s32 min_pos, v3s32 max_pos)
 			: min_pos(min_pos), volume((max_pos - min_pos) / CHUNK_EDGE + 1)
 	{
 		chunks.resize(volume.X * volume.Y * volume.Z);
@@ -218,14 +218,14 @@ public:
 	class Chunk
 	{
 	public:
-		inline u8 &getBits(v3s16 pos)
+		inline u8 &getBits(v3s32 pos)
 		{
 			std::size_t address = getAddress(pos);
 			return bits[address];
 		}
 
 	private:
-		inline std::size_t getAddress(v3s16 pos) {
+		inline std::size_t getAddress(v3s32 pos) {
 			std::size_t address = (pos.X & CHUNK_MASK) + (pos.Y & CHUNK_MASK) * CHUNK_EDGE + (pos.Z & CHUNK_MASK) * (CHUNK_EDGE * CHUNK_EDGE);
 			return address;
 		}
@@ -233,9 +233,9 @@ public:
 		std::array<u8, CHUNK_VOLUME> bits;
 	};
 
-	Chunk &getChunk(v3s16 pos)
+	Chunk &getChunk(v3s32 pos)
 	{
-		v3s16 delta = (pos - min_pos) / CHUNK_EDGE;
+		v3s32 delta = (pos - min_pos) / CHUNK_EDGE;
 		std::size_t address = delta.X + delta.Y * volume.X + delta.Z * volume.X * volume.Y;
 		Chunk *chunk = chunks[address].get();
 		if (!chunk) {
@@ -246,8 +246,8 @@ public:
 	}
 private:
 	std::vector<std::unique_ptr<Chunk>> chunks;
-	v3s16 min_pos;
-	v3s16 volume;
+	v3s32 min_pos;
+	v3s32 volume;
 };
 
 void ClientMap::updateDrawList()
@@ -263,10 +263,10 @@ void ClientMap::updateDrawList()
 		}
 		m_drawlist.clear();
 
-		v3s16 cam_pos_nodes = floatToInt(m_camera_position, BS);
+		v3s32 cam_pos_nodes = floatToInt(m_camera_position, BS);
 
-		v3s16 p_blocks_min;
-		v3s16 p_blocks_max;
+		v3s32 p_blocks_min;
+		v3s32 p_blocks_max;
 		getBlocksInViewRange(cam_pos_nodes, &p_blocks_min, &p_blocks_max);
 
 		// Number of blocks occlusion culled
@@ -284,8 +284,8 @@ void ClientMap::updateDrawList()
 				occlusion_culling_enabled = false;
 		}
 
-		v3s16 camera_block = getContainerPos(cam_pos_nodes, MAP_BLOCKSIZE);
-		m_drawlist = std::map<v3s16, MapBlock*, MapBlockComparer>(MapBlockComparer(camera_block));
+		v3s32 camera_block = getContainerPos(cam_pos_nodes, MAP_BLOCKSIZE);
+		m_drawlist = std::map<v3s32, MapBlock*, MapBlockComparer>(MapBlockComparer(camera_block));
 
 		auto is_frustum_culled = m_client->getCamera()->getFrustumCuller();
 
@@ -294,7 +294,7 @@ void ClientMap::updateDrawList()
 		// if (occlusion_culling_enabled && m_control.show_wireframe)
 		// 	occlusion_culling_enabled = porting::getTimeS() & 1;
 
-		std::queue<v3s16> blocks_to_consider;
+		std::queue<v3s32> blocks_to_consider;
 
 		// Bits per block:
 		// [ visited | 0 | 0 | 0 | 0 | Z visible | Y visible | X visible ]
@@ -307,7 +307,7 @@ void ClientMap::updateDrawList()
 		// Recursively walk the space and pick mapblocks for drawing
 		while (blocks_to_consider.size() > 0) {
 
-			v3s16 block_coord = blocks_to_consider.front();
+			v3s32 block_coord = blocks_to_consider.front();
 			blocks_to_consider.pop();
 
 			auto &flags = blocks_seen.getChunk(block_coord).getBits(block_coord);
@@ -320,7 +320,7 @@ void ClientMap::updateDrawList()
 			blocks_visited++;
 
 			// Get the sector, block and mesh
-			MapSector *sector = this->getSectorNoGenerate(v2s16(block_coord.X, block_coord.Z));
+			MapSector *sector = this->getSectorNoGenerate(v2s32(block_coord.X, block_coord.Z));
 
 			if (!sector)
 				continue;
@@ -334,7 +334,7 @@ void ClientMap::updateDrawList()
 			v3f mesh_sphere_center;
 			f32 mesh_sphere_radius;
 
-			v3s16 block_pos_nodes = block_coord * MAP_BLOCKSIZE;
+			v3s32 block_pos_nodes = block_coord * MAP_BLOCKSIZE;
 
 			if (mesh) {
 				mesh_sphere_center = intToFloat(block_pos_nodes, BS)
@@ -362,7 +362,7 @@ void ClientMap::updateDrawList()
 
 			// Calculate the vector from the camera block to the current block
 			// We use it to determine through which sides of the current block we can continue the search
-			v3s16 look = block_coord - camera_block;
+			v3s32 look = block_coord - camera_block;
 
 			// Occluded near sides will further occlude the far sides
 			u8 visible_outer_sides = flags & 0x07;
@@ -427,7 +427,7 @@ void ClientMap::updateDrawList()
 
 			// Calculate vector from camera to mapblock center. Because we only need relation between
 			// coordinates we scale by 2 to avoid precision loss.
-			v3s16 precise_look = 2 * (block_pos_nodes - cam_pos_nodes) + MAP_BLOCKSIZE - 1;
+			v3s32 precise_look = 2 * (block_pos_nodes - cam_pos_nodes) + MAP_BLOCKSIZE - 1;
 
 			// dominant axis flag
 			u8 dominant_axis = (abs(precise_look.X) > abs(precise_look.Y) && abs(precise_look.X) > abs(precise_look.Z)) |
@@ -439,7 +439,7 @@ void ClientMap::updateDrawList()
 			// - Only traverse the sides that are not occluded
 			// - Only traverse the sides that are not opaque
 			// When queueing, mark the relevant side on the next block as 'visible'
-			for (s16 axis = 0; axis < 3; axis++) {
+			for (s32 axis = 0; axis < 3; axis++) {
 
 				// Select a bit from transparent_sides for the side
 				u8 far_side_mask = 1 << (2 * axis);
@@ -453,7 +453,7 @@ void ClientMap::updateDrawList()
 					bool side_visible = ((near_transparency & adjacent_sides) | (near_transparency & my_side & dominant_axis)) != 0;
 					side_visible = side_visible && ((far_side_mask & transparent_sides) != 0);
 
-					v3s16 next_pos = block_coord;
+					v3s32 next_pos = block_coord;
 					next_pos[axis] += next_pos_offset;
 
 					// If a side is a see-through, mark the next block's side as visible, and queue
@@ -496,10 +496,10 @@ void ClientMap::updateDrawList()
 		}
 		m_drawlist.clear();
 
-		v3s16 cam_pos_nodes = floatToInt(m_camera_position, BS);
+		v3s32 cam_pos_nodes = floatToInt(m_camera_position, BS);
 
-		v3s16 p_blocks_min;
-		v3s16 p_blocks_max;
+		v3s32 p_blocks_min;
+		v3s32 p_blocks_max;
 		getBlocksInViewRange(cam_pos_nodes, &p_blocks_min, &p_blocks_max);
 
 		// Number of blocks currently loaded by the client
@@ -517,8 +517,8 @@ void ClientMap::updateDrawList()
 				occlusion_culling_enabled = false;
 		}
 
-		v3s16 camera_block = getContainerPos(cam_pos_nodes, MAP_BLOCKSIZE);
-		m_drawlist = std::map<v3s16, MapBlock*, MapBlockComparer>(MapBlockComparer(camera_block));
+		v3s32 camera_block = getContainerPos(cam_pos_nodes, MAP_BLOCKSIZE);
+		m_drawlist = std::map<v3s32, MapBlock*, MapBlockComparer>(MapBlockComparer(camera_block));
 
 		auto is_frustum_culled = m_client->getCamera()->getFrustumCuller();
 
@@ -529,7 +529,7 @@ void ClientMap::updateDrawList()
 
 		for (const auto &sector_it : m_sectors) {
 			MapSector *sector = sector_it.second;
-			v2s16 sp = sector->getPos();
+			v2s32 sp = sector->getPos();
 
 			blocks_loaded += sector->size();
 			if (!m_control.range_all) {
@@ -558,7 +558,7 @@ void ClientMap::updateDrawList()
 					continue;
 				}
 
-				v3s16 block_coord = block->getPos();
+				v3s32 block_coord = block->getPos();
 				v3f mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
 						+ block->mesh->getBoundingSphereCenter();
 				f32 mesh_sphere_radius = block->mesh->getBoundingRadius();
@@ -609,10 +609,10 @@ void ClientMap::touchMapBlocks()
 	if (!m_new_occlusion_culler)
 		return;
 
-	v3s16 cam_pos_nodes = floatToInt(m_camera_position, BS);
+	v3s32 cam_pos_nodes = floatToInt(m_camera_position, BS);
 
-	v3s16 p_blocks_min;
-	v3s16 p_blocks_max;
+	v3s32 p_blocks_min;
+	v3s32 p_blocks_max;
 	getBlocksInViewRange(cam_pos_nodes, &p_blocks_min, &p_blocks_max);
 
 	// Number of blocks currently loaded by the client
@@ -622,7 +622,7 @@ void ClientMap::touchMapBlocks()
 
 	for (const auto &sector_it : m_sectors) {
 		MapSector *sector = sector_it.second;
-		v2s16 sp = sector->getPos();
+		v2s32 sp = sector->getPos();
 
 		blocks_loaded += sector->size();
 		if (!m_control.range_all) {
@@ -720,7 +720,7 @@ void ClientMap::renderMap(video::IVideoDriver* driver, s32 pass)
 	auto is_frustum_culled = m_client->getCamera()->getFrustumCuller();
 
 	for (auto &i : m_drawlist) {
-		v3s16 block_pos = i.first;
+		v3s32 block_pos = i.first;
 		MapBlock *block = i.second;
 		MapBlockMesh *block_mesh = block->mesh;
 
@@ -888,7 +888,7 @@ static bool getVisibleBrightness(Map *map, const v3f &p0, v3f dir, float step,
 	bool allow_non_sunlight_propagates = false;
 	// Check content nearly at camera position
 	{
-		v3s16 p = floatToInt(p0 /*+ dir * 3*BS*/, BS);
+		v3s32 p = floatToInt(p0 /*+ dir * 3*BS*/, BS);
 		MapNode n = map->getNode(p);
 		if(ndef->getLightingFlags(n).has_light &&
 				!ndef->getLightingFlags(n).sunlight_propagates)
@@ -896,7 +896,7 @@ static bool getVisibleBrightness(Map *map, const v3f &p0, v3f dir, float step,
 	}
 	// If would start at CONTENT_IGNORE, start closer
 	{
-		v3s16 p = floatToInt(pf, BS);
+		v3s32 p = floatToInt(pf, BS);
 		MapNode n = map->getNode(p);
 		if(n.getContent() == CONTENT_IGNORE){
 			float newd = 2*BS;
@@ -910,7 +910,7 @@ static bool getVisibleBrightness(Map *map, const v3f &p0, v3f dir, float step,
 		distance += step;
 		step *= step_multiplier;
 
-		v3s16 p = floatToInt(pf, BS);
+		v3s32 p = floatToInt(pf, BS);
 		MapNode n = map->getNode(p);
 		ContentLightingFlags f = ndef->getLightingFlags(n);
 		if (allow_allowing_non_sunlight_propagates && i == 0 &&
@@ -1093,7 +1093,7 @@ void ClientMap::renderMapShadows(video::IVideoDriver *driver,
 		if (count > high_bound)
 			break;
 
-		v3s16 block_pos = i.first;
+		v3s32 block_pos = i.first;
 		MapBlock *block = i.second;
 
 		// If the mesh of the block happened to get deleted, ignore it
@@ -1200,9 +1200,9 @@ void ClientMap::updateDrawListShadow(v3f shadow_light_pos, v3f shadow_light_dir,
 {
 	ScopeProfiler sp(g_profiler, "CM::updateDrawListShadow()", SPT_AVG);
 
-	v3s16 cam_pos_nodes = floatToInt(shadow_light_pos, BS);
-	v3s16 p_blocks_min;
-	v3s16 p_blocks_max;
+	v3s32 cam_pos_nodes = floatToInt(shadow_light_pos, BS);
+	v3s32 p_blocks_min;
+	v3s32 p_blocks_max;
 	getBlocksInViewRange(cam_pos_nodes, &p_blocks_min, &p_blocks_max, radius + length);
 
 	for (auto &i : m_drawlist_shadow) {
@@ -1277,7 +1277,7 @@ void ClientMap::updateTransparentMeshBuffers()
 		if (m_needs_update_transparent_meshes ||
 				block->mesh->getTransparentBuffers().size() == 0) {
 
-			v3s16 block_pos = block->getPos();
+			v3s32 block_pos = block->getPos();
 			v3f block_pos_f = intToFloat(block_pos * MAP_BLOCKSIZE + MAP_BLOCKSIZE / 2, BS);
 			f32 distance = m_camera_position.getDistanceFromSQ(block_pos_f);
 			if (distance <= sorting_distance_sq) {

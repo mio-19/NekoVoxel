@@ -570,7 +570,7 @@ void ClientLauncher::main_menu(MainMenuData *menudata)
 void ClientLauncher::speed_tests()
 {
 	// volatile to avoid some potential compiler optimisations
-	volatile static s16 temp16;
+	volatile static s32 temp16;
 	volatile static f32 tempf;
 	// Silence compiler warning
 	(void)temp16;
@@ -629,18 +629,18 @@ void ClientLauncher::speed_tests()
 	{
 		TimeTaker timer("Testing std::map speed");
 
-		std::map<v2s16, f32> map1;
+		std::map<v2s32, f32> map1;
 		tempf = -324;
-		const s16 ii = 300;
-		for (s16 y = 0; y < ii; y++) {
-			for (s16 x = 0; x < ii; x++) {
-				map1[v2s16(x, y)] =  tempf;
+		const s32 ii = 300;
+		for (s32 y = 0; y < ii; y++) {
+			for (s32 x = 0; x < ii; x++) {
+				map1[v2s32(x, y)] =  tempf;
 				tempf += 1;
 			}
 		}
-		for (s16 y = ii - 1; y >= 0; y--) {
-			for (s16 x = 0; x < ii; x++) {
-				tempf = map1[v2s16(x, y)];
+		for (s32 y = ii - 1; y >= 0; y--) {
+			for (s32 x = 0; x < ii; x++) {
+				tempf = map1[v2s32(x, y)];
 			}
 		}
 	}

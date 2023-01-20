@@ -104,7 +104,7 @@ struct EnumString ScriptApiNode::es_TextureAlphaMode[] =
 		{0, NULL},
 	};
 
-bool ScriptApiNode::node_on_punch(v3s16 p, MapNode node,
+bool ScriptApiNode::node_on_punch(v3s32 p, MapNode node,
 		ServerActiveObject *puncher, const PointedThing &pointed)
 {
 	SCRIPTAPI_PRECHECKHEADER
@@ -127,7 +127,7 @@ bool ScriptApiNode::node_on_punch(v3s16 p, MapNode node,
 	return true;
 }
 
-bool ScriptApiNode::node_on_dig(v3s16 p, MapNode node,
+bool ScriptApiNode::node_on_dig(v3s32 p, MapNode node,
 		ServerActiveObject *digger)
 {
 	SCRIPTAPI_PRECHECKHEADER
@@ -154,7 +154,7 @@ bool ScriptApiNode::node_on_dig(v3s16 p, MapNode node,
 	return result;
 }
 
-void ScriptApiNode::node_on_construct(v3s16 p, MapNode node)
+void ScriptApiNode::node_on_construct(v3s32 p, MapNode node)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -172,7 +172,7 @@ void ScriptApiNode::node_on_construct(v3s16 p, MapNode node)
 	lua_pop(L, 1);  // Pop error handler
 }
 
-void ScriptApiNode::node_on_destruct(v3s16 p, MapNode node)
+void ScriptApiNode::node_on_destruct(v3s32 p, MapNode node)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -190,7 +190,7 @@ void ScriptApiNode::node_on_destruct(v3s16 p, MapNode node)
 	lua_pop(L, 1);  // Pop error handler
 }
 
-bool ScriptApiNode::node_on_flood(v3s16 p, MapNode node, MapNode newnode)
+bool ScriptApiNode::node_on_flood(v3s32 p, MapNode node, MapNode newnode)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -211,7 +211,7 @@ bool ScriptApiNode::node_on_flood(v3s16 p, MapNode node, MapNode newnode)
 	return readParam<bool>(L, -1, false);
 }
 
-void ScriptApiNode::node_after_destruct(v3s16 p, MapNode node)
+void ScriptApiNode::node_after_destruct(v3s32 p, MapNode node)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -230,7 +230,7 @@ void ScriptApiNode::node_after_destruct(v3s16 p, MapNode node)
 	lua_pop(L, 1);  // Pop error handler
 }
 
-bool ScriptApiNode::node_on_timer(v3s16 p, MapNode node, f32 dtime)
+bool ScriptApiNode::node_on_timer(v3s32 p, MapNode node, f32 dtime)
 {
 	SCRIPTAPI_PRECHECKHEADER
 
@@ -250,7 +250,7 @@ bool ScriptApiNode::node_on_timer(v3s16 p, MapNode node, f32 dtime)
 	return readParam<bool>(L, -1, false);
 }
 
-void ScriptApiNode::node_on_receive_fields(v3s16 p,
+void ScriptApiNode::node_on_receive_fields(v3s32 p,
 		const std::string &formname,
 		const StringMap &fields,
 		ServerActiveObject *sender)

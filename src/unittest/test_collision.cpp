@@ -42,9 +42,9 @@ void TestCollision::runTests(IGameDef *gamedef)
 
 void TestCollision::testAxisAlignedCollision()
 {
-	for (s16 bx = -3; bx <= 3; bx++)
-	for (s16 by = -3; by <= 3; by++)
-	for (s16 bz = -3; bz <= 3; bz++) {
+	for (s32 bx = -3; bx <= 3; bx++)
+	for (s32 by = -3; by <= 3; by++)
+	for (s32 bz = -3; bz <= 3; bz++) {
 		// X-
 		{
 			aabb3f s(bx, by, bz, bx+1, by+1, bz+1);

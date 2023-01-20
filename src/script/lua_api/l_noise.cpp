@@ -136,7 +136,7 @@ luaL_Reg LuaPerlinNoise::methods[] = {
   LuaPerlinNoiseMap
 */
 
-LuaPerlinNoiseMap::LuaPerlinNoiseMap(const NoiseParams *np, s32 seed, v3s16 size)
+LuaPerlinNoiseMap::LuaPerlinNoiseMap(const NoiseParams *np, s32 seed, v3s32 size)
 {
 	try {
 		noise = new Noise(np, seed, size.X, size.Y, size.Z);
@@ -297,8 +297,8 @@ int LuaPerlinNoiseMap::l_get_map_slice(lua_State *L)
 	NO_MAP_LOCK_REQUIRED;
 
 	LuaPerlinNoiseMap *o = checkObject<LuaPerlinNoiseMap>(L, 1);
-	v3s16 slice_offset   = read_v3s16(L, 2);
-	v3s16 slice_size     = read_v3s16(L, 3);
+	v3s32 slice_offset   = read_v3s16(L, 2);
+	v3s32 slice_size     = read_v3s16(L, 3);
 	bool use_buffer      = lua_istable(L, 4);
 
 	Noise *n = o->noise;
@@ -322,7 +322,7 @@ int LuaPerlinNoiseMap::create_object(lua_State *L)
 	NoiseParams np;
 	if (!read_noiseparams(L, 1, &np))
 		return 0;
-	v3s16 size = read_v3s16(L, 2);
+	v3s32 size = read_v3s16(L, 2);
 
 	LuaPerlinNoiseMap *o = new LuaPerlinNoiseMap(&np, 0, size);
 	*(void **)(lua_newuserdata(L, sizeof(void *))) = o;
@@ -343,7 +343,7 @@ int LuaPerlinNoiseMap::gc_object(lua_State *L)
 struct NoiseMapParams {
 	NoiseParams np;
 	s32 seed;
-	v3s16 size;
+	v3s32 size;
 };
 
 void *LuaPerlinNoiseMap::packIn(lua_State *L, int idx)
@@ -352,7 +352,7 @@ void *LuaPerlinNoiseMap::packIn(lua_State *L, int idx)
 	NoiseMapParams *ret = new NoiseMapParams();
 	ret->np = o->noise->np;
 	ret->seed = o->noise->seed;
-	ret->size = v3s16(o->noise->sx, o->noise->sy, o->noise->sz);
+	ret->size = v3s32(o->noise->sx, o->noise->sy, o->noise->sz);
 	return ret;
 }
 

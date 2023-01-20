@@ -57,14 +57,14 @@ public:
 	void signal();
 
 	// Requires queue mutex held
-	bool pushBlock(const v3s16 &pos);
+	bool pushBlock(const v3s32 &pos);
 
 	void cancelPendingItems();
 
 protected:
 
 	void runCompletionCallbacks(
-		const v3s16 &pos, EmergeAction action,
+		const v3s32 &pos, EmergeAction action,
 		const EmergeCallbackList &callbacks);
 
 private:
@@ -74,14 +74,14 @@ private:
 	Mapgen *m_mapgen;
 
 	Event m_queue_event;
-	std::queue<v3s16> m_block_queue;
+	std::queue<v3s32> m_block_queue;
 
-	bool popBlockEmerge(v3s16 *pos, BlockEmergeData *bedata);
+	bool popBlockEmerge(v3s32 *pos, BlockEmergeData *bedata);
 
 	EmergeAction getBlockOrStartGen(
-		const v3s16 &pos, bool allow_gen, MapBlock **block, BlockMakeData *data);
-	MapBlock *finishGen(v3s16 pos, BlockMakeData *bmdata,
-		std::map<v3s16, MapBlock *> *modified_blocks);
+		const v3s32 &pos, bool allow_gen, MapBlock **block, BlockMakeData *data);
+	MapBlock *finishGen(v3s32 pos, BlockMakeData *bmdata,
+		std::map<v3s32, MapBlock *> *modified_blocks);
 
 	friend class EmergeManager;
 };
@@ -169,8 +169,8 @@ EmergeManager::EmergeManager(Server *server, MetricsBackend *mb)
 		);
 	}
 
-	s16 nthreads = 1;
-	g_settings->getS16NoEx("num_emerge_threads", nthreads);
+	s32 nthreads = 1;
+	g_settings->getS32NoEx("num_emerge_threads", nthreads);
 	// If automatic, leave a proc for the main thread and one for
 	// some other misc thread
 	if (nthreads <= 0)
@@ -190,7 +190,7 @@ EmergeManager::EmergeManager(Server *server, MetricsBackend *mb)
 	m_qlimit_diskonly = rangelim(m_qlimit_diskonly, 1, 1000000);
 	m_qlimit_generate = rangelim(m_qlimit_generate, 1, 1000000);
 
-	for (s16 i = 0; i < nthreads; i++)
+	for (s32 i = 0; i < nthreads; i++)
 		m_threads.push_back(new EmergeThread(server, i));
 
 	infostream << "EmergeManager: using " << nthreads << " threads" << std::endl;
@@ -258,7 +258,7 @@ void EmergeManager::initMapgens(MapgenParams *params)
 
 	mgparams = params;
 
-	v3s16 csize = v3s16(1, 1, 1) * (params->chunksize * MAP_BLOCKSIZE);
+	v3s32 csize = v3s32(1, 1, 1) * (params->chunksize * MAP_BLOCKSIZE);
 	biomegen = biomemgr->createBiomeGen(BIOMEGEN_ORIGINAL, params->bparams, csize);
 
 	for (u32 i = 0; i != m_threads.size(); i++) {
@@ -325,7 +325,7 @@ bool EmergeManager::isRunning()
 
 bool EmergeManager::enqueueBlockEmerge(
 	session_t peer_id,
-	v3s16 blockpos,
+	v3s32 blockpos,
 	bool allow_generate,
 	bool ignore_queue_limits)
 {
@@ -340,7 +340,7 @@ bool EmergeManager::enqueueBlockEmerge(
 
 
 bool EmergeManager::enqueueBlockEmergeEx(
-	v3s16 blockpos,
+	v3s32 blockpos,
 	session_t peer_id,
 	u16 flags,
 	EmergeCompletionCallback callback,
@@ -369,7 +369,7 @@ bool EmergeManager::enqueueBlockEmergeEx(
 }
 
 
-bool EmergeManager::isBlockInQueue(v3s16 pos)
+bool EmergeManager::isBlockInQueue(v3s32 pos)
 {
 	MutexAutoLock queuelock(m_queue_mutex);
 	return m_blocks_enqueued.find(pos) != m_blocks_enqueued.end();
@@ -382,17 +382,17 @@ bool EmergeManager::isBlockInQueue(v3s16 pos)
 
 
 // TODO(hmmmm): Move this to ServerMap
-v3s16 EmergeManager::getContainingChunk(v3s16 blockpos, s16 chunksize)
+v3s32 EmergeManager::getContainingChunk(v3s32 blockpos, s32 chunksize)
 {
-	s16 coff = -chunksize / 2;
-	v3s16 chunk_offset(coff, coff, coff);
+	s32 coff = -chunksize / 2;
+	v3s32 chunk_offset(coff, coff, coff);
 
 	return getContainerPos(blockpos - chunk_offset, chunksize)
 		* chunksize + chunk_offset;
 }
 
 
-int EmergeManager::getSpawnLevelAtPoint(v2s16 p)
+int EmergeManager::getSpawnLevelAtPoint(v2s32 p)
 {
 	if (m_mapgens.empty() || !m_mapgens[0]) {
 		errorstream << "EmergeManager: getSpawnLevelAtPoint() called"
@@ -405,14 +405,14 @@ int EmergeManager::getSpawnLevelAtPoint(v2s16 p)
 
 
 // TODO(hmmmm): Move this to ServerMap
-bool EmergeManager::isBlockUnderground(v3s16 blockpos)
+bool EmergeManager::isBlockUnderground(v3s32 blockpos)
 {
 	// Use a simple heuristic
 	return blockpos.Y * (MAP_BLOCKSIZE + 1) <= mgparams->water_level;
 }
 
 bool EmergeManager::pushBlockEmergeData(
-	v3s16 pos,
+	v3s32 pos,
 	u16 peer_requested,
 	u16 flags,
 	EmergeCompletionCallback callback,
@@ -437,7 +437,7 @@ bool EmergeManager::pushBlockEmergeData(
 		}
 	}
 
-	std::pair<std::map<v3s16, BlockEmergeData>::iterator, bool> findres;
+	std::pair<std::map<v3s32, BlockEmergeData>::iterator, bool> findres;
 	findres = m_blocks_enqueued.insert(std::make_pair(pos, BlockEmergeData()));
 
 	BlockEmergeData &bedata = findres.first->second;
@@ -459,7 +459,7 @@ bool EmergeManager::pushBlockEmergeData(
 }
 
 
-bool EmergeManager::popBlockEmergeData(v3s16 pos, BlockEmergeData *bedata)
+bool EmergeManager::popBlockEmergeData(v3s32 pos, BlockEmergeData *bedata)
 {
 	auto it = m_blocks_enqueued.find(pos);
 	if (it == m_blocks_enqueued.end())
@@ -531,7 +531,7 @@ void EmergeThread::signal()
 }
 
 
-bool EmergeThread::pushBlock(const v3s16 &pos)
+bool EmergeThread::pushBlock(const v3s32 &pos)
 {
 	m_block_queue.push(pos);
 	return true;
@@ -544,7 +544,7 @@ void EmergeThread::cancelPendingItems()
 
 	while (!m_block_queue.empty()) {
 		BlockEmergeData bedata;
-		v3s16 pos;
+		v3s32 pos;
 
 		pos = m_block_queue.front();
 		m_block_queue.pop();
@@ -556,7 +556,7 @@ void EmergeThread::cancelPendingItems()
 }
 
 
-void EmergeThread::runCompletionCallbacks(const v3s16 &pos, EmergeAction action,
+void EmergeThread::runCompletionCallbacks(const v3s32 &pos, EmergeAction action,
 	const EmergeCallbackList &callbacks)
 {
 	m_emerge->reportCompletedEmerge(action);
@@ -573,7 +573,7 @@ void EmergeThread::runCompletionCallbacks(const v3s16 &pos, EmergeAction action,
 }
 
 
-bool EmergeThread::popBlockEmerge(v3s16 *pos, BlockEmergeData *bedata)
+bool EmergeThread::popBlockEmerge(v3s32 *pos, BlockEmergeData *bedata)
 {
 	MutexAutoLock queuelock(m_emerge->m_queue_mutex);
 
@@ -590,7 +590,7 @@ bool EmergeThread::popBlockEmerge(v3s16 *pos, BlockEmergeData *bedata)
 
 
 EmergeAction EmergeThread::getBlockOrStartGen(
-	const v3s16 &pos, bool allow_gen, MapBlock **block, BlockMakeData *bmdata)
+	const v3s32 &pos, bool allow_gen, MapBlock **block, BlockMakeData *bmdata)
 {
 	MutexAutoLock envlock(m_server->m_env_mutex);
 
@@ -615,8 +615,8 @@ EmergeAction EmergeThread::getBlockOrStartGen(
 }
 
 
-MapBlock *EmergeThread::finishGen(v3s16 pos, BlockMakeData *bmdata,
-	std::map<v3s16, MapBlock *> *modified_blocks)
+MapBlock *EmergeThread::finishGen(v3s32 pos, BlockMakeData *bmdata,
+	std::map<v3s32, MapBlock *> *modified_blocks)
 {
 	MutexAutoLock envlock(m_server->m_env_mutex);
 	ScopeProfiler sp(g_profiler,
@@ -635,9 +635,9 @@ MapBlock *EmergeThread::finishGen(v3s16 pos, BlockMakeData *bmdata,
 		return NULL;
 	}
 
-	v3s16 minp = bmdata->blockpos_min * MAP_BLOCKSIZE;
-	v3s16 maxp = bmdata->blockpos_max * MAP_BLOCKSIZE +
-				 v3s16(1,1,1) * (MAP_BLOCKSIZE - 1);
+	v3s32 minp = bmdata->blockpos_min * MAP_BLOCKSIZE;
+	v3s32 maxp = bmdata->blockpos_max * MAP_BLOCKSIZE +
+				 v3s32(1,1,1) * (MAP_BLOCKSIZE - 1);
 
 	// Ignore map edit events, they will not need to be sent
 	// to anybody because the block hasn't been sent to anybody
@@ -677,8 +677,8 @@ void *EmergeThread::run()
 {
 	BEGIN_DEBUG_EXCEPTION_HANDLER
 
-	v3s16 pos;
-	std::map<v3s16, MapBlock *> modified_blocks;
+	v3s32 pos;
+	std::map<v3s32, MapBlock *> modified_blocks;
 
 	m_map    = &m_server->m_env->getServerMap();
 	m_emerge = m_server->m_emerge;

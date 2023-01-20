@@ -44,8 +44,8 @@ namespace voxalgo
  */
 void update_lighting_nodes(
 	Map *map,
-	const std::vector<std::pair<v3s16, MapNode>> &oldnodes,
-	std::map<v3s16, MapBlock*> &modified_blocks);
+	const std::vector<std::pair<v3s32, MapNode>> &oldnodes,
+	std::map<v3s32, MapBlock*> &modified_blocks);
 
 /*!
  * Updates borders of the given mapblock.
@@ -57,7 +57,7 @@ void update_lighting_nodes(
  * the function modified
  */
 void update_block_border_lighting(Map *map, MapBlock *block,
-	std::map<v3s16, MapBlock*> &modified_blocks);
+	std::map<v3s32, MapBlock*> &modified_blocks);
 
 /*!
  * Copies back nodes from a voxel manipulator
@@ -68,7 +68,7 @@ void update_block_border_lighting(Map *map, MapBlock *block,
  * the function modified
  */
 void blit_back_with_light(Map *map, MMVManip *vm,
-	std::map<v3s16, MapBlock*> *modified_blocks);
+	std::map<v3s32, MapBlock*> *modified_blocks);
 
 /*!
  * Corrects the light in a map block.
@@ -77,7 +77,7 @@ void blit_back_with_light(Map *map, MMVManip *vm,
  * \param block the block to update
  */
 void repair_block_light(Map *map, MapBlock *block,
-	std::map<v3s16, MapBlock*> *modified_blocks);
+	std::map<v3s32, MapBlock*> *modified_blocks);
 
 /*!
  * This class iterates trough voxels that intersect with
@@ -107,15 +107,15 @@ public:
 	 * Direction of the line. Each component can be -1 or 1 (if a
 	 * component of the line's vector is 0, then there will be 1).
 	 */
-	v3s16 m_step_directions { 1, 1, 1 };
+	v3s32 m_step_directions { 1, 1, 1 };
 	//! Position of the current node.
-	v3s16 m_current_node_pos;
+	v3s32 m_current_node_pos;
 	//! Index of the current node
-	s16 m_current_index = 0;
+	s32 m_current_index = 0;
 	//! Position of the start node.
-	v3s16 m_start_node_pos;
+	v3s32 m_start_node_pos;
 	//! Index of the last node
-	s16 m_last_index;
+	s32 m_last_index;
 
 	/*!
 	 * Creates a voxel line iterator with the given line.
@@ -150,7 +150,7 @@ public:
 	 * If voxel does not intersect with the line,
 	 * the result is undefined.
 	 */
-	s16 getIndex(v3s16 voxel);
+	s32 getIndex(v3s32 voxel);
 };
 
 } // namespace voxalgo

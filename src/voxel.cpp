@@ -51,8 +51,8 @@ void VoxelManipulator::clear()
 void VoxelManipulator::print(std::ostream &o, const NodeDefManager *ndef,
 	VoxelPrintMode mode)
 {
-	const v3s16 &em = m_area.getExtent();
-	v3s16 of = m_area.MinEdge;
+	const v3s32 &em = m_area.getExtent();
+	v3s32 of = m_area.MinEdge;
 	o<<"size: "<<em.X<<"x"<<em.Y<<"x"<<em.Z
 	 <<" offset: ("<<of.X<<","<<of.Y<<","<<of.Z<<")"<<std::endl;
 
@@ -204,7 +204,7 @@ void VoxelManipulator::addArea(const VoxelArea &area)
 }
 
 void VoxelManipulator::copyFrom(MapNode *src, const VoxelArea& src_area,
-		v3s16 from_pos, v3s16 to_pos, const v3s16 &size)
+		v3s32 from_pos, v3s32 to_pos, const v3s32 &size)
 {
 	/* The reason for this optimised code is that we're a member function
 	 * and the data type/layout of m_data is know to us: it's stored as
@@ -240,8 +240,8 @@ void VoxelManipulator::copyFrom(MapNode *src, const VoxelArea& src_area,
 	s32 i_src = src_area.index(from_pos.X, from_pos.Y, from_pos.Z);
 	s32 i_local = m_area.index(to_pos.X, to_pos.Y, to_pos.Z);
 
-	for (s16 z = 0; z < size.Z; z++) {
-		for (s16 y = 0; y < size.Y; y++) {
+	for (s32 z = 0; z < size.Z; z++) {
+		for (s32 y = 0; y < size.Y; y++) {
 			memcpy(&m_data[i_local], &src[i_src], size.X * sizeof(*m_data));
 			memset(&m_flags[i_local], 0, size.X);
 			i_src += src_step;
@@ -252,14 +252,14 @@ void VoxelManipulator::copyFrom(MapNode *src, const VoxelArea& src_area,
 }
 
 void VoxelManipulator::copyTo(MapNode *dst, const VoxelArea& dst_area,
-		v3s16 dst_pos, v3s16 from_pos, const v3s16 &size)
+		v3s32 dst_pos, v3s32 from_pos, const v3s32 &size)
 {
-	for(s16 z=0; z<size.Z; z++)
-	for(s16 y=0; y<size.Y; y++)
+	for(s32 z=0; z<size.Z; z++)
+	for(s32 y=0; y<size.Y; y++)
 	{
 		s32 i_dst = dst_area.index(dst_pos.X, dst_pos.Y+y, dst_pos.Z+z);
 		s32 i_local = m_area.index(from_pos.X, from_pos.Y+y, from_pos.Z+z);
-		for (s16 x = 0; x < size.X; x++) {
+		for (s32 x = 0; x < size.X; x++) {
 			if (m_data[i_local].getContent() != CONTENT_IGNORE)
 				dst[i_dst] = m_data[i_local];
 			i_dst++;
@@ -278,7 +278,7 @@ void VoxelManipulator::clearFlag(u8 flags)
 	// 0-1ms on moderate area
 	TimeTaker timer("clearFlag", &clearflag_time);
 
-	//v3s16 s = m_area.getExtent();
+	//v3s32 s = m_area.getExtent();
 
 	/*dstream<<"clearFlag clearing area of size "
 			<<""<<s.X<<"x"<<s.Y<<"x"<<s.Z<<""

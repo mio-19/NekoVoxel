@@ -57,22 +57,22 @@ public:
 
 	virtual void resolveNodeNames();
 
-	bool canPlaceDecoration(MMVManip *vm, v3s16 p);
-	size_t placeDeco(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	bool canPlaceDecoration(MMVManip *vm, v3s32 p);
+	size_t placeDeco(Mapgen *mg, u32 blockseed, v3s32 nmin, v3s32 nmax);
 
-	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s16 p, bool ceiling) = 0;
+	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s32 p, bool ceiling) = 0;
 
 	u32 flags = 0;
 	int mapseed = 0;
 	std::vector<content_t> c_place_on;
-	s16 sidelen = 1;
-	s16 y_min;
-	s16 y_max;
+	s32 sidelen = 1;
+	s32 y_min;
+	s32 y_max;
 	float fill_ratio = 0.0f;
 	NoiseParams np;
 	std::vector<content_t> c_spawnby;
-	s16 nspawnby;
-	s16 place_offset_y = 0;
+	s32 nspawnby;
+	s32 place_offset_y = 0;
 
 	std::unordered_set<biome_t> biomes;
 
@@ -86,11 +86,11 @@ public:
 	ObjDef *clone() const;
 
 	virtual void resolveNodeNames();
-	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s16 p, bool ceiling);
+	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s32 p, bool ceiling);
 
 	std::vector<content_t> c_decos;
-	s16 deco_height;
-	s16 deco_height_max;
+	s32 deco_height;
+	s32 deco_height_max;
 	u8 deco_param2;
 	u8 deco_param2_max;
 };
@@ -103,7 +103,7 @@ public:
 	DecoSchematic() = default;
 	virtual ~DecoSchematic();
 
-	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s16 p, bool ceiling);
+	virtual size_t generate(MMVManip *vm, PcgRandom *pr, v3s32 p, bool ceiling);
 
 	Rotation rotation;
 	Schematic *schematic = nullptr;
@@ -114,7 +114,7 @@ public:
 /*
 class DecoLSystem : public Decoration {
 public:
-	virtual void generate(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	virtual void generate(Mapgen *mg, u32 blockseed, v3s32 nmin, v3s32 nmax);
 };
 */
 
@@ -145,7 +145,7 @@ public:
 		}
 	}
 
-	size_t placeAllDecos(Mapgen *mg, u32 blockseed, v3s16 nmin, v3s16 nmax);
+	size_t placeAllDecos(Mapgen *mg, u32 blockseed, v3s32 nmin, v3s32 nmax);
 
 private:
 	DecorationManager() {};

@@ -453,9 +453,9 @@ void ContentFeatures::serialize(std::ostream &os, u16 protocol_version) const
 		os << serializeString16(group.first);
 		if (protocol_version < 41 && group.first.compare("bouncy") == 0) {
 			// Old clients may choke on negative bouncy value
-			writeS16(os, abs(group.second));
+			writeS32(os, abs(group.second));
 		} else {
-			writeS16(os, group.second);
+			writeS32(os, group.second);
 		}
 	}
 	writeU8(os, param_type);
@@ -556,7 +556,7 @@ void ContentFeatures::deSerialize(std::istream &is, u16 protocol_version)
 	u32 groups_size = readU16(is);
 	for (u32 i = 0; i < groups_size; i++) {
 		std::string name = deSerializeString16(is);
-		int value = readS16(is);
+		int value = readS32(is);
 		groups[name] = value;
 	}
 	param_type = (enum ContentParamType) readU8(is);
