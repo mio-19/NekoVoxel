@@ -463,7 +463,7 @@ void set_default_settings()
 	// Mapgen
 	settings->setDefault("mg_name", "v7");
 	settings->setDefault("water_level", "1");
-	settings->setDefault("mapgen_limit", "31007");
+	settings->setDefault("mapgen_limit", "2100000008");
 	settings->setDefault("chunksize", "5");
 	settings->setDefault("fixed_map_seed", "");
 	settings->setDefault("max_block_generate_distance", "10");
