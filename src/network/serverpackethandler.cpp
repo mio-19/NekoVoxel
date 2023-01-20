@@ -1034,9 +1034,9 @@ void Server::handleCommand_Interact(NetworkPacket *pkt)
 	if ((action == INTERACT_START_DIGGING || action == INTERACT_DIGGING_COMPLETED ||
 			action == INTERACT_PLACE || action == INTERACT_USE) &&
 			enable_anticheat && !isSingleplayer()) {
-		v3f target_pos = player_pos;
+		v3d target_pos = player_pos;
 		if (pointed.type == POINTEDTHING_NODE) {
-			target_pos = intToFloat(pointed.node_undersurface, BS);
+			target_pos = intToDouble(pointed.node_undersurface, BS);
 		} else if (pointed.type == POINTEDTHING_OBJECT) {
 			if (playersao->getId() == pointed_object->getId()) {
 				actionstream << "Server: " << player->getName()

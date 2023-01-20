@@ -204,7 +204,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 
 			// Do calculations relative to the node center
 			// to translate the ray rather than the boxes
-			v3f npf = intToFloat(np, BS);
+			v3d npf = intToDouble(np, BS);
 			v3f rel_start = state->m_shootline.start - npf;
 			for (aabb3f &box : boxes) {
 				v3f intersection_point;

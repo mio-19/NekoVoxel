@@ -70,7 +70,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // The original idea behind this is to disallow plain casts between
 // floating-point and integer positions, which potentially give wrong
 // results. (negative coordinates, values between nodes, ...)
-// Use floatToInt(p, BS) and intToFloat(p, BS).
+// Use doubleToInt(p, BS) and intToDouble(p, BS).
 #define BS 10.0f
 
 // Dimension of a MapBlock

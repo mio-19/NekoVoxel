@@ -2254,7 +2254,7 @@ void Server::fadeSound(s32 handle, float step, float gain)
 void Server::sendRemoveNode(v3s32 p, std::unordered_set<u16> *far_players,
 		float far_d_nodes)
 {
-	v3f p_f = intToFloat(p, BS);
+	v3d p_f = intToDouble(p, BS);
 	v3s32 block_pos = getNodeBlockPos(p);
 
 	NetworkPacket pkt(TOCLIENT_REMOVENODE, 6);

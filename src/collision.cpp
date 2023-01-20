@@ -342,7 +342,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 			n.getCollisionBoxes(gamedef->ndef(), &nodeboxes, neighbors);
 
 			// Calculate float position only once
-			v3f posf = intToFloat(p, BS);
+			v3d posf = intToDouble(p, BS);
 			for (auto box : nodeboxes) {
 				box.MinEdge += posf;
 				box.MaxEdge += posf;
