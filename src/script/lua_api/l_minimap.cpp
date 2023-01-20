@@ -62,7 +62,7 @@ int LuaMinimap::l_set_pos(lua_State *L)
 	LuaMinimap *ref = checkObject<LuaMinimap>(L, 1);
 	Minimap *m = getobject(ref);
 
-	m->setPos(read_v3s16(L, 2));
+	m->setPos(read_v3s32(L, 2));
 	return 1;
 }
 

@@ -40,7 +40,7 @@ int ModApiRollback::l_rollback_get_node_actions(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 
-	v3s32 pos = read_v3s16(L, 1);
+	v3s32 pos = read_v3s32(L, 1);
 	int range = luaL_checknumber(L, 2);
 	time_t seconds = (time_t) luaL_checknumber(L, 3);
 	int limit = luaL_checknumber(L, 4);
