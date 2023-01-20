@@ -89,6 +89,15 @@ u32 f32Tou32Slow(f32 f)
 	return signbit | (exp << 23) | (imant & 0x7FFFFFUL);
 }
 
+u64 f64Tou64Slow(f64 f) {
+	throw std::runtime_error("TODO");
+}
+
+f64 u64Tof64Slow(u64 i)
+{
+	throw std::runtime_error("TODO");
+}
+
 // This test needs the following requisites in order to work:
 // - The float type must be a 32 bits IEEE-754 single-precision float.
 // - The endianness of f32s and integers must match.

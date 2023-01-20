@@ -571,6 +571,17 @@ v3f Settings::getV3F(const std::string &name) const
 	return value;
 }
 
+v3d Settings::getV3D(const std::string &name) const
+{
+	v3d value;
+	Strfnd f(get(name));
+	f.next("(");
+	value.X = stod(f.next(","));
+	value.Y = stod(f.next(","));
+	value.Z = stod(f.next(")"));
+	return value;
+}
+
 
 u32 Settings::getFlagStr(const std::string &name, const FlagDesc *flagdesc,
 	u32 *flagmask) const
@@ -945,6 +956,13 @@ bool Settings::setV2F(const std::string &name, v2f value)
 
 
 bool Settings::setV3F(const std::string &name, v3f value)
+{
+	std::ostringstream os;
+	os << "(" << value.X << "," << value.Y << "," << value.Z << ")";
+	return set(name, os.str());
+}
+
+bool Settings::setV3D(const std::string &name, v3d value)
 {
 	std::ostringstream os;
 	os << "(" << value.X << "," << value.Y << "," << value.Z << ")";

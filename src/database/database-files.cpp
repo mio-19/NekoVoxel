@@ -58,7 +58,7 @@ void PlayerDatabaseFiles::deSerialize(RemotePlayer *p, std::istream &is,
 		}
 
 		try {
-			sao->setBasePosition(args.getV3F("position"));
+			sao->setBasePosition(args.getV3D("position"));
 		} catch (SettingNotFoundException &e) {}
 
 		try {
@@ -124,7 +124,7 @@ void PlayerDatabaseFiles::serialize(RemotePlayer *p, std::ostream &os)
 	// This should not happen
 	sanity_check(sao);
 	args.setU16("hp", sao->getHP());
-	args.setV3F("position", sao->getBasePosition());
+	args.setV3D("position", sao->getBasePosition());
 	args.setFloat("pitch", sao->getLookPitch());
 	args.setFloat("yaw", sao->getRotation().Y);
 	args.setU16("breath", sao->getBreath());

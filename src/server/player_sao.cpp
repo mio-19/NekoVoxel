@@ -72,9 +72,9 @@ void PlayerSAO::finalize(RemotePlayer *player, const std::set<std::string> &priv
 	m_privs = privs;
 }
 
-v3f PlayerSAO::getEyeOffset() const
+v3d PlayerSAO::getEyeOffset() const
 {
-	return v3f(0, BS * m_prop.eye_height, 0);
+	return v3d(0, BS * m_prop.eye_height, 0);
 }
 
 std::string PlayerSAO::getDescription()

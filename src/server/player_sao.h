@@ -87,9 +87,9 @@ public:
 	std::string getClientInitializationData(u16 protocol_version) override;
 	void getStaticData(std::string *result) const override;
 	void step(float dtime, bool send_recommended) override;
-	void setBasePosition(v3f position);
-	void setPos(const v3f &pos) override;
-	void moveTo(v3f pos, bool continuous) override;
+	void setBasePosition(v3d position);
+	void setPos(const v3d &pos) override;
+	void moveTo(v3d pos, bool continuous) override;
 	void setPlayerYaw(const float yaw);
 	// Data should not be sent at player initialization
 	void setPlayerYawAndSend(const float yaw);
@@ -177,8 +177,8 @@ public:
 
 	void finalize(RemotePlayer *player, const std::set<std::string> &privs);
 
-	v3f getEyePosition() const { return m_base_position + getEyeOffset(); }
-	v3f getEyeOffset() const;
+	v3d getEyePosition() const { return m_base_position + getEyeOffset(); }
+	v3d getEyeOffset() const;
 	float getZoomFOV() const;
 
 	inline SimpleMetadata &getMeta() { return m_meta; }
