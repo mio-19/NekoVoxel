@@ -191,7 +191,7 @@ namespace ParticleParamTypes
 		void deSerialize(std::istream &is)
 		{
 			legacyDeSerialize(is);
-			bias = readF32(is);
+			bias = readF64(is);
 		}
 
 		This interpolate(float fac, const This against) const
@@ -300,7 +300,7 @@ namespace ParticleParamTypes
 		{
 			style = static_cast<TweenStyle>(readU8(is));
 			reps = readU16(is);
-			beginning = readF32(is);
+			beginning = readF64(is);
 			start.deSerialize(is);
 			end.deSerialize(is);
 		}

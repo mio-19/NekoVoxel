@@ -136,7 +136,7 @@ void ItemDefinition::serialize(std::ostream &os, u16 protocol_version) const
 	os << serializeString16(description);
 	os << serializeString16(inventory_image);
 	os << serializeString16(wield_image);
-	writeV3F32(os, wield_scale);
+	writeV3F64(os, wield_scale);
 	writeS32(os, stack_max);
 	writeU8(os, usable);
 	writeU8(os, liquids_pointable);
@@ -215,7 +215,7 @@ void ItemDefinition::deSerialize(std::istream &is, u16 protocol_version)
 	sound_place.deSerialize(is, protocol_version);
 	sound_place_failed.deSerialize(is, protocol_version);
 
-	range = readF32(is);
+	range = readF64(is);
 	palette_image = deSerializeString16(is);
 	color = readARGB8(is);
 	inventory_overlay = deSerializeString16(is);

@@ -62,6 +62,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 extern FloatType g_serialize_f32_type;
+extern FloatType g_serialize_f64_type;
 
 #if HAVE_ENDIAN_H
 // use machine native byte swapping routines
@@ -210,6 +211,25 @@ inline f32 readF32(const u8 *data)
 	throw SerializationError("readF32: Unreachable code");
 }
 
+inline f64 readF64(const u8 *data)
+{
+	u64 u = readU64(data);
+
+	switch (g_serialize_f64_type) {
+	case FLOATTYPE_SYSTEM: {
+			f64 f;
+			memcpy(&f, &u, 8);
+			return f;
+		}
+	case FLOATTYPE_SLOW:
+		return u64Tof64Slow(u);
+	case FLOATTYPE_UNKNOWN: // First initialization
+		g_serialize_f64_type = getFloatSerializationType();
+		return readF64(data);
+	}
+	throw SerializationError("readF64: Unreachable code");
+}
+
 inline video::SColor readARGB8(const u8 *data)
 {
 	video::SColor p(readU32(data));
@@ -326,6 +346,23 @@ inline void writeF32(u8 *data, f32 i)
 	throw SerializationError("writeF32: Unreachable code");
 }
 
+inline void writeF64(u8 *data, f64 i)
+{
+	switch (g_serialize_f64_type) {
+	case FLOATTYPE_SYSTEM: {
+			u64 u;
+			memcpy(&u, &i, 8);
+			return writeU64(data, u);
+		}
+	case FLOATTYPE_SLOW:
+		return writeU64(data, f64Tou64Slow(i));
+	case FLOATTYPE_UNKNOWN: // First initialization
+		g_serialize_f64_type = getFloatSerializationType();
+		return writeF64(data, i);
+	}
+	throw SerializationError("writeF64: Unreachable code");
+}
+
 inline void writeARGB8(u8 *data, video::SColor p)
 {
 	writeU32(data, p.color);
@@ -375,6 +412,13 @@ inline void writeV3F32(u8 *data, v3d p)
 	writeF32(&data[0], p.X);
 	writeF32(&data[4], p.Y);
 	writeF32(&data[8], p.Z);
+}
+
+inline void writeV3F64(u8 *data, v3d p)
+{
+	writeF64(&data[0], p.X);
+	writeF64(&data[8], p.Y);
+	writeF64(&data[16], p.Z);
 }
 
 ////

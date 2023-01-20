@@ -1725,7 +1725,7 @@ void GenericCAO::processMessage(const std::string &data)
 		m_rotation = wrapDegrees_0_360_v3f(m_rotation);
 		bool do_interpolate = readU8(is);
 		bool is_end_position = readU8(is);
-		float update_interval = readF32(is);
+		float update_interval = readF64(is);
 
 		// Place us a bit higher if we're physical, to not sink into
 		// the ground due to sucky collision detection...
@@ -1756,7 +1756,7 @@ void GenericCAO::processMessage(const std::string &data)
 	} else if (cmd == AO_CMD_SET_SPRITE) {
 		v2s32 p = readV2S32(is);
 		int num_frames = readU16(is);
-		float framelength = readF32(is);
+		float framelength = readF64(is);
 		bool select_horiz_by_yawpitch = readU8(is);
 
 		m_tx_basepos = p;
@@ -1767,9 +1767,9 @@ void GenericCAO::processMessage(const std::string &data)
 
 		updateTexturePos();
 	} else if (cmd == AO_CMD_SET_PHYSICS_OVERRIDE) {
-		float override_speed = readF32(is);
-		float override_jump = readF32(is);
-		float override_gravity = readF32(is);
+		float override_speed = readF64(is);
+		float override_jump = readF64(is);
+		float override_gravity = readF64(is);
 		// MT 0.4.10 legacy: send inverted for detault `true` if the server sends nothing
 		bool sneak = !readU8(is);
 		bool sneak_glitch = !readU8(is);
@@ -1790,8 +1790,8 @@ void GenericCAO::processMessage(const std::string &data)
 		v2f range = readV2F32(is);
 		if (!m_is_local_player) {
 			m_animation_range = v2s32((s32)range.X, (s32)range.Y);
-			m_animation_speed = readF32(is);
-			m_animation_blend = readF32(is);
+			m_animation_speed = readF64(is);
+			m_animation_blend = readF64(is);
 			// these are sent inverted so we get true when the server sends nothing
 			m_animation_loop = !readU8(is);
 			updateAnimation();
@@ -1800,8 +1800,8 @@ void GenericCAO::processMessage(const std::string &data)
 			if(player->last_animation == NO_ANIM)
 			{
 				m_animation_range = v2s32((s32)range.X, (s32)range.Y);
-				m_animation_speed = readF32(is);
-				m_animation_blend = readF32(is);
+				m_animation_speed = readF64(is);
+				m_animation_blend = readF64(is);
 				// these are sent inverted so we get true when the server sends nothing
 				m_animation_loop = !readU8(is);
 			}
@@ -1821,7 +1821,7 @@ void GenericCAO::processMessage(const std::string &data)
 			// FIXME: ^ This code is trash. It's also broken.
 		}
 	} else if (cmd == AO_CMD_SET_ANIMATION_SPEED) {
-		m_animation_speed = readF32(is);
+		m_animation_speed = readF64(is);
 		updateAnimationSpeed();
 	} else if (cmd == AO_CMD_SET_BONE_POSITION) {
 		std::string bone = deSerializeString16(is);

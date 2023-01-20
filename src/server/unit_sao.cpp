@@ -270,8 +270,8 @@ std::string UnitSAO::generateUpdateAttachmentCommand() const
 	// parameters
 	writeS32(os, m_attachment_parent_id);
 	os << serializeString16(m_attachment_bone);
-	writeV3F32(os, m_attachment_position);
-	writeV3F32(os, m_attachment_rotation);
+	writeV3F64(os, m_attachment_position);
+	writeV3F64(os, m_attachment_rotation);
 	writeU8(os, m_force_visible);
 	return os.str();
 }
@@ -284,8 +284,8 @@ std::string UnitSAO::generateUpdateBonePositionCommand(
 	writeU8(os, AO_CMD_SET_BONE_POSITION);
 	// parameters
 	os << serializeString16(bone);
-	writeV3F32(os, position);
-	writeV3F32(os, rotation);
+	writeV3F64(os, position);
+	writeV3F64(os, rotation);
 	return os.str();
 }
 
@@ -333,13 +333,13 @@ std::string UnitSAO::generateUpdatePositionCommand(const v3d &position,
 	// command
 	writeU8(os, AO_CMD_UPDATE_POSITION);
 	// pos
-	writeV3F32(os, position);
+	writeV3F64(os, position);
 	// velocity
-	writeV3F32(os, velocity);
+	writeV3F64(os, velocity);
 	// acceleration
-	writeV3F32(os, acceleration);
+	writeV3F64(os, acceleration);
 	// rotation
-	writeV3F32(os, rotation);
+	writeV3F64(os, rotation);
 	// do_interpolate
 	writeU8(os, do_interpolate);
 	// is_end_position (for interpolation)

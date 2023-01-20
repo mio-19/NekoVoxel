@@ -94,7 +94,7 @@ void ToolCapabilities::deSerialize(std::istream &is)
 	if (version < 4)
 		throw SerializationError("unsupported ToolCapabilities version");
 
-	full_punch_interval = readF32(is);
+	full_punch_interval = readF64(is);
 	max_drop_level = readS32(is);
 	groupcaps.clear();
 	u32 groupcaps_size = readU32(is);
@@ -106,7 +106,7 @@ void ToolCapabilities::deSerialize(std::istream &is)
 		u32 times_size = readU32(is);
 		for(u32 i = 0; i < times_size; i++) {
 			int level = readS32(is);
-			float time = readF32(is);
+			float time = readF64(is);
 			cap.times[level] = time;
 		}
 		groupcaps[name] = cap;

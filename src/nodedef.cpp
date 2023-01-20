@@ -70,19 +70,19 @@ void NodeBox::serialize(std::ostream &os, u16 protocol_version) const
 
 		writeU16(os, fixed.size());
 		for (const aabb3f &nodebox : fixed) {
-			writeV3F32(os, nodebox.MinEdge);
-			writeV3F32(os, nodebox.MaxEdge);
+			writeV3F64(os, nodebox.MinEdge);
+			writeV3F64(os, nodebox.MaxEdge);
 		}
 		break;
 	case NODEBOX_WALLMOUNTED:
 		writeU8(os, type);
 
-		writeV3F32(os, wall_top.MinEdge);
-		writeV3F32(os, wall_top.MaxEdge);
-		writeV3F32(os, wall_bottom.MinEdge);
-		writeV3F32(os, wall_bottom.MaxEdge);
-		writeV3F32(os, wall_side.MinEdge);
-		writeV3F32(os, wall_side.MaxEdge);
+		writeV3F64(os, wall_top.MinEdge);
+		writeV3F64(os, wall_top.MaxEdge);
+		writeV3F64(os, wall_bottom.MinEdge);
+		writeV3F64(os, wall_bottom.MaxEdge);
+		writeV3F64(os, wall_side.MinEdge);
+		writeV3F64(os, wall_side.MaxEdge);
 		break;
 	case NODEBOX_CONNECTED: {
 		writeU8(os, type);
@@ -90,8 +90,8 @@ void NodeBox::serialize(std::ostream &os, u16 protocol_version) const
 #define WRITEBOX(box) \
 		writeU16(os, (box).size()); \
 		for (const aabb3f &i: (box)) { \
-			writeV3F32(os, i.MinEdge); \
-			writeV3F32(os, i.MaxEdge); \
+			writeV3F64(os, i.MinEdge); \
+			writeV3F64(os, i.MaxEdge); \
 		};
 
 		const auto &c = getConnected();
@@ -565,7 +565,7 @@ void ContentFeatures::deSerialize(std::istream &is, u16 protocol_version)
 	// visual
 	drawtype = (enum NodeDrawType) readU8(is);
 	mesh = deSerializeString16(is);
-	visual_scale = readF32(is);
+	visual_scale = readF64(is);
 	if (readU8(is) != 6)
 		throw SerializationError("unsupported tile count");
 	for (TileDef &td : tiledef)

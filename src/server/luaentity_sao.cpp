@@ -242,8 +242,8 @@ std::string LuaEntitySAO::getClientInitializationData(u16 protocol_version)
 	os << serializeString16(""); // name
 	writeU8(os, 0); // is_player
 	writeU16(os, getId()); //id
-	writeV3F32(os, m_base_position);
-	writeV3F32(os, m_rotation);
+	writeV3F64(os, m_base_position);
+	writeV3F64(os, m_rotation);
 	writeU16(os, m_hp);
 
 	std::ostringstream msg_os(std::ios::binary);

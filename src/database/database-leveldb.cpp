@@ -137,7 +137,7 @@ void PlayerDatabaseLevelDB::savePlayer(RemotePlayer *player)
 	PlayerSAO *sao = player->getPlayerSAO();
 	sanity_check(sao);
 	writeU16(os, sao->getHP());
-	writeV3F32(os, sao->getBasePosition());
+	writeV3F64(os, sao->getBasePosition());
 	writeF32(os, sao->getLookPitch());
 	writeF32(os, sao->getRotation().Y);
 	writeU16(os, sao->getBreath());
@@ -177,8 +177,8 @@ bool PlayerDatabaseLevelDB::loadPlayer(RemotePlayer *player, PlayerSAO *sao)
 
 	sao->setHPRaw(readU16(is));
 	sao->setBasePosition(readV3F32(is));
-	sao->setLookPitch(readF32(is));
-	sao->setPlayerYaw(readF32(is));
+	sao->setLookPitch(readF64(is));
+	sao->setPlayerYaw(readF64(is));
 	sao->setBreath(readU16(is), false);
 
 	u32 attribute_count = readU32(is);

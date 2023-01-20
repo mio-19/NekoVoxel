@@ -28,6 +28,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <cassert>
 
 FloatType g_serialize_f32_type = FLOATTYPE_UNKNOWN;
+FloatType g_serialize_f64_type = FLOATTYPE_UNKNOWN;
 
 
 ////

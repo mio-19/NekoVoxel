@@ -992,7 +992,7 @@ void Client::handleCommand_AddParticleSpawner(NetworkPacket* pkt)
 	u16 attached_id = 0;
 
 	p.amount             = readU16(is);
-	p.time               = readF32(is);
+	p.time               = readF64(is);
 
 	// older protocols do not support tweening, and send only
 	// static ranges, so we can't just use the normal serialization
@@ -1029,7 +1029,7 @@ void Client::handleCommand_AddParticleSpawner(NetworkPacket* pkt)
 		p.node_tile   = readU8(is);
 
 		// v >= 5.6.0
-		f64 tmp_sbias = readF32(is);
+		f64 tmp_sbias = readF64(is);
 		if (is.eof())
 			break;
 
@@ -1037,10 +1037,10 @@ void Client::handleCommand_AddParticleSpawner(NetworkPacket* pkt)
 		// backwards compatibility with older clients, which do not support
 		// a bias field in their range "format"
 		p.pos.start.bias = tmp_sbias;
-		p.vel.start.bias = readF32(is);
-		p.acc.start.bias = readF32(is);
-		p.exptime.start.bias = readF32(is);
-		p.size.start.bias = readF32(is);
+		p.vel.start.bias = readF64(is);
+		p.acc.start.bias = readF64(is);
+		p.exptime.start.bias = readF64(is);
+		p.size.start.bias = readF64(is);
 
 		p.pos.end.deSerialize(is);
 		p.vel.end.deSerialize(is);

@@ -48,9 +48,9 @@ struct SimpleSoundSpec
 	void deSerialize(std::istream &is, u16 protocol_version)
 	{
 		name = deSerializeString16(is);
-		gain = readF32(is);
-		pitch = readF32(is);
-		fade = readF32(is);
+		gain = readF64(is);
+		pitch = readF64(is);
+		fade = readF64(is);
 	}
 
 	std::string name;

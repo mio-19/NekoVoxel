@@ -56,9 +56,9 @@ v3d PARAM_PVFN(interpolate) (float fac, const v3d a, const v3d b)
 PARAM_DEF_NUM(u8,  writeU8,    readU8);  PARAM_DEF_NUM(s8,  writeS8,    readS8);
 PARAM_DEF_NUM(u16, writeU16,   readU16); PARAM_DEF_NUM(s16, writeS16,   readS16);
 PARAM_DEF_NUM(u32, writeU32,   readU32); PARAM_DEF_NUM(s32, writeS32,   readS32);
-PARAM_DEF_NUM(f64, writeF32,   readF32);
+PARAM_DEF_NUM(f64, writeF32,   readF64);
 PARAM_DEF_SRZR(v2f, writeV2F32, readV2F32);
-PARAM_DEF_SRZR(v3d, writeV3F32, readV3F32);
+PARAM_DEF_SRZR(v3d, writeV3F64, readV3F32);
 
 enum class ParticleTextureFlags : u8 {
 	/* each value specifies a bit in a bitmask; if the maximum value
@@ -118,9 +118,9 @@ void ServerParticleTexture::deSerialize(std::istream &is, u16 protocol_ver, bool
 
 void ParticleParameters::serialize(std::ostream &os, u16 protocol_ver) const
 {
-	writeV3F32(os, pos);
-	writeV3F32(os, vel);
-	writeV3F32(os, acc);
+	writeV3F64(os, pos);
+	writeV3F64(os, vel);
+	writeV3F64(os, acc);
 	writeF32(os, expirationtime);
 	writeF32(os, size);
 	writeU8(os, collisiondetection);
@@ -133,7 +133,7 @@ void ParticleParameters::serialize(std::ostream &os, u16 protocol_ver) const
 	writeU16(os, node.param0);
 	writeU8(os, node.param2);
 	writeU8(os, node_tile);
-	writeV3F32(os, drag);
+	writeV3F64(os, drag);
 	jitter.serialize(os);
 	bounce.serialize(os);
 }
@@ -154,8 +154,8 @@ void ParticleParameters::deSerialize(std::istream &is, u16 protocol_ver)
 	pos                = readV3F32(is);
 	vel                = readV3F32(is);
 	acc                = readV3F32(is);
-	expirationtime     = readF32(is);
-	size               = readF32(is);
+	expirationtime     = readF64(is);
+	size               = readF64(is);
 	collisiondetection = readU8(is);
 	texture.string     = deSerializeString32(is);
 	vertical           = readU8(is);
