@@ -318,6 +318,15 @@ inline v3f intToFloat(v3s32 p, f32 d)
 	);
 }
 
+inline v3d intToDouble(v3s32 p, f32 d)
+{
+	return v3d(
+			(f64)p.X * d,
+			(f64)p.Y * d,
+			(f64)p.Z * d
+	);
+}
+
 // Random helper. Usually d=BS
 inline aabb3f getNodeBox(v3s32 p, float d)
 {

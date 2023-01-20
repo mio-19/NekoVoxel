@@ -483,7 +483,7 @@ void Server::process_PlayerPos(RemotePlayer *player, PlayerSAO *playersao,
 	fov = (f32)f32fov / 80.0f;
 	*pkt >> wanted_range;
 
-	v3f position((f32)ps.X / 100.0f, (f32)ps.Y / 100.0f, (f32)ps.Z / 100.0f);
+	v3d position((f64)ps.X / 100.0f, (f64)ps.Y / 100.0f, (f64)ps.Z / 100.0f);
 	v3f speed((f32)ss.X / 100.0f, (f32)ss.Y / 100.0f, (f32)ss.Z / 100.0f);
 
 	pitch = modulo360f(pitch);
@@ -637,9 +637,9 @@ void Server::handleCommand_InventoryAction(NetworkPacket* pkt)
 		case InventoryLocation::NODEMETA:
 			{
 				// Check for out-of-range interaction
-				v3f node_pos   = intToFloat(loc.p, BS);
-				v3f player_pos = player->getPlayerSAO()->getEyePosition();
-				f32 d = player_pos.getDistanceFrom(node_pos);
+				v3d node_pos   = intToDouble(loc.p, BS);
+				v3d player_pos = player->getPlayerSAO()->getEyePosition();
+				f64 d = player_pos.getDistanceFrom(node_pos);
 				return checkInteractDistance(player, d, "inventory");
 			}
 		case InventoryLocation::DETACHED:
