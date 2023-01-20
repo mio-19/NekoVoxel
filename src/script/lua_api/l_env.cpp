@@ -858,7 +858,7 @@ static void checkArea(v3size &minp, v3size &maxp)
 	}
 
 	// Clamp to map range to avoid problems
-#define CLAMP(arg) core::clamp(arg, (s16)-MAX_MAP_GENERATION_LIMIT, (s16)MAX_MAP_GENERATION_LIMIT)
+#define CLAMP(arg) core::clamp(arg, (s_size)-MAX_MAP_GENERATION_LIMIT, (s_size)MAX_MAP_GENERATION_LIMIT)
 	minp = v3size(CLAMP(minp.X), CLAMP(minp.Y), CLAMP(minp.Z));
 	maxp = v3size(CLAMP(maxp.X), CLAMP(maxp.Y), CLAMP(maxp.Z));
 #undef CLAMP
