@@ -539,12 +539,12 @@ int MapgenV7::generateTerrain()
 
 	//// Place nodes
 	const v3size &em = vm->m_area.getExtent();
-	s16 stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
+	s_size stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 index2d = 0;
 
-	for (s16 z = node_min.Z; z <= node_max.Z; z++)
-	for (s16 x = node_min.X; x <= node_max.X; x++, index2d++) {
-		s16 surface_y = baseTerrainLevelFromMap(index2d);
+	for (s_size z = node_min.Z; z <= node_max.Z; z++)
+	for (s_size x = node_min.X; x <= node_max.X; x++, index2d++) {
+		s_size surface_y = baseTerrainLevelFromMap(index2d);
 		if (surface_y > stone_surface_max_y)
 			stone_surface_max_y = surface_y;
 
@@ -552,7 +552,7 @@ int MapgenV7::generateTerrain()
 		u32 vi = vm->m_area.index(x, node_min.Y - 1, z);
 		u32 index3d = (z - node_min.Z) * zstride_1u1d + (x - node_min.X);
 
-		for (s16 y = node_min.Y - 1; y <= node_max.Y + 1;
+		for (s_size y = node_min.Y - 1; y <= node_max.Y + 1;
 				y++,
 				index3d += ystride,
 				VoxelArea::add_y(em, vi, 1),

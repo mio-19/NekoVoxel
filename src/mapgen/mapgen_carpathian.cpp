@@ -461,7 +461,7 @@ int MapgenCarpathian::generateTerrain()
 
 	//// Place nodes
 	const v3size &em = vm->m_area.getExtent();
-	s16 stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
+	s_size stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 index2d = 0;
 
 	for (s16 z = node_min.Z; z <= node_max.Z; z++)

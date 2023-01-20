@@ -411,20 +411,20 @@ s16 MapgenFractal::generateTerrain()
 	MapNode n_stone(c_stone);
 	MapNode n_water(c_water_source);
 
-	s16 stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
+	s_size stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 index2d = 0;
 
 	if (noise_seabed)
 		noise_seabed->perlinMap2D(node_min.X, node_min.Z);
 
-	for (s16 z = node_min.Z; z <= node_max.Z; z++) {
-		for (s16 y = node_min.Y - 1; y <= node_max.Y + 1; y++) {
+	for (auto z = node_min.Z; z <= node_max.Z; z++) {
+		for (auto y = node_min.Y - 1; y <= node_max.Y + 1; y++) {
 			u32 vi = vm->m_area.index(node_min.X, y, z);
-			for (s16 x = node_min.X; x <= node_max.X; x++, vi++, index2d++) {
+			for (auto x = node_min.X; x <= node_max.X; x++, vi++, index2d++) {
 				if (vm->m_data[vi].getContent() != CONTENT_IGNORE)
 					continue;
 
-				s16 seabed_height = -MAX_MAP_GENERATION_LIMIT;
+				s_size seabed_height = -MAX_MAP_GENERATION_LIMIT;
 				if (noise_seabed)
 					seabed_height = noise_seabed->result[index2d];
 

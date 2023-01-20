@@ -565,7 +565,7 @@ inline bool objectpos_over_limit(v3f p)
 
 inline bool blockpos_over_max_limit(v3size p)
 {
-	const s16 max_limit_bp = MAX_MAP_GENERATION_LIMIT / MAP_BLOCKSIZE;
+	const s_size max_limit_bp = MAX_MAP_GENERATION_LIMIT / MAP_BLOCKSIZE;
 	return p.X < -max_limit_bp ||
 		p.X >  max_limit_bp ||
 		p.Y < -max_limit_bp ||

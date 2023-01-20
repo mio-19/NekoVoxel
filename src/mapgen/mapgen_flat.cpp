@@ -294,7 +294,7 @@ s16 MapgenFlat::generateTerrain()
 	MapNode n_water(c_water_source);
 
 	const v3size &em = vm->m_area.getExtent();
-	s16 stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
+	s_size stone_surface_max_y = -MAX_MAP_GENERATION_LIMIT;
 	u32 ni2d = 0;
 
 	bool use_noise = (spflags & MGFLAT_LAKES) || (spflags & MGFLAT_HILLS);
