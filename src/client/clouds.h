@@ -49,7 +49,7 @@ public:
 
 	virtual void render();
 
-	virtual const aabb3f &getBoundingBox() const
+	virtual const aabb3f32 &getBoundingBox() const
 	{
 		return m_box;
 	}
@@ -122,14 +122,14 @@ private:
 	{
 		float height_bs    = m_params.height    * BS;
 		float thickness_bs = m_params.thickness * BS;
-		m_box = aabb3f(-BS * 1000000.0f, height_bs - BS * m_camera_offset.Y, -BS * 1000000.0f,
+		m_box = aabb3f32(-BS * 1000000.0f, height_bs - BS * m_camera_offset.Y, -BS * 1000000.0f,
 				BS * 1000000.0f, height_bs + thickness_bs - BS * m_camera_offset.Y, BS * 1000000.0f);
 	}
 
 	bool gridFilled(int x, int y) const;
 
 	video::SMaterial m_material;
-	aabb3f m_box;
+	aabb3f32 m_box;
 	u16 m_cloud_radius_i;
 	bool m_enable_3d;
 	u32 m_seed;
