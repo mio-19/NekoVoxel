@@ -247,7 +247,7 @@ s32 GUIScrollBar::getPosFromMousePos(const core::position2di &pos) const
 		w = RelativeRect.getHeight() - border_size * 2 - thumb_size;
 		p = pos.Y - AbsoluteRect.UpperLeftCorner.Y - border_size - offset;
 	}
-	return core::isnotzero(range()) ? s32(f32(p) / f32(w) * range() + 0.5f) + min_pos : 0;
+	return core::isnotzero(range()) ? s32(f64(p) / f64(w) * range() + 0.5f) + min_pos : 0;
 }
 
 void GUIScrollBar::setPos(const s32 &pos)
@@ -265,14 +265,14 @@ void GUIScrollBar::setPos(const s32 &pos)
 
 	if (is_auto_scaling)
 		thumb_size = s32(thumb_area /
-				 (f32(page_size) / f32(thumb_area + border_size * 2)));
+				 (f64(page_size) / f64(thumb_area + border_size * 2)));
 
 	thumb_size = core::s32_clamp(thumb_size, thumb_min, thumb_area);
 	scroll_pos = core::s32_clamp(pos, min_pos, max_pos);
 
-	f32 f = core::isnotzero(range()) ? (f32(thumb_area) - f32(thumb_size)) / range()
+	f64 f = core::isnotzero(range()) ? (f64(thumb_area) - f64(thumb_size)) / range()
 					 : 1.0f;
-	draw_center = s32((f32(scroll_pos - min_pos) * f) + (f32(thumb_size) * 0.5f)) +
+	draw_center = s32((f64(scroll_pos - min_pos) * f) + (f64(thumb_size) * 0.5f)) +
 		border_size;
 }
 

@@ -257,9 +257,9 @@ void GUIEngine::run()
 	{
 		video::SColor fog_color;
 		video::E_FOG_TYPE fog_type = video::EFT_FOG_LINEAR;
-		f32 fog_start = 0;
-		f32 fog_end = 0;
-		f32 fog_density = 0;
+		f64 fog_start = 0;
+		f64 fog_end = 0;
+		f64 fog_density = 0;
 		bool fog_pixelfog = false;
 		bool fog_rangefog = false;
 		driver->getFog(fog_color, fog_type, fog_start, fog_end, fog_density,
@@ -447,8 +447,8 @@ void GUIEngine::drawBackground(video::IVideoDriver *driver)
 	// Chop background image to the smaller screen dimension
 	v2u32 bg_size = screensize;
 	v2f32 scale(
-			(f32) bg_size.X / sourcesize.X,
-			(f32) bg_size.Y / sourcesize.Y);
+			(f64) bg_size.X / sourcesize.X,
+			(f64) bg_size.Y / sourcesize.Y);
 	if (scale.X < scale.Y)
 		bg_size.X = (int) (scale.Y * sourcesize.X);
 	else
@@ -494,11 +494,11 @@ void GUIEngine::drawHeader(video::IVideoDriver *driver)
 	if(!texture)
 		return;
 
-	f32 mult = (((f32)screensize.Width / 2.0)) /
-			((f32)texture->getOriginalSize().Width);
+	f64 mult = (((f64)screensize.Width / 2.0)) /
+			((f64)texture->getOriginalSize().Width);
 
-	v2s32 splashsize(((f32)texture->getOriginalSize().Width) * mult,
-			((f32)texture->getOriginalSize().Height) * mult);
+	v2s32 splashsize(((f64)texture->getOriginalSize().Width) * mult,
+			((f64)texture->getOriginalSize().Height) * mult);
 
 	// Don't draw the header if there isn't enough room
 	s32 free_space = (((s32)screensize.Height)-320)/2;
@@ -526,11 +526,11 @@ void GUIEngine::drawFooter(video::IVideoDriver *driver)
 	if(!texture)
 		return;
 
-	f32 mult = (((f32)screensize.Width)) /
-			((f32)texture->getOriginalSize().Width);
+	f64 mult = (((f64)screensize.Width)) /
+			((f64)texture->getOriginalSize().Width);
 
-	v2s32 footersize(((f32)texture->getOriginalSize().Width) * mult,
-			((f32)texture->getOriginalSize().Height) * mult);
+	v2s32 footersize(((f64)texture->getOriginalSize().Width) * mult,
+			((f64)texture->getOriginalSize().Height) * mult);
 
 	// Don't draw the footer if there isn't enough room
 	s32 free_space = (((s32)screensize.Height)-320)/2;

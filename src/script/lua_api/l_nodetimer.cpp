@@ -33,8 +33,8 @@ int NodeTimerRef::l_set(lua_State *L)
 {
 	MAP_LOCK_REQUIRED;
 	NodeTimerRef *o = checkObject<NodeTimerRef>(L, 1);
-	f32 t = readParam<float>(L,2);
-	f32 e = readParam<float>(L,3);
+	f64 t = readParam<float>(L,2);
+	f64 e = readParam<float>(L,3);
 	o->m_map->setNodeTimer(NodeTimer(t, e, o->m_p));
 	return 0;
 }
@@ -43,7 +43,7 @@ int NodeTimerRef::l_start(lua_State *L)
 {
 	MAP_LOCK_REQUIRED;
 	NodeTimerRef *o = checkObject<NodeTimerRef>(L, 1);
-	f32 t = readParam<float>(L,2);
+	f64 t = readParam<float>(L,2);
 	o->m_map->setNodeTimer(NodeTimer(t, 0, o->m_p));
 	return 0;
 }

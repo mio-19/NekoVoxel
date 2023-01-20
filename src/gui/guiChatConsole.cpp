@@ -105,7 +105,7 @@ GUIChatConsole::~GUIChatConsole()
 		m_font->drop();
 }
 
-void GUIChatConsole::openConsole(f32 scale)
+void GUIChatConsole::openConsole(f64 scale)
 {
 	assert(scale > 0.0f && scale <= 1.0f);
 
@@ -152,7 +152,7 @@ void GUIChatConsole::replaceAndAddToHistory(const std::wstring &line)
 
 
 void GUIChatConsole::setCursor(
-	bool visible, bool blinking, f32 blink_speed, f32 relative_height)
+	bool visible, bool blinking, f64 blink_speed, f64 relative_height)
 {
 	if (visible)
 	{

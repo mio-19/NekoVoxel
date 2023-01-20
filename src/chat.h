@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 struct ChatLine
 {
 	// age in seconds
-	f32 age = 0.0f;
+	f64 age = 0.0f;
 	// name of sending player, or empty if sent by server
 	EnrichedString name;
 	// message text
@@ -91,11 +91,11 @@ public:
 	const ChatLine& getLine(u32 index) const;
 
 	// Increase each chat line's age by dtime.
-	void step(f32 dtime);
+	void step(f64 dtime);
 	// Delete oldest N chat lines.
 	void deleteOldest(u32 count);
 	// Delete lines older than maxAge.
-	void deleteByAge(f32 maxAge);
+	void deleteByAge(f64 maxAge);
 
 	// Get number of rows, 0 if reformat has not been called yet.
 	u32 getRows() const;

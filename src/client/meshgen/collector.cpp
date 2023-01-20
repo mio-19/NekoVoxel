@@ -40,7 +40,7 @@ void MeshCollector::append(const TileLayer &layer, const video::S3DVertex *verti
 {
 	PreMeshBuffer &p = findBuffer(layer, layernum, numVertices);
 
-	f32 scale = 1.0f;
+	f64 scale = 1.0f;
 	if (use_scale)
 		scale = 1.0f / layer.scale;
 
@@ -75,7 +75,7 @@ void MeshCollector::append(const TileLayer &layer, const video::S3DVertex *verti
 {
 	PreMeshBuffer &p = findBuffer(layer, layernum, numVertices);
 
-	f32 scale = 1.0f;
+	f64 scale = 1.0f;
 	if (use_scale)
 		scale = 1.0f / layer.scale;
 

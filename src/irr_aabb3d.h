@@ -23,4 +23,4 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <aabbox3d.h>
 
-typedef core::aabbox3d<f32> aabb3f;
+typedef core::aabbox3d<f64> aabb3f;

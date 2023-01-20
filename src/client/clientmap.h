@@ -88,7 +88,7 @@ public:
 		ISceneNode::drop(); // calls destructor
 	}
 
-	void updateCamera(v3d pos, v3d dir, f32 fov, v3s32 offset);
+	void updateCamera(v3d pos, v3d dir, f64 fov, v3s32 offset);
 
 	/*
 		Forcefully get a sector from somewhere
@@ -135,8 +135,8 @@ public:
 	void PrintInfo(std::ostream &out) override;
 
 	const MapDrawControl & getControl() const { return m_control; }
-	f32 getWantedRange() const { return m_control.wanted_range; }
-	f32 getCameraFov() const { return m_camera_fov; }
+	f64 getWantedRange() const { return m_control.wanted_range; }
+	f64 getCameraFov() const { return m_camera_fov; }
 
 	void onSettingChanged(const std::string &name);
 
@@ -196,7 +196,7 @@ private:
 
 	v3d m_camera_position = v3d(0,0,0);
 	v3d m_camera_direction = v3d(0,0,1);
-	f32 m_camera_fov = M_PI;
+	f64 m_camera_fov = M_PI;
 	v3s32 m_camera_offset;
 	bool m_needs_update_transparent_meshes = true;
 

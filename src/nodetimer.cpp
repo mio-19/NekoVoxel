@@ -63,7 +63,7 @@ void NodeTimerList::serialize(std::ostream &os, u8 map_format_version) const
 	for (const auto &timer : m_timers) {
 		NodeTimer t = timer.second;
 		NodeTimer nt = NodeTimer(t.timeout,
-			t.timeout - (f32)(timer.first - m_time), t.position);
+			t.timeout - (f64)(timer.first - m_time), t.position);
 		v3s32 p = t.position;
 
 		u16 p16 = p.Z * MAP_BLOCKSIZE * MAP_BLOCKSIZE + p.Y * MAP_BLOCKSIZE + p.X;
@@ -136,7 +136,7 @@ std::vector<NodeTimer> NodeTimerList::step(float dtime)
 	// Process timers
 	for (; i != m_timers.end() && i->first <= m_time; ++i) {
 		NodeTimer t = i->second;
-		t.elapsed = t.timeout + (f32)(m_time - i->first);
+		t.elapsed = t.timeout + (f64)(m_time - i->first);
 		elapsed_timers.push_back(t);
 		m_iterators.erase(t.position);
 	}

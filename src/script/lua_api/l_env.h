@@ -311,7 +311,7 @@ private:
 public:
 	//! Constructor with the same arguments as RaycastState.
 	LuaRaycast(
-		const core::line3d<f32> &shootline,
+		const core::line3d<f64> &shootline,
 		bool objects_pointable,
 		bool liquids_pointable) :
 		state(shootline, objects_pointable, liquids_pointable)

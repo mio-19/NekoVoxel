@@ -95,7 +95,7 @@ void GUIScene::draw()
 	}
 
 	core::dimension2d<s32> size = getAbsoluteClippingRect().getSize();
-	m_smgr->getActiveCamera()->setAspectRatio((f32)size.Width / (f32)size.Height);
+	m_smgr->getActiveCamera()->setAspectRatio((f64)size.Width / (f64)size.Height);
 
 	if (!m_target) {
 		updateCamera(m_smgr->addEmptySceneNode());
@@ -125,11 +125,11 @@ bool GUIScene::OnEvent(const SEvent &event)
 {
 	if (m_mouse_ctrl && event.EventType == EET_MOUSE_INPUT_EVENT) {
 		if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
-			m_last_pos = v2f((f32)event.MouseInput.X, (f32)event.MouseInput.Y);
+			m_last_pos = v2f((f64)event.MouseInput.X, (f64)event.MouseInput.Y);
 			return true;
 		} else if (event.MouseInput.Event == EMIE_MOUSE_MOVED) {
 			if (event.MouseInput.isLeftPressed()) {
-				m_curr_pos = v2f((f32)event.MouseInput.X, (f32)event.MouseInput.Y);
+				m_curr_pos = v2f((f64)event.MouseInput.X, (f64)event.MouseInput.Y);
 
 				rotateCamera(v3d(
 					m_last_pos.Y - m_curr_pos.Y,
@@ -165,7 +165,7 @@ void GUIScene::setFrameLoop(s32 begin, s32 end)
 /**
  * Sets the animation speed (FPS) for the mesh
  */
-void GUIScene::setAnimationSpeed(f32 speed)
+void GUIScene::setAnimationSpeed(f64 speed)
 {
 	m_mesh->setAnimationSpeed(speed);
 }
@@ -175,20 +175,20 @@ void GUIScene::setAnimationSpeed(f32 speed)
 inline void GUIScene::calcOptimalDistance()
 {
 	core::aabbox3df box = m_mesh->getBoundingBox();
-	f32 width  = box.MaxEdge.X - box.MinEdge.X;
-	f32 height = box.MaxEdge.Y - box.MinEdge.Y;
-	f32 depth  = box.MaxEdge.Z - box.MinEdge.Z;
-	f32 max_width = width > depth ? width : depth;
+	f64 width  = box.MaxEdge.X - box.MinEdge.X;
+	f64 height = box.MaxEdge.Y - box.MinEdge.Y;
+	f64 depth  = box.MaxEdge.Z - box.MinEdge.Z;
+	f64 max_width = width > depth ? width : depth;
 
 	const scene::SViewFrustum *f = m_cam->getViewFrustum();
-	f32 cam_far = m_cam->getFarValue();
-	f32 far_width = core::line3df(f->getFarLeftUp(), f->getFarRightUp()).getLength();
-	f32 far_height = core::line3df(f->getFarLeftUp(), f->getFarLeftDown()).getLength();
+	f64 cam_far = m_cam->getFarValue();
+	f64 far_width = core::line3df(f->getFarLeftUp(), f->getFarRightUp()).getLength();
+	f64 far_height = core::line3df(f->getFarLeftUp(), f->getFarLeftDown()).getLength();
 
 	core::recti rect = getAbsolutePosition();
-	f32 zoomX = rect.getWidth() / max_width;
-	f32 zoomY = rect.getHeight() / height;
-	f32 dist;
+	f64 zoomX = rect.getWidth() / max_width;
+	f64 zoomY = rect.getHeight() / height;
+	f64 dist;
 
 	if (zoomX < zoomY)
 		dist = (max_width / (far_width / cam_far)) + (0.5f * max_width);

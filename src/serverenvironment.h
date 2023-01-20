@@ -311,7 +311,7 @@ public:
 	bool getActiveObjectMessage(ActiveObjectMessage *dest);
 
 	virtual void getSelectedActiveObjects(
-		const core::line3d<f32> &shootline_on_map,
+		const core::line3d<f64> &shootline_on_map,
 		std::vector<PointedThing> &objects
 	);
 
@@ -360,7 +360,7 @@ public:
 	void clearObjects(ClearObjectsMode mode);
 
 	// This makes stuff happen
-	void step(f32 dtime);
+	void step(f64 dtime);
 
 	u32 getGameTime() const { return m_game_time; }
 

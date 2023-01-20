@@ -47,16 +47,16 @@ struct ObjectProperties
 	v2s32 initial_sprite_basepos;
 	bool is_visible = true;
 	bool makes_footstep_sound = false;
-	f32 stepheight = 0.0f;
+	f64 stepheight = 0.0f;
 	float automatic_rotate = 0.0f;
 	bool automatic_face_movement_dir = false;
-	f32 automatic_face_movement_dir_offset = 0.0f;
+	f64 automatic_face_movement_dir_offset = 0.0f;
 	bool backface_culling = true;
 	s8 glow = 0;
 	std::string nametag = "";
 	video::SColor nametag_color = video::SColor(255, 255, 255, 255);
 	Optional<video::SColor> nametag_bgcolor = nullopt;
-	f32 automatic_face_movement_max_rotation_per_sec = -1.0f;
+	f64 automatic_face_movement_max_rotation_per_sec = -1.0f;
 	std::string infotext;
 	//! For dropped items, this contains item information.
 	std::string wield_item;

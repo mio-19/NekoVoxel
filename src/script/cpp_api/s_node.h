@@ -43,7 +43,7 @@ public:
 	void node_on_destruct(v3s32 p, MapNode node);
 	bool node_on_flood(v3s32 p, MapNode node, MapNode newnode);
 	void node_after_destruct(v3s32 p, MapNode node);
-	bool node_on_timer(v3s32 p, MapNode node, f32 dtime);
+	bool node_on_timer(v3s32 p, MapNode node, f64 dtime);
 	void node_on_receive_fields(v3s32 p,
 			const std::string &formname,
 			const StringMap &fields,

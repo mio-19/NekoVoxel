@@ -217,7 +217,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 				}
 
 				intersection_point += npf; // translate back to world coords
-				f32 distanceSq = (intersection_point
+				f64 distanceSq = (intersection_point
 					- state->m_shootline.start).getLengthSQ();
 				// If this is the nearest collision, save it
 				if (min_distance_sq > distanceSq) {
@@ -238,7 +238,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 			result.node_undersurface = np;
 			result.distanceSq = min_distance_sq;
 			// Set undersurface and abovesurface nodes
-			f32 d = 0.002 * BS;
+			f64 d = 0.002 * BS;
 			v3d fake_intersection = result.intersection_point;
 			found_boxcenter += npf; // translate back to world coords
 			// Move intersection towards its source block.
@@ -290,9 +290,9 @@ void Environment::stepTimeOfDay(float dtime)
 
 	// Cached in order to prevent the two reads we do to give
 	// different results (can be written by code not under the lock)
-	f32 cached_time_of_day_speed = m_time_of_day_speed;
+	f64 cached_time_of_day_speed = m_time_of_day_speed;
 
-	f32 speed = cached_time_of_day_speed * 24000. / (24. * 3600);
+	f64 speed = cached_time_of_day_speed * 24000. / (24. * 3600);
 	m_time_conversion_skew += dtime;
 	u32 units = (u32)(m_time_conversion_skew * speed);
 	bool sync_f = false;
@@ -307,7 +307,7 @@ void Environment::stepTimeOfDay(float dtime)
 			m_time_of_day_f = (float)m_time_of_day / 24000.0;
 	}
 	if (speed > 0) {
-		m_time_conversion_skew -= (f32)units / speed;
+		m_time_conversion_skew -= (f64)units / speed;
 	}
 	if (!sync_f) {
 		m_time_of_day_f += cached_time_of_day_speed / 24 / 3600 * dtime;

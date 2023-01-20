@@ -188,7 +188,7 @@ void Particle::step(float dtime)
 			box, 0.0f, dtime, &p_pos, &p_velocity, m_acceleration * BS, nullptr,
 			m_object_collision);
 
-		f32 bounciness = m_bounce.pickWithin();
+		f64 bounciness = m_bounce.pickWithin();
 		if (r.collides && (m_collision_removal || bounciness > 0)) {
 			if (m_collision_removal) {
 				// force expiration of the particle
@@ -279,7 +279,7 @@ void Particle::updateLight()
 
 void Particle::updateVertices()
 {
-	f32 tx0, tx1, ty0, ty1;
+	f64 tx0, tx1, ty0, ty1;
 	v2f scale;
 
 	if (m_texture.tex != nullptr)
@@ -458,7 +458,7 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 	pp.expirationtime = r_exp.pickWithin();
 
 	if (sphere_radius != v3d()) {
-		f32 l = sphere_radius.getLength();
+		f64 l = sphere_radius.getLength();
 		v3d mag = sphere_radius;
 		mag.normalize();
 
@@ -472,7 +472,7 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 
 	if (p.attractor_kind != ParticleParamTypes::AttractorKind::none && attract != 0) {
 		v3d dir;
-		f32 dist = 0; /* =0 necessary to silence warning */
+		f64 dist = 0; /* =0 necessary to silence warning */
 		switch (p.attractor_kind) {
 			case ParticleParamTypes::AttractorKind::none:
 				break;
@@ -506,7 +506,7 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 				v3d normal = attractor_direction;
 				normal.normalize();
 				v3d point_to_origin = porigin - pp.pos;
-				f32 factor = normal.dotProduct(point_to_origin);
+				f64 factor = normal.dotProduct(point_to_origin);
 				if (numericAbsolute(factor) == 0.0f) {
 					dir = normal;
 				} else {
@@ -519,13 +519,13 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 			}
 		}
 
-		f32 speedTowards = numericAbsolute(attract) * dist;
+		f64 speedTowards = numericAbsolute(attract) * dist;
 		v3d avel = dir * speedTowards;
 		if (attract > 0 && speedTowards > 0) {
 			avel *= -1;
 			if (p.attractor_kill) {
 				// make sure the particle dies after crossing the attractor threshold
-				f32 timeToCenter = dist / speedTowards;
+				f64 timeToCenter = dist / speedTowards;
 				if (timeToCenter < pp.expirationtime)
 					pp.expirationtime = timeToCenter;
 			}
@@ -765,7 +765,7 @@ void ParticleManager::handleParticleEvent(ClientEvent *event, Client *client,
 			v2f texpos, texsize;
 			video::SColor color(0xFFFFFFFF);
 
-			f32 oldsize = p.size;
+			f64 oldsize = p.size;
 
 			if (p.node.getContent() != CONTENT_IGNORE) {
 				const ContentFeatures &f = m_env->getGameDef()->ndef()->get(p.node);
@@ -882,9 +882,9 @@ void ParticleManager::addNodeParticle(IGameDef *gamedef,
 		0.0f
 	);
 	p.pos = v3d(
-		(f32)pos.X + myrand_range(0.f, .5f) - .25f,
-		(f32)pos.Y + myrand_range(0.f, .5f) - .25f,
-		(f32)pos.Z + myrand_range(0.f, .5f) - .25f
+		(f64)pos.X + myrand_range(0.f, .5f) - .25f,
+		(f64)pos.Y + myrand_range(0.f, .5f) - .25f,
+		(f64)pos.Z + myrand_range(0.f, .5f) - .25f
 	);
 
 	Particle *toadd = new Particle(

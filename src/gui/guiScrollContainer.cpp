@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 GUIScrollContainer::GUIScrollContainer(gui::IGUIEnvironment *env,
 		gui::IGUIElement *parent, s32 id, const core::rect<s32> &rectangle,
-		const std::string &orientation, f32 scrollfactor) :
+		const std::string &orientation, f64 scrollfactor) :
 		gui::IGUIElement(gui::EGUIET_ELEMENT, env, parent, id, rectangle),
 		m_scrollbar(nullptr), m_scrollfactor(scrollfactor)
 {

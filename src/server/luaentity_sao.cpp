@@ -160,7 +160,7 @@ void LuaEntitySAO::step(float dtime, bool send_recommended)
 			aabb3f box = m_prop.collisionbox;
 			box.MinEdge *= BS;
 			box.MaxEdge *= BS;
-			f32 pos_max_d = BS*0.25; // Distance per iteration
+			f64 pos_max_d = BS*0.25; // Distance per iteration
 			v3d p_pos = m_base_position;
 			v3d p_velocity = m_velocity;
 			v3d p_acceleration = m_acceleration;
@@ -461,7 +461,7 @@ std::string LuaEntitySAO::generateSetTextureModCommand() const
 }
 
 std::string LuaEntitySAO::generateSetSpriteCommand(v2s32 p, u16 num_frames,
-	f32 framelength, bool select_horiz_by_yawpitch)
+	f64 framelength, bool select_horiz_by_yawpitch)
 {
 	std::ostringstream os(std::ios::binary);
 	// command

@@ -222,7 +222,7 @@ public:
 	}
 
 	/// Radius of the bounding-sphere, in BS-space.
-	f32 getBoundingRadius() const { return m_bounding_radius; }
+	f64 getBoundingRadius() const { return m_bounding_radius; }
 
 	/// Center of the bounding-sphere, in BS-space, relative to block pos.
 	v3d getBoundingSphereCenter() const { return m_bounding_sphere_center; }
@@ -249,7 +249,7 @@ private:
 	ITextureSource *m_tsrc;
 	IShaderSource *m_shdrsrc;
 
-	f32 m_bounding_radius;
+	f64 m_bounding_radius;
 	// MapblockMeshGenerator uses the same as mapblock center
 	v3d m_bounding_sphere_center = v3d((MAP_BLOCKSIZE * 0.5f - 0.5f) * BS);
 

@@ -240,9 +240,9 @@ void setMeshColorByNormalXYZ(scene::IMesh *mesh,
 	if (!mesh)
 		return;
 	auto colorizator = [=] (video::S3DVertex *vertex) {
-		f32 x = fabs(vertex->Normal.X);
-		f32 y = fabs(vertex->Normal.Y);
-		f32 z = fabs(vertex->Normal.Z);
+		f64 x = fabs(vertex->Normal.X);
+		f64 y = fabs(vertex->Normal.Y);
+		f64 z = fabs(vertex->Normal.Z);
 		if (x >= y && x >= z)
 			vertex->Color = colorX;
 		else if (y >= z)
@@ -339,7 +339,7 @@ bool checkMeshNormals(scene::IMesh *mesh)
 		// has it valid, then most likely all other ones are fine too. We can
 		// check all of the normals to have length, but it seems like an overkill
 		// hurting the performance and covering only really weird broken models.
-		f32 length = buffer->getNormal(0).getLength();
+		f64 length = buffer->getNormal(0).getLength();
 
 		if (!std::isfinite(length) || length < 1e-10f)
 			return false;
@@ -399,7 +399,7 @@ scene::SMesh* cloneMesh(scene::IMesh *src_mesh)
 }
 
 scene::IMesh* convertNodeboxesToMesh(const std::vector<aabb3f> &boxes,
-		const f32 *uv_coords, float expand)
+		const f64 *uv_coords, float expand)
 {
 	scene::SMesh* dst_mesh = new scene::SMesh();
 
@@ -425,14 +425,14 @@ scene::IMesh* convertNodeboxesToMesh(const std::vector<aabb3f> &boxes,
 		box.MaxEdge.Z += expand;
 
 		// Compute texture UV coords
-		f32 tx1 = (box.MinEdge.X / BS) + 0.5;
-		f32 ty1 = (box.MinEdge.Y / BS) + 0.5;
-		f32 tz1 = (box.MinEdge.Z / BS) + 0.5;
-		f32 tx2 = (box.MaxEdge.X / BS) + 0.5;
-		f32 ty2 = (box.MaxEdge.Y / BS) + 0.5;
-		f32 tz2 = (box.MaxEdge.Z / BS) + 0.5;
+		f64 tx1 = (box.MinEdge.X / BS) + 0.5;
+		f64 ty1 = (box.MinEdge.Y / BS) + 0.5;
+		f64 tz1 = (box.MinEdge.Z / BS) + 0.5;
+		f64 tx2 = (box.MaxEdge.X / BS) + 0.5;
+		f64 ty2 = (box.MaxEdge.Y / BS) + 0.5;
+		f64 tz2 = (box.MaxEdge.Z / BS) + 0.5;
 
-		f32 txc_default[24] = {
+		f64 txc_default[24] = {
 			// up
 			tx1, 1 - tz2, tx2, 1 - tz1,
 			// down
@@ -448,7 +448,7 @@ scene::IMesh* convertNodeboxesToMesh(const std::vector<aabb3f> &boxes,
 		};
 
 		// use default texture UV mapping if not provided
-		const f32 *txc = uv_coords ? uv_coords : txc_default;
+		const f64 *txc = uv_coords ? uv_coords : txc_default;
 
 		v3d min = box.MinEdge;
 		v3d max = box.MaxEdge;

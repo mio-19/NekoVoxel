@@ -57,7 +57,7 @@ public:
 		- Step mobs
 		- Run timers of map
 	*/
-	virtual void step(f32 dtime) = 0;
+	virtual void step(f64 dtime) = 0;
 
 	virtual Map &getMap() = 0;
 
@@ -96,7 +96,7 @@ public:
 	 *
 	 * @param[out] objects          found objects
 	 */
-	virtual void getSelectedActiveObjects(const core::line3d<f32> &shootline_on_map,
+	virtual void getSelectedActiveObjects(const core::line3d<f64> &shootline_on_map,
 			std::vector<PointedThing> &objects) = 0;
 
 	/*!

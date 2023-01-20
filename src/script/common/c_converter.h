@@ -105,10 +105,10 @@ bool                read_color          (lua_State *L, int index,
                                          video::SColor *color);
 bool                is_color_table      (lua_State *L, int index);
 
-aabb3f              read_aabb3f         (lua_State *L, int index, f32 scale);
+aabb3f              read_aabb3f         (lua_State *L, int index, f64 scale);
 v3s16               read_v3s16          (lua_State *L, int index);
 v3s32               read_v3s32          (lua_State *L, int index);
-std::vector<aabb3f> read_aabb3f_vector  (lua_State *L, int index, f32 scale);
+std::vector<aabb3f> read_aabb3f_vector  (lua_State *L, int index, f64 scale);
 size_t              read_stringlist     (lua_State *L, int index,
                                          std::vector<std::string> *result);
 

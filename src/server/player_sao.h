@@ -96,12 +96,12 @@ public:
 	void setLookPitch(const float pitch);
 	// Data should not be sent at player initialization
 	void setLookPitchAndSend(const float pitch);
-	f32 getLookPitch() const { return m_pitch; }
-	f32 getRadLookPitch() const { return m_pitch * core::DEGTORAD; }
+	f64 getLookPitch() const { return m_pitch; }
+	f64 getRadLookPitch() const { return m_pitch * core::DEGTORAD; }
 	// Deprecated
-	f32 getRadLookPitchDep() const { return -1.0 * m_pitch * core::DEGTORAD; }
+	f64 getRadLookPitchDep() const { return -1.0 * m_pitch * core::DEGTORAD; }
 	void setFov(const float pitch);
-	f32 getFov() const { return m_fov; }
+	f64 getFov() const { return m_fov; }
 	void setWantedRange(const s32 range);
 	s32 getWantedRange() const { return m_wanted_range; }
 
@@ -214,8 +214,8 @@ private:
 	bool m_is_singleplayer;
 
 	u16 m_breath = PLAYER_MAX_BREATH_DEFAULT;
-	f32 m_pitch = 0.0f;
-	f32 m_fov = 0.0f;
+	f64 m_pitch = 0.0f;
+	f64 m_fov = 0.0f;
 	s32 m_wanted_range = 0.0f;
 
 	SimpleMetadata m_meta;

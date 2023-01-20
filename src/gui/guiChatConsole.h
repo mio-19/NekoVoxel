@@ -40,7 +40,7 @@ public:
 	// Open the console (height = desired fraction of screen size)
 	// This doesn't open immediately but initiates an animation.
 	// You should call isOpenInhibited() before this.
-	void openConsole(f32 scale);
+	void openConsole(f64 scale);
 
 	bool isOpen() const;
 
@@ -62,8 +62,8 @@ public:
 	void setCursor(
 		bool visible,
 		bool blinking = false,
-		f32 blink_speed = 1.0,
-		f32 relative_height = 1.0);
+		f64 blink_speed = 1.0,
+		f64 relative_height = 1.0);
 
 	// Irrlicht draw method
 	virtual void draw();
@@ -105,11 +105,11 @@ private:
 	// current console height [pixels]
 	s32 m_height = 0;
 	// desired height [pixels]
-	f32 m_desired_height = 0.0f;
+	f64 m_desired_height = 0.0f;
 	// desired height [screen height fraction]
-	f32 m_desired_height_fraction = 0.0f;
+	f64 m_desired_height_fraction = 0.0f;
 	// console open/close animation speed [screen height fraction / second]
-	f32 m_height_speed = 5.0f;
+	f64 m_height_speed = 5.0f;
 	// if nonzero, opening the console is inhibited [milliseconds]
 	u32 m_open_inhibited = 0;
 
@@ -117,9 +117,9 @@ private:
 	// cursor is off during [0,32767] and on during [32768,65535]
 	u32 m_cursor_blink = 0;
 	// cursor blink speed [on/off toggles / second]
-	f32 m_cursor_blink_speed = 0.0f;
+	f64 m_cursor_blink_speed = 0.0f;
 	// cursor height [line height]
-	f32 m_cursor_height = 0.0f;
+	f64 m_cursor_height = 0.0f;
 
 	// background texture
 	video::ITexture *m_background = nullptr;

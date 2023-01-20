@@ -459,7 +459,7 @@ private:
 
 	// Queued transforming water nodes
 	UniqueQueue<v3s32> m_transforming_liquid;
-	f32 m_transforming_liquid_loop_count_multiplier = 1.0f;
+	f64 m_transforming_liquid_loop_count_multiplier = 1.0f;
 	u32 m_unprocessed_count = 0;
 	u64 m_inc_trending_up_start_time = 0; // milliseconds
 	bool m_queue_size_timer_started = false;

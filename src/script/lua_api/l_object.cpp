@@ -1170,10 +1170,10 @@ int ObjectRef::l_set_fov(lua_State *L)
 	if (player == nullptr)
 		return 0;
 
-	float degrees = static_cast<f32>(luaL_checknumber(L, 2));
+	float degrees = static_cast<f64>(luaL_checknumber(L, 2));
 	bool is_multiplier = readParam<bool>(L, 3, false);
 	float transition_time = lua_isnumber(L, 4) ?
-		static_cast<f32>(luaL_checknumber(L, 4)) : 0.0f;
+		static_cast<f64>(luaL_checknumber(L, 4)) : 0.0f;
 
 	player->setFov({degrees, is_multiplier, transition_time});
 	getServer(L)->SendPlayerFov(player->getPeerId());

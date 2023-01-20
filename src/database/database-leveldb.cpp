@@ -120,8 +120,8 @@ void PlayerDatabaseLevelDB::savePlayer(RemotePlayer *player)
 	u8 version = 1
 	u16 hp
 	v3d position
-	f32 pitch
-	f32 yaw
+	f64 pitch
+	f64 yaw
 	u16 breath
 	u32 attribute_count
 	for each attribute {

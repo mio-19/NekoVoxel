@@ -38,7 +38,7 @@ struct MeshCollector
 {
 	std::array<std::vector<PreMeshBuffer>, MAX_TILE_LAYERS> prebuffers;
 	// bounding sphere radius and center
-	f32 m_bounding_radius_sq = 0.0f;
+	f64 m_bounding_radius_sq = 0.0f;
 	v3d m_center_pos;
 
 	// center_pos: pos to use for bounding-sphere, in BS-space

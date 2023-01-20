@@ -52,7 +52,7 @@ public:
 	v3d getRadRotation() { return m_rotation * core::DEGTORAD; }
 
 	// Deprecated
-	f32 getRadYawDep() const { return (m_rotation.Y + 90.) * core::DEGTORAD; }
+	f64 getRadYawDep() const { return (m_rotation.Y + 90.) * core::DEGTORAD; }
 
 	// Armor groups
 	inline bool isImmortal() const
@@ -98,7 +98,7 @@ public:
 	std::string generateUpdateArmorGroupsCommand() const;
 	static std::string generateUpdatePositionCommand(const v3d &position,
 			const v3d &velocity, const v3d &acceleration, const v3d &rotation,
-			bool do_interpolate, bool is_movement_end, f32 update_interval);
+			bool do_interpolate, bool is_movement_end, f64 update_interval);
 	std::string generateSetPropertiesCommand(const ObjectProperties &prop) const;
 	static std::string generateUpdateBonePositionCommand(const std::string &bone,
 			const v3d &position, const v3d &rotation);
@@ -108,7 +108,7 @@ protected:
 	u16 m_hp = 1;
 
 	v3d m_rotation;
-	f32 m_rotation_add_yaw = 0;
+	f64 m_rotation_add_yaw = 0;
 
 	ItemGroupList m_armor_groups;
 

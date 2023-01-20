@@ -155,7 +155,7 @@ size_t ShadowRenderer::getDirectionalLightCount() const
 	return m_light_list.size();
 }
 
-f32 ShadowRenderer::getMaxShadowFar() const
+f64 ShadowRenderer::getMaxShadowFar() const
 {
 	if (!m_light_list.empty()) {
 		float zMax = m_light_list[0].getFarValue();
@@ -279,8 +279,8 @@ void ShadowRenderer::updateSMTextures()
 			// Static shader values.
 			for (auto cb : {m_shadow_depth_cb, m_shadow_depth_entity_cb, m_shadow_depth_trans_cb})
 				if (cb) {
-					cb->MapRes = (f32)m_shadow_map_texture_size;
-					cb->MaxFar = (f32)m_shadow_map_max_distance * BS;
+					cb->MapRes = (f64)m_shadow_map_texture_size;
+					cb->MaxFar = (f64)m_shadow_map_max_distance * BS;
 					cb->PerspectiveBiasXY = getPerspectiveBiasXY();
 					cb->PerspectiveBiasZ = getPerspectiveBiasZ();
 					cb->CameraPos = light.getFuturePlayerPos();

@@ -412,7 +412,7 @@ void Minimap::setPos(v3s32 pos)
 		m_minimap_update_thread->deferUpdate();
 }
 
-void Minimap::setAngle(f32 angle)
+void Minimap::setAngle(f64 angle)
 {
 	m_angle = angle;
 }
@@ -659,16 +659,16 @@ void Minimap::drawMinimap(core::rect<s32> rect) {
 	core::rect<s32> img_rect(0, 0, imgsize.Width, imgsize.Height);
 	static const video::SColor col(255, 255, 255, 255);
 	static const video::SColor c[4] = {col, col, col, col};
-	f32 sin_angle = std::sin(m_angle * core::DEGTORAD);
-	f32 cos_angle = std::cos(m_angle * core::DEGTORAD);
+	f64 sin_angle = std::sin(m_angle * core::DEGTORAD);
+	f64 cos_angle = std::cos(m_angle * core::DEGTORAD);
 	s32 marker_size2 =  0.025 * (float)rect.getWidth();;
 	for (std::list<v2f>::const_iterator
 			i = m_active_markers.begin();
 			i != m_active_markers.end(); ++i) {
 		v2f posf = *i;
 		if (data->minimap_shape_round) {
-			f32 t1 = posf.X * cos_angle - posf.Y * sin_angle;
-			f32 t2 = posf.X * sin_angle + posf.Y * cos_angle;
+			f64 t1 = posf.X * cos_angle - posf.Y * sin_angle;
+			f64 t2 = posf.X * sin_angle + posf.Y * cos_angle;
 			posf.X = t1;
 			posf.Y = t2;
 		}

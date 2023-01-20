@@ -1879,7 +1879,7 @@ void Server::SendSetLighting(session_t peer_id, const Lighting &lighting)
 	Send(&pkt);
 }
 
-void Server::SendTimeOfDay(session_t peer_id, u16 time, f32 time_speed)
+void Server::SendTimeOfDay(session_t peer_id, u16 time, f64 time_speed)
 {
 	NetworkPacket pkt(TOCLIENT_TIME_OF_DAY, 0, peer_id);
 	pkt << time << time_speed;
@@ -1910,7 +1910,7 @@ void Server::SendMovePlayer(session_t peer_id)
 	// Send attachment updates instantly to the client prior updating position
 	sao->sendOutdatedData();
 
-	NetworkPacket pkt(TOCLIENT_MOVE_PLAYER, sizeof(v3d) + sizeof(f32) * 2, peer_id);
+	NetworkPacket pkt(TOCLIENT_MOVE_PLAYER, sizeof(v3d) + sizeof(f64) * 2, peer_id);
 	pkt << sao->getBasePosition() << sao->getLookPitch() << sao->getRotation().Y;
 
 	{
@@ -1936,7 +1936,7 @@ void Server::SendPlayerFov(session_t peer_id)
 }
 
 void Server::SendLocalPlayerAnimations(session_t peer_id, v2s32 animation_frames[4],
-		f32 animation_speed)
+		f64 animation_speed)
 {
 	NetworkPacket pkt(TOCLIENT_LOCAL_PLAYER_ANIMATIONS, 0,
 		peer_id);
@@ -3364,7 +3364,7 @@ Address Server::getPeerAddress(session_t peer_id)
 }
 
 void Server::setLocalPlayerAnimations(RemotePlayer *player,
-		v2s32 animation_frames[4], f32 frame_speed)
+		v2s32 animation_frames[4], f64 frame_speed)
 {
 	sanity_check(player);
 	player->setLocalAnimations(animation_frames, frame_speed);

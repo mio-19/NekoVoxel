@@ -384,9 +384,9 @@ enum ToClientCommand
 	/*
 		Sends an FOV override/multiplier to client.
 
-		f32 fov
+		f64 fov
 		bool is_multiplier
-		f32 transition_time
+		f64 transition_time
 	*/
 
 	TOCLIENT_DEATHSCREEN = 0x37,
@@ -513,12 +513,12 @@ enum ToClientCommand
 
 	TOCLIENT_SPAWN_PARTICLE = 0x46,
 	/*
-		-- struct range<T> { T min, T max, f32 bias };
+		-- struct range<T> { T min, T max, f64 bias };
 		v3d pos
 		v3d velocity
 		v3d acceleration
-		f32 expirationtime
-		f32 size
+		f64 expirationtime
+		f64 size
 		u8 bool collisiondetection
 		u32 len
 		u8[len] texture
@@ -533,20 +533,20 @@ enum ToClientCommand
 
 	TOCLIENT_ADD_PARTICLESPAWNER = 0x47,
 	/*
-		-- struct range<T> { T min, T max, f32 bias };
+		-- struct range<T> { T min, T max, f64 bias };
 		-- struct tween<T> { T start, T end };
 		u16 amount
-		f32 spawntime
+		f64 spawntime
 		v3d minpos
 		v3d maxpos
 		v3d minvel
 		v3d maxvel
 		v3d minacc
 		v3d maxacc
-		f32 minexptime
-		f32 maxexptime
-		f32 minsize
-		f32 maxsize
+		f64 minexptime
+		f64 maxexptime
+		f64 minsize
+		f64 maxsize
 		u8 bool collisiondetection
 		u32 len
 		u8[len] texture
@@ -557,28 +557,28 @@ enum ToClientCommand
 		u8 glow
 		u8 object_collision
 
-		f32 pos_start_bias
-		f32 vel_start_bias
-		f32 acc_start_bias
-		f32 exptime_start_bias
-		f32 size_start_bias
+		f64 pos_start_bias
+		f64 vel_start_bias
+		f64 acc_start_bias
+		f64 exptime_start_bias
+		f64 size_start_bias
 
 		range<v3d> pos_end
 		-- i.e v3d pos_end_min
 		--     v3d pos_end_max
-		--     f32 pos_end_bias
+		--     f64 pos_end_bias
 		range<v3d> vel_end
 		range<v3d> acc_end
 
 		tween<range<v3d>> drag
 		-- i.e. v3d drag_start_min
 		--      v3d drag_start_max
-		--      f32 drag_start_bias
+		--      f64 drag_start_bias
 		--      v3d drag_end_min
 		--      v3d drag_end_max
-		--      f32 drag_end_bias
+		--      f64 drag_end_bias
 		tween<range<v3d>> jitter
-		tween<range<f32>> bounce
+		tween<range<f64>> bounce
 
 		u8 attraction_kind
 			none  = 0
@@ -587,7 +587,7 @@ enum ToClientCommand
 			plane = 3
 
 		if attraction_kind > none {
-			tween<range<f32>> attract_strength
+			tween<range<f64>> attract_strength
 			tween<v3d>        attractor_origin
 			u16               attractor_origin_attachment_object_id
 			u8                spawner_flags
@@ -606,7 +606,7 @@ enum ToClientCommand
 			u8 flags
 			-- bit 0: animated
 			-- other bits free & ignored as of proto v40
-			tween<f32> alpha
+			tween<f64> alpha
 			tween<v2f> scale
 			if flags.animated {
 				TileAnimation animation
@@ -782,7 +782,7 @@ enum ToClientCommand
 		std::string texture
 		std::string tonemap
 		std::string sunrise
-		f32 scale
+		f64 scale
 	*/
 
 	TOCLIENT_SET_MOON = 0x5b,
@@ -790,7 +790,7 @@ enum ToClientCommand
 		bool visible
 		std::string texture
 		std::string tonemap
-		f32 scale
+		f64 scale
 	*/
 
 	TOCLIENT_SET_STARS = 0x5c,
@@ -798,8 +798,8 @@ enum ToClientCommand
 		bool visible
 		u32 count
 		u8[4] starcolor (ARGB)
-		f32 scale
-		f32 day_opacity
+		f64 scale
+		f64 day_opacity
 	*/
 
 	TOCLIENT_SRP_BYTES_S_B = 0x60,
@@ -829,15 +829,15 @@ enum ToClientCommand
 
 	TOCLIENT_SET_LIGHTING = 0x63,
 	/*
-		f32 shadow_intensity
-		f32 saturation
+		f64 shadow_intensity
+		f64 saturation
 		exposure parameters
-			f32 luminance_min
-			f32 luminance_max
-			f32 exposure_correction
-			f32 speed_dark_bright
-			f32 speed_bright_dark
-			f32 center_weight_power
+			f64 luminance_min
+			f64 luminance_max
+			f64 exposure_correction
+			f64 speed_dark_bright
+			f64 speed_bright_dark
+			f64 center_weight_power
 	*/
 
 	TOCLIENT_NUM_MSG_TYPES = 0x64,

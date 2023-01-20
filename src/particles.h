@@ -52,7 +52,7 @@ namespace ParticleParamTypes
 	DECL_PARAM_OVERLOADS(u8);  DECL_PARAM_OVERLOADS(s8);
 	DECL_PARAM_OVERLOADS(u16); DECL_PARAM_OVERLOADS(s16);
 	DECL_PARAM_OVERLOADS(u32); DECL_PARAM_OVERLOADS(s32);
-	DECL_PARAM_OVERLOADS(f32);
+	DECL_PARAM_OVERLOADS(f64);
 	DECL_PARAM_OVERLOADS(v2f);
 	DECL_PARAM_OVERLOADS(v3d);
 
@@ -150,7 +150,7 @@ namespace ParticleParamTypes
 	using u16Parameter = Parameter<u16, 1>; using s16Parameter = Parameter<s16, 1>;
 	using u32Parameter = Parameter<u32, 1>; using s32Parameter = Parameter<s32, 1>;
 
-	using f32Parameter = Parameter<f32, 1>;
+	using f32Parameter = Parameter<f64, 1>;
 
 	using v2fParameter = VectorParameter<v2f, 2>;
 	using v3fParameter = VectorParameter<v3d, 3>;
@@ -162,7 +162,7 @@ namespace ParticleParamTypes
 		using This = RangedParameter<T>;
 
 		T min, max;
-		f32 bias = 0;
+		f64 bias = 0;
 
 		RangedParameter() = default;
 		RangedParameter(T _min, T _max)            : min(_min),  max(_max)  {}
@@ -239,7 +239,7 @@ namespace ParticleParamTypes
 
 		TweenStyle style = TweenStyle::fwd;
 		u16 reps = 1;
-		f32 beginning = 0.0f;
+		f64 beginning = 0.0f;
 
 		T start, end;
 
@@ -392,7 +392,7 @@ struct CommonParticleParams
 struct ParticleParameters : CommonParticleParams
 {
 	v3d pos, vel, acc, drag;
-	f32 size = 1, expirationtime = 1;
+	f64 size = 1, expirationtime = 1;
 	ParticleParamTypes::f32Range bounce;
 	ParticleParamTypes::v3fRange jitter;
 
@@ -403,7 +403,7 @@ struct ParticleParameters : CommonParticleParams
 struct ParticleSpawnerParameters : CommonParticleParams
 {
 	u16 amount = 1;
-	f32 time = 1;
+	f64 time = 1;
 
 	std::vector<ServerParticleTexture> texpool;
 

@@ -89,16 +89,16 @@ struct PointedThing
 	 * Square of the distance between the pointing
 	 * ray's start point and the intersection point in irrlicht coordinates.
 	 */
-	f32 distanceSq = 0;
+	f64 distanceSq = 0;
 
 	//! Constructor for POINTEDTHING_NOTHING
 	PointedThing() = default;
 	//! Constructor for POINTEDTHING_NODE
 	PointedThing(const v3s32 &under, const v3s32 &above,
 		const v3s32 &real_under, const v3d &point, const v3d &normal,
-		u16 box_id, f32 distSq);
+		u16 box_id, f64 distSq);
 	//! Constructor for POINTEDTHING_OBJECT
-	PointedThing(u16 id, const v3d &point, const v3d &normal, const v3d &raw_normal, f32 distSq);
+	PointedThing(u16 id, const v3d &point, const v3d &normal, const v3d &raw_normal, f64 distSq);
 	std::string dump() const;
 	void serialize(std::ostream &os) const;
 	void deSerialize(std::istream &is);

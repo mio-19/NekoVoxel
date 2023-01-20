@@ -153,7 +153,7 @@ void MapblockMeshGenerator::drawQuad(v3d *coords, const v3s32 &normal,
 //  mask      - a bit mask that suppresses drawing of tiles.
 //              tile i will not be drawn if mask & (1 << i) is 1
 void MapblockMeshGenerator::drawCuboid(const aabb3f &box,
-	TileSpec *tiles, int tilecount, const LightInfo *lights, const f32 *txc, u8 mask)
+	TileSpec *tiles, int tilecount, const LightInfo *lights, const f64 *txc, u8 mask)
 {
 	assert(tilecount >= 1 && tilecount <= 6); // pre-condition
 
@@ -308,18 +308,18 @@ LightInfo MapblockMeshGenerator::blendLight(const v3d &vertex_pos)
 	// Light levels at (logical) node corners are known. Here,
 	// trilinear interpolation is used to calculate light level
 	// at a given point in the node.
-	f32 x = core::clamp(vertex_pos.X / BS + 0.5, 0.0 - SMOOTH_LIGHTING_OVERSIZE, 1.0 + SMOOTH_LIGHTING_OVERSIZE);
-	f32 y = core::clamp(vertex_pos.Y / BS + 0.5, 0.0 - SMOOTH_LIGHTING_OVERSIZE, 1.0 + SMOOTH_LIGHTING_OVERSIZE);
-	f32 z = core::clamp(vertex_pos.Z / BS + 0.5, 0.0 - SMOOTH_LIGHTING_OVERSIZE, 1.0 + SMOOTH_LIGHTING_OVERSIZE);
-	f32 lightDay = 0.0; // daylight
-	f32 lightNight = 0.0;
-	f32 lightBoosted = 0.0; // daylight + direct sunlight, if any
+	f64 x = core::clamp(vertex_pos.X / BS + 0.5, 0.0 - SMOOTH_LIGHTING_OVERSIZE, 1.0 + SMOOTH_LIGHTING_OVERSIZE);
+	f64 y = core::clamp(vertex_pos.Y / BS + 0.5, 0.0 - SMOOTH_LIGHTING_OVERSIZE, 1.0 + SMOOTH_LIGHTING_OVERSIZE);
+	f64 z = core::clamp(vertex_pos.Z / BS + 0.5, 0.0 - SMOOTH_LIGHTING_OVERSIZE, 1.0 + SMOOTH_LIGHTING_OVERSIZE);
+	f64 lightDay = 0.0; // daylight
+	f64 lightNight = 0.0;
+	f64 lightBoosted = 0.0; // daylight + direct sunlight, if any
 	for (int k = 0; k < 8; ++k) {
-		f32 dx = (k & 4) ? x : 1 - x;
-		f32 dy = (k & 2) ? y : 1 - y;
-		f32 dz = (k & 1) ? z : 1 - z;
+		f64 dx = (k & 4) ? x : 1 - x;
+		f64 dy = (k & 2) ? y : 1 - y;
+		f64 dz = (k & 1) ? z : 1 - z;
 		// Use direct sunlight (255), if any; use daylight otherwise.
-		f32 light_boosted = frame.sunlight[k] ? 255 : frame.lightsDay[k];
+		f64 light_boosted = frame.sunlight[k] ? 255 : frame.lightsDay[k];
 		lightDay += dx * dy * dz * frame.lightsDay[k];
 		lightNight += dx * dy * dz * frame.lightsNight[k];
 		lightBoosted += dx * dy * dz * light_boosted;
@@ -346,15 +346,15 @@ video::SColor MapblockMeshGenerator::blendLightColor(const v3d &vertex_pos,
 	return color;
 }
 
-void MapblockMeshGenerator::generateCuboidTextureCoords(const aabb3f &box, f32 *coords)
+void MapblockMeshGenerator::generateCuboidTextureCoords(const aabb3f &box, f64 *coords)
 {
-	f32 tx1 = (box.MinEdge.X / BS) + 0.5;
-	f32 ty1 = (box.MinEdge.Y / BS) + 0.5;
-	f32 tz1 = (box.MinEdge.Z / BS) + 0.5;
-	f32 tx2 = (box.MaxEdge.X / BS) + 0.5;
-	f32 ty2 = (box.MaxEdge.Y / BS) + 0.5;
-	f32 tz2 = (box.MaxEdge.Z / BS) + 0.5;
-	f32 txc[24] = {
+	f64 tx1 = (box.MinEdge.X / BS) + 0.5;
+	f64 ty1 = (box.MinEdge.Y / BS) + 0.5;
+	f64 tz1 = (box.MinEdge.Z / BS) + 0.5;
+	f64 tx2 = (box.MaxEdge.X / BS) + 0.5;
+	f64 ty2 = (box.MaxEdge.Y / BS) + 0.5;
+	f64 tz2 = (box.MaxEdge.Z / BS) + 0.5;
+	f64 txc[24] = {
 		    tx1, 1 - tz2,     tx2, 1 - tz1, // up
 		    tx1,     tz1,     tx2,     tz2, // down
 		    tz1, 1 - ty2,     tz2, 1 - ty1, // right
@@ -366,17 +366,17 @@ void MapblockMeshGenerator::generateCuboidTextureCoords(const aabb3f &box, f32 *
 		coords[i] = txc[i];
 }
 
-void MapblockMeshGenerator::drawAutoLightedCuboid(aabb3f box, const f32 *txc,
+void MapblockMeshGenerator::drawAutoLightedCuboid(aabb3f box, const f64 *txc,
 	TileSpec *tiles, int tile_count, u8 mask)
 {
 	bool scale = std::fabs(f->visual_scale - 1.0f) > 1e-3f;
-	f32 texture_coord_buf[24];
-	f32 dx1 = box.MinEdge.X;
-	f32 dy1 = box.MinEdge.Y;
-	f32 dz1 = box.MinEdge.Z;
-	f32 dx2 = box.MaxEdge.X;
-	f32 dy2 = box.MaxEdge.Y;
-	f32 dz2 = box.MaxEdge.Z;
+	f64 texture_coord_buf[24];
+	f64 dx1 = box.MinEdge.X;
+	f64 dy1 = box.MinEdge.Y;
+	f64 dz1 = box.MinEdge.Z;
+	f64 dx2 = box.MaxEdge.X;
+	f64 dy2 = box.MaxEdge.Y;
+	f64 dz2 = box.MaxEdge.Z;
 	if (scale) {
 		if (!txc) { // generate texture coords before scaling
 			generateCuboidTextureCoords(box, texture_coord_buf);
@@ -412,7 +412,7 @@ void MapblockMeshGenerator::drawAutoLightedCuboid(aabb3f box, const f32 *txc,
 
 u8 MapblockMeshGenerator::getNodeBoxMask(aabb3f box, u8 solid_neighbors, u8 sametype_neighbors) const
 {
-	const f32 NODE_BOUNDARY = 0.5 * BS;
+	const f64 NODE_BOUNDARY = 0.5 * BS;
 
 	// For an oversized nodebox, return immediately
 	if (box.MaxEdge.X > NODE_BOUNDARY ||
@@ -528,7 +528,7 @@ void MapblockMeshGenerator::calculateCornerLevels()
 		corner_levels[k][i] = getCornerLevel(i, k);
 }
 
-f32 MapblockMeshGenerator::getCornerLevel(int i, int k)
+f64 MapblockMeshGenerator::getCornerLevel(int i, int k)
 {
 	float sum = 0;
 	int count = 0;
@@ -657,12 +657,12 @@ void MapblockMeshGenerator::drawLiquidTop()
 	// -Z towards +Z, thus the direction is +Z.
 	// Rotate texture to make animation go in flow direction
 	// Positive if liquid moves towards +Z
-	f32 dz = (corner_levels[0][0] + corner_levels[0][1]) -
+	f64 dz = (corner_levels[0][0] + corner_levels[0][1]) -
 	         (corner_levels[1][0] + corner_levels[1][1]);
 	// Positive if liquid moves towards +X
-	f32 dx = (corner_levels[0][0] + corner_levels[1][0]) -
+	f64 dx = (corner_levels[0][0] + corner_levels[1][0]) -
 	         (corner_levels[0][1] + corner_levels[1][1]);
-	f32 tcoord_angle = atan2(dz, dx) * core::RADTODEG;
+	f64 tcoord_angle = atan2(dz, dx) * core::RADTODEG;
 	v2f tcoord_center(0.5, 0.5);
 	v2f tcoord_translate(blockpos_nodes.Z + p.Z, blockpos_nodes.X + p.X);
 	tcoord_translate.rotateBy(tcoord_angle);
@@ -1215,14 +1215,14 @@ void MapblockMeshGenerator::drawFencelikeNode()
 	TileSpec tile_rot = tile;
 	tile_rot.rotation = 1;
 
-	static const f32 post_rad = BS / 8;
-	static const f32 bar_rad  = BS / 16;
-	static const f32 bar_len  = BS / 2 - post_rad;
+	static const f64 post_rad = BS / 8;
+	static const f64 bar_rad  = BS / 16;
+	static const f64 bar_len  = BS / 2 - post_rad;
 
 	// The post - always present
 	static const aabb3f post(-post_rad, -BS / 2, -post_rad,
 	                          post_rad,  BS / 2,  post_rad);
-	static const f32 postuv[24] = {
+	static const f64 postuv[24] = {
 		0.375, 0.375, 0.625, 0.625,
 		0.375, 0.375, 0.625, 0.625,
 		0.000, 0.000, 0.250, 1.000,
@@ -1245,7 +1245,7 @@ void MapblockMeshGenerator::drawFencelikeNode()
 		                           BS / 2 + bar_len,  BS / 4 + bar_rad,  bar_rad);
 		static const aabb3f bar_x2(BS / 2 - bar_len, -BS / 4 - bar_rad, -bar_rad,
 		                           BS / 2 + bar_len, -BS / 4 + bar_rad,  bar_rad);
-		static const f32 xrailuv[24] = {
+		static const f64 xrailuv[24] = {
 			0.000, 0.125, 1.000, 0.250,
 			0.000, 0.250, 1.000, 0.375,
 			0.375, 0.375, 0.500, 0.500,
@@ -1267,7 +1267,7 @@ void MapblockMeshGenerator::drawFencelikeNode()
 		                            bar_rad,  BS / 4 + bar_rad, BS / 2 + bar_len);
 		static const aabb3f bar_z2(-bar_rad, -BS / 4 - bar_rad, BS / 2 - bar_len,
 		                            bar_rad, -BS / 4 + bar_rad, BS / 2 + bar_len);
-		static const f32 zrailuv[24] = {
+		static const f64 zrailuv[24] = {
 			0.1875, 0.0625, 0.3125, 0.3125, // cannot rotate; stretch
 			0.2500, 0.0625, 0.3750, 0.3125, // for wood texture instead
 			0.0000, 0.5625, 1.0000, 0.6875,

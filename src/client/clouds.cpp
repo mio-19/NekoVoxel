@@ -156,9 +156,9 @@ void Clouds::render()
 	// Get fog parameters for setting them back later
 	video::SColor fog_color(0,0,0,0);
 	video::E_FOG_TYPE fog_type = video::EFT_FOG_LINEAR;
-	f32 fog_start = 0;
-	f32 fog_end = 0;
-	f32 fog_density = 0;
+	f64 fog_start = 0;
+	f64 fog_end = 0;
+	f64 fog_density = 0;
 	bool fog_pixelfog = false;
 	bool fog_rangefog = false;
 	driver->getFog(fog_color, fog_type, fog_start, fog_end, fog_density,
@@ -216,10 +216,10 @@ void Clouds::render()
 			video::S3DVertex(0,0,0, 0,0,0, c_top, 0, 0)
 		};
 
-		const f32 rx = cloud_size / 2.0f;
+		const f64 rx = cloud_size / 2.0f;
 		// if clouds are flat, the top layer should be at the given height
-		const f32 ry = m_enable_3d ? m_params.thickness * BS : 0.0f;
-		const f32 rz = cloud_size / 2;
+		const f64 ry = m_enable_3d ? m_params.thickness * BS : 0.0f;
+		const f64 rz = cloud_size / 2;
 
 		for(int i=0; i<num_faces_to_draw; i++)
 		{

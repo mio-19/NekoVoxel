@@ -80,31 +80,31 @@ void SmoothTranslator<T>::update(T new_target, bool is_end_position, float updat
 }
 
 template<typename T>
-void SmoothTranslator<T>::translate(f32 dtime)
+void SmoothTranslator<T>::translate(f64 dtime)
 {
 	anim_time_counter = anim_time_counter + dtime;
 	T val_diff = val_target - val_old;
-	f32 moveratio = 1.0;
+	f64 moveratio = 1.0;
 	if (anim_time > 0.001)
 		moveratio = anim_time_counter / anim_time;
-	f32 move_end = aim_is_end ? 1.0 : 1.5;
+	f64 move_end = aim_is_end ? 1.0 : 1.5;
 
 	// Move a bit less than should, to avoid oscillation
 	moveratio = std::min(moveratio * 0.8f, move_end);
 	val_current = val_old + val_diff * moveratio;
 }
 
-void SmoothTranslatorWrapped::translate(f32 dtime)
+void SmoothTranslatorWrapped::translate(f64 dtime)
 {
 	anim_time_counter = anim_time_counter + dtime;
-	f32 val_diff = std::abs(val_target - val_old);
+	f64 val_diff = std::abs(val_target - val_old);
 	if (val_diff > 180.f)
 		val_diff = 360.f - val_diff;
 
-	f32 moveratio = 1.0;
+	f64 moveratio = 1.0;
 	if (anim_time > 0.001)
 		moveratio = anim_time_counter / anim_time;
-	f32 move_end = aim_is_end ? 1.0 : 1.5;
+	f64 move_end = aim_is_end ? 1.0 : 1.5;
 
 	// Move a bit less than should, to avoid oscillation
 	moveratio = std::min(moveratio * 0.8f, move_end);
@@ -112,7 +112,7 @@ void SmoothTranslatorWrapped::translate(f32 dtime)
 		val_diff * moveratio, 360.f);
 }
 
-void SmoothTranslatorWrappedv3f::translate(f32 dtime)
+void SmoothTranslatorWrappedv3f::translate(f64 dtime)
 {
 	anim_time_counter = anim_time_counter + dtime;
 
@@ -130,10 +130,10 @@ void SmoothTranslatorWrappedv3f::translate(f32 dtime)
 	if (val_diff_v3f.Z > 180.f)
 		val_diff_v3f.Z = 360.f - val_diff_v3f.Z;
 
-	f32 moveratio = 1.0;
+	f64 moveratio = 1.0;
 	if (anim_time > 0.001)
 		moveratio = anim_time_counter / anim_time;
-	f32 move_end = aim_is_end ? 1.0 : 1.5;
+	f64 move_end = aim_is_end ? 1.0 : 1.5;
 
 	// Move a bit less than should, to avoid oscillation
 	moveratio = std::min(moveratio * 0.8f, move_end);
@@ -1036,7 +1036,7 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 			m_velocity = v3d(0,0,0);
 			m_acceleration = v3d(0,0,0);
 			const PlayerControl &controls = player->getPlayerControl();
-			f32 new_speed = player->local_animation_speed;
+			f64 new_speed = player->local_animation_speed;
 
 			bool walking = false;
 			if (controls.movement_speed > 0.001f) {
@@ -1145,7 +1145,7 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 			box.MinEdge *= BS;
 			box.MaxEdge *= BS;
 			collisionMoveResult moveresult;
-			f32 pos_max_d = BS*0.125; // Distance per iteration
+			f64 pos_max_d = BS*0.125; // Distance per iteration
 			v3d p_pos = m_position;
 			v3d p_velocity = m_velocity;
 			moveresult = collisionMoveSimple(env,env->getGameDef(),

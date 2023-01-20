@@ -327,7 +327,7 @@ std::string UnitSAO::generateUpdateArmorGroupsCommand() const
 
 std::string UnitSAO::generateUpdatePositionCommand(const v3d &position,
 		const v3d &velocity, const v3d &acceleration, const v3d &rotation,
-		bool do_interpolate, bool is_movement_end, f32 update_interval)
+		bool do_interpolate, bool is_movement_end, f64 update_interval)
 {
 	std::ostringstream os(std::ios::binary);
 	// command

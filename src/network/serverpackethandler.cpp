@@ -471,20 +471,20 @@ void Server::process_PlayerPos(RemotePlayer *player, PlayerSAO *playersao,
 	*pkt >> f32pitch;
 	*pkt >> f32yaw;
 
-	f32 pitch = (f32)f32pitch / 100.0f;
-	f32 yaw = (f32)f32yaw / 100.0f;
+	f64 pitch = (f64)f32pitch / 100.0f;
+	f64 yaw = (f64)f32yaw / 100.0f;
 	u32 keyPressed = 0;
 
-	f32 fov = 0;
+	f64 fov = 0;
 	u8 wanted_range = 0;
 
 	*pkt >> keyPressed;
 	*pkt >> f32fov;
-	fov = (f32)f32fov / 80.0f;
+	fov = (f64)f32fov / 80.0f;
 	*pkt >> wanted_range;
 
-	v3d position((f32)ps.X / 100.0f, (f32)ps.Y / 100.0f, (f32)ps.Z / 100.0f);
-	v3d speed((f32)ss.X / 100.0f, (f32)ss.Y / 100.0f, (f32)ss.Z / 100.0f);
+	v3d position((f64)ps.X / 100.0f, (f64)ps.Y / 100.0f, (f64)ps.Z / 100.0f);
+	v3d speed((f64)ss.X / 100.0f, (f64)ss.Y / 100.0f, (f64)ss.Z / 100.0f);
 
 	pitch = modulo360f(pitch);
 	yaw = wrapDegrees_0_360(yaw);
@@ -639,7 +639,7 @@ void Server::handleCommand_InventoryAction(NetworkPacket* pkt)
 				// Check for out-of-range interaction
 				v3d node_pos   = intToFloat(loc.p, BS);
 				v3d player_pos = player->getPlayerSAO()->getEyePosition();
-				f32 d = player_pos.getDistanceFrom(node_pos);
+				f64 d = player_pos.getDistanceFrom(node_pos);
 				return checkInteractDistance(player, d, "inventory");
 			}
 		case InventoryLocation::DETACHED:
@@ -884,11 +884,11 @@ void Server::handleCommand_Respawn(NetworkPacket* pkt)
 	// the previous addition has been successfully removed
 }
 
-bool Server::checkInteractDistance(RemotePlayer *player, const f32 d, const std::string &what)
+bool Server::checkInteractDistance(RemotePlayer *player, const f64 d, const std::string &what)
 {
 	ItemStack selected_item, hand_item;
 	player->getWieldedItem(&selected_item, &hand_item);
-	f32 max_d = BS * getToolRange(selected_item.getDefinition(m_itemdef),
+	f64 max_d = BS * getToolRange(selected_item.getDefinition(m_itemdef),
 			hand_item.getDefinition(m_itemdef));
 
 	// Cube diagonal * 1.5 for maximal supported node extents:

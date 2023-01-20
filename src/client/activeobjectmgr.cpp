@@ -91,14 +91,14 @@ void ActiveObjectMgr::removeObject(u16 id)
 }
 
 // clang-format on
-void ActiveObjectMgr::getActiveObjects(const v3d &origin, f32 max_d,
+void ActiveObjectMgr::getActiveObjects(const v3d &origin, f64 max_d,
 		std::vector<DistanceSortedActiveObject> &dest)
 {
-	f32 max_d2 = max_d * max_d;
+	f64 max_d2 = max_d * max_d;
 	for (auto &ao_it : m_active_objects) {
 		ClientActiveObject *obj = ao_it.second;
 
-		f32 d2 = (obj->getPosition() - origin).getLengthSQ();
+		f64 d2 = (obj->getPosition() - origin).getLengthSQ();
 
 		if (d2 > max_d2)
 			continue;
@@ -107,7 +107,7 @@ void ActiveObjectMgr::getActiveObjects(const v3d &origin, f32 max_d,
 	}
 }
 
-void ActiveObjectMgr::getActiveSelectableObjects(const core::line3d<f32> &shootline,
+void ActiveObjectMgr::getActiveSelectableObjects(const core::line3d<f64> &shootline,
 		std::vector<DistanceSortedActiveObject> &dest)
 {
 	// Imagine a not-axis-aligned cuboid oriented into the direction of the shootline,
@@ -115,7 +115,7 @@ void ActiveObjectMgr::getActiveSelectableObjects(const core::line3d<f32> &shootl
 	// shootline (+selection box radius forwards and backwards). We check whether
 	// the selection box center is inside this cuboid.
 
-	f32 max_d = shootline.getLength();
+	f64 max_d = shootline.getLength();
 	v3d dir = shootline.getVector().normalize();
 	v3d dir_ortho1 = dir.crossProduct(dir + v3d(1,0,0)).normalize();
 	v3d dir_ortho2 = dir.crossProduct(dir_ortho1);
@@ -128,11 +128,11 @@ void ActiveObjectMgr::getActiveSelectableObjects(const core::line3d<f32> &shootl
 			continue;
 
 		// possible optimization: get rid of the sqrt here
-		f32 selection_box_radius = selection_box.getRadius();
+		f64 selection_box_radius = selection_box.getRadius();
 
 		v3d pos_diff = obj->getPosition() + selection_box.getCenter() - shootline.start;
 
-		f32 d = dir.dotProduct(pos_diff);
+		f64 d = dir.dotProduct(pos_diff);
 
 		// backward- and far-plane
 		if (d + selection_box_radius < 0.0f || d - selection_box_radius > max_d)

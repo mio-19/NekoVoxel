@@ -91,15 +91,15 @@ struct ClientEvent
 		} player_damage;
 		struct
 		{
-			f32 pitch;
-			f32 yaw;
+			f64 pitch;
+			f64 yaw;
 		} player_force_move;
 		struct
 		{
 			bool set_camera_point_target;
-			f32 camera_point_target_x;
-			f32 camera_point_target_y;
-			f32 camera_point_target_z;
+			f64 camera_point_target_x;
+			f64 camera_point_target_y;
+			f64 camera_point_target_z;
 		} deathscreen;
 		struct
 		{
@@ -133,13 +133,13 @@ struct ClientEvent
 		} override_day_night_ratio;
 		struct
 		{
-			f32 density;
+			f64 density;
 			u32 color_bright;
 			u32 color_ambient;
-			f32 height;
-			f32 thickness;
-			f32 speed_x;
-			f32 speed_y;
+			f64 height;
+			f64 thickness;
+			f64 speed_x;
+			f64 speed_y;
 		} cloud_params;
 		SunParams *sun_params;
 		MoonParams *moon_params;

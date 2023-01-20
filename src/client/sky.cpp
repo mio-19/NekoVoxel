@@ -133,7 +133,7 @@ void Sky::render()
 	translate.setTranslation(camera->getAbsolutePosition());
 
 	// Draw the sky box between the near and far clip plane
-	const f32 viewDistance = (camera->getNearValue() + camera->getFarValue()) * 0.5f;
+	const f64 viewDistance = (camera->getNearValue() + camera->getFarValue()) * 0.5f;
 	core::matrix4 scale;
 	scale.setScale(core::vector3df(viewDistance, viewDistance, viewDistance));
 
@@ -184,8 +184,8 @@ void Sky::render()
 			m_materials[4].EmissiveColor = texel_color;
 		}
 
-		const f32 t = 1.0f;
-		const f32 o = 0.0f;
+		const f64 t = 1.0f;
+		const f64 o = 0.0f;
 		static const u16 indices[6] = {0, 1, 2, 0, 2, 3};
 		video::S3DVertex vertices[4];
 
@@ -447,7 +447,7 @@ void Sky::update(float time_of_day, float time_brightness,
 			s8 dir_factor = 1;
 			if (cam_mode > CAMERA_MODE_THIRD)
 				dir_factor = -1;
-			f32 pointcolor_blend = wrapDegrees_0_360(yaw * dir_factor + 90);
+			f64 pointcolor_blend = wrapDegrees_0_360(yaw * dir_factor + 90);
 			if (pointcolor_blend > 180)
 				pointcolor_blend = 360 - pointcolor_blend;
 			pointcolor_blend /= 180;
@@ -461,7 +461,7 @@ void Sky::update(float time_of_day, float time_brightness,
 			if (m_time_of_day > 0.5)
 				pointcolor_blend = 1 - pointcolor_blend;
 			// Horizon colors of sun and moon
-			f32 pointcolor_light = rangelim(m_time_brightness * 3, 0.2, 1);
+			f64 pointcolor_light = rangelim(m_time_brightness * 3, 0.2, 1);
 
 			video::SColorf pointcolor_sun_f(1, 1, 1, 1);
 			// Use tonemap only if default sun/moon tinting is used
@@ -708,8 +708,8 @@ void Sky::draw_sky_body(std::array<video::S3DVertex, 4> &vertices, float pos_1, 
 	* c: color of the body
 	*/
 
-	const f32 t = 1.0f;
-	const f32 o = 0.0f;
+	const f64 t = 1.0f;
+	const f64 o = 0.0f;
 	vertices[0] = video::S3DVertex(pos_1, pos_1, -1, 0, 0, 1, c, t, t);
 	vertices[1] = video::S3DVertex(pos_2, pos_1, -1, 0, 0, 1, c, o, t);
 	vertices[2] = video::S3DVertex(pos_2, pos_2, -1, 0, 0, 1, c, o, o);
@@ -844,7 +844,7 @@ void Sky::updateStars()
 			rgen.range(-10000, 10000),
 			rgen.range(-10000, 10000)
 		);
-		core::CMatrix4<f32> a;
+		core::CMatrix4<f64> a;
 		a.buildRotateFromTo(v3d(0, 1, 0), r);
 		v3d p = v3d(-d, 1, -d);
 		v3d p1 = v3d(d, 1, -d);

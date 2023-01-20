@@ -210,24 +210,24 @@ public:
 
 class MainShaderConstantSetter : public IShaderConstantSetter
 {
-	CachedVertexShaderSetting<f32, 16> m_world_view_proj;
-	CachedVertexShaderSetting<f32, 16> m_world;
+	CachedVertexShaderSetting<f64, 16> m_world_view_proj;
+	CachedVertexShaderSetting<f64, 16> m_world;
 
 	// Shadow-related
-	CachedPixelShaderSetting<f32, 16> m_shadow_view_proj;
-	CachedPixelShaderSetting<f32, 3> m_light_direction;
-	CachedPixelShaderSetting<f32> m_texture_res;
-	CachedPixelShaderSetting<f32> m_shadow_strength;
-	CachedPixelShaderSetting<f32> m_time_of_day;
-	CachedPixelShaderSetting<f32> m_shadowfar;
-	CachedPixelShaderSetting<f32, 4> m_camera_pos;
+	CachedPixelShaderSetting<f64, 16> m_shadow_view_proj;
+	CachedPixelShaderSetting<f64, 3> m_light_direction;
+	CachedPixelShaderSetting<f64> m_texture_res;
+	CachedPixelShaderSetting<f64> m_shadow_strength;
+	CachedPixelShaderSetting<f64> m_time_of_day;
+	CachedPixelShaderSetting<f64> m_shadowfar;
+	CachedPixelShaderSetting<f64, 4> m_camera_pos;
 	CachedPixelShaderSetting<s32> m_shadow_texture;
-	CachedVertexShaderSetting<f32> m_perspective_bias0_vertex;
-	CachedPixelShaderSetting<f32> m_perspective_bias0_pixel;
-	CachedVertexShaderSetting<f32> m_perspective_bias1_vertex;
-	CachedPixelShaderSetting<f32> m_perspective_bias1_pixel;
-	CachedVertexShaderSetting<f32> m_perspective_zbias_vertex;
-	CachedPixelShaderSetting<f32> m_perspective_zbias_pixel;
+	CachedVertexShaderSetting<f64> m_perspective_bias0_vertex;
+	CachedPixelShaderSetting<f64> m_perspective_bias0_pixel;
+	CachedVertexShaderSetting<f64> m_perspective_bias1_vertex;
+	CachedPixelShaderSetting<f64> m_perspective_bias1_pixel;
+	CachedVertexShaderSetting<f64> m_perspective_zbias_vertex;
+	CachedPixelShaderSetting<f64> m_perspective_zbias_pixel;
 
 #if ENABLE_GLES
 	// Modelview matrix
@@ -307,23 +307,23 @@ public:
 			shadowViewProj *= light.getViewMatrix();
 			m_shadow_view_proj.set(shadowViewProj.pointer(), services);
 
-			f32 v_LightDirection[3];
+			f64 v_LightDirection[3];
 			light.getDirection().getAs3Values(v_LightDirection);
 			m_light_direction.set(v_LightDirection, services);
 
-			f32 TextureResolution = light.getMapResolution();
+			f64 TextureResolution = light.getMapResolution();
 			m_texture_res.set(&TextureResolution, services);
 
-			f32 ShadowStrength = shadow->getShadowStrength();
+			f64 ShadowStrength = shadow->getShadowStrength();
 			m_shadow_strength.set(&ShadowStrength, services);
 
-			f32 timeOfDay = shadow->getTimeOfDay();
+			f64 timeOfDay = shadow->getTimeOfDay();
 			m_time_of_day.set(&timeOfDay, services);
 
-			f32 shadowFar = shadow->getMaxShadowFar();
+			f64 shadowFar = shadow->getMaxShadowFar();
 			m_shadowfar.set(&shadowFar, services);
 
-			f32 cam_pos[4];
+			f64 cam_pos[4];
 			shadowViewProj.transformVect(cam_pos, light.getPlayerPos());
 			m_camera_pos.set(cam_pos, services);
 
@@ -332,13 +332,13 @@ public:
 			s32 TextureLayerID = 3;
 			m_shadow_texture.set(&TextureLayerID, services);
 
-			f32 bias0 = shadow->getPerspectiveBiasXY();
+			f64 bias0 = shadow->getPerspectiveBiasXY();
 			m_perspective_bias0_vertex.set(&bias0, services);
 			m_perspective_bias0_pixel.set(&bias0, services);
-			f32 bias1 = 1.0f - bias0 + 1e-5f;
+			f64 bias1 = 1.0f - bias0 + 1e-5f;
 			m_perspective_bias1_vertex.set(&bias1, services);
 			m_perspective_bias1_pixel.set(&bias1, services);
-			f32 zbias = shadow->getPerspectiveBiasZ();
+			f64 zbias = shadow->getPerspectiveBiasZ();
 			m_perspective_zbias_vertex.set(&zbias, services);
 			m_perspective_zbias_pixel.set(&zbias, services);
 		}

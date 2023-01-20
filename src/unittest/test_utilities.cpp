@@ -422,29 +422,29 @@ void TestUtilities::testStringJoin()
 }
 
 
-static bool within(const f32 value1, const f32 value2, const f32 precision)
+static bool within(const f64 value1, const f64 value2, const f64 precision)
 {
 	return std::fabs(value1 - value2) <= precision;
 }
 
-static bool within(const v3d &v1, const v3d &v2, const f32 precision)
+static bool within(const v3d &v1, const v3d &v2, const f64 precision)
 {
 	return within(v1.X, v2.X, precision) && within(v1.Y, v2.Y, precision)
 		&& within(v1.Z, v2.Z, precision);
 }
 
 static bool within(const core::matrix4 &m1, const core::matrix4 &m2,
-		const f32 precision)
+		const f64 precision)
 {
-	const f32 *M1 = m1.pointer();
-	const f32 *M2 = m2.pointer();
+	const f64 *M1 = m1.pointer();
+	const f64 *M2 = m2.pointer();
 	for (int i = 0; i < 16; i++)
 		if (! within(M1[i], M2[i], precision))
 			return false;
 	return true;
 }
 
-static bool roundTripsDeg(const v3d &v, const f32 precision)
+static bool roundTripsDeg(const v3d &v, const f64 precision)
 {
 	core::matrix4 m;
 	setPitchYawRoll(m, v);
@@ -456,14 +456,14 @@ void TestUtilities::testEulerConversion()
 	// This test may fail on non-IEEE systems.
 	// Low tolerance is 4 ulp(1.0) for binary floats with 24 bit mantissa.
 	// (ulp = unit in the last place; ulp(1.0) = 2^-23).
-	const f32 tolL = 4.76837158203125e-7f;
+	const f64 tolL = 4.76837158203125e-7f;
 	// High tolerance is 2 ulp(180.0), needed for numbers in degrees.
 	// ulp(180.0) = 2^-16
-	const f32 tolH = 3.0517578125e-5f;
+	const f64 tolH = 3.0517578125e-5f;
 	v3d v1, v2;
 	core::matrix4 m1, m2;
-	const f32 *M1 = m1.pointer();
-	const f32 *M2 = m2.pointer();
+	const f64 *M1 = m1.pointer();
+	const f64 *M2 = m2.pointer();
 
 	// Check that the radians version and the degrees version
 	// produce the same results. Check also that the conversion

@@ -189,7 +189,7 @@ public:
 	 * The line starts at the camera and ends on the camera's far plane.
 	 * The coordinates do not contain the camera offset.
 	 */
-	line3d<f32> getShootline() { return m_shootline; }
+	line3d<f64> getShootline() { return m_shootline; }
 
 	void step(float dtime);
 	void resetHud();
@@ -227,7 +227,7 @@ private:
 	 * The line ends on the camera's far plane.
 	 * The coordinates do not contain the camera offset.
 	 */
-	line3d<f32> m_shootline;
+	line3d<f64> m_shootline;
 
 	bool m_has_move_id = false;
 	size_t m_move_id;

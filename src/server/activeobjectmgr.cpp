@@ -142,8 +142,8 @@ void ActiveObjectMgr::getObjectsInArea(const aabb3f &box,
 	}
 }
 
-void ActiveObjectMgr::getAddedActiveObjectsAroundPos(const v3d &player_pos, f32 radius,
-		f32 player_radius, std::set<u16> &current_objects,
+void ActiveObjectMgr::getAddedActiveObjectsAroundPos(const v3d &player_pos, f64 radius,
+		f64 player_radius, std::set<u16> &current_objects,
 		std::queue<u16> &added_objects)
 {
 	/*
@@ -164,7 +164,7 @@ void ActiveObjectMgr::getAddedActiveObjectsAroundPos(const v3d &player_pos, f32 
 		if (object->isGone())
 			continue;
 
-		f32 distance_f = object->getBasePosition().getDistanceFrom(player_pos);
+		f64 distance_f = object->getBasePosition().getDistanceFrom(player_pos);
 		if (object->getType() == ACTIVEOBJECT_TYPE_PLAYER) {
 			// Discard if too far
 			if (distance_f > player_radius && player_radius != 0)

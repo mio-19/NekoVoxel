@@ -187,7 +187,7 @@ int LuaRaycast::create_object(lua_State *L)
 		liquids = readParam<bool>(L, 4);
 	}
 
-	LuaRaycast *o = new LuaRaycast(core::line3d<f32>(pos1, pos2),
+	LuaRaycast *o = new LuaRaycast(core::line3d<f64>(pos1, pos2),
 		objects, liquids);
 
 	*(void **) (lua_newuserdata(L, sizeof(void *))) = o;

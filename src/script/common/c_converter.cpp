@@ -347,7 +347,7 @@ bool is_color_table(lua_State *L, int index)
 	return is_color_table;
 }
 
-aabb3f read_aabb3f(lua_State *L, int index, f32 scale)
+aabb3f read_aabb3f(lua_State *L, int index, f64 scale)
 {
 	aabb3f box;
 	if(lua_istable(L, index)){
@@ -391,7 +391,7 @@ void push_aabb3f(lua_State *L, aabb3f box)
 	lua_rawseti(L, -2, 6);
 }
 
-std::vector<aabb3f> read_aabb3f_vector(lua_State *L, int index, f32 scale)
+std::vector<aabb3f> read_aabb3f_vector(lua_State *L, int index, f64 scale)
 {
 	std::vector<aabb3f> boxes;
 	if(lua_istable(L, index)){

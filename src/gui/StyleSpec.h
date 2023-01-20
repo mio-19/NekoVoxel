@@ -460,7 +460,7 @@ private:
 		std::vector<std::string> v_vector = split(value, ',');
 
 		if (v_vector.size() == 1) {
-			f32 x = stof(v_vector[0]);
+			f64 x = stof(v_vector[0]);
 			vec.X = x;
 			vec.Y = x;
 		} else if (v_vector.size() == 2) {

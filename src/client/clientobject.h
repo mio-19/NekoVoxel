@@ -100,7 +100,7 @@ class DistanceSortedActiveObject
 public:
 	ClientActiveObject *obj;
 
-	DistanceSortedActiveObject(ClientActiveObject *a_obj, f32 a_d)
+	DistanceSortedActiveObject(ClientActiveObject *a_obj, f64 a_d)
 	{
 		obj = a_obj;
 		d = a_d;
@@ -112,5 +112,5 @@ public:
 	}
 
 private:
-	f32 d;
+	f64 d;
 };

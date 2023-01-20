@@ -122,8 +122,8 @@ public:
 
 	void setPos(v3s32 pos);
 	v3s32 getPos() const { return data->pos; }
-	void setAngle(f32 angle);
-	f32 getAngle() const { return m_angle; }
+	void setAngle(f64 angle);
+	f64 getAngle() const { return m_angle; }
 	void toggleMinimapShape();
 	void setMinimapShape(MinimapShape shape);
 	MinimapShape getMinimapShape();
@@ -169,7 +169,7 @@ private:
 	std::vector<MinimapModeDef> m_modes;
 	size_t m_current_mode_index;
 	u16 m_surface_mode_scan_height;
-	f32 m_angle;
+	f64 m_angle;
 	std::mutex m_mutex;
 	std::list<MinimapMarker*> m_markers;
 	std::list<v2f> m_active_markers;

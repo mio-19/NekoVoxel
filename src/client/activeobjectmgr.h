@@ -35,14 +35,14 @@ public:
 	bool registerObject(ClientActiveObject *obj) override;
 	void removeObject(u16 id) override;
 
-	void getActiveObjects(const v3d &origin, f32 max_d,
+	void getActiveObjects(const v3d &origin, f64 max_d,
 			std::vector<DistanceSortedActiveObject> &dest);
 	// Similar to above, but takes selection box sizes, and line direction into
 	// account.
 	// Objects without selectionbox are not returned.
 	// Returned distances are in direction of shootline.
 	// Distance check is coarse.
-	void getActiveSelectableObjects(const core::line3d<f32> &shootline,
+	void getActiveSelectableObjects(const core::line3d<f64> &shootline,
 			std::vector<DistanceSortedActiveObject> &dest);
 };
 } // namespace client

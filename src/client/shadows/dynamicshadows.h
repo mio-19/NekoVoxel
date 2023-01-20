@@ -29,10 +29,10 @@ class Client;
 
 struct shadowFrustum
 {
-	f32 zNear{0.0f};
-	f32 zFar{0.0f};
-	f32 length{0.0f};
-	f32 radius{0.0f};
+	f64 zNear{0.0f};
+	f64 zFar{0.0f};
+	f64 length{0.0f};
+	f64 radius{0.0f};
 	core::matrix4 ProjOrthMat;
 	core::matrix4 ViewMat;
 	v3d position;
@@ -46,7 +46,7 @@ public:
 	DirectionalLight(const u32 shadowMapResolution,
 			const v3d &position,
 			video::SColorf lightColor = video::SColor(0xffffffff),
-			f32 farValue = 100.0f);
+			f64 farValue = 100.0f);
 	~DirectionalLight() = default;
 
 	//DISABLE_CLASS_COPY(DirectionalLight)
@@ -70,13 +70,13 @@ public:
 	core::matrix4 getViewProjMatrix();
 
 	/// Gets the light's maximum far value, i.e. the shadow boundary
-	f32 getMaxFarValue() const
+	f64 getMaxFarValue() const
 	{
 		return farPlane * BS;
 	}
 
 	/// Gets the current far value of the light
-	f32 getFarValue() const
+	f64 getFarValue() const
 	{
 		return shadow_frustum.zFar;
 	}
@@ -109,7 +109,7 @@ private:
 
 	video::SColorf diffuseColor;
 
-	f32 farPlane;
+	f64 farPlane;
 	u32 mapRes;
 
 	v3d pos;

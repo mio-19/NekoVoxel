@@ -123,7 +123,7 @@ ClientMap::~ClientMap()
 	g_settings->deregisterChangedCallback("enable_raytraced_culling", on_settings_changed, this);
 }
 
-void ClientMap::updateCamera(v3d pos, v3d dir, f32 fov, v3s32 offset)
+void ClientMap::updateCamera(v3d pos, v3d dir, f64 fov, v3s32 offset)
 {
 	v3s32 previous_node = floatToInt(m_camera_position, BS) + m_camera_offset;
 	v3s32 previous_block = getContainerPos(previous_node, MAP_BLOCKSIZE);
@@ -332,7 +332,7 @@ void ClientMap::updateDrawList()
 
 			// Calculate the coordinates for range and frutum culling
 			v3d mesh_sphere_center;
-			f32 mesh_sphere_radius;
+			f64 mesh_sphere_radius;
 
 			v3s32 block_pos_nodes = block_coord * MAP_BLOCKSIZE;
 
@@ -561,7 +561,7 @@ void ClientMap::updateDrawList()
 				v3s32 block_coord = block->getPos();
 				v3d mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
 						+ block->mesh->getBoundingSphereCenter();
-				f32 mesh_sphere_radius = block->mesh->getBoundingRadius();
+				f64 mesh_sphere_radius = block->mesh->getBoundingRadius();
 				// First, perform a simple distance check.
 				if (!m_control.range_all &&
 					mesh_sphere_center.getDistanceFrom(intToFloat(cam_pos_nodes, BS)) >
@@ -651,7 +651,7 @@ void ClientMap::touchMapBlocks()
 
 			v3d mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
 					+ block->mesh->getBoundingSphereCenter();
-			f32 mesh_sphere_radius = block->mesh->getBoundingRadius();
+			f64 mesh_sphere_radius = block->mesh->getBoundingRadius();
 			// First, perform a simple distance check.
 			if (!m_control.range_all &&
 				mesh_sphere_center.getDistanceFrom(intToFloat(cam_pos_nodes, BS)) >
@@ -732,7 +732,7 @@ void ClientMap::renderMap(video::IVideoDriver* driver, s32 pass)
 		// (The one in updateDrawList is only coarse.)
 		v3d mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
 				+ block_mesh->getBoundingSphereCenter();
-		f32 mesh_sphere_radius = block_mesh->getBoundingRadius();
+		f64 mesh_sphere_radius = block_mesh->getBoundingRadius();
 		if (is_frustum_culled(mesh_sphere_center, mesh_sphere_radius))
 			continue;
 
@@ -949,7 +949,7 @@ int ClientMap::getBackgroundBrightness(float max_d, u32 daylight_factor,
 	static v3d z_directions[50] = {
 		v3d(-100, 0, 0)
 	};
-	static f32 z_offsets[50] = {
+	static f64 z_offsets[50] = {
 		-1000,
 	};
 
@@ -973,7 +973,7 @@ int ClientMap::getBackgroundBrightness(float max_d, u32 daylight_factor,
 	values.reserve(ARRLEN(z_directions));
 	for (u32 i = 0; i < ARRLEN(z_directions); i++) {
 		v3d z_dir = z_directions[i];
-		core::CMatrix4<f32> a;
+		core::CMatrix4<f64> a;
 		a.buildRotateFromTo(v3d(0,1,0), z_dir);
 		v3d dir = m_camera_direction;
 		a.rotateVect(dir);
@@ -1265,7 +1265,7 @@ void ClientMap::updateTransparentMeshBuffers()
 	ScopeProfiler sp(g_profiler, "CM::updateTransparentMeshBuffers", SPT_AVG);
 	u32 sorted_blocks = 0;
 	u32 unsorted_blocks = 0;
-	f32 sorting_distance_sq = pow(m_cache_transparency_sorting_distance * BS, 2.0f);
+	f64 sorting_distance_sq = pow(m_cache_transparency_sorting_distance * BS, 2.0f);
 
 
 	// Update the order of transparent mesh buffers in each mesh
@@ -1279,7 +1279,7 @@ void ClientMap::updateTransparentMeshBuffers()
 
 			v3s32 block_pos = block->getPos();
 			v3d block_pos_f = intToFloat(block_pos * MAP_BLOCKSIZE + MAP_BLOCKSIZE / 2, BS);
-			f32 distance = m_camera_position.getDistanceFromSQ(block_pos_f);
+			f64 distance = m_camera_position.getDistanceFromSQ(block_pos_f);
 			if (distance <= sorting_distance_sq) {
 				block->mesh->updateTransparentBuffers(m_camera_position, block_pos);
 				++sorted_blocks;

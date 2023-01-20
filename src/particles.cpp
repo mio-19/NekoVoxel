@@ -56,7 +56,7 @@ v3d PARAM_PVFN(interpolate) (float fac, const v3d a, const v3d b)
 PARAM_DEF_NUM(u8,  writeU8,    readU8);  PARAM_DEF_NUM(s8,  writeS8,    readS8);
 PARAM_DEF_NUM(u16, writeU16,   readU16); PARAM_DEF_NUM(s16, writeS16,   readS16);
 PARAM_DEF_NUM(u32, writeU32,   readU32); PARAM_DEF_NUM(s32, writeS32,   readS32);
-PARAM_DEF_NUM(f32, writeF32,   readF32);
+PARAM_DEF_NUM(f64, writeF32,   readF32);
 PARAM_DEF_SRZR(v2f, writeV2F32, readV2F32);
 PARAM_DEF_SRZR(v3d, writeV3F32, readV3F32);
 

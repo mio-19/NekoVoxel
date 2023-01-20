@@ -619,7 +619,7 @@ bool Settings::getNoiseParamsFromValue(const std::string &name,
 	if (!getNoEx(name, value))
 		return false;
 
-	// Format: f32,f32,(f32,f32,f32),s32,s32,f32[,f32]
+	// Format: f64,f64,(f64,f64,f64),s32,s32,f64[,f64]
 	Strfnd f(value);
 
 	np.offset   = stof(f.next(","));

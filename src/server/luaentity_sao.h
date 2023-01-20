@@ -89,7 +89,7 @@ private:
 	void sendPosition(bool do_interpolate, bool is_movement_end);
 	std::string generateSetTextureModCommand() const;
 	static std::string generateSetSpriteCommand(v2s32 p, u16 num_frames,
-			f32 framelength, bool select_horiz_by_yawpitch);
+			f64 framelength, bool select_horiz_by_yawpitch);
 
 	std::string m_init_name;
 	std::string m_init_state;

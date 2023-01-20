@@ -1259,14 +1259,14 @@ void getNodeBoxUnion(const NodeBox &nodebox, const ContentFeatures &features,
 					features.param_type_2 == CPT2_4DIR ||
 					features.param_type_2 == CPT2_COLORED_4DIR) {
 				// Get maximal coordinate
-				f32 coords[] = {
+				f64 coords[] = {
 					fabsf(half_processed.MinEdge.X),
 					fabsf(half_processed.MinEdge.Y),
 					fabsf(half_processed.MinEdge.Z),
 					fabsf(half_processed.MaxEdge.X),
 					fabsf(half_processed.MaxEdge.Y),
 					fabsf(half_processed.MaxEdge.Z) };
-				f32 max = 0;
+				f64 max = 0;
 				for (float coord : coords) {
 					if (max < coord) {
 						max = coord;
@@ -1285,12 +1285,12 @@ void getNodeBoxUnion(const NodeBox &nodebox, const ContentFeatures &features,
 			box_union->addInternalBox(nodebox.wall_top);
 			box_union->addInternalBox(nodebox.wall_bottom);
 			// Find maximal coordinate in the X-Z plane
-			f32 coords[] = {
+			f64 coords[] = {
 				fabsf(nodebox.wall_side.MinEdge.X),
 				fabsf(nodebox.wall_side.MinEdge.Z),
 				fabsf(nodebox.wall_side.MaxEdge.X),
 				fabsf(nodebox.wall_side.MaxEdge.Z) };
-			f32 max = 0;
+			f64 max = 0;
 			for (float coord : coords) {
 				if (max < coord) {
 					max = coord;

@@ -69,12 +69,12 @@ struct NearbyCollisionInfo {
 // Helper functions:
 // Truncate floating point numbers to specified number of decimal places
 // in order to move all the floating point error to one side of the correct value
-static inline f32 truncate(const f32 val, const f32 factor)
+static inline f64 truncate(const f64 val, const f64 factor)
 {
 	return truncf(val * factor) / factor;
 }
 
-static inline v3d truncate(const v3d& vec, const f32 factor)
+static inline v3d truncate(const v3d& vec, const f64 factor)
 {
 	return v3d(
 		truncate(vec.X, factor),
@@ -89,7 +89,7 @@ static inline v3d truncate(const v3d& vec, const f32 factor)
 // The time after which the collision occurs is stored in dtime.
 CollisionAxis axisAlignedCollision(
 		const aabb3f &staticbox, const aabb3f &movingbox,
-		const v3d &speed, f32 *dtime)
+		const v3d &speed, f64 *dtime)
 {
 	//TimeTaker tt("axisAlignedCollision");
 
@@ -102,10 +102,10 @@ CollisionAxis axisAlignedCollision(
 			std::max(movingbox.MaxEdge.Z, staticbox.MaxEdge.Z) - std::min(movingbox.MinEdge.Z, staticbox.MinEdge.Z)
 	);
 
-	const f32 dtime_max = *dtime;
-	f32 inner_margin;		// the distance of clipping recovery
-	f32 distance;
-	f32 time;
+	const f64 dtime_max = *dtime;
+	f64 inner_margin;		// the distance of clipping recovery
+	f64 distance;
+	f64 time;
 
 
 	if (speed.Y) {
@@ -194,7 +194,7 @@ CollisionAxis axisAlignedCollision(
 bool wouldCollideWithCeiling(
 		const std::vector<NearbyCollisionInfo> &cinfo,
 		const aabb3f &movingbox,
-		f32 y_increase, f32 d)
+		f64 y_increase, f64 d)
 {
 	//TimeTaker tt("wouldCollideWithCeiling");
 
@@ -223,8 +223,8 @@ static inline void getNeighborConnectingFace(const v3s32 &p,
 }
 
 collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
-		f32 pos_max_d, const aabb3f &box_0,
-		f32 stepheight, f32 dtime,
+		f64 pos_max_d, const aabb3f &box_0,
+		f64 stepheight, f64 dtime,
 		v3d *pos_f, v3d *speed_f,
 		v3d accel_f, ActiveObject *self,
 		bool collideWithObjects)
@@ -376,7 +376,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 		ClientEnvironment *c_env = dynamic_cast<ClientEnvironment*>(env);
 		if (c_env != 0) {
 			// Calculate distance by speed, add own extent and 1.5m of tolerance
-			f32 distance = speed_f->getLength() * dtime +
+			f64 distance = speed_f->getLength() * dtime +
 				box_0.getExtent().getLength() + 1.5f * BS;
 			std::vector<DistanceSortedActiveObject> clientobjects;
 			c_env->getActiveObjects(*pos_f, distance, clientobjects);
@@ -394,7 +394,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 		{
 			if (s_env != NULL) {
 				// Calculate distance by speed, add own extent and 1.5m of tolerance
-				f32 distance = speed_f->getLength() * dtime +
+				f64 distance = speed_f->getLength() * dtime +
 					box_0.getExtent().getLength() + 1.5f * BS;
 
 				// search for objects which are not us, or we are not its parent
@@ -442,7 +442,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 		Collision detection
 	*/
 
-	f32 d = 0.0f;
+	f64 d = 0.0f;
 
 	int loopcount = 0;
 
@@ -459,7 +459,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 		movingbox.MaxEdge += *pos_f;
 
 		CollisionAxis nearest_collided = COLLISION_AXIS_NONE;
-		f32 nearest_dtime = dtime;
+		f64 nearest_dtime = dtime;
 		int nearest_boxindex = -1;
 
 		/*
@@ -472,7 +472,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 				continue;
 
 			// Find nearest collision of the two boxes (raytracing-like)
-			f32 dtime_tmp = nearest_dtime;
+			f64 dtime_tmp = nearest_dtime;
 			CollisionAxis collided = axisAlignedCollision(box_info.box,
 					movingbox, *speed_f, &dtime_tmp);
 

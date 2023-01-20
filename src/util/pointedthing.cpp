@@ -25,7 +25,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 PointedThing::PointedThing(const v3s32 &under, const v3s32 &above,
 	const v3s32 &real_under, const v3d &point, const v3d &normal,
-	u16 box_id, f32 distSq):
+	u16 box_id, f64 distSq):
 	type(POINTEDTHING_NODE),
 	node_undersurface(under),
 	node_abovesurface(above),
@@ -37,7 +37,7 @@ PointedThing::PointedThing(const v3s32 &under, const v3s32 &above,
 {}
 
 PointedThing::PointedThing(u16 id, const v3d &point,
-  const v3d &normal, const v3d &raw_normal, f32 distSq) :
+  const v3d &normal, const v3d &raw_normal, f64 distSq) :
 	type(POINTEDTHING_OBJECT),
 	object_id(id),
 	intersection_point(point),

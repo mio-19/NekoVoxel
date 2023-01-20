@@ -49,7 +49,7 @@ struct SunParams
 	std::string tonemap;
 	std::string sunrise;
 	bool sunrise_visible;
-	f32 scale;
+	f64 scale;
 };
 
 struct MoonParams
@@ -57,7 +57,7 @@ struct MoonParams
 	bool visible;
 	std::string texture;
 	std::string tonemap;
-	f32 scale;
+	f64 scale;
 };
 
 struct StarParams
@@ -65,8 +65,8 @@ struct StarParams
 	bool visible;
 	u32 count;
 	video::SColor starcolor;
-	f32 scale;
-	f32 day_opacity;
+	f64 scale;
+	f64 day_opacity;
 };
 
 struct CloudParams

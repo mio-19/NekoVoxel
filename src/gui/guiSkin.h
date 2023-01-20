@@ -341,7 +341,7 @@ namespace gui
 		}
 } // end namespace gui
 //! Sets the shading
-inline void setShading(video::SColor &color,f32 s) // :PATCH:
+inline void setShading(video::SColor &color,f64 s) // :PATCH:
 {
 	if (s < 1.0f)
 	{

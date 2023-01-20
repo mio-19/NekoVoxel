@@ -106,7 +106,7 @@ void DirectionalLight::createSplitMatrices(const Camera *cam)
 
 DirectionalLight::DirectionalLight(const u32 shadowMapResolution,
 		const v3d &position, video::SColorf lightColor,
-		f32 farValue) :
+		f64 farValue) :
 		diffuseColor(lightColor),
 		farPlane(farValue), mapRes(shadowMapResolution), pos(position)
 {}

@@ -64,7 +64,7 @@ public:
 	size_t addDirectionalLight();
 	DirectionalLight &getDirectionalLight(u32 index = 0);
 	size_t getDirectionalLightCount() const;
-	f32 getMaxShadowFar() const;
+	f64 getMaxShadowFar() const;
 
 	/// Adds a shadow to the scene node.
 	/// The shadow mode can be ESM_BOTH, or ESM_RECEIVE.
@@ -93,8 +93,8 @@ public:
 	float getShadowStrength() const { return m_shadows_enabled ? m_shadow_strength : 0.0f; }
 	float getTimeOfDay() const { return m_time_day; }
 
-	f32 getPerspectiveBiasXY() { return m_perspective_bias_xy; }
-	f32 getPerspectiveBiasZ() { return m_perspective_bias_z; }
+	f64 getPerspectiveBiasXY() { return m_perspective_bias_xy; }
+	f64 getPerspectiveBiasZ() { return m_perspective_bias_z; }
 
 private:
 	video::ITexture *getSMTexture(const std::string &shadow_map_name,
@@ -137,8 +137,8 @@ private:
 	bool m_force_update_shadow_map;
 	u8 m_map_shadow_update_frames; /* Use this number of frames to update map shaodw */
 	u8 m_current_frame{0}; /* Current frame */
-	f32 m_perspective_bias_xy;
-	f32 m_perspective_bias_z;
+	f64 m_perspective_bias_xy;
+	f64 m_perspective_bias_z;
 
 	video::ECOLOR_FORMAT m_texture_format{video::ECOLOR_FORMAT::ECF_R16F};
 	video::ECOLOR_FORMAT m_texture_format_color{video::ECOLOR_FORMAT::ECF_R16G16};

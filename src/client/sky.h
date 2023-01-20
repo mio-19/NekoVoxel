@@ -68,7 +68,7 @@ public:
 	bool getSunVisible() const { return m_sun_params.visible; }
 	void setSunTexture(const std::string &sun_texture,
 		const std::string &sun_tonemap, ITextureSource *tsrc);
-	void setSunScale(f32 sun_scale) { m_sun_params.scale = sun_scale; }
+	void setSunScale(f64 sun_scale) { m_sun_params.scale = sun_scale; }
 	void setSunriseVisible(bool glow_visible) { m_sun_params.sunrise_visible = glow_visible; }
 	void setSunriseTexture(const std::string &sunglow_texture, ITextureSource* tsrc);
 	v3d getSunDirection();
@@ -77,14 +77,14 @@ public:
 	bool getMoonVisible() const { return m_moon_params.visible; }
 	void setMoonTexture(const std::string &moon_texture,
 		const std::string &moon_tonemap, ITextureSource *tsrc);
-	void setMoonScale(f32 moon_scale) { m_moon_params.scale = moon_scale; }
+	void setMoonScale(f64 moon_scale) { m_moon_params.scale = moon_scale; }
 	v3d getMoonDirection();
 
 	void setStarsVisible(bool stars_visible) { m_star_params.visible = stars_visible; }
 	void setStarCount(u16 star_count);
 	void setStarColor(video::SColor star_color) { m_star_params.starcolor = star_color; }
-	void setStarScale(f32 star_scale) { m_star_params.scale = star_scale; updateStars(); }
-	void setStarDayOpacity(f32 day_opacity) { m_star_params.day_opacity = day_opacity; }
+	void setStarScale(f64 star_scale) { m_star_params.scale = star_scale; updateStars(); }
+	void setStarDayOpacity(f64 day_opacity) { m_star_params.day_opacity = day_opacity; }
 
 	bool getCloudsVisible() const { return m_clouds_visible && m_clouds_enabled; }
 	const video::SColorf &getCloudColor() const { return m_cloudcolor_f; }
@@ -131,7 +131,7 @@ private:
 	}
 
 	// Mix two colors by a given amount
-	static video::SColor m_mix_scolor(video::SColor col1, video::SColor col2, f32 factor)
+	static video::SColor m_mix_scolor(video::SColor col1, video::SColor col2, f64 factor)
 	{
 		video::SColor result = video::SColor(
 				col1.getAlpha() * (1 - factor) + col2.getAlpha() * factor,
@@ -140,7 +140,7 @@ private:
 				col1.getBlue() * (1 - factor) + col2.getBlue() * factor);
 		return result;
 	}
-	static video::SColorf m_mix_scolorf(video::SColorf col1, video::SColorf col2, f32 factor)
+	static video::SColorf m_mix_scolorf(video::SColorf col1, video::SColorf col2, f64 factor)
 	{
 		video::SColorf result =
 				video::SColorf(col1.r * (1 - factor) + col2.r * factor,

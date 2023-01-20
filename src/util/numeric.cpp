@@ -115,7 +115,7 @@ u64 murmur_hash_64_ua(const void *key, int len, unsigned int seed)
 	distance_ptr: return location for distance from the camera
 */
 bool isBlockInSight(v3s32 blockpos_b, v3d camera_pos, v3d camera_dir,
-		f32 camera_fov, f32 range, f32 *distance_ptr)
+		f64 camera_fov, f64 range, f64 *distance_ptr)
 {
 	v3s32 blockpos_nodes = blockpos_b * MAP_BLOCKSIZE;
 
@@ -130,7 +130,7 @@ bool isBlockInSight(v3s32 blockpos_b, v3d camera_pos, v3d camera_dir,
 	v3d blockpos_relative = blockpos - camera_pos;
 
 	// Total distance
-	f32 d = MYMAX(0, blockpos_relative.getLength() - BLOCK_MAX_RADIUS);
+	f64 d = MYMAX(0, blockpos_relative.getLength() - BLOCK_MAX_RADIUS);
 
 	if (distance_ptr)
 		*distance_ptr = d;
@@ -148,17 +148,17 @@ bool isBlockInSight(v3s32 blockpos_b, v3d camera_pos, v3d camera_dir,
 	// such that a block that has any portion visible with the
 	// current camera position will have the center visible at the
 	// adjusted position
-	f32 adjdist = BLOCK_MAX_RADIUS / cos((M_PI - camera_fov) / 2);
+	f64 adjdist = BLOCK_MAX_RADIUS / cos((M_PI - camera_fov) / 2);
 
 	// Block position relative to adjusted camera
 	v3d blockpos_adj = blockpos - (camera_pos - camera_dir * adjdist);
 
 	// Distance in camera direction (+=front, -=back)
-	f32 dforward = blockpos_adj.dotProduct(camera_dir);
+	f64 dforward = blockpos_adj.dotProduct(camera_dir);
 
 	// Cosine of the angle between the camera direction
 	// and the block direction (camera_dir is an unit vector)
-	f32 cosangle = dforward / blockpos_adj.getLength();
+	f64 cosangle = dforward / blockpos_adj.getLength();
 
 	// If block is not in the field of view, skip it
 	// HOTFIX: use sligthly increased angle (+10%) to fix too aggressive
@@ -193,7 +193,7 @@ void setPitchYawRollRad(core::matrix4 &m, const v3d &rot)
 	f64 c1 = cos(a1), s1 = sin(a1);
 	f64 c2 = cos(a2), s2 = sin(a2);
 	f64 c3 = cos(a3), s3 = sin(a3);
-	f32 *M = m.pointer();
+	f64 *M = m.pointer();
 
 	M[0] = s1 * s2 * s3 + c1 * c3;
 	M[1] = s1 * c2;
@@ -210,14 +210,14 @@ void setPitchYawRollRad(core::matrix4 &m, const v3d &rot)
 
 v3d getPitchYawRollRad(const core::matrix4 &m)
 {
-	const f32 *M = m.pointer();
+	const f64 *M = m.pointer();
 
 	f64 a1 = atan2(M[1], M[5]);
-	f32 c2 = std::sqrt((f64)M[10]*M[10] + (f64)M[8]*M[8]);
-	f32 a2 = atan2f(-M[9], c2);
+	f64 c2 = std::sqrt((f64)M[10]*M[10] + (f64)M[8]*M[8]);
+	f64 a2 = atan2f(-M[9], c2);
 	f64 c1 = cos(a1);
 	f64 s1 = sin(a1);
-	f32 a3 = atan2f(s1*M[6] - c1*M[2], c1*M[0] - s1*M[4]);
+	f64 a3 = atan2f(s1*M[6] - c1*M[2], c1*M[0] - s1*M[4]);
 
 	return v3d(a2, a3, a1);
 }

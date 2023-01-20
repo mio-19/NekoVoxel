@@ -39,7 +39,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // Maximum radius of a block.  The magic number is
 // sqrt(3.0) / 2.0 in literal form.
-static constexpr const f32 BLOCK_MAX_RADIUS = 0.866025403784f * MAP_BLOCKSIZE * BS;
+static constexpr const f64 BLOCK_MAX_RADIUS = 0.866025403784f * MAP_BLOCKSIZE * BS;
 
 inline s32 getContainerPos(s32 p, s32 d)
 {
@@ -255,7 +255,7 @@ inline u32 calc_parity(u32 v)
 u64 murmur_hash_64_ua(const void *key, int len, unsigned int seed);
 
 bool isBlockInSight(v3s32 blockpos_b, v3d camera_pos, v3d camera_dir,
-		f32 camera_fov, f32 range, f32 *distance_ptr=NULL);
+		f64 camera_fov, f64 range, f64 *distance_ptr=NULL);
 
 s32 adjustDist(s32 dist, float zoom_fov);
 
@@ -263,12 +263,12 @@ s32 adjustDist(s32 dist, float zoom_fov);
 	Returns nearest 32-bit integer for given floating point number.
 	<cmath> and <math.h> in VC++ don't provide round().
 */
-inline s32 myround(f32 f)
+inline s32 myround(f64 f)
 {
 	return (s32)(f < 0.f ? (f - 0.5f) : (f + 0.5f));
 }
 
-inline constexpr f32 sqr(f32 f)
+inline constexpr f64 sqr(f64 f)
 {
 	return f * f;
 }
@@ -276,7 +276,7 @@ inline constexpr f32 sqr(f32 f)
 /*
 	Returns integer position of node in given floating point position
 */
-inline v3s32 floatToInt(v3d p, f32 d)
+inline v3s32 floatToInt(v3d p, f64 d)
 {
 	return v3s32(
 		(p.X + (p.X > 0 ? d / 2 : -d / 2)) / d,
@@ -309,12 +309,12 @@ inline v3s32 doubleToInt(v3d p, double d)
 /*
 	Returns floating point position of node in given integer position
 */
-inline v3d intToFloat(v3s32 p, f32 d)
+inline v3d intToFloat(v3s32 p, f64 d)
 {
 	return v3d(
-		(f32)p.X * d,
-		(f32)p.Y * d,
-		(f32)p.Z * d
+		(f64)p.X * d,
+		(f64)p.Y * d,
+		(f64)p.Z * d
 	);
 }
 

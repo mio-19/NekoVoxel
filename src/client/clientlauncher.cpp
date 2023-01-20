@@ -571,7 +571,7 @@ void ClientLauncher::speed_tests()
 {
 	// volatile to avoid some potential compiler optimisations
 	volatile static s32 temp16;
-	volatile static f32 tempf;
+	volatile static f64 tempf;
 	// Silence compiler warning
 	(void)temp16;
 	static v3d tempv3f1;
@@ -629,7 +629,7 @@ void ClientLauncher::speed_tests()
 	{
 		TimeTaker timer("Testing std::map speed");
 
-		std::map<v2s32, f32> map1;
+		std::map<v2s32, f64> map1;
 		tempf = -324;
 		const s32 ii = 300;
 		for (s32 y = 0; y < ii; y++) {

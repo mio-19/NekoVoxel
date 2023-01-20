@@ -408,7 +408,7 @@ class GameGlobalShaderConstantSetter : public IShaderConstantSetter
 	Sky *m_sky;
 	Client *m_client;
 	bool *m_force_fog_off;
-	f32 *m_fog_range;
+	f64 *m_fog_range;
 	bool m_fog_enabled;
 	CachedPixelShaderSetting<float, 4> m_sky_bg_color;
 	CachedPixelShaderSetting<float> m_fog_distance;
@@ -463,7 +463,7 @@ public:
 	void setSky(Sky *sky) { m_sky = sky; }
 
 	GameGlobalShaderConstantSetter(Sky *sky, bool *force_fog_off,
-			f32 *fog_range, Client *client) :
+			f64 *fog_range, Client *client) :
 		m_sky(sky),
 		m_client(client),
 		m_force_fog_off(force_fog_off),
@@ -630,12 +630,12 @@ class GameGlobalShaderConstantSetterFactory : public IShaderConstantSetterFactor
 {
 	Sky *m_sky;
 	bool *m_force_fog_off;
-	f32 *m_fog_range;
+	f64 *m_fog_range;
 	Client *m_client;
 	std::vector<GameGlobalShaderConstantSetter *> created_nosky;
 public:
 	GameGlobalShaderConstantSetterFactory(bool *force_fog_off,
-			f32 *fog_range, Client *client) :
+			f64 *fog_range, Client *client) :
 		m_sky(NULL),
 		m_force_fog_off(force_fog_off),
 		m_fog_range(fog_range),
@@ -676,7 +676,7 @@ struct FpsControl {
 
 	void reset();
 
-	void limit(IrrlichtDevice *device, f32 *dtime);
+	void limit(IrrlichtDevice *device, f64 *dtime);
 
 	u32 getBusyMs() const { return busy_time / 1000; }
 
@@ -717,7 +717,7 @@ struct GameRunData {
 	float update_draw_list_timer;
 	float touch_blocks_timer;
 
-	f32 fog_range;
+	f64 fog_range;
 
 	v3d update_draw_list_last_cam_dir;
 
@@ -778,17 +778,17 @@ protected:
 
 	// Main loop
 
-	void updateInteractTimers(f32 dtime);
+	void updateInteractTimers(f64 dtime);
 	bool checkConnection();
 	bool handleCallbacks();
 	void processQueues();
-	void updateProfilers(const RunStats &stats, const FpsControl &draw_times, f32 dtime);
+	void updateProfilers(const RunStats &stats, const FpsControl &draw_times, f64 dtime);
 	void updateDebugState();
-	void updateStats(RunStats *stats, const FpsControl &draw_times, f32 dtime);
+	void updateStats(RunStats *stats, const FpsControl &draw_times, f64 dtime);
 	void updateProfilerGraphs(ProfilerGraph *graph);
 
 	// Input related
-	void processUserInput(f32 dtime);
+	void processUserInput(f64 dtime);
 	void processKeyInput();
 	void processItemSelection(u16 *new_playeritem);
 
@@ -817,11 +817,11 @@ protected:
 	void updateCameraDirection(CameraOrientation *cam, float dtime);
 	void updateCameraOrientation(CameraOrientation *cam, float dtime);
 	void updatePlayerControl(const CameraOrientation &cam);
-	void step(f32 dtime);
+	void step(f64 dtime);
 	void processClientEvents(CameraOrientation *cam);
-	void updateCamera(f32 dtime);
-	void updateSound(f32 dtime);
-	void processPlayerInteraction(f32 dtime, bool show_hud);
+	void updateCamera(f64 dtime);
+	void updateSound(f64 dtime);
+	void processPlayerInteraction(f64 dtime, bool show_hud);
 	/*!
 	 * Returns the object or node the player is pointing at.
 	 * Also updates the selected thing in the Hud.
@@ -836,16 +836,16 @@ protected:
 	 * NULL if not found
 	 */
 	PointedThing updatePointedThing(
-			const core::line3d<f32> &shootline, bool liquids_pointable,
+			const core::line3d<f64> &shootline, bool liquids_pointable,
 			bool look_for_object, const v3s32 &camera_offset);
 	void handlePointingAtNothing(const ItemStack &playerItem);
 	void handlePointingAtNode(const PointedThing &pointed,
-			const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime);
+			const ItemStack &selected_item, const ItemStack &hand_item, f64 dtime);
 	void handlePointingAtObject(const PointedThing &pointed, const ItemStack &playeritem,
 			const v3d &player_position, bool show_debug);
 	void handleDigging(const PointedThing &pointed, const v3s32 &nodepos,
-			const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime);
-	void updateFrame(ProfilerGraph *graph, RunStats *stats, f32 dtime,
+			const ItemStack &selected_item, const ItemStack &hand_item, f64 dtime);
+	void updateFrame(ProfilerGraph *graph, RunStats *stats, f64 dtime,
 			const CameraOrientation &cam);
 	void updateShadows();
 
@@ -909,14 +909,14 @@ private:
 		CameraOrientation *cam);
 	void handleClientEvent_CloudParams(ClientEvent *event, CameraOrientation *cam);
 
-	void updateChat(f32 dtime);
+	void updateChat(f64 dtime);
 
 	bool nodePlacement(const ItemDefinition &selected_def, const ItemStack &selected_item,
 		const v3s32 &nodepos, const v3s32 &neighborpos, const PointedThing &pointed,
 		const NodeMetadata *meta);
 	static const ClientEventHandler clientEventHandler[CLIENTEVENT_MAX];
 
-	f32 getSensitivityScaleFactor() const;
+	f64 getSensitivityScaleFactor() const;
 
 	InputHandler *input = nullptr;
 
@@ -992,11 +992,11 @@ private:
 	bool m_cache_enable_fog;
 	bool m_cache_enable_noclip;
 	bool m_cache_enable_free_move;
-	f32  m_cache_mouse_sensitivity;
-	f32  m_cache_joystick_frustum_sensitivity;
-	f32  m_repeat_place_time;
-	f32  m_cache_cam_smoothing;
-	f32  m_cache_fog_start;
+	f64  m_cache_mouse_sensitivity;
+	f64  m_cache_joystick_frustum_sensitivity;
+	f64  m_repeat_place_time;
+	f64  m_cache_cam_smoothing;
+	f64  m_cache_fog_start;
 
 	bool m_invert_mouse = false;
 	bool m_first_loop_after_window_activation = false;
@@ -1176,7 +1176,7 @@ void Game::run()
 	CameraOrientation cam_view_target = {};
 	CameraOrientation cam_view = {};
 	FpsControl draw_times;
-	f32 dtime; // in seconds
+	f64 dtime; // in seconds
 
 	/* Clear the profiler */
 	Profiler::GraphValues dummyvalues;
@@ -1628,8 +1628,8 @@ bool Game::connectToServer(const GameStartData &start_data,
 		input->clear();
 
 		FpsControl fps_control;
-		f32 dtime;
-		f32 wait_time = 0; // in seconds
+		f64 dtime;
+		f64 wait_time = 0; // in seconds
 
 		fps_control.reset();
 
@@ -1691,7 +1691,7 @@ bool Game::getServerContent(bool *aborted)
 	input->clear();
 
 	FpsControl fps_control;
-	f32 dtime; // in seconds
+	f64 dtime; // in seconds
 
 	fps_control.reset();
 
@@ -1781,7 +1781,7 @@ bool Game::getServerContent(bool *aborted)
  ****************************************************************************/
 /****************************************************************************/
 
-inline void Game::updateInteractTimers(f32 dtime)
+inline void Game::updateInteractTimers(f64 dtime)
 {
 	if (runData.nodig_delay_timer >= 0)
 		runData.nodig_delay_timer -= dtime;
@@ -1876,7 +1876,7 @@ void Game::updateDebugState()
 }
 
 void Game::updateProfilers(const RunStats &stats, const FpsControl &draw_times,
-		f32 dtime)
+		f64 dtime)
 {
 	float profiler_print_interval =
 			g_settings->getFloat("profiler_print_interval");
@@ -1906,10 +1906,10 @@ void Game::updateProfilers(const RunStats &stats, const FpsControl &draw_times,
 }
 
 void Game::updateStats(RunStats *stats, const FpsControl &draw_times,
-		f32 dtime)
+		f64 dtime)
 {
 
-	f32 jitter;
+	f64 jitter;
 	Jitter *jp;
 
 	/* Time average and jitter calculation
@@ -1960,7 +1960,7 @@ void Game::updateStats(RunStats *stats, const FpsControl &draw_times,
  Input handling
  ****************************************************************************/
 
-void Game::processUserInput(f32 dtime)
+void Game::processUserInput(f64 dtime)
 {
 	// Reset input if window not active or some menu is active
 	if (!device->isWindowActive() || isMenuActive() || guienv->hasFocus(gui_chat_console)) {
@@ -2577,9 +2577,9 @@ void Game::updateCameraDirection(CameraOrientation *cam, float dtime)
 
 // Get the factor to multiply with sensitivity to get the same mouse/joystick
 // responsiveness independently of FOV.
-f32 Game::getSensitivityScaleFactor() const
+f64 Game::getSensitivityScaleFactor() const
 {
-	f32 fov_y = client->getCamera()->getFovY();
+	f64 fov_y = client->getCamera()->getFovY();
 
 	// Multiply by a constant such that it becomes 1.0 at 72 degree FOV and
 	// 16:9 aspect ratio to minimize disruption of existing sensitivity
@@ -2602,7 +2602,7 @@ void Game::updateCameraOrientation(CameraOrientation *cam, float dtime)
 			dist.Y = -dist.Y;
 		}
 
-		f32 sens_scale = getSensitivityScaleFactor();
+		f64 sens_scale = getSensitivityScaleFactor();
 		cam->camera_yaw   -= dist.X * m_cache_mouse_sensitivity * sens_scale;
 		cam->camera_pitch += dist.Y * m_cache_mouse_sensitivity * sens_scale;
 
@@ -2613,8 +2613,8 @@ void Game::updateCameraOrientation(CameraOrientation *cam, float dtime)
 #endif
 
 	if (m_cache_enable_joysticks) {
-		f32 sens_scale = getSensitivityScaleFactor();
-		f32 c = m_cache_joystick_frustum_sensitivity * dtime * sens_scale;
+		f64 sens_scale = getSensitivityScaleFactor();
+		f64 c = m_cache_joystick_frustum_sensitivity * dtime * sens_scale;
 		cam->camera_yaw -= input->joystick.getAxisWithoutDead(JA_FRUSTUM_HORIZONTAL) * c;
 		cam->camera_pitch += input->joystick.getAxisWithoutDead(JA_FRUSTUM_VERTICAL) * c;
 	}
@@ -2672,7 +2672,7 @@ void Game::updatePlayerControl(const CameraOrientation &cam)
 }
 
 
-inline void Game::step(f32 dtime)
+inline void Game::step(f64 dtime)
 {
 	if (server)
 		server->step(dtime);
@@ -2745,9 +2745,9 @@ void Game::handleClientEvent_PlayerDamage(ClientEvent *event, CameraOrientation 
 	if (client->getHP() > 0) {
 		LocalPlayer *player = client->getEnv().getLocalPlayer();
 
-		f32 hp_max = player->getCAO() ?
+		f64 hp_max = player->getCAO() ?
 			player->getCAO()->getProperties().hp_max : PLAYER_MAX_HP_DEFAULT;
-		f32 damage_ratio = event->player_damage.amount / hp_max;
+		f64 damage_ratio = event->player_damage.amount / hp_max;
 
 		runData.damage_flash += 95.0f + 64.f * damage_ratio;
 		runData.damage_flash = MYMIN(runData.damage_flash, 127.0f);
@@ -3044,7 +3044,7 @@ void Game::processClientEvents(CameraOrientation *cam)
 	}
 }
 
-void Game::updateChat(f32 dtime)
+void Game::updateChat(f64 dtime)
 {
 	// Get new messages from error log buffer
 	while (!m_chat_log_buf.empty())
@@ -3070,7 +3070,7 @@ void Game::updateChat(f32 dtime)
 	m_game_ui->updateChatSize();
 }
 
-void Game::updateCamera(f32 dtime)
+void Game::updateCamera(f64 dtime)
 {
 	LocalPlayer *player = client->getEnv().getLocalPlayer();
 
@@ -3117,7 +3117,7 @@ void Game::updateCamera(f32 dtime)
 	camera->update(player, dtime, tool_reload_ratio);
 	camera->step(dtime);
 
-	f32 camera_fov = camera->getFovMax();
+	f64 camera_fov = camera->getFovMax();
 	v3s32 camera_offset = camera->getOffset();
 
 	m_camera_offset_changed = (camera_offset != old_camera_offset);
@@ -3140,7 +3140,7 @@ void Game::updateCamera(f32 dtime)
 }
 
 
-void Game::updateSound(f32 dtime)
+void Game::updateSound(f64 dtime)
 {
 	// Update sound listener
 	v3s32 camera_offset = camera->getOffset();
@@ -3178,7 +3178,7 @@ void Game::updateSound(f32 dtime)
 }
 
 
-void Game::processPlayerInteraction(f32 dtime, bool show_hud)
+void Game::processPlayerInteraction(f64 dtime, bool show_hud)
 {
 	LocalPlayer *player = client->getEnv().getLocalPlayer();
 
@@ -3193,9 +3193,9 @@ void Game::processPlayerInteraction(f32 dtime, bool show_hud)
 	const ItemStack &tool_item = player->getWieldedItem(&selected_item, &hand_item);
 
 	const ItemDefinition &selected_def = selected_item.getDefinition(itemdef_manager);
-	f32 d = getToolRange(selected_def, hand_item.getDefinition(itemdef_manager));
+	f64 d = getToolRange(selected_def, hand_item.getDefinition(itemdef_manager));
 
-	core::line3d<f32> shootline;
+	core::line3d<f64> shootline;
 
 	switch (camera->getCameraMode()) {
 	case CAMERA_MODE_FIRST:
@@ -3331,7 +3331,7 @@ void Game::processPlayerInteraction(f32 dtime, bool show_hud)
 
 
 PointedThing Game::updatePointedThing(
-	const core::line3d<f32> &shootline,
+	const core::line3d<f64> &shootline,
 	bool liquids_pointable,
 	bool look_for_object,
 	const v3s32 &camera_offset)
@@ -3376,7 +3376,7 @@ PointedThing Game::updatePointedThing(
 		n.getSelectionBoxes(nodedef, &boxes,
 			n.getNeighbors(result.node_undersurface, &map));
 
-		f32 d = 0.002 * BS;
+		f64 d = 0.002 * BS;
 		for (std::vector<aabb3f>::const_iterator i = boxes.begin();
 			i != boxes.end(); ++i) {
 			aabb3f box = *i;
@@ -3438,7 +3438,7 @@ void Game::handlePointingAtNothing(const ItemStack &playerItem)
 
 
 void Game::handlePointingAtNode(const PointedThing &pointed,
-	const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime)
+	const ItemStack &selected_item, const ItemStack &hand_item, f64 dtime)
 {
 	v3s32 nodepos = pointed.node_undersurface;
 	v3s32 neighborpos = pointed.node_abovesurface;
@@ -3751,7 +3751,7 @@ void Game::handlePointingAtObject(const PointedThing &pointed,
 
 
 void Game::handleDigging(const PointedThing &pointed, const v3s32 &nodepos,
-		const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime)
+		const ItemStack &selected_item, const ItemStack &hand_item, f64 dtime)
 {
 	// See also: serverpackethandle.cpp, action == 2
 	LocalPlayer *player = client->getEnv().getLocalPlayer();
@@ -3880,7 +3880,7 @@ void Game::handleDigging(const PointedThing &pointed, const v3s32 &nodepos,
 	camera->setDigging(0);  // Dig animation
 }
 
-void Game::updateFrame(ProfilerGraph *graph, RunStats *stats, f32 dtime,
+void Game::updateFrame(ProfilerGraph *graph, RunStats *stats, f64 dtime,
 		const CameraOrientation &cam)
 {
 	TimeTaker tt_update("Game::updateFrame()");
@@ -4235,7 +4235,7 @@ void FpsControl::reset()
 /*
  * On some computers framerate doesn't seem to be automatically limited
  */
-void FpsControl::limit(IrrlichtDevice *device, f32 *dtime)
+void FpsControl::limit(IrrlichtDevice *device, f64 *dtime)
 {
 	const float fps_limit = (device->isWindowFocused() && !g_menumgr.pausesGame())
 			? g_settings->getFloat("fps_max")

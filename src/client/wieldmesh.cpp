@@ -43,7 +43,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 static scene::IMesh *createExtrusionMesh(int resolution_x, int resolution_y)
 {
-	const f32 r = 0.5;
+	const f64 r = 0.5;
 
 	scene::IMeshBuffer *buf = new scene::SMeshBuffer();
 	video::SColor c(255,255,255,255);
@@ -67,15 +67,15 @@ static scene::IMesh *createExtrusionMesh(int resolution_x, int resolution_y)
 		buf->append(vertices, 8, indices, 12);
 	}
 
-	f32 pixelsize_x = 1 / (f32) resolution_x;
-	f32 pixelsize_y = 1 / (f32) resolution_y;
+	f64 pixelsize_x = 1 / (f64) resolution_x;
+	f64 pixelsize_y = 1 / (f64) resolution_y;
 
 	for (int i = 0; i < resolution_x; ++i) {
-		f32 pixelpos_x = i * pixelsize_x - 0.5;
-		f32 x0 = pixelpos_x;
-		f32 x1 = pixelpos_x + pixelsize_x;
-		f32 tex0 = (i + 0.1) * pixelsize_x;
-		f32 tex1 = (i + 0.9) * pixelsize_x;
+		f64 pixelpos_x = i * pixelsize_x - 0.5;
+		f64 x0 = pixelpos_x;
+		f64 x1 = pixelpos_x + pixelsize_x;
+		f64 tex0 = (i + 0.1) * pixelsize_x;
+		f64 tex1 = (i + 0.9) * pixelsize_x;
 		video::S3DVertex vertices[8] = {
 			// x-
 			video::S3DVertex(x0,-r,-r, -1,0,0, c, tex0,1),
@@ -92,11 +92,11 @@ static scene::IMesh *createExtrusionMesh(int resolution_x, int resolution_y)
 		buf->append(vertices, 8, indices, 12);
 	}
 	for (int i = 0; i < resolution_y; ++i) {
-		f32 pixelpos_y = i * pixelsize_y - 0.5;
-		f32 y0 = -pixelpos_y - pixelsize_y;
-		f32 y1 = -pixelpos_y;
-		f32 tex0 = (i + 0.1) * pixelsize_y;
-		f32 tex1 = (i + 0.9) * pixelsize_y;
+		f64 pixelpos_y = i * pixelsize_y - 0.5;
+		f64 y0 = -pixelpos_y - pixelsize_y;
+		f64 y1 = -pixelpos_y;
+		f64 tex0 = (i + 0.1) * pixelsize_y;
+		f64 tex1 = (i + 0.9) * pixelsize_y;
 		video::S3DVertex vertices[8] = {
 			// y-
 			video::S3DVertex(-r,y0,-r, 0,-1,0, c, 0,tex0),

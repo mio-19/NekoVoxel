@@ -1181,7 +1181,7 @@ core::array<scene::ISceneNode*> CGUITTFont::addTextSceneNode(const wchar_t* text
 				// Now we copy planes corresponding to the letter size.
 				IMeshManipulator* mani = smgr->getMeshManipulator();
 				IMesh* meshcopy = mani->createMeshCopy(shared_plane_ptr_);
-				mani->scale(meshcopy, vector3df((f32)letter_size.Width, (f32)letter_size.Height, 1));
+				mani->scale(meshcopy, vector3df((f64)letter_size.Width, (f64)letter_size.Height, 1));
 
 				ISceneNode* current_node = smgr->addMeshSceneNode(meshcopy, parent, -1, current_pos);
 				meshcopy->drop();
@@ -1209,7 +1209,7 @@ core::array<scene::ISceneNode*> CGUITTFont::addTextSceneNode(const wchar_t* text
 		u32 n = glyph_indices[i];
 		SGUITTGlyph const& glyph = Glyphs[n-1];
 		ITexture* current_tex = Glyph_Pages[glyph.glyph_page]->texture;
-		f32 page_texture_size = (f32)current_tex->getSize().Width;
+		f64 page_texture_size = (f64)current_tex->getSize().Width;
 		//Now we calculate the UV position according to the texture size and the source rect.
 		//
 		//  2___3
@@ -1218,17 +1218,17 @@ core::array<scene::ISceneNode*> CGUITTFont::addTextSceneNode(const wchar_t* text
 		//  |/  |	<-- the texture coords of point 2 is (0,0, point 0 is (0, 1)
 		//  0---1
 		//
-		f32 u1 = glyph.source_rect.UpperLeftCorner.X / page_texture_size;
-		f32 u2 = u1 + (glyph.source_rect.getWidth() / page_texture_size);
-		f32 v1 = glyph.source_rect.UpperLeftCorner.Y / page_texture_size;
-		f32 v2 = v1 + (glyph.source_rect.getHeight() / page_texture_size);
+		f64 u1 = glyph.source_rect.UpperLeftCorner.X / page_texture_size;
+		f64 u2 = u1 + (glyph.source_rect.getWidth() / page_texture_size);
+		f64 v1 = glyph.source_rect.UpperLeftCorner.Y / page_texture_size;
+		f64 v2 = v1 + (glyph.source_rect.getHeight() / page_texture_size);
 
 		//we can be quite sure that this is IMeshSceneNode, because we just added them in the above loop.
 		IMeshSceneNode* node = static_cast<IMeshSceneNode*>(container[i]);
 
 		S3DVertex* pv = static_cast<S3DVertex*>(node->getMesh()->getMeshBuffer(0)->getVertices());
-		//pv[0].TCoords.Y = pv[1].TCoords.Y = (letter_size.Height - 1) / static_cast<f32>(letter_size.Height);
-		//pv[1].TCoords.X = pv[3].TCoords.X = (letter_size.Width - 1)  / static_cast<f32>(letter_size.Width);
+		//pv[0].TCoords.Y = pv[1].TCoords.Y = (letter_size.Height - 1) / static_cast<f64>(letter_size.Height);
+		//pv[1].TCoords.X = pv[3].TCoords.X = (letter_size.Width - 1)  / static_cast<f64>(letter_size.Width);
 		pv[0].TCoords = vector2df(u1, v2);
 		pv[1].TCoords = vector2df(u2, v2);
 		pv[2].TCoords = vector2df(u1, v1);

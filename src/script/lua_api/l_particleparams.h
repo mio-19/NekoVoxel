@@ -51,7 +51,7 @@ namespace LuaParticleParams
 	// these are unfortunately necessary as C++ intentionally disallows function template
 	// specialization and there's no way to make template overloads reliably resolve correctly
 	inline void readLuaValue(lua_State* L, f32Parameter& ret) { readNumericLuaValue(L, ret); }
-	inline void readLuaValue(lua_State* L, f32& ret)          { readNumericLuaValue(L, ret); }
+	inline void readLuaValue(lua_State* L, f64& ret)          { readNumericLuaValue(L, ret); }
 	inline void readLuaValue(lua_State* L, u16& ret)          { readNumericLuaValue(L, ret); }
 	inline void readLuaValue(lua_State* L, u8& ret)           { readNumericLuaValue(L, ret); }
 

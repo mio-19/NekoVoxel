@@ -1018,7 +1018,7 @@ void ServerEnvironment::activateBlock(MapBlock *block, u32 additional_dtime)
 	m_lbm_mgr.applyLBMs(this, block, stamp, (float)dtime_s);
 
 	// Run node timers
-	block->step((float)dtime_s, [&](v3s32 p, MapNode n, f32 d) -> bool {
+	block->step((float)dtime_s, [&](v3s32 p, MapNode n, f64 d) -> bool {
 		return m_script->node_on_timer(p, n, d);
 	});
 }
@@ -1449,7 +1449,7 @@ void ServerEnvironment::step(float dtime)
 					MOD_REASON_BLOCK_EXPIRED);
 
 			// Run node timers
-			block->step(dtime, [&](v3s32 p, MapNode n, f32 d) -> bool {
+			block->step(dtime, [&](v3s32 p, MapNode n, f64 d) -> bool {
 				return m_script->node_on_timer(p, n, d);
 			});
 		}
@@ -1672,8 +1672,8 @@ void ServerEnvironment::getAddedActiveObjects(PlayerSAO *playersao, s32 radius,
 	std::set<u16> &current_objects,
 	std::queue<u16> &added_objects)
 {
-	f32 radius_f = radius * BS;
-	f32 player_radius_f = player_radius * BS;
+	f64 radius_f = radius * BS;
+	f64 player_radius_f = player_radius * BS;
 
 	if (player_radius_f < 0.0f)
 		player_radius_f = 0.0f;
@@ -1691,8 +1691,8 @@ void ServerEnvironment::getRemovedActiveObjects(PlayerSAO *playersao, s32 radius
 	std::set<u16> &current_objects,
 	std::queue<u16> &removed_objects)
 {
-	f32 radius_f = radius * BS;
-	f32 player_radius_f = player_radius * BS;
+	f64 radius_f = radius * BS;
+	f64 player_radius_f = player_radius * BS;
 
 	if (player_radius_f < 0)
 		player_radius_f = 0;
@@ -1719,7 +1719,7 @@ void ServerEnvironment::getRemovedActiveObjects(PlayerSAO *playersao, s32 radius
 			continue;
 		}
 
-		f32 distance_f = object->getBasePosition().getDistanceFrom(playersao->getBasePosition());
+		f64 distance_f = object->getBasePosition().getDistanceFrom(playersao->getBasePosition());
 		if (object->getType() == ACTIVEOBJECT_TYPE_PLAYER) {
 			if (distance_f <= player_radius_f || player_radius_f == 0)
 				continue;
@@ -1765,7 +1765,7 @@ bool ServerEnvironment::getActiveObjectMessage(ActiveObjectMessage *dest)
 }
 
 void ServerEnvironment::getSelectedActiveObjects(
-	const core::line3d<f32> &shootline_on_map,
+	const core::line3d<f64> &shootline_on_map,
 	std::vector<PointedThing> &objects)
 {
 	std::vector<ServerActiveObject *> objs;

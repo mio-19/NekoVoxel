@@ -281,7 +281,7 @@ private:
 	/** internam data required for drawing clouds */
 	struct clouddata {
 		/** delta time since last cloud processing */
-		f32     dtime;
+		f64     dtime;
 		/** absolute time of last cloud processing */
 		u32     lasttime;
 		/** pointer to cloud class */

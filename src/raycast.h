@@ -37,11 +37,11 @@ public:
 	 * @param objects_pointable if false, only nodes will be found
 	 * @param liquids pointable if false, liquid nodes won't be found
 	 */
-	RaycastState(const core::line3d<f32> &shootline, bool objects_pointable,
+	RaycastState(const core::line3d<f64> &shootline, bool objects_pointable,
 		bool liquids_pointable);
 
 	//! Shootline of the raycast.
-	core::line3d<f32> m_shootline;
+	core::line3d<f64> m_shootline;
 	//! Iterator to store the progress of the raycast.
 	voxalgo::VoxelLineIterator m_iterator;
 	//! Previous tested node during the raycast.

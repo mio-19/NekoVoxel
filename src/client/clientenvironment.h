@@ -72,7 +72,7 @@ public:
 	Client *getGameDef() { return m_client; }
 	void setScript(ClientScripting *script) { m_script = script; }
 
-	void step(f32 dtime);
+	void step(f64 dtime);
 
 	virtual void setLocalPlayer(LocalPlayer *player);
 	LocalPlayer *getLocalPlayer() const { return m_local_player; }
@@ -119,7 +119,7 @@ public:
 	*/
 
 	// Get all nearby objects
-	void getActiveObjects(const v3d &origin, f32 max_d,
+	void getActiveObjects(const v3d &origin, f64 max_d,
 		std::vector<DistanceSortedActiveObject> &dest)
 	{
 		return m_ao_manager.getActiveObjects(origin, max_d, dest);
@@ -131,7 +131,7 @@ public:
 	ClientEnvEvent getClientEnvEvent();
 
 	virtual void getSelectedActiveObjects(
-		const core::line3d<f32> &shootline_on_map,
+		const core::line3d<f64> &shootline_on_map,
 		std::vector<PointedThing> &objects
 	);
 

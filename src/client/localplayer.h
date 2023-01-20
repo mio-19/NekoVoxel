@@ -62,13 +62,13 @@ public:
 	bool swimming_vertical = false;
 	bool swimming_pitch = false;
 
-	f32 gravity = 0; // total downwards acceleration
+	f64 gravity = 0; // total downwards acceleration
 
-	void move(f32 dtime, Environment *env, f32 pos_max_d);
-	void move(f32 dtime, Environment *env, f32 pos_max_d,
+	void move(f64 dtime, Environment *env, f64 pos_max_d);
+	void move(f64 dtime, Environment *env, f64 pos_max_d,
 			std::vector<CollisionInfo> *collision_info);
 	// Temporary option for old move code
-	void old_move(f32 dtime, Environment *env, f32 pos_max_d,
+	void old_move(f64 dtime, Environment *env, f64 pos_max_d,
 			std::vector<CollisionInfo> *collision_info);
 
 	void applyControl(float dtime, Environment *env);
@@ -117,11 +117,11 @@ public:
 
 	v3s32 getLightPosition() const;
 
-	void setYaw(f32 yaw) { m_yaw = yaw; }
-	f32 getYaw() const { return m_yaw; }
+	void setYaw(f64 yaw) { m_yaw = yaw; }
+	f64 getYaw() const { return m_yaw; }
 
-	void setPitch(f32 pitch) { m_pitch = pitch; }
-	f32 getPitch() const { return m_pitch; }
+	void setPitch(f64 pitch) { m_pitch = pitch; }
+	f64 getPitch() const { return m_pitch; }
 
 	inline void setPosition(const v3d &position)
 	{
@@ -156,14 +156,14 @@ public:
 	inline Lighting& getLighting() { return m_lighting; }
 
 private:
-	void accelerate(const v3d &target_speed, const f32 max_increase_H,
-		const f32 max_increase_V, const bool use_pitch);
+	void accelerate(const v3d &target_speed, const f64 max_increase_H,
+		const f64 max_increase_V, const bool use_pitch);
 	bool updateSneakNode(Map *map, const v3d &position, const v3d &sneak_max);
 	float getSlipFactor(Environment *env, const v3d &speedH);
-	void handleAutojump(f32 dtime, Environment *env,
+	void handleAutojump(f64 dtime, Environment *env,
 		const collisionMoveResult &result,
 		const v3d &position_before_move, const v3d &speed_before_move,
-		f32 pos_max_d);
+		f64 pos_max_d);
 
 	v3d m_position;
 	v3s32 m_standing_node;
@@ -179,7 +179,7 @@ private:
 
 	// ***** Variables for temporary option of the old move code *****
 	// Stores the max player uplift by m_sneak_node
-	f32 m_sneak_node_bb_ymax = 0.0f;
+	f64 m_sneak_node_bb_ymax = 0.0f;
 	// Whether recalculation of m_sneak_node and its top bbox is needed
 	bool m_need_to_get_new_sneak_node = true;
 	// Node below player, used to determine whether it has been removed,
@@ -191,8 +191,8 @@ private:
 	bool m_can_jump = false;
 	bool m_disable_jump = false;
 	u16 m_breath = PLAYER_MAX_BREATH_DEFAULT;
-	f32 m_yaw = 0.0f;
-	f32 m_pitch = 0.0f;
+	f64 m_yaw = 0.0f;
+	f64 m_pitch = 0.0f;
 	aabb3f m_collisionbox = aabb3f(-BS * 0.30f, 0.0f, -BS * 0.30f, BS * 0.30f,
 		BS * 1.75f, BS * 0.30f);
 	float m_eye_height = 1.625f;

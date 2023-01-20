@@ -88,7 +88,7 @@ const ChatLine& ChatBuffer::getLine(u32 index) const
 	return m_unformatted[index];
 }
 
-void ChatBuffer::step(f32 dtime)
+void ChatBuffer::step(f64 dtime)
 {
 	for (ChatLine &line : m_unformatted) {
 		line.age += dtime;
@@ -129,7 +129,7 @@ void ChatBuffer::deleteOldest(u32 count)
 		scrollAbsolute(m_scroll - del_formatted);
 }
 
-void ChatBuffer::deleteByAge(f32 maxAge)
+void ChatBuffer::deleteByAge(f64 maxAge)
 {
 	u32 count = 0;
 	while (count < m_unformatted.size() && m_unformatted[count].age > maxAge)

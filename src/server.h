@@ -314,7 +314,7 @@ public:
 	Address getPeerAddress(session_t peer_id);
 
 	void setLocalPlayerAnimations(RemotePlayer *player, v2s32 animation_frames[4],
-			f32 frame_speed);
+			f64 frame_speed);
 	void setPlayerEyeOffset(RemotePlayer *player, const v3d &first, const v3d &third);
 
 	void setSky(RemotePlayer *player, const SkyboxParams &params);
@@ -441,10 +441,10 @@ private:
 
 
 	virtual void SendChatMessage(session_t peer_id, const ChatMessage &message);
-	void SendTimeOfDay(session_t peer_id, u16 time, f32 time_speed);
+	void SendTimeOfDay(session_t peer_id, u16 time, f64 time_speed);
 
 	void SendLocalPlayerAnimations(session_t peer_id, v2s32 animation_frames[4],
-		f32 animation_speed);
+		f64 animation_speed);
 	void SendEyeOffset(session_t peer_id, v3d first, v3d third);
 	void SendPlayerPrivileges(session_t peer_id);
 	void SendPlayerInventoryFormspec(session_t peer_id);
@@ -521,7 +521,7 @@ private:
 	void HandlePlayerDeath(PlayerSAO* sao, const PlayerHPChangeReason &reason);
 	void DeleteClient(session_t peer_id, ClientDeletionReason reason);
 	void UpdateCrafting(RemotePlayer *player);
-	bool checkInteractDistance(RemotePlayer *player, const f32 d, const std::string &what);
+	bool checkInteractDistance(RemotePlayer *player, const f64 d, const std::string &what);
 
 	void handleChatInterfaceEvent(ChatEvent *evt);
 

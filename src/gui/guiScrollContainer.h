@@ -28,7 +28,7 @@ class GUIScrollContainer : public gui::IGUIElement
 public:
 	GUIScrollContainer(gui::IGUIEnvironment *env, gui::IGUIElement *parent, s32 id,
 			const core::rect<s32> &rectangle, const std::string &orientation,
-			f32 scrollfactor);
+			f64 scrollfactor);
 
 	virtual bool OnEvent(const SEvent &event) override;
 
@@ -56,7 +56,7 @@ private:
 
 	GUIScrollBar *m_scrollbar;
 	OrientationEnum m_orientation;
-	f32 m_scrollfactor;
+	f64 m_scrollfactor;
 
 	void updateScrolling();
 };

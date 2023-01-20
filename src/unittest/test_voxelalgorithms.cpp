@@ -50,19 +50,19 @@ void TestVoxelAlgorithms::testVoxelLineIterator()
 	// Test some lines
 	// Do not test lines that start or end on the border of
 	// two voxels as rounding errors can make the test fail!
-	std::vector<core::line3d<f32> > lines;
-	for (f32 x = -9.1; x < 9; x += 3.124) {
-	for (f32 y = -9.2; y < 9; y += 3.123) {
-	for (f32 z = -9.3; z < 9; z += 3.122) {
+	std::vector<core::line3d<f64> > lines;
+	for (f64 x = -9.1; x < 9; x += 3.124) {
+	for (f64 y = -9.2; y < 9; y += 3.123) {
+	for (f64 z = -9.3; z < 9; z += 3.122) {
 		lines.emplace_back(-x, -y, -z, x, y, z);
 	}
 	}
 	}
 	lines.emplace_back(0, 0, 0, 0, 0, 0);
 	// Test every line
-	std::vector<core::line3d<f32> >::iterator it = lines.begin();
+	std::vector<core::line3d<f64> >::iterator it = lines.begin();
 	for (; it < lines.end(); it++) {
-		core::line3d<f32> l = *it;
+		core::line3d<f64> l = *it;
 
 		// Initialize test
 		voxalgo::VoxelLineIterator iterator(l.start, l.getVector());
@@ -84,7 +84,7 @@ void TestVoxelAlgorithms::testVoxelLineIterator()
 			actual_nodecount++;
 			v3s32 new_voxel = iterator.m_current_node_pos;
 			// This must be a neighbor of the old voxel
-			UASSERTEQ(f32, (new_voxel - old_voxel).getLengthSQ(), 1);
+			UASSERTEQ(f64, (new_voxel - old_voxel).getLengthSQ(), 1);
 			// The line must intersect with the voxel
 			v3d voxel_center = intToFloat(iterator.m_current_node_pos, 1);
 			aabb3f box(voxel_center - v3d(0.5, 0.5, 0.5),

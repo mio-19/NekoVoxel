@@ -53,8 +53,8 @@ struct LightInfo {
 };
 
 struct LightFrame {
-	f32 lightsDay[8];
-	f32 lightsNight[8];
+	f64 lightsDay[8];
+	f64 lightsNight[8];
 	bool sunlight[8];
 };
 
@@ -100,9 +100,9 @@ public:
 
 // cuboid drawing!
 	void drawCuboid(const aabb3f &box, TileSpec *tiles, int tilecount,
-		const LightInfo *lights , const f32 *txc, u8 mask = 0);
-	void generateCuboidTextureCoords(aabb3f const &box, f32 *coords);
-	void drawAutoLightedCuboid(aabb3f box, const f32 *txc = NULL,
+		const LightInfo *lights , const f64 *txc, u8 mask = 0);
+	void generateCuboidTextureCoords(aabb3f const &box, f64 *coords);
+	void drawAutoLightedCuboid(aabb3f box, const f64 *txc = NULL,
 		TileSpec *tiles = NULL, int tile_count = 0, u8 mask = 0);
 	u8 getNodeBoxMask(aabb3f box, u8 solid_neighbors, u8 sametype_neighbors) const;
 
@@ -115,18 +115,18 @@ public:
 	content_t c_source;
 	video::SColor color_liquid_top;
 	struct NeighborData {
-		f32 level;
+		f64 level;
 		content_t content;
 		bool is_same_liquid;
 		bool top_is_same_liquid;
 	};
 	NeighborData liquid_neighbors[3][3];
-	f32 corner_levels[2][2];
+	f64 corner_levels[2][2];
 
 	void prepareLiquidNodeDrawing();
 	void getLiquidNeighborhood();
 	void calculateCornerLevels();
-	f32 getCornerLevel(int i, int k);
+	f64 getCornerLevel(int i, int k);
 	void drawLiquidSides();
 	void drawLiquidTop();
 	void drawLiquidBottom();

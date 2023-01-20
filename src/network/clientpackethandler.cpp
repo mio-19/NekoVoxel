@@ -542,9 +542,9 @@ void Client::handleCommand_Movement(NetworkPacket* pkt)
 
 void Client::handleCommand_Fov(NetworkPacket *pkt)
 {
-	f32 fov;
+	f64 fov;
 	bool is_multiplier = false;
-	f32 transition_time = 0.0f;
+	f64 transition_time = 0.0f;
 
 	*pkt >> fov >> is_multiplier;
 
@@ -607,7 +607,7 @@ void Client::handleCommand_MovePlayer(NetworkPacket* pkt)
 	assert(player != NULL);
 
 	v3d pos;
-	f32 pitch, yaw;
+	f64 pitch, yaw;
 
 	*pkt >> pos >> pitch >> yaw;
 
@@ -806,13 +806,13 @@ void Client::handleCommand_PlaySound(NetworkPacket* pkt)
 		[0] u32 server_id
 		[4] u16 name length
 		[6] char name[len]
-		[ 6 + len] f32 gain
+		[ 6 + len] f64 gain
 		[10 + len] u8 type
-		[11 + len] (f32 * 3) pos
+		[11 + len] (f64 * 3) pos
 		[23 + len] u16 object_id
 		[25 + len] bool loop
-		[26 + len] f32 fade
-		[30 + len] f32 pitch
+		[26 + len] f64 fade
+		[30 + len] f64 pitch
 		[34 + len] bool ephemeral
 	*/
 
@@ -1029,7 +1029,7 @@ void Client::handleCommand_AddParticleSpawner(NetworkPacket* pkt)
 		p.node_tile   = readU8(is);
 
 		// v >= 5.6.0
-		f32 tmp_sbias = readF32(is);
+		f64 tmp_sbias = readF32(is);
 		if (is.eof())
 			break;
 
@@ -1419,11 +1419,11 @@ void Client::handleCommand_HudSetStars(NetworkPacket *pkt)
 
 void Client::handleCommand_CloudParams(NetworkPacket* pkt)
 {
-	f32 density;
+	f64 density;
 	video::SColor color_bright;
 	video::SColor color_ambient;
-	f32 height;
-	f32 thickness;
+	f64 height;
+	f64 thickness;
 	v2f speed;
 
 	*pkt >> density >> color_bright >> color_ambient

@@ -42,8 +42,8 @@ struct SmoothTranslator
 	T val_old;
 	T val_current;
 	T val_target;
-	f32 anim_time = 0;
-	f32 anim_time_counter = 0;
+	f64 anim_time = 0;
+	f64 anim_time_counter = 0;
 	bool aim_is_end = true;
 
 	SmoothTranslator() = default;
@@ -53,17 +53,17 @@ struct SmoothTranslator
 	void update(T new_target, bool is_end_position = false,
 		float update_interval = -1);
 
-	void translate(f32 dtime);
+	void translate(f64 dtime);
 };
 
-struct SmoothTranslatorWrapped : SmoothTranslator<f32>
+struct SmoothTranslatorWrapped : SmoothTranslator<f64>
 {
-	void translate(f32 dtime);
+	void translate(f64 dtime);
 };
 
 struct SmoothTranslatorWrappedv3f : SmoothTranslator<v3d>
 {
-	void translate(f32 dtime);
+	void translate(f64 dtime);
 };
 
 class GenericCAO : public ClientActiveObject
@@ -194,7 +194,7 @@ public:
 		return &m_matrixnode->getAbsoluteTransformation();
 	}
 
-	inline f32 getStepHeight() const
+	inline f64 getStepHeight() const
 	{
 		return m_prop.stepheight;
 	}

@@ -322,11 +322,11 @@ bool Hud::calculateScreenPos(const v3s32 &camera_offset, HudElement *e, v2s32 *p
 	w_pos -= intToFloat(camera_offset, BS);
 	core::matrix4 trans = camera->getProjectionMatrix();
 	trans *= camera->getViewMatrix();
-	f32 transformed_pos[4] = { w_pos.X, w_pos.Y, w_pos.Z, 1.0f };
+	f64 transformed_pos[4] = { w_pos.X, w_pos.Y, w_pos.Z, 1.0f };
 	trans.multiplyWith1x4Matrix(transformed_pos);
 	if (transformed_pos[3] < 0)
 		return false;
-	f32 zDiv = transformed_pos[3] == 0.0f ? 1.0f :
+	f64 zDiv = transformed_pos[3] == 0.0f ? 1.0f :
 		core::reciprocal(transformed_pos[3]);
 	pos->X = m_screensize.X * (0.5 * transformed_pos[0] * zDiv + 0.5);
 	pos->Y = m_screensize.Y * (0.5 - transformed_pos[1] * zDiv * 0.5);
@@ -941,7 +941,7 @@ void Hud::updateSelectionMesh(const v3s32 &camera_offset)
 	// New pointed object, create new mesh.
 
 	// Texture UV coordinates for selection boxes
-	static f32 texture_uv[24] = {
+	static f64 texture_uv[24] = {
 		0,0,1,1,
 		0,0,1,1,
 		0,0,1,1,

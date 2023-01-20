@@ -298,8 +298,8 @@ u16 getSmoothLightTransparent(const v3s32 &p, const v3s32 &corner, MeshMakeData 
 }
 
 void get_sunlight_color(video::SColorf *sunlight, u32 daynight_ratio){
-	f32 rg = daynight_ratio / 1000.0f - 0.04f;
-	f32 b = (0.98f * daynight_ratio) / 1000.0f + 0.078f;
+	f64 rg = daynight_ratio / 1000.0f - 0.04f;
+	f64 b = (0.98f * daynight_ratio) / 1000.0f + 0.078f;
 	sunlight->r = rg;
 	sunlight->g = rg;
 	sunlight->b = b;
@@ -320,11 +320,11 @@ void final_color_blend(video::SColor *result,
 	static const video::SColorf artificialColor(1.04f, 1.04f, 1.04f);
 
 	video::SColorf c(data);
-	f32 n = 1 - c.a;
+	f64 n = 1 - c.a;
 
-	f32 r = c.r * (c.a * dayLight.r + n * artificialColor.r) * 2.0f;
-	f32 g = c.g * (c.a * dayLight.g + n * artificialColor.g) * 2.0f;
-	f32 b = c.b * (c.a * dayLight.b + n * artificialColor.b) * 2.0f;
+	f64 r = c.r * (c.a * dayLight.r + n * artificialColor.r) * 2.0f;
+	f64 g = c.g * (c.a * dayLight.g + n * artificialColor.g) * 2.0f;
+	f64 b = c.b * (c.a * dayLight.b + n * artificialColor.b) * 2.0f;
 
 	// Emphase blue a bit in darker places
 	// Each entry of this array represents a range of 8 blue levels
@@ -584,7 +584,7 @@ static void makeFastFace(const TileSpec &tile, u16 li0, u16 li1, u16 li2, u16 li
 		vpos += pos;
 	}
 
-	f32 abs_scale = 1.0f;
+	f64 abs_scale = 1.0f;
 	if      (scale.X < 0.999f || scale.X > 1.001f) abs_scale = scale.X;
 	else if (scale.Y < 0.999f || scale.Y > 1.001f) abs_scale = scale.Y;
 	else if (scale.Z < 0.999f || scale.Z > 1.001f) abs_scale = scale.Z;
@@ -604,10 +604,10 @@ static void makeFastFace(const TileSpec &tile, u16 li0, u16 li1, u16 li2, u16 li
 			< abs(day[1] - day[3]) + abs(night[1] - night[3]);
 
 	v2f32 f[4] = {
-		core::vector2d<f32>(x0 + w * abs_scale, y0 + h),
-		core::vector2d<f32>(x0, y0 + h),
-		core::vector2d<f32>(x0, y0),
-		core::vector2d<f32>(x0 + w * abs_scale, y0) };
+		core::vector2d<f64>(x0 + w * abs_scale, y0 + h),
+		core::vector2d<f64>(x0, y0 + h),
+		core::vector2d<f64>(x0, y0),
+		core::vector2d<f64>(x0 + w * abs_scale, y0) };
 
 	// equivalent to dest.push_back(FastFace()) but faster
 	dest.emplace_back();
@@ -923,7 +923,7 @@ static void updateFastFaceRow(
 				// Floating point conversion of the position vector
 				v3d pf(p_corrected.X, p_corrected.Y, p_corrected.Z);
 				// Center point of face (kind of)
-				v3d sp = pf - ((f32)continuous_tiles_count * 0.5f - 0.5f)
+				v3d sp = pf - ((f64)continuous_tiles_count * 0.5f - 0.5f)
 					* translate_dir_f;
 				v3d scale(1, 1, 1);
 

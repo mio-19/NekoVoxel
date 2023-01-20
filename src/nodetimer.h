@@ -38,15 +38,15 @@ public:
 	NodeTimer() = default;
 	NodeTimer(const v3s32 &position_):
 		position(position_) {}
-	NodeTimer(f32 timeout_, f32 elapsed_, v3s32 position_):
+	NodeTimer(f64 timeout_, f64 elapsed_, v3s32 position_):
 		timeout(timeout_), elapsed(elapsed_), position(position_) {}
 	~NodeTimer() = default;
 
 	void serialize(std::ostream &os) const;
 	void deSerialize(std::istream &is);
 
-	f32 timeout = 0.0f;
-	f32 elapsed = 0.0f;
+	f64 timeout = 0.0f;
+	f64 elapsed = 0.0f;
 	v3s32 position;
 };
 

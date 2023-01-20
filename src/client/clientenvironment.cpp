@@ -158,17 +158,17 @@ void ClientEnvironment::step(float dtime)
 	*/
 	bool is_climbing = lplayer->is_climbing;
 
-	f32 player_speed = lplayer->getSpeed().getLength();
+	f64 player_speed = lplayer->getSpeed().getLength();
 
 	/*
 		Maximum position increment
 	*/
-	//f32 position_max_increment = 0.05*BS;
-	f32 position_max_increment = 0.1*BS;
+	//f64 position_max_increment = 0.05*BS;
+	f64 position_max_increment = 0.1*BS;
 
 	// Maximum time increment (for collision detection etc)
 	// time = distance / speed
-	f32 dtime_max_increment = 1;
+	f64 dtime_max_increment = 1;
 	if(player_speed > 0.001)
 		dtime_max_increment = position_max_increment / player_speed;
 
@@ -185,7 +185,7 @@ void ClientEnvironment::step(float dtime)
 	*/
 
 	u32 steps = ceil(dtime / dtime_max_increment);
-	f32 dtime_part = dtime / steps;
+	f64 dtime_part = dtime / steps;
 	for (; steps > 0; --steps) {
 		/*
 			Local player handling
@@ -216,7 +216,7 @@ void ClientEnvironment::step(float dtime)
 				// How much the node's move_resistance blocks movement, ranges
 				// between 0 and 1. Should match the scale at which liquid_viscosity
 				// increase affects other liquid attributes.
-				static const f32 resistance_factor = 0.3f;
+				static const f64 resistance_factor = 0.3f;
 
 				v3d d_wanted;
 				bool in_liquid_stable = lplayer->in_liquid_stable || lplayer->in_liquid;
@@ -225,7 +225,7 @@ void ClientEnvironment::step(float dtime)
 				} else {
 					d_wanted = -speed / BS;
 				}
-				f32 dl = d_wanted.getLength();
+				f64 dl = d_wanted.getLength();
 				if (in_liquid_stable) {
 					if (dl > lplayer->movement_liquid_fluidity_smooth)
 						dl = lplayer->movement_liquid_fluidity_smooth;
@@ -250,7 +250,7 @@ void ClientEnvironment::step(float dtime)
 	}
 
 	bool player_immortal = false;
-	f32 player_fall_factor = 1.0f;
+	f64 player_fall_factor = 1.0f;
 	GenericCAO *playercao = lplayer->getCAO();
 	if (playercao) {
 		player_immortal = playercao->isImmortal();
@@ -269,22 +269,22 @@ void ClientEnvironment::step(float dtime)
 		// Get rid of other components
 		speed_diff.X = 0;
 		speed_diff.Z = 0;
-		f32 pre_factor = 1; // 1 hp per node/s
-		f32 tolerance = BS*14; // 5 without damage
+		f64 pre_factor = 1; // 1 hp per node/s
+		f64 tolerance = BS*14; // 5 without damage
 		if (info.type == COLLISION_NODE) {
 			const ContentFeatures &f = m_client->ndef()->
 				get(m_map->getNode(info.node_p));
 			// Determine fall damage modifier
 			int addp_n = itemgroup_get(f.groups, "fall_damage_add_percent");
 			// convert node group to an usable fall damage factor
-			f32 node_fall_factor = 1.0f + (float)addp_n / 100.0f;
+			f64 node_fall_factor = 1.0f + (float)addp_n / 100.0f;
 			// combine both player fall damage modifiers
 			pre_factor = node_fall_factor * player_fall_factor;
 		}
 		float speed = pre_factor * speed_diff.getLength();
 
 		if (speed > tolerance && !player_immortal && pre_factor > 0.0f) {
-			f32 damage_f = (speed - tolerance) / BS;
+			f64 damage_f = (speed - tolerance) / BS;
 			u16 damage = (u16)MYMIN(damage_f + 0.5, U16_MAX);
 			if (damage != 0) {
 				damageLocalPlayer(damage, true);
@@ -491,7 +491,7 @@ ClientEnvEvent ClientEnvironment::getClientEnvEvent()
 }
 
 void ClientEnvironment::getSelectedActiveObjects(
-	const core::line3d<f32> &shootline_on_map,
+	const core::line3d<f64> &shootline_on_map,
 	std::vector<PointedThing> &objects)
 {
 	std::vector<DistanceSortedActiveObject> allObjects;

@@ -81,7 +81,7 @@ struct ItemDefinition
 	SimpleSoundSpec sound_place;
 	SimpleSoundSpec sound_place_failed;
 	SimpleSoundSpec sound_use, sound_use_air;
-	f32 range;
+	f64 range;
 
 	// Client shall immediately place this node when player places the item.
 	// Server will update the precise end result a moment later.

@@ -42,17 +42,17 @@ public:
 	void OnSetConstants(video::IMaterialRendererServices *services,
 			s32 userData) override;
 
-	f32 MaxFar{2048.0f}, MapRes{1024.0f};
-	f32 PerspectiveBiasXY {0.9f}, PerspectiveBiasZ {0.5f};
+	f64 MaxFar{2048.0f}, MapRes{1024.0f};
+	f64 PerspectiveBiasXY {0.9f}, PerspectiveBiasZ {0.5f};
 	v3d CameraPos;
 
 private:
-	CachedVertexShaderSetting<f32, 16> m_light_mvp_setting;
-	CachedVertexShaderSetting<f32> m_map_resolution_setting;
-	CachedVertexShaderSetting<f32> m_max_far_setting;
+	CachedVertexShaderSetting<f64, 16> m_light_mvp_setting;
+	CachedVertexShaderSetting<f64> m_map_resolution_setting;
+	CachedVertexShaderSetting<f64> m_max_far_setting;
 	CachedPixelShaderSetting<s32> m_color_map_sampler_setting;
-	CachedVertexShaderSetting<f32> m_perspective_bias0;
-	CachedVertexShaderSetting<f32> m_perspective_bias1;
-	CachedVertexShaderSetting<f32> m_perspective_zbias;
-	CachedVertexShaderSetting<f32, 4> m_cam_pos_setting;
+	CachedVertexShaderSetting<f64> m_perspective_bias0;
+	CachedVertexShaderSetting<f64> m_perspective_bias1;
+	CachedVertexShaderSetting<f64> m_perspective_zbias;
+	CachedVertexShaderSetting<f64, 4> m_cam_pos_setting;
 };

@@ -149,7 +149,7 @@ public:
 	float getMovementDirection();
 	float getMovementSpeed();
 
-	f32 doubling_dtime;
+	f64 doubling_dtime;
 
 private:
 	void setLayoutFromControllerName(const std::string &name);
@@ -163,9 +163,9 @@ private:
 	std::bitset<KeyType::INTERNAL_ENUM_COUNT> m_keys_down;
 	std::bitset<KeyType::INTERNAL_ENUM_COUNT> m_keys_pressed;
 
-	f32 m_internal_time;
+	f64 m_internal_time;
 
-	f32 m_past_pressed_time[KeyType::INTERNAL_ENUM_COUNT];
+	f64 m_past_pressed_time[KeyType::INTERNAL_ENUM_COUNT];
 
 	std::bitset<KeyType::INTERNAL_ENUM_COUNT> m_past_keys_pressed;
 	std::bitset<KeyType::INTERNAL_ENUM_COUNT> m_keys_released;

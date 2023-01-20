@@ -218,7 +218,7 @@ void RemoteClient::GetNextBlocks (
 
 	// cos(angle between velocity and camera) * |velocity|
 	// Limit to 0.0f in case player moves backwards.
-	f32 dot = rangelim(camera_dir.dotProduct(playerspeed), 0.0f, 300.0f);
+	f64 dot = rangelim(camera_dir.dotProduct(playerspeed), 0.0f, 300.0f);
 
 	// Reduce the field of view when a player moves and looks forward.
 	// limit max fov effect to 50%, 60% at 20n/s fly speed
@@ -285,7 +285,7 @@ void RemoteClient::GetNextBlocks (
 				movement.
 				(0.1 is about 4 degrees)
 			*/
-			f32 dist;
+			f64 dist;
 			if (!(isBlockInSight(p, camera_pos, camera_dir, camera_fov,
 						d_blocks_in_sight, &dist) ||
 					(playerspeed.getLength() > 1.0f * BS &&

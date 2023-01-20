@@ -343,7 +343,7 @@ void GUIFormSpecMenu::parseScrollContainer(parserData *data, const std::string &
 	std::vector<std::string> v_geom = split(parts[1], ',');
 	std::string scrollbar_name = parts[2];
 	std::string orientation = parts[3];
-	f32 scroll_factor = 0.1f;
+	f64 scroll_factor = 0.1f;
 	if (parts.size() >= 5 && !parts[4].empty())
 		scroll_factor = stof(parts[4]);
 
@@ -478,8 +478,8 @@ void GUIFormSpecMenu::parseList(parserData *data, const std::string &element)
 
 	v2f32 slot_scale = style.getVector2f(StyleSpec::SIZE, v2f32(0, 0));
 	v2f32 slot_size(
-		slot_scale.X <= 0 ? imgsize.X : std::max<f32>(slot_scale.X * imgsize.X, 1),
-		slot_scale.Y <= 0 ? imgsize.Y : std::max<f32>(slot_scale.Y * imgsize.Y, 1)
+		slot_scale.X <= 0 ? imgsize.X : std::max<f64>(slot_scale.X * imgsize.X, 1),
+		slot_scale.Y <= 0 ? imgsize.Y : std::max<f64>(slot_scale.Y * imgsize.Y, 1)
 	);
 
 	v2f32 slot_spacing = style.getVector2f(StyleSpec::SPACING, v2f32(-1, -1));
@@ -3297,10 +3297,10 @@ void GUIFormSpecMenu::regenerateGui(v2u32 screensize)
 		}
 
 		DesiredRect = mydata.rect = core::rect<s32>(
-				(s32)((f32)mydata.screensize.X * mydata.offset.X) - (s32)(mydata.anchor.X * (f32)mydata.size.X) + offset.X,
-				(s32)((f32)mydata.screensize.Y * mydata.offset.Y) - (s32)(mydata.anchor.Y * (f32)mydata.size.Y) + offset.Y,
-				(s32)((f32)mydata.screensize.X * mydata.offset.X) + (s32)((1.0 - mydata.anchor.X) * (f32)mydata.size.X) + offset.X,
-				(s32)((f32)mydata.screensize.Y * mydata.offset.Y) + (s32)((1.0 - mydata.anchor.Y) * (f32)mydata.size.Y) + offset.Y
+				(s32)((f64)mydata.screensize.X * mydata.offset.X) - (s32)(mydata.anchor.X * (f64)mydata.size.X) + offset.X,
+				(s32)((f64)mydata.screensize.Y * mydata.offset.Y) - (s32)(mydata.anchor.Y * (f64)mydata.size.Y) + offset.Y,
+				(s32)((f64)mydata.screensize.X * mydata.offset.X) + (s32)((1.0 - mydata.anchor.X) * (f64)mydata.size.X) + offset.X,
+				(s32)((f64)mydata.screensize.Y * mydata.offset.Y) + (s32)((1.0 - mydata.anchor.Y) * (f64)mydata.size.Y) + offset.Y
 		);
 	} else {
 		// Non-size[] form must consist only of text fields and
@@ -3309,10 +3309,10 @@ void GUIFormSpecMenu::regenerateGui(v2u32 screensize)
 		m_font = g_fontengine->getFont();
 		m_btn_height = font_line_height(m_font) * 0.875;
 		DesiredRect = core::rect<s32>(
-			(s32)((f32)mydata.screensize.X * mydata.offset.X) - (s32)(mydata.anchor.X * 580.0),
-			(s32)((f32)mydata.screensize.Y * mydata.offset.Y) - (s32)(mydata.anchor.Y * 300.0),
-			(s32)((f32)mydata.screensize.X * mydata.offset.X) + (s32)((1.0 - mydata.anchor.X) * 580.0),
-			(s32)((f32)mydata.screensize.Y * mydata.offset.Y) + (s32)((1.0 - mydata.anchor.Y) * 300.0)
+			(s32)((f64)mydata.screensize.X * mydata.offset.X) - (s32)(mydata.anchor.X * 580.0),
+			(s32)((f64)mydata.screensize.Y * mydata.offset.Y) - (s32)(mydata.anchor.Y * 300.0),
+			(s32)((f64)mydata.screensize.X * mydata.offset.X) + (s32)((1.0 - mydata.anchor.X) * 580.0),
+			(s32)((f64)mydata.screensize.Y * mydata.offset.Y) + (s32)((1.0 - mydata.anchor.Y) * 300.0)
 		);
 	}
 	recalculateAbsolutePosition(false);
