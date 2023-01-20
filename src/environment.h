@@ -84,7 +84,7 @@ public:
 	 * \param p output, position of the first non-air node
 	 * the line intersects
 	 */
-	bool line_of_sight(v3f pos1, v3f pos2, v3s32 *p = nullptr);
+	bool line_of_sight(v3d pos1, v3d pos2, v3s32 *p = nullptr);
 
 	/*!
 	 * Gets the objects pointed by the shootline as

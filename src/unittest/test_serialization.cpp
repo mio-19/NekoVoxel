@@ -286,7 +286,7 @@ void TestSerialization::testStreamRead()
 	UASSERT(readV2S32(is) == v2s32(1920, 1080));
 	UASSERT(readV3S32(is) == v3s32(-400, 6400054, 290549855));
 
-	UASSERT(readV3F1000(is) == v3f(500, 10024.2f, -192.54f));
+	UASSERT(readV3F1000(is) == v3d(500, 10024.2f, -192.54f));
 	UASSERT(readARGB8(is) == video::SColor(255, 128, 50, 128));
 
 	UASSERT(deSerializeString32(is) == "some longer string here");
@@ -328,7 +328,7 @@ void TestSerialization::testStreamWrite()
 	writeV2S32(os, v2s32(1920, 1080));
 	writeV3S32(os, v3s32(-400, 6400054, 290549855));
 
-	writeV3F1000(os, v3f(500, 10024.2f, -192.54f));
+	writeV3F1000(os, v3d(500, 10024.2f, -192.54f));
 	writeARGB8(os, video::SColor(255, 128, 50, 128));
 
 	os << serializeString32("some longer string here");

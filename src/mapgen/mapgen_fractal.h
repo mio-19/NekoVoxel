@@ -46,8 +46,8 @@ struct MapgenFractalParams : public MapgenParams
 	s32 dungeon_ymax = 2100000000;
 	u16 fractal = 1;
 	u16 iterations = 11;
-	v3f scale = v3f(4096.0, 1024.0, 4096.0);
-	v3f offset = v3f(1.52, 0.0, 0.0);
+	v3d scale = v3d(4096.0, 1024.0, 4096.0);
+	v3d offset = v3d(1.52, 0.0, 0.0);
 	float slice_w = 0.0f;
 	float julia_x = 0.267f;
 	float julia_y = 0.2f;
@@ -87,8 +87,8 @@ private:
 	bool julia;
 	u16 fractal;
 	u16 iterations;
-	v3f scale;
-	v3f offset;
+	v3d scale;
+	v3d offset;
 	float slice_w;
 	float julia_x;
 	float julia_y;

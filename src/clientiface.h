@@ -375,7 +375,7 @@ private:
 	std::set<v3s32> m_blocks_sent;
 	s32 m_nearest_unsent_d = 0;
 	v3s32 m_last_center;
-	v3f m_last_camera_dir;
+	v3d m_last_camera_dir;
 
 	const u16 m_max_simul_sends;
 	const float m_min_time_from_building;

@@ -30,7 +30,7 @@ GUIScene::GUIScene(gui::IGUIEnvironment *env, scene::ISceneManager *smgr,
 	m_driver = env->getVideoDriver();
 	m_smgr = smgr->createNewSceneManager(false);
 
-	m_cam = m_smgr->addCameraSceneNode(0, v3f(0.f, 0.f, -100.f), v3f(0.f));
+	m_cam = m_smgr->addCameraSceneNode(0, v3d(0.f, 0.f, -100.f), v3d(0.f));
 	m_cam->setFOV(30.f * core::DEGTORAD);
 
 	m_smgr->getParameters()->setAttribute(scene::ALLOW_ZWRITE_ON_TRANSPARENT, true);
@@ -99,7 +99,7 @@ void GUIScene::draw()
 
 	if (!m_target) {
 		updateCamera(m_smgr->addEmptySceneNode());
-		rotateCamera(v3f(0.f));
+		rotateCamera(v3d(0.f));
 		m_cam->bindTargetAndRotation(true);
 	}
 
@@ -107,12 +107,12 @@ void GUIScene::draw()
 
 	// Continuous rotation
 	if (m_inf_rot)
-		rotateCamera(v3f(0.f, -0.03f * (float)dtime_ms, 0.f));
+		rotateCamera(v3d(0.f, -0.03f * (float)dtime_ms, 0.f));
 
 	m_smgr->drawAll();
 
 	if (m_initial_rotation && m_mesh) {
-		rotateCamera(v3f(m_custom_rot.X, m_custom_rot.Y, 0.f));
+		rotateCamera(v3d(m_custom_rot.X, m_custom_rot.Y, 0.f));
 		calcOptimalDistance();
 
 		m_initial_rotation = false;
@@ -131,7 +131,7 @@ bool GUIScene::OnEvent(const SEvent &event)
 			if (event.MouseInput.isLeftPressed()) {
 				m_curr_pos = v2f((f32)event.MouseInput.X, (f32)event.MouseInput.Y);
 
-				rotateCamera(v3f(
+				rotateCamera(v3d(
 					m_last_pos.Y - m_curr_pos.Y,
 					m_curr_pos.X - m_last_pos.X, 0.f));
 
@@ -217,14 +217,14 @@ void GUIScene::updateTargetPos()
 	m_target_pos = m_target->getAbsolutePosition();
 }
 
-void GUIScene::setCameraRotation(v3f rot)
+void GUIScene::setCameraRotation(v3d rot)
 {
 	correctBounds(rot);
 
 	core::matrix4 mat;
 	mat.setRotationDegrees(rot);
 
-	m_cam_pos = v3f(0.f, 0.f, m_cam_distance);
+	m_cam_pos = v3d(0.f, 0.f, m_cam_distance);
 	mat.rotateVect(m_cam_pos);
 
 	m_cam_pos += m_target_pos;
@@ -232,7 +232,7 @@ void GUIScene::setCameraRotation(v3f rot)
 	m_update_cam = false;
 }
 
-bool GUIScene::correctBounds(v3f &rot)
+bool GUIScene::correctBounds(v3d &rot)
 {
 	const float ROTATION_MAX_1 = 60.0f;
 	const float ROTATION_MAX_2 = 300.0f;
@@ -263,7 +263,7 @@ void GUIScene::cameraLoop()
 	if (m_update_cam) {
 		m_cam_pos = m_target_pos + (m_cam_pos - m_target_pos).normalize() * m_cam_distance;
 
-		v3f rot = getCameraRotation();
+		v3d rot = getCameraRotation();
 		if (correctBounds(rot))
 			setCameraRotation(rot);
 

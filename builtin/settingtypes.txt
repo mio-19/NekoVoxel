@@ -17,7 +17,7 @@
 #    - flags
 #    - noise_params_2d
 #    - noise_params_3d
-#    - v3f
+#    - v3d
 #
 # `type_args` can be:
 #   * int:
@@ -47,7 +47,7 @@
 #   * noise_params_3d:
 #            Format is <offset>, <scale>, (<spreadX>, <spreadY>, <spreadZ>), <seed>, <octaves>, <persistence>, <lacunarity>[, <default flags>]
 #            - default
-#   * v3f:
+#   * v3d:
 #            Format is (<X>, <Y>, <Z>)
 #            - default
 #
@@ -1382,7 +1382,7 @@ mgfractal_iterations (Iterations) int 11 1 65535
 #    Increase these to 'zoom' into the detail of the fractal.
 #    Default is for a vertically-squashed shape suitable for
 #    an island, set all 3 numbers equal for the raw shape.
-mgfractal_scale (Scale) v3f (4096.0, 1024.0, 4096.0)
+mgfractal_scale (Scale) v3d (4096.0, 1024.0, 4096.0)
 
 #    (X,Y,Z) offset of fractal from world center in units of 'scale'.
 #    Can be used to move a desired point to (0, 0) to create a
@@ -1392,7 +1392,7 @@ mgfractal_scale (Scale) v3f (4096.0, 1024.0, 4096.0)
 #    sets with default parameters, it may need altering in other
 #    situations.
 #    Range roughly -2 to 2. Multiply by 'scale' for offset in nodes.
-mgfractal_offset (Offset) v3f (1.79, 0.0, 0.0)
+mgfractal_offset (Offset) v3d (1.79, 0.0, 0.0)
 
 #    W coordinate of the generated 3D slice of a 4D fractal.
 #    Determines which 3D slice of the 4D shape is generated.

@@ -154,8 +154,8 @@ void NodeBox::deSerialize(std::istream &is)
 		count = readU16(is); \
 		(box).reserve(count); \
 		while (count--) { \
-			v3f min = readV3F32(is); \
-			v3f max = readV3F32(is); \
+			v3d min = readV3F32(is); \
+			v3d max = readV3F32(is); \
 			(box).emplace_back(min, max); }; }
 
 		u16 count;
@@ -1002,7 +1002,7 @@ void ContentFeatures::updateTextures(ITextureSource *tsrc, IShaderSource *shdsrc
 		// Read the mesh and apply scale
 		mesh_ptr[0] = client->getMesh(mesh);
 		if (mesh_ptr[0]){
-			v3f scale = v3f(1.0, 1.0, 1.0) * BS * visual_scale;
+			v3d scale = v3d(1.0, 1.0, 1.0) * BS * visual_scale;
 			scaleMesh(mesh_ptr[0], scale);
 			recalculateBoundingBox(mesh_ptr[0]);
 			meshmanip->recalculateNormals(mesh_ptr[0], true, false);

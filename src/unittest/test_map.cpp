@@ -57,16 +57,16 @@ void TestMap::testMaxMapgenLimit()
 
 	// objectpos_over_limit should do exactly this except the last node
 	// actually spans from LIMIT-0.5 to LIMIT+0.5
-	float limit_times_bs = MAX_MAP_GENERATION_LIMIT * BS;
-	UASSERT(objectpos_over_limit(v3f(limit_times_bs-BS/2)) == false);
-	UASSERT(objectpos_over_limit(v3f(limit_times_bs)) == false);
-	UASSERT(objectpos_over_limit(v3f(limit_times_bs+BS/2)) == false);
-	UASSERT(objectpos_over_limit(v3f(limit_times_bs+BS)) == true);
+	double limit_times_bs = MAX_MAP_GENERATION_LIMIT * BS;
+	UASSERT(objectpos_over_limit(v3d(limit_times_bs-BS/2)) == false);
+	UASSERT(objectpos_over_limit(v3d(limit_times_bs)) == false);
+	UASSERT(objectpos_over_limit(v3d(limit_times_bs+BS/2)) == false);
+	UASSERT(objectpos_over_limit(v3d(limit_times_bs+BS)) == true);
 
-	UASSERT(objectpos_over_limit(v3f(-limit_times_bs+BS/2)) == false);
-	UASSERT(objectpos_over_limit(v3f(-limit_times_bs)) == false);
-	UASSERT(objectpos_over_limit(v3f(-limit_times_bs-BS/2)) == false);
-	UASSERT(objectpos_over_limit(v3f(-limit_times_bs-BS)) == true);
+	UASSERT(objectpos_over_limit(v3d(-limit_times_bs+BS/2)) == false);
+	UASSERT(objectpos_over_limit(v3d(-limit_times_bs)) == false);
+	UASSERT(objectpos_over_limit(v3d(-limit_times_bs-BS/2)) == false);
+	UASSERT(objectpos_over_limit(v3d(-limit_times_bs-BS)) == true);
 
 	// blockpos_over_max_limit
 	s32 limit_block = MAX_MAP_GENERATION_LIMIT / MAP_BLOCKSIZE;

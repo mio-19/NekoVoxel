@@ -253,7 +253,7 @@ enum ToClientCommand
 	/*
 		Message from server to accept auth.
 
-		v3s32 player's position + v3f(0,BS/2,0) floatToInt'd
+		v3s32 player's position + v3d(0,BS/2,0) floatToInt'd
 		u64 map seed
 		f1000 recommended send interval
 		u32 : supported auth methods for sudo mode
@@ -312,7 +312,7 @@ enum ToClientCommand
 
 	TOCLIENT_PLAYER_SPEED = 0x2B,
 	/*
-		v3f added_vel
+		v3d added_vel
 	 */
 
 	TOCLIENT_MEDIA_PUSH = 0x2C,
@@ -514,9 +514,9 @@ enum ToClientCommand
 	TOCLIENT_SPAWN_PARTICLE = 0x46,
 	/*
 		-- struct range<T> { T min, T max, f32 bias };
-		v3f pos
-		v3f velocity
-		v3f acceleration
+		v3d pos
+		v3d velocity
+		v3d acceleration
 		f32 expirationtime
 		f32 size
 		u8 bool collisiondetection
@@ -527,8 +527,8 @@ enum ToClientCommand
 		TileAnimation animation
 		u8 glow
 		u8 object_collision
-		v3f drag
-		range<v3f> bounce
+		v3d drag
+		range<v3d> bounce
 	*/
 
 	TOCLIENT_ADD_PARTICLESPAWNER = 0x47,
@@ -537,12 +537,12 @@ enum ToClientCommand
 		-- struct tween<T> { T start, T end };
 		u16 amount
 		f32 spawntime
-		v3f minpos
-		v3f maxpos
-		v3f minvel
-		v3f maxvel
-		v3f minacc
-		v3f maxacc
+		v3d minpos
+		v3d maxpos
+		v3d minvel
+		v3d maxvel
+		v3d minacc
+		v3d maxacc
 		f32 minexptime
 		f32 maxexptime
 		f32 minsize
@@ -563,21 +563,21 @@ enum ToClientCommand
 		f32 exptime_start_bias
 		f32 size_start_bias
 
-		range<v3f> pos_end
-		-- i.e v3f pos_end_min
-		--     v3f pos_end_max
+		range<v3d> pos_end
+		-- i.e v3d pos_end_min
+		--     v3d pos_end_max
 		--     f32 pos_end_bias
-		range<v3f> vel_end
-		range<v3f> acc_end
+		range<v3d> vel_end
+		range<v3d> acc_end
 
-		tween<range<v3f>> drag
-		-- i.e. v3f drag_start_min
-		--      v3f drag_start_max
+		tween<range<v3d>> drag
+		-- i.e. v3d drag_start_min
+		--      v3d drag_start_max
 		--      f32 drag_start_bias
-		--      v3f drag_end_min
-		--      v3f drag_end_max
+		--      v3d drag_end_min
+		--      v3d drag_end_max
 		--      f32 drag_end_bias
-		tween<range<v3f>> jitter
+		tween<range<v3d>> jitter
 		tween<range<f32>> bounce
 
 		u8 attraction_kind
@@ -588,18 +588,18 @@ enum ToClientCommand
 
 		if attraction_kind > none {
 			tween<range<f32>> attract_strength
-			tween<v3f>        attractor_origin
+			tween<v3d>        attractor_origin
 			u16               attractor_origin_attachment_object_id
 			u8                spawner_flags
 			    bit 1: attractor_kill (particles dies on contact)
 			if attraction_mode > point {
-				tween<v3f> attractor_angle
+				tween<v3d> attractor_angle
 				u16        attractor_origin_attachment_object_id
 			}
 		}
 
-		tween<range<v3f>> radius
-		tween<range<v3f>> drag
+		tween<range<v3d>> radius
+		tween<range<v3d>> drag
 
 		u16 texpool_sz
 		texpool_sz.times {

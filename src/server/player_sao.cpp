@@ -27,7 +27,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 PlayerSAO::PlayerSAO(ServerEnvironment *env_, RemotePlayer *player_, session_t peer_id_,
 		bool is_singleplayer):
-	UnitSAO(env_, v3f(0,0,0)),
+	UnitSAO(env_, v3d(0,0,0)),
 	m_player(player_),
 	m_peer_id(peer_id_),
 	m_is_singleplayer(is_singleplayer)
@@ -42,7 +42,7 @@ PlayerSAO::PlayerSAO(ServerEnvironment *env_, RemotePlayer *player_, session_t p
 	m_prop.pointable = true;
 	// Start of default appearance, this should be overwritten by Lua
 	m_prop.visual = "upright_sprite";
-	m_prop.visual_size = v3f(1, 2, 1);
+	m_prop.visual_size = v3d(1, 2, 1);
 	m_prop.textures.clear();
 	m_prop.textures.emplace_back("player.png");
 	m_prop.textures.emplace_back("player_back.png");
@@ -72,9 +72,9 @@ void PlayerSAO::finalize(RemotePlayer *player, const std::set<std::string> &priv
 	m_privs = privs;
 }
 
-v3f PlayerSAO::getEyeOffset() const
+v3d PlayerSAO::getEyeOffset() const
 {
-	return v3f(0, BS * m_prop.eye_height, 0);
+	return v3d(0, BS * m_prop.eye_height, 0);
 }
 
 std::string PlayerSAO::getDescription()
@@ -192,7 +192,7 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 		// upwards in 1 node intervals, stopping below top damage point.
 		for (float dam_height = 0.1f; dam_height < dam_top; dam_height++) {
 			v3s32 p = floatToInt(m_base_position +
-				v3f(0.0f, dam_height * BS, 0.0f), BS);
+				v3d(0.0f, dam_height * BS, 0.0f), BS);
 			MapNode n = m_env->getMap().getNode(p);
 			const ContentFeatures &c = m_env->getGameDef()->ndef()->get(n);
 			if (c.damage_per_second > damage_per_second) {
@@ -203,7 +203,7 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 
 		// Top damage point
 		v3s32 ptop = floatToInt(m_base_position +
-			v3f(0.0f, dam_top * BS, 0.0f), BS);
+			v3d(0.0f, dam_top * BS, 0.0f), BS);
 		MapNode ntop = m_env->getMap().getNode(ptop);
 		const ContentFeatures &c = m_env->getGameDef()->ndef()->get(ntop);
 		if (c.damage_per_second > damage_per_second) {
@@ -259,12 +259,12 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 	// If the object gets detached this comes into effect automatically from
 	// the last known origin.
 	if (auto *parent = getParent()) {
-		v3f pos = parent->getBasePosition();
+		v3d pos = parent->getBasePosition();
 		m_last_good_position = pos;
 		setBasePosition(pos);
 
 		if (m_player)
-			m_player->setSpeed(v3f());
+			m_player->setSpeed(v3d());
 	}
 
 	if (!send_recommended)
@@ -273,7 +273,7 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 	if (m_position_not_sent) {
 		m_position_not_sent = false;
 		float update_interval = m_env->getSendRecommendedInterval();
-		v3f pos;
+		v3d pos;
 		// When attached, the position is only sent to clients where the
 		// parent isn't known
 		if (isAttached())
@@ -283,8 +283,8 @@ void PlayerSAO::step(float dtime, bool send_recommended)
 
 		std::string str = generateUpdatePositionCommand(
 			pos,
-			v3f(0.0f, 0.0f, 0.0f),
-			v3f(0.0f, 0.0f, 0.0f),
+			v3d(0.0f, 0.0f, 0.0f),
+			v3d(0.0f, 0.0f, 0.0f),
 			m_rotation,
 			true,
 			false,
@@ -325,7 +325,7 @@ std::string PlayerSAO::generateUpdatePhysicsOverrideCommand() const
 	return os.str();
 }
 
-void PlayerSAO::setBasePosition(v3f position)
+void PlayerSAO::setBasePosition(v3d position)
 {
 	if (m_player && position != m_base_position)
 		m_player->setDirty(true);
@@ -339,7 +339,7 @@ void PlayerSAO::setBasePosition(v3f position)
 	}
 }
 
-void PlayerSAO::setPos(const v3f &pos)
+void PlayerSAO::setPos(const v3d &pos)
 {
 	if(isAttached())
 		return;
@@ -356,7 +356,7 @@ void PlayerSAO::setPos(const v3f &pos)
 	m_env->getGameDef()->SendMovePlayer(m_peer_id);
 }
 
-void PlayerSAO::moveTo(v3f pos, bool continuous)
+void PlayerSAO::moveTo(v3d pos, bool continuous)
 {
 	if(isAttached())
 		return;
@@ -371,7 +371,7 @@ void PlayerSAO::moveTo(v3f pos, bool continuous)
 
 void PlayerSAO::setPlayerYaw(const float yaw)
 {
-	v3f rotation(0, yaw, 0);
+	v3d rotation(0, yaw, 0);
 	if (m_player && yaw != m_rotation.Y)
 		m_player->setDirty(true);
 
@@ -415,7 +415,7 @@ void PlayerSAO::setLookPitchAndSend(const float pitch)
 	m_env->getGameDef()->SendMovePlayer(m_peer_id);
 }
 
-u32 PlayerSAO::punch(v3f dir,
+u32 PlayerSAO::punch(v3d dir,
 	const ToolCapabilities *toolcap,
 	ServerActiveObject *puncher,
 	float time_from_last_punch,
@@ -562,7 +562,7 @@ std::string PlayerSAO::getPropertyPacket()
 	return generateSetPropertiesCommand(m_prop);
 }
 
-void PlayerSAO::setMaxSpeedOverride(const v3f &vel)
+void PlayerSAO::setMaxSpeedOverride(const v3d &vel)
 {
 	if (m_max_speed_override_time == 0.0f)
 		m_max_speed_override = vel;
@@ -625,7 +625,7 @@ bool PlayerSAO::checkMovementCheat()
 	if (player_max_jump < 0.0001f)
 		player_max_jump = 0.0001f;
 
-	v3f diff = (m_base_position - m_last_good_position);
+	v3d diff = (m_base_position - m_last_good_position);
 	float d_vert = diff.Y;
 	diff.Y = 0;
 	float d_horiz = diff.getLength();

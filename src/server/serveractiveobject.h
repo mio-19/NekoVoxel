@@ -55,7 +55,7 @@ public:
 		NOTE: m_env can be NULL, but step() isn't called if it is.
 		Prototypes are used that way.
 	*/
-	ServerActiveObject(ServerEnvironment *env, v3f pos);
+	ServerActiveObject(ServerEnvironment *env, v3d pos);
 	virtual ~ServerActiveObject() = default;
 
 	virtual ActiveObjectType getSendType() const
@@ -76,24 +76,24 @@ public:
 
 	// Create a certain type of ServerActiveObject
 	static ServerActiveObject* create(ActiveObjectType type,
-			ServerEnvironment *env, u16 id, v3f pos,
+			ServerEnvironment *env, u16 id, v3d pos,
 			const std::string &data);
 
 	/*
 		Some simple getters/setters
 	*/
-	v3f getBasePosition() const { return m_base_position; }
-	void setBasePosition(v3f pos){ m_base_position = pos; }
+	v3d getBasePosition() const { return m_base_position; }
+	void setBasePosition(v3d pos){ m_base_position = pos; }
 	ServerEnvironment* getEnv(){ return m_env; }
 
 	/*
 		Some more dynamic interface
 	*/
 
-	virtual void setPos(const v3f &pos)
+	virtual void setPos(const v3d &pos)
 		{ setBasePosition(pos); }
 	// continuous: if true, object does not stop immediately at pos
-	virtual void moveTo(v3f pos, bool continuous)
+	virtual void moveTo(v3d pos, bool continuous)
 		{ setBasePosition(pos); }
 	// If object has moved less than this and data has not changed,
 	// saving to disk may be omitted
@@ -146,7 +146,7 @@ public:
 	{ return true; }
 
 	// Returns added tool wear
-	virtual u32 punch(v3f dir,
+	virtual u32 punch(v3d dir,
 			const ToolCapabilities *toolcap = nullptr,
 			ServerActiveObject *puncher = nullptr,
 			float time_from_last_punch = 1000000.0f,
@@ -169,9 +169,9 @@ public:
 	{}
 	virtual void setAnimationSpeed(float frame_speed)
 	{}
-	virtual void setBonePosition(const std::string &bone, v3f position, v3f rotation)
+	virtual void setBonePosition(const std::string &bone, v3d position, v3d rotation)
 	{}
-	virtual void getBonePosition(const std::string &bone, v3f *position, v3f *lotation)
+	virtual void getBonePosition(const std::string &bone, v3d *position, v3d *lotation)
 	{}
 	virtual const std::unordered_set<int> &getAttachmentChildIds() const
 	{ static std::unordered_set<int> rv; return rv; }
@@ -243,7 +243,7 @@ protected:
 	virtual void onDetach(int parent_id) {}
 
 	ServerEnvironment *m_env;
-	v3f m_base_position;
+	v3d m_base_position;
 	std::unordered_set<u32> m_attached_particle_spawners;
 
 	/*

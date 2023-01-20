@@ -354,10 +354,10 @@ void GUIEngine::cloudInit()
 {
 	m_cloud.clouds = new Clouds(m_smgr, -1, rand());
 	m_cloud.clouds->setHeight(100.0f);
-	m_cloud.clouds->update(v3f(0, 0, 0), video::SColor(255,240,240,255));
+	m_cloud.clouds->update(v3d(0, 0, 0), video::SColor(255,240,240,255));
 
 	m_cloud.camera = m_smgr->addCameraSceneNode(0,
-				v3f(0,0,0), v3f(0, 60, 100));
+				v3d(0,0,0), v3d(0, 60, 100));
 	m_cloud.camera->setFarValue(10000);
 
 	m_cloud.lasttime = m_rendering_engine->get_timer_time();

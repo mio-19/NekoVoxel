@@ -437,7 +437,7 @@ void PlayerDatabaseSQLite3::savePlayer(RemotePlayer *player)
 	PlayerSAO* sao = player->getPlayerSAO();
 	sanity_check(sao);
 
-	const v3f &pos = sao->getBasePosition();
+	const v3d &pos = sao->getBasePosition();
 	// Begin save in brace is mandatory
 	if (!playerDataExists(player->getName())) {
 		beginSave();

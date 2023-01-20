@@ -123,7 +123,7 @@ ClientMap::~ClientMap()
 	g_settings->deregisterChangedCallback("enable_raytraced_culling", on_settings_changed, this);
 }
 
-void ClientMap::updateCamera(v3f pos, v3f dir, f32 fov, v3s32 offset)
+void ClientMap::updateCamera(v3d pos, v3d dir, f32 fov, v3s32 offset)
 {
 	v3s32 previous_node = floatToInt(m_camera_position, BS) + m_camera_offset;
 	v3s32 previous_block = getContainerPos(previous_node, MAP_BLOCKSIZE);
@@ -331,7 +331,7 @@ void ClientMap::updateDrawList()
 
 
 			// Calculate the coordinates for range and frutum culling
-			v3f mesh_sphere_center;
+			v3d mesh_sphere_center;
 			f32 mesh_sphere_radius;
 
 			v3s32 block_pos_nodes = block_coord * MAP_BLOCKSIZE;
@@ -342,7 +342,7 @@ void ClientMap::updateDrawList()
 				mesh_sphere_radius = mesh->getBoundingRadius();
 			}
 			else {
-				mesh_sphere_center = intToFloat(block_pos_nodes, BS) + v3f((MAP_BLOCKSIZE * 0.5f - 0.5f) * BS);
+				mesh_sphere_center = intToFloat(block_pos_nodes, BS) + v3d((MAP_BLOCKSIZE * 0.5f - 0.5f) * BS);
 				mesh_sphere_radius = 0.0f;
 			}
 
@@ -559,7 +559,7 @@ void ClientMap::updateDrawList()
 				}
 
 				v3s32 block_coord = block->getPos();
-				v3f mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
+				v3d mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
 						+ block->mesh->getBoundingSphereCenter();
 				f32 mesh_sphere_radius = block->mesh->getBoundingRadius();
 				// First, perform a simple distance check.
@@ -649,7 +649,7 @@ void ClientMap::touchMapBlocks()
 				continue;
 			}
 
-			v3f mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
+			v3d mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
 					+ block->mesh->getBoundingSphereCenter();
 			f32 mesh_sphere_radius = block->mesh->getBoundingRadius();
 			// First, perform a simple distance check.
@@ -690,7 +690,7 @@ void ClientMap::renderMap(video::IVideoDriver* driver, s32 pass)
 	const int crack = m_client->getCrackLevel();
 	const u32 daynight_ratio = m_client->getEnv().getDayNightRatio();
 
-	const v3f camera_position = m_camera_position;
+	const v3d camera_position = m_camera_position;
 
 	/*
 		Get all blocks and draw all visible ones
@@ -730,13 +730,13 @@ void ClientMap::renderMap(video::IVideoDriver* driver, s32 pass)
 
 		// Do exact frustum culling
 		// (The one in updateDrawList is only coarse.)
-		v3f mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
+		v3d mesh_sphere_center = intToFloat(block->getPosRelative(), BS)
 				+ block_mesh->getBoundingSphereCenter();
 		f32 mesh_sphere_radius = block_mesh->getBoundingRadius();
 		if (is_frustum_culled(mesh_sphere_center, mesh_sphere_radius))
 			continue;
 
-		v3f block_pos_r = intToFloat(block->getPosRelative() + MAP_BLOCKSIZE / 2, BS);
+		v3d block_pos_r = intToFloat(block->getPosRelative() + MAP_BLOCKSIZE / 2, BS);
 
 		float d = camera_position.getDistanceFrom(block_pos_r);
 		d = MYMAX(0,d - BLOCK_MAX_RADIUS);
@@ -806,7 +806,7 @@ void ClientMap::renderMap(video::IVideoDriver* driver, s32 pass)
 	TimeTaker draw("Drawing mesh buffers");
 
 	core::matrix4 m; // Model matrix
-	v3f offset = intToFloat(m_camera_offset, BS);
+	v3d offset = intToFloat(m_camera_offset, BS);
 	u32 material_swaps = 0;
 
 	// Render all mesh buffers in order
@@ -847,7 +847,7 @@ void ClientMap::renderMap(video::IVideoDriver* driver, s32 pass)
 			material.TextureLayer[ShadowRenderer::TEXTURE_LAYER_SHADOW].Texture = nullptr;
 		}
 
-		v3f block_wpos = intToFloat(descriptor.m_pos * MAP_BLOCKSIZE, BS);
+		v3d block_wpos = intToFloat(descriptor.m_pos * MAP_BLOCKSIZE, BS);
 		m.setTranslation(block_wpos - offset);
 
 		driver->setTransform(video::ETS_WORLD, m);
@@ -871,7 +871,7 @@ void ClientMap::renderMap(video::IVideoDriver* driver, s32 pass)
 	g_profiler->avg(prefix + "material swaps [#]", material_swaps);
 }
 
-static bool getVisibleBrightness(Map *map, const v3f &p0, v3f dir, float step,
+static bool getVisibleBrightness(Map *map, const v3d &p0, v3d dir, float step,
 	float step_multiplier, float start_distance, float end_distance,
 	const NodeDefManager *ndef, u32 daylight_factor, float sunlight_min_d,
 	int *result, bool *sunlight_seen)
@@ -880,7 +880,7 @@ static bool getVisibleBrightness(Map *map, const v3f &p0, v3f dir, float step,
 	int brightness_count = 0;
 	float distance = start_distance;
 	dir.normalize();
-	v3f pf = p0;
+	v3d pf = p0;
 	pf += dir * distance;
 	int noncount = 0;
 	bool nonlight_seen = false;
@@ -946,8 +946,8 @@ int ClientMap::getBackgroundBrightness(float max_d, u32 daylight_factor,
 		int oldvalue, bool *sunlight_seen_result)
 {
 	ScopeProfiler sp(g_profiler, "CM::getBackgroundBrightness", SPT_AVG);
-	static v3f z_directions[50] = {
-		v3f(-100, 0, 0)
+	static v3d z_directions[50] = {
+		v3d(-100, 0, 0)
 	};
 	static f32 z_offsets[50] = {
 		-1000,
@@ -956,7 +956,7 @@ int ClientMap::getBackgroundBrightness(float max_d, u32 daylight_factor,
 	if (z_directions[0].X < -99) {
 		for (u32 i = 0; i < ARRLEN(z_directions); i++) {
 			// Assumes FOV of 72 and 16/9 aspect ratio
-			z_directions[i] = v3f(
+			z_directions[i] = v3d(
 				0.02 * myrand_range(-100, 100),
 				1.0,
 				0.01 * myrand_range(-100, 100)
@@ -972,10 +972,10 @@ int ClientMap::getBackgroundBrightness(float max_d, u32 daylight_factor,
 	std::vector<int> values;
 	values.reserve(ARRLEN(z_directions));
 	for (u32 i = 0; i < ARRLEN(z_directions); i++) {
-		v3f z_dir = z_directions[i];
+		v3d z_dir = z_directions[i];
 		core::CMatrix4<f32> a;
-		a.buildRotateFromTo(v3f(0,1,0), z_dir);
-		v3f dir = m_camera_direction;
+		a.buildRotateFromTo(v3d(0,1,0), z_dir);
+		v3d dir = m_camera_direction;
 		a.rotateVect(dir);
 		int br = 0;
 		float step = BS*1.5;
@@ -1152,7 +1152,7 @@ void ClientMap::renderMapShadows(video::IVideoDriver *driver,
 	TimeTaker draw("Drawing shadow mesh buffers");
 
 	core::matrix4 m; // Model matrix
-	v3f offset = intToFloat(m_camera_offset, BS);
+	v3d offset = intToFloat(m_camera_offset, BS);
 	u32 material_swaps = 0;
 
 	// Render all mesh buffers in order
@@ -1173,7 +1173,7 @@ void ClientMap::renderMapShadows(video::IVideoDriver *driver,
 			++material_swaps;
 		}
 
-		v3f block_wpos = intToFloat(descriptor.m_pos * MAP_BLOCKSIZE, BS);
+		v3d block_wpos = intToFloat(descriptor.m_pos * MAP_BLOCKSIZE, BS);
 		m.setTranslation(block_wpos - offset);
 
 		driver->setTransform(video::ETS_WORLD, m);
@@ -1185,7 +1185,7 @@ void ClientMap::renderMapShadows(video::IVideoDriver *driver,
 	video::SMaterial clean;
 	clean.BlendOperation = video::EBO_ADD;
 	driver->setMaterial(clean); // reset material to defaults
-	driver->draw3DLine(v3f(), v3f(), video::SColor(0));
+	driver->draw3DLine(v3d(), v3d(), video::SColor(0));
 
 	g_profiler->avg(prefix + "draw meshes [ms]", draw.stop(true));
 	g_profiler->avg(prefix + "vertices drawn [#]", vertex_count);
@@ -1196,7 +1196,7 @@ void ClientMap::renderMapShadows(video::IVideoDriver *driver,
 /*
 	Custom update draw list for the pov of shadow light.
 */
-void ClientMap::updateDrawListShadow(v3f shadow_light_pos, v3f shadow_light_dir, float radius, float length)
+void ClientMap::updateDrawListShadow(v3d shadow_light_pos, v3d shadow_light_dir, float radius, float length)
 {
 	ScopeProfiler sp(g_profiler, "CM::updateDrawListShadow()", SPT_AVG);
 
@@ -1236,8 +1236,8 @@ void ClientMap::updateDrawListShadow(v3f shadow_light_pos, v3f shadow_light_dir,
 				continue;
 			}
 
-			v3f block_pos = intToFloat(block->getPos() * MAP_BLOCKSIZE, BS);
-			v3f projection = shadow_light_pos + shadow_light_dir * shadow_light_dir.dotProduct(block_pos - shadow_light_pos);
+			v3d block_pos = intToFloat(block->getPos() * MAP_BLOCKSIZE, BS);
+			v3d projection = shadow_light_pos + shadow_light_dir * shadow_light_dir.dotProduct(block_pos - shadow_light_pos);
 			if (projection.getDistanceFrom(block_pos) > radius)
 				continue;
 
@@ -1278,7 +1278,7 @@ void ClientMap::updateTransparentMeshBuffers()
 				block->mesh->getTransparentBuffers().size() == 0) {
 
 			v3s32 block_pos = block->getPos();
-			v3f block_pos_f = intToFloat(block_pos * MAP_BLOCKSIZE + MAP_BLOCKSIZE / 2, BS);
+			v3d block_pos_f = intToFloat(block_pos * MAP_BLOCKSIZE + MAP_BLOCKSIZE / 2, BS);
 			f32 distance = m_camera_position.getDistanceFromSQ(block_pos_f);
 			if (distance <= sorting_distance_sq) {
 				block->mesh->updateTransparentBuffers(m_camera_position, block_pos);

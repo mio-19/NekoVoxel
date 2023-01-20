@@ -27,9 +27,9 @@ class LuaEntitySAO : public UnitSAO
 public:
 	LuaEntitySAO() = delete;
 	// Used by the environment to load SAO
-	LuaEntitySAO(ServerEnvironment *env, v3f pos, const std::string &data);
+	LuaEntitySAO(ServerEnvironment *env, v3d pos, const std::string &data);
 	// Used by the Lua API
-	LuaEntitySAO(ServerEnvironment *env, v3f pos, const std::string &name,
+	LuaEntitySAO(ServerEnvironment *env, v3d pos, const std::string &name,
 			const std::string &state) :
 			UnitSAO(env, pos),
 			m_init_name(name), m_init_state(state)
@@ -47,15 +47,15 @@ public:
 	bool shouldUnload() const { return true; }
 	void getStaticData(std::string *result) const;
 
-	u32 punch(v3f dir, const ToolCapabilities *toolcap = nullptr,
+	u32 punch(v3d dir, const ToolCapabilities *toolcap = nullptr,
 			ServerActiveObject *puncher = nullptr,
 			float time_from_last_punch = 1000000.0f,
 			u16 initial_wear = 0);
 
 	void rightClick(ServerActiveObject *clicker);
 
-	void setPos(const v3f &pos);
-	void moveTo(v3f pos, bool continuous);
+	void setPos(const v3d &pos);
+	void moveTo(v3d pos, bool continuous);
 	float getMinimumSavedMovement();
 
 	std::string getDescription();
@@ -64,11 +64,11 @@ public:
 	u16 getHP() const;
 
 	/* LuaEntitySAO-specific */
-	void setVelocity(v3f velocity);
-	void addVelocity(v3f velocity) { m_velocity += velocity; }
-	v3f getVelocity();
-	void setAcceleration(v3f acceleration);
-	v3f getAcceleration();
+	void setVelocity(v3d velocity);
+	void addVelocity(v3d velocity) { m_velocity += velocity; }
+	v3d getVelocity();
+	void setAcceleration(v3d acceleration);
+	v3d getAcceleration();
 
 	void setTextureMod(const std::string &mod);
 	std::string getTextureMod() const;
@@ -95,12 +95,12 @@ private:
 	std::string m_init_state;
 	bool m_registered = false;
 
-	v3f m_velocity;
-	v3f m_acceleration;
+	v3d m_velocity;
+	v3d m_acceleration;
 
-	v3f m_last_sent_position;
-	v3f m_last_sent_velocity;
-	v3f m_last_sent_rotation;
+	v3d m_last_sent_position;
+	v3d m_last_sent_velocity;
+	v3d m_last_sent_rotation;
 	float m_last_sent_position_timer = 0.0f;
 	float m_last_sent_move_precision = 0.0f;
 	std::string m_current_texture_modifier = "";

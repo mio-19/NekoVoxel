@@ -120,7 +120,7 @@ local function parse_setting_line(settings, line, read_all, base_level, allow_se
 	end
 
 	if setting_type == "string"
-			or setting_type == "key" or setting_type == "v3f" then
+			or setting_type == "key" or setting_type == "v3d" then
 		local default = remaining_line:match("^(.*)$")
 
 		if not default then
@@ -686,24 +686,24 @@ local function create_change_setting_formspec(dialogdata)
 				.. tostring(flags["absvalue"] == true) .. "]"
 		height = height + 1
 
-	elseif setting.type == "v3f" then
+	elseif setting.type == "v3d" then
 		local val = get_current_value(setting)
-		local v3f = {}
+		local v3d = {}
 		for line in val:gmatch("[+-]?[%d.+-eE]+") do -- All numeric characters
-			table.insert(v3f, line)
+			table.insert(v3d, line)
 		end
 
 		height = height + 0.3
 		formspec = formspec
 				.. "field[0.3," .. height .. ";3.3,1;te_x;"
 				.. fgettext("X") .. ";" -- X
-				.. core.formspec_escape(v3f[1] or "") .. "]"
+				.. core.formspec_escape(v3d[1] or "") .. "]"
 				.. "field[3.6," .. height .. ";3.3,1;te_y;"
 				.. fgettext("Y") .. ";" -- Y
-				.. core.formspec_escape(v3f[2] or "") .. "]"
+				.. core.formspec_escape(v3d[2] or "") .. "]"
 				.. "field[6.9," .. height .. ";3.3,1;te_z;"
 				.. fgettext("Z") .. ";" -- Z
-				.. core.formspec_escape(v3f[3] or "") .. "]"
+				.. core.formspec_escape(v3d[3] or "") .. "]"
 		height = height + 1.1
 
 	elseif setting.type == "flags" then
@@ -921,7 +921,7 @@ local function handle_change_setting_buttons(this, fields)
 			}
 			core.settings:set_np_group(setting.name, new_value)
 
-		elseif setting.type == "v3f" then
+		elseif setting.type == "v3d" then
 			local new_value = "("
 					.. fields["te_x"] .. ", "
 					.. fields["te_y"] .. ", "

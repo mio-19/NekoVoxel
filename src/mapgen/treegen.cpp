@@ -173,13 +173,13 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 
 	//initialize rotation matrix, position and stacks for branches
 	core::matrix4 rotation;
-	rotation = setRotationAxisRadians(rotation, M_PI / 2, v3f(0, 0, 1));
-	v3f position;
+	rotation = setRotationAxisRadians(rotation, M_PI / 2, v3d(0, 0, 1));
+	v3d position;
 	position.X = p0.X;
 	position.Y = p0.Y;
 	position.Z = p0.Z;
 	std::stack <core::matrix4> stack_orientation;
-	std::stack <v3f> stack_position;
+	std::stack <v3d> stack_position;
 
 	//generate axiom
 	std::string axiom = tree_definition.initial_axiom;
@@ -228,38 +228,38 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 	if (tree_definition.trunk_type == "double") {
 		tree_trunk_placement(
 			vmanip,
-			v3f(position.X + 1, position.Y - 1, position.Z),
+			v3d(position.X + 1, position.Y - 1, position.Z),
 			tree_definition
 		);
 		tree_trunk_placement(
 			vmanip,
-			v3f(position.X, position.Y - 1, position.Z + 1),
+			v3d(position.X, position.Y - 1, position.Z + 1),
 			tree_definition
 		);
 		tree_trunk_placement(
 			vmanip,
-			v3f(position.X + 1, position.Y - 1, position.Z + 1),
+			v3d(position.X + 1, position.Y - 1, position.Z + 1),
 			tree_definition
 		);
 	} else if (tree_definition.trunk_type == "crossed") {
 		tree_trunk_placement(
 			vmanip,
-			v3f(position.X + 1, position.Y - 1, position.Z),
+			v3d(position.X + 1, position.Y - 1, position.Z),
 			tree_definition
 		);
 		tree_trunk_placement(
 			vmanip,
-			v3f(position.X - 1, position.Y - 1, position.Z),
+			v3d(position.X - 1, position.Y - 1, position.Z),
 			tree_definition
 		);
 		tree_trunk_placement(
 			vmanip,
-			v3f(position.X, position.Y - 1, position.Z + 1),
+			v3d(position.X, position.Y - 1, position.Z + 1),
 			tree_definition
 		);
 		tree_trunk_placement(
 			vmanip,
-			v3f(position.X, position.Y - 1, position.Z - 1),
+			v3d(position.X, position.Y - 1, position.Z - 1),
 			tree_definition
 		);
 	}
@@ -297,67 +297,67 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 		char axiom_char = axiom.at(i);
 		core::matrix4 temp_rotation;
 		temp_rotation.makeIdentity();
-		v3f dir;
+		v3d dir;
 		switch (axiom_char) {
 		case 'G':
-			dir = v3f(1, 0, 0);
+			dir = v3d(1, 0, 0);
 			dir = transposeMatrix(rotation, dir);
 			position += dir;
 			break;
 		case 'T':
 			tree_trunk_placement(
 				vmanip,
-				v3f(position.X, position.Y, position.Z),
+				v3d(position.X, position.Y, position.Z),
 				tree_definition
 			);
 			if (tree_definition.trunk_type == "double" &&
 					!tree_definition.thin_branches) {
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X + 1, position.Y, position.Z),
+					v3d(position.X + 1, position.Y, position.Z),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X, position.Y, position.Z + 1),
+					v3d(position.X, position.Y, position.Z + 1),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X + 1, position.Y, position.Z + 1),
+					v3d(position.X + 1, position.Y, position.Z + 1),
 					tree_definition
 				);
 			} else if (tree_definition.trunk_type == "crossed" &&
 					!tree_definition.thin_branches) {
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X + 1, position.Y, position.Z),
+					v3d(position.X + 1, position.Y, position.Z),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X - 1, position.Y, position.Z),
+					v3d(position.X - 1, position.Y, position.Z),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X, position.Y, position.Z + 1),
+					v3d(position.X, position.Y, position.Z + 1),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X, position.Y, position.Z - 1),
+					v3d(position.X, position.Y, position.Z - 1),
 					tree_definition
 				);
 			}
-			dir = v3f(1, 0, 0);
+			dir = v3d(1, 0, 0);
 			dir = transposeMatrix(rotation, dir);
 			position += dir;
 			break;
 		case 'F':
 			tree_trunk_placement(
 				vmanip,
-				v3f(position.X, position.Y, position.Z),
+				v3d(position.X, position.Y, position.Z),
 				tree_definition
 			);
 			if ((stack_orientation.empty() &&
@@ -367,17 +367,17 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 					!tree_definition.thin_branches)) {
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X + 1, position.Y, position.Z),
+					v3d(position.X + 1, position.Y, position.Z),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X, position.Y, position.Z + 1),
+					v3d(position.X, position.Y, position.Z + 1),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X + 1, position.Y, position.Z + 1),
+					v3d(position.X + 1, position.Y, position.Z + 1),
 					tree_definition
 				);
 			} else if ((stack_orientation.empty() &&
@@ -387,22 +387,22 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 					!tree_definition.thin_branches)) {
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X + 1, position.Y, position.Z),
+					v3d(position.X + 1, position.Y, position.Z),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X - 1, position.Y, position.Z),
+					v3d(position.X - 1, position.Y, position.Z),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X, position.Y, position.Z + 1),
+					v3d(position.X, position.Y, position.Z + 1),
 					tree_definition
 				);
 				tree_trunk_placement(
 					vmanip,
-					v3f(position.X, position.Y, position.Z - 1),
+					v3d(position.X, position.Y, position.Z - 1),
 					tree_definition
 				);
 			}
@@ -416,26 +416,26 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 							abs(z) == size) {
 						tree_leaves_placement(
 							vmanip,
-							v3f(position.X + x + 1, position.Y + y,
+							v3d(position.X + x + 1, position.Y + y,
 									position.Z + z),
 							ps.next(),
 							tree_definition
 						);
 						tree_leaves_placement(
 							vmanip,
-							v3f(position.X + x - 1, position.Y + y,
+							v3d(position.X + x - 1, position.Y + y,
 									position.Z + z),
 							ps.next(),
 							tree_definition
 						);
 						tree_leaves_placement(
-							vmanip,v3f(position.X + x, position.Y + y,
+							vmanip,v3d(position.X + x, position.Y + y,
 									position.Z + z + 1),
 							ps.next(),
 							tree_definition
 						);
 						tree_leaves_placement(
-							vmanip,v3f(position.X + x, position.Y + y,
+							vmanip,v3d(position.X + x, position.Y + y,
 									position.Z + z - 1),
 							ps.next(),
 							tree_definition
@@ -443,28 +443,28 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 					}
 				}
 			}
-			dir = v3f(1, 0, 0);
+			dir = v3d(1, 0, 0);
 			dir = transposeMatrix(rotation, dir);
 			position += dir;
 			break;
 		case 'f':
 			tree_single_leaves_placement(
 				vmanip,
-				v3f(position.X, position.Y, position.Z),
+				v3d(position.X, position.Y, position.Z),
 				ps.next(),
 				tree_definition
 			);
-			dir = v3f(1, 0, 0);
+			dir = v3d(1, 0, 0);
 			dir = transposeMatrix(rotation, dir);
 			position += dir;
 			break;
 		case 'R':
 			tree_fruit_placement(
 				vmanip,
-				v3f(position.X, position.Y, position.Z),
+				v3d(position.X, position.Y, position.Z),
 				tree_definition
 			);
-			dir = v3f(1, 0, 0);
+			dir = v3d(1, 0, 0);
 			dir = transposeMatrix(rotation, dir);
 			position += dir;
 			break;
@@ -485,37 +485,37 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 		case '+':
 			temp_rotation.makeIdentity();
 			temp_rotation = setRotationAxisRadians(temp_rotation,
-					angle_in_radians + angleOffset_in_radians, v3f(0, 0, 1));
+					angle_in_radians + angleOffset_in_radians, v3d(0, 0, 1));
 			rotation *= temp_rotation;
 			break;
 		case '-':
 			temp_rotation.makeIdentity();
 			temp_rotation = setRotationAxisRadians(temp_rotation,
-					angle_in_radians + angleOffset_in_radians, v3f(0, 0, -1));
+					angle_in_radians + angleOffset_in_radians, v3d(0, 0, -1));
 			rotation *= temp_rotation;
 			break;
 		case '&':
 			temp_rotation.makeIdentity();
 			temp_rotation = setRotationAxisRadians(temp_rotation,
-					angle_in_radians + angleOffset_in_radians, v3f(0, 1, 0));
+					angle_in_radians + angleOffset_in_radians, v3d(0, 1, 0));
 			rotation *= temp_rotation;
 			break;
 		case '^':
 			temp_rotation.makeIdentity();
 			temp_rotation = setRotationAxisRadians(temp_rotation,
-					angle_in_radians + angleOffset_in_radians, v3f(0, -1, 0));
+					angle_in_radians + angleOffset_in_radians, v3d(0, -1, 0));
 			rotation *= temp_rotation;
 			break;
 		case '*':
 			temp_rotation.makeIdentity();
 			temp_rotation = setRotationAxisRadians(temp_rotation,
-					angle_in_radians, v3f(1, 0, 0));
+					angle_in_radians, v3d(1, 0, 0));
 			rotation *= temp_rotation;
 			break;
 		case '/':
 			temp_rotation.makeIdentity();
 			temp_rotation = setRotationAxisRadians(temp_rotation,
-					angle_in_radians, v3f(-1, 0, 0));
+					angle_in_radians, v3d(-1, 0, 0));
 			rotation *= temp_rotation;
 			break;
 		default:
@@ -527,7 +527,7 @@ treegen::error make_ltree(MMVManip &vmanip, v3s32 p0,
 }
 
 
-void tree_trunk_placement(MMVManip &vmanip, v3f p0, TreeDef &tree_definition)
+void tree_trunk_placement(MMVManip &vmanip, v3d p0, TreeDef &tree_definition)
 {
 	v3s32 p1 = v3s32(myround(p0.X), myround(p0.Y), myround(p0.Z));
 	if (!vmanip.m_area.contains(p1))
@@ -543,7 +543,7 @@ void tree_trunk_placement(MMVManip &vmanip, v3f p0, TreeDef &tree_definition)
 }
 
 
-void tree_leaves_placement(MMVManip &vmanip, v3f p0,
+void tree_leaves_placement(MMVManip &vmanip, v3d p0,
 		PseudoRandom ps, TreeDef &tree_definition)
 {
 	MapNode leavesnode = tree_definition.leavesnode;
@@ -567,7 +567,7 @@ void tree_leaves_placement(MMVManip &vmanip, v3f p0,
 }
 
 
-void tree_single_leaves_placement(MMVManip &vmanip, v3f p0,
+void tree_single_leaves_placement(MMVManip &vmanip, v3d p0,
 		PseudoRandom ps, TreeDef &tree_definition)
 {
 	MapNode leavesnode = tree_definition.leavesnode;
@@ -584,7 +584,7 @@ void tree_single_leaves_placement(MMVManip &vmanip, v3f p0,
 }
 
 
-void tree_fruit_placement(MMVManip &vmanip, v3f p0, TreeDef &tree_definition)
+void tree_fruit_placement(MMVManip &vmanip, v3d p0, TreeDef &tree_definition)
 {
 	v3s32 p1 = v3s32(myround(p0.X), myround(p0.Y), myround(p0.Z));
 	if (!vmanip.m_area.contains(p1))
@@ -597,7 +597,7 @@ void tree_fruit_placement(MMVManip &vmanip, v3f p0, TreeDef &tree_definition)
 }
 
 
-irr::core::matrix4 setRotationAxisRadians(irr::core::matrix4 M, double angle, v3f axis)
+irr::core::matrix4 setRotationAxisRadians(irr::core::matrix4 M, double angle, v3d axis)
 {
 	double c = cos(angle);
 	double s = sin(angle);
@@ -625,9 +625,9 @@ irr::core::matrix4 setRotationAxisRadians(irr::core::matrix4 M, double angle, v3
 }
 
 
-v3f transposeMatrix(irr::core::matrix4 M, v3f v)
+v3d transposeMatrix(irr::core::matrix4 M, v3d v)
 {
-	v3f translated;
+	v3d translated;
 	double x = M[0] * v.X + M[4] * v.Y + M[8]  * v.Z +M[12];
 	double y = M[1] * v.X + M[5] * v.Y + M[9]  * v.Z +M[13];
 	double z = M[2] * v.X + M[6] * v.Y + M[10] * v.Z +M[14];

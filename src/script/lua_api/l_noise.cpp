@@ -52,7 +52,7 @@ int LuaPerlinNoise::l_get_3d(lua_State *L)
 {
 	NO_MAP_LOCK_REQUIRED;
 	LuaPerlinNoise *o = checkObject<LuaPerlinNoise>(L, 1);
-	v3f p = check_v3f(L, 2);
+	v3d p = check_v3f(L, 2);
 	lua_Number val = NoisePerlin3D(&o->np, p.X, p.Y, p.Z, 0);
 	lua_pushnumber(L, val);
 	return 1;
@@ -71,7 +71,7 @@ int LuaPerlinNoise::create_object(lua_State *L)
 		params.seed    = luaL_checkint(L, 1);
 		params.octaves = luaL_checkint(L, 2);
 		params.persist = readParam<float>(L, 3);
-		params.spread  = v3f(1, 1, 1) * readParam<float>(L, 4);
+		params.spread  = v3d(1, 1, 1) * readParam<float>(L, 4);
 	}
 
 	LuaPerlinNoise *o = new LuaPerlinNoise(&params);
@@ -208,7 +208,7 @@ int LuaPerlinNoiseMap::l_get_3d_map(lua_State *L)
 	size_t i = 0;
 
 	LuaPerlinNoiseMap *o = checkObject<LuaPerlinNoiseMap>(L, 1);
-	v3f p = check_v3f(L, 2);
+	v3d p = check_v3f(L, 2);
 
 	if (!o->is3D())
 		return 0;
@@ -238,7 +238,7 @@ int LuaPerlinNoiseMap::l_get_3d_map_flat(lua_State *L)
 	NO_MAP_LOCK_REQUIRED;
 
 	LuaPerlinNoiseMap *o = checkObject<LuaPerlinNoiseMap>(L, 1);
-	v3f p                = check_v3f(L, 2);
+	v3d p                = check_v3f(L, 2);
 	bool use_buffer      = lua_istable(L, 3);
 
 	if (!o->is3D())
@@ -280,7 +280,7 @@ int LuaPerlinNoiseMap::l_calc_3d_map(lua_State *L)
 	NO_MAP_LOCK_REQUIRED;
 
 	LuaPerlinNoiseMap *o = checkObject<LuaPerlinNoiseMap>(L, 1);
-	v3f p                = check_v3f(L, 2);
+	v3d p                = check_v3f(L, 2);
 
 	if (!o->is3D())
 		return 0;

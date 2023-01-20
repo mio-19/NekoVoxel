@@ -306,7 +306,7 @@ void Clouds::render()
 				break;
 			}
 
-			v3f pos(p0.X, m_params.height * BS, p0.Y);
+			v3d pos(p0.X, m_params.height * BS, p0.Y);
 			pos -= intToFloat(m_camera_offset, BS);
 
 			for (video::S3DVertex &vertex : v) {
@@ -339,7 +339,7 @@ void Clouds::step(float dtime)
 	m_origin = m_origin + dtime * BS * m_params.speed;
 }
 
-void Clouds::update(const v3f &camera_p, const video::SColorf &color_diffuse)
+void Clouds::update(const v3d &camera_p, const video::SColorf &color_diffuse)
 {
 	video::SColorf ambient(m_params.color_ambient);
 	video::SColorf bright(m_params.color_bright);

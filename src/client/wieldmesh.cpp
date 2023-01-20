@@ -47,7 +47,7 @@ static scene::IMesh *createExtrusionMesh(int resolution_x, int resolution_y)
 
 	scene::IMeshBuffer *buf = new scene::SMeshBuffer();
 	video::SColor c(255,255,255,255);
-	v3f scale(1.0, 1.0, 0.1);
+	v3d scale(1.0, 1.0, 0.1);
 
 	// Front and back
 	{
@@ -144,7 +144,7 @@ public:
 			m_extrusion_meshes[resolution] =
 				createExtrusionMesh(resolution, resolution);
 		}
-		m_cube = createCubeMesh(v3f(1.0, 1.0, 1.0));
+		m_cube = createCubeMesh(v3d(1.0, 1.0, 1.0));
 	}
 	// Destructor
 	virtual ~ExtrusionMeshCache()
@@ -243,7 +243,7 @@ WieldMeshSceneNode::~WieldMeshSceneNode()
 }
 
 void WieldMeshSceneNode::setCube(const ContentFeatures &f,
-			v3f wield_scale)
+			v3d wield_scale)
 {
 	scene::IMesh *cubemesh = g_extrusion_mesh_cache->createCube();
 	scene::SMesh *copy = cloneMesh(cubemesh);
@@ -255,7 +255,7 @@ void WieldMeshSceneNode::setCube(const ContentFeatures &f,
 }
 
 void WieldMeshSceneNode::setExtruded(const std::string &imagename,
-	const std::string &overlay_name, v3f wield_scale, ITextureSource *tsrc,
+	const std::string &overlay_name, v3d wield_scale, ITextureSource *tsrc,
 	u8 num_frames)
 {
 	video::ITexture *texture = tsrc->getTexture(imagename);
@@ -318,7 +318,7 @@ static scene::SMesh *createSpecialNodeMesh(Client *client, MapNode n,
 	std::vector<ItemPartColor> *colors, const ContentFeatures &f)
 {
 	MeshMakeData mesh_make_data(client, false);
-	MeshCollector collector(v3f(0.0f * BS));
+	MeshCollector collector(v3d(0.0f * BS));
 	mesh_make_data.setSmoothLighting(false);
 	MapblockMeshGenerator gen(&mesh_make_data, &collector,
 		client->getSceneManager()->getMeshManipulator());
@@ -406,14 +406,14 @@ void WieldMeshSceneNode::setItem(const ItemStack &item, Client *client, bool che
 		switch (f.drawtype) {
 		case NDT_AIRLIKE:
 			setExtruded("no_texture_airlike.png", "",
-				v3f(1.0, 1.0, 1.0), tsrc, 1);
+				v3d(1.0, 1.0, 1.0), tsrc, 1);
 			break;
 		case NDT_SIGNLIKE:
 		case NDT_TORCHLIKE:
 		case NDT_RAILLIKE:
 		case NDT_PLANTLIKE:
 		case NDT_FLOWINGLIQUID: {
-			v3f wscale = def.wield_scale;
+			v3d wscale = def.wield_scale;
 			if (f.drawtype == NDT_FLOWINGLIQUID)
 				wscale.Z *= 0.1f;
 			setExtruded(tsrc->getTextureName(f.tiles[0].layers[0].texture_id),
@@ -601,15 +601,15 @@ void getItemMesh(Client *client, const ItemStack &item, ItemMesh *result)
 			mesh = cloneMesh(cube);
 			cube->drop();
 			if (f.drawtype == NDT_FLOWINGLIQUID) {
-				scaleMesh(mesh, v3f(1.2, 0.03, 1.2));
-				translateMesh(mesh, v3f(0, -0.57, 0));
+				scaleMesh(mesh, v3d(1.2, 0.03, 1.2));
+				translateMesh(mesh, v3d(0, -0.57, 0));
 			} else
-				scaleMesh(mesh, v3f(1.2, 1.2, 1.2));
+				scaleMesh(mesh, v3d(1.2, 1.2, 1.2));
 			// add overlays
 			postProcessNodeMesh(mesh, f, false, false, nullptr,
 				&result->buffer_colors, true);
 			if (f.drawtype == NDT_ALLFACES)
-				scaleMesh(mesh, v3f(f.visual_scale));
+				scaleMesh(mesh, v3d(f.visual_scale));
 			break;
 		}
 		case NDT_PLANTLIKE: {
@@ -637,7 +637,7 @@ void getItemMesh(Client *client, const ItemStack &item, ItemMesh *result)
 			n.setParam2(def.place_param2);
 
 			mesh = createSpecialNodeMesh(client, n, &result->buffer_colors, f);
-			scaleMesh(mesh, v3f(0.12, 0.12, 0.12));
+			scaleMesh(mesh, v3d(0.12, 0.12, 0.12));
 			break;
 		}
 		}
@@ -700,7 +700,7 @@ scene::SMesh *getExtrudedMesh(ITextureSource *tsrc,
 		material.MaterialType = video::EMT_TRANSPARENT_ALPHA_CHANNEL;
 		material.MaterialTypeParam = 0.5f;
 	}
-	scaleMesh(mesh, v3f(2.0, 2.0, 2.0));
+	scaleMesh(mesh, v3d(2.0, 2.0, 2.0));
 
 	return mesh;
 }

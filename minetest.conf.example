@@ -2181,7 +2181,7 @@
 #    Increase these to 'zoom' into the detail of the fractal.
 #    Default is for a vertically-squashed shape suitable for
 #    an island, set all 3 numbers equal for the raw shape.
-#    type: v3f
+#    type: v3d
 # mgfractal_scale = (4096.0, 1024.0, 4096.0)
 
 #    (X,Y,Z) offset of fractal from world center in units of 'scale'.
@@ -2192,7 +2192,7 @@
 #    sets with default parameters, it may need altering in other
 #    situations.
 #    Range roughly -2 to 2. Multiply by 'scale' for offset in nodes.
-#    type: v3f
+#    type: v3d
 # mgfractal_offset = (1.79, 0.0, 0.0)
 
 #    W coordinate of the generated 3D slice of a 4D fractal.

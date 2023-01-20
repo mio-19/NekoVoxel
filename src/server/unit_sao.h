@@ -28,7 +28,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class UnitSAO : public ServerActiveObject
 {
 public:
-	UnitSAO(ServerEnvironment *env, v3f pos);
+	UnitSAO(ServerEnvironment *env, v3d pos);
 	virtual ~UnitSAO() = default;
 
 	u16 getHP() const { return m_hp; }
@@ -36,20 +36,20 @@ public:
 	bool isDead() const { return m_hp == 0; }
 
 	// Rotation
-	void setRotation(v3f rotation) { m_rotation = rotation; }
-	const v3f &getRotation() const { return m_rotation; }
-	const v3f getTotalRotation() const {
+	void setRotation(v3d rotation) { m_rotation = rotation; }
+	const v3d &getRotation() const { return m_rotation; }
+	const v3d getTotalRotation() const {
 		// This replicates what happens clientside serverside
 		core::matrix4 rot;
 		setPitchYawRoll(rot, -m_rotation);
-		v3f res;
+		v3d res;
 		// First rotate by m_rotation, then rotate by the automatic rotate yaw
-		(core::quaternion(v3f(0, -m_rotation_add_yaw * core::DEGTORAD, 0))
+		(core::quaternion(v3d(0, -m_rotation_add_yaw * core::DEGTORAD, 0))
 				* core::quaternion(rot.getRotationDegrees() * core::DEGTORAD))
 				.toEuler(res);
 		return res * core::RADTODEG;
 	}
-	v3f getRadRotation() { return m_rotation * core::DEGTORAD; }
+	v3d getRadRotation() { return m_rotation * core::DEGTORAD; }
 
 	// Deprecated
 	f32 getRadYawDep() const { return (m_rotation.Y + 90.) * core::DEGTORAD; }
@@ -70,16 +70,16 @@ public:
 	void setAnimationSpeed(float frame_speed);
 
 	// Bone position
-	void setBonePosition(const std::string &bone, v3f position, v3f rotation);
-	void getBonePosition(const std::string &bone, v3f *position, v3f *rotation);
+	void setBonePosition(const std::string &bone, v3d position, v3d rotation);
+	void getBonePosition(const std::string &bone, v3d *position, v3d *rotation);
 
 	// Attachments
 	ServerActiveObject *getParent() const;
 	inline bool isAttached() const { return getParent(); }
-	void setAttachment(int parent_id, const std::string &bone, v3f position,
-			v3f rotation, bool force_visible);
-	void getAttachment(int *parent_id, std::string *bone, v3f *position,
-			v3f *rotation, bool *force_visible) const;
+	void setAttachment(int parent_id, const std::string &bone, v3d position,
+			v3d rotation, bool force_visible);
+	void getAttachment(int *parent_id, std::string *bone, v3d *position,
+			v3d *rotation, bool *force_visible) const;
 	void clearChildAttachments();
 	void clearParentAttachment();
 	void addAttachmentChild(int child_id);
@@ -96,18 +96,18 @@ public:
 	std::string generateUpdateAnimationSpeedCommand() const;
 	std::string generateUpdateAnimationCommand() const;
 	std::string generateUpdateArmorGroupsCommand() const;
-	static std::string generateUpdatePositionCommand(const v3f &position,
-			const v3f &velocity, const v3f &acceleration, const v3f &rotation,
+	static std::string generateUpdatePositionCommand(const v3d &position,
+			const v3d &velocity, const v3d &acceleration, const v3d &rotation,
 			bool do_interpolate, bool is_movement_end, f32 update_interval);
 	std::string generateSetPropertiesCommand(const ObjectProperties &prop) const;
 	static std::string generateUpdateBonePositionCommand(const std::string &bone,
-			const v3f &position, const v3f &rotation);
+			const v3d &position, const v3d &rotation);
 	void sendPunchCommand();
 
 protected:
 	u16 m_hp = 1;
 
-	v3f m_rotation;
+	v3d m_rotation;
 	f32 m_rotation_add_yaw = 0;
 
 	ItemGroupList m_armor_groups;
@@ -117,7 +117,7 @@ protected:
 	ObjectProperties m_prop;
 
 	// Stores position and rotation for each bone name
-	std::unordered_map<std::string, core::vector2d<v3f>> m_bone_position;
+	std::unordered_map<std::string, core::vector2d<v3d>> m_bone_position;
 
 	int m_attachment_parent_id = 0;
 
@@ -144,8 +144,8 @@ private:
 	// Attachments
 	std::unordered_set<int> m_attachment_child_ids;
 	std::string m_attachment_bone = "";
-	v3f m_attachment_position;
-	v3f m_attachment_rotation;
+	v3d m_attachment_position;
+	v3d m_attachment_rotation;
 	bool m_attachment_sent = false;
 	bool m_force_visible = false;
 };

@@ -86,9 +86,9 @@ void TestVoxelAlgorithms::testVoxelLineIterator()
 			// This must be a neighbor of the old voxel
 			UASSERTEQ(f32, (new_voxel - old_voxel).getLengthSQ(), 1);
 			// The line must intersect with the voxel
-			v3f voxel_center = intToFloat(iterator.m_current_node_pos, 1);
-			aabb3f box(voxel_center - v3f(0.5, 0.5, 0.5),
-				voxel_center + v3f(0.5, 0.5, 0.5));
+			v3d voxel_center = intToFloat(iterator.m_current_node_pos, 1);
+			aabb3f box(voxel_center - v3d(0.5, 0.5, 0.5),
+				voxel_center + v3d(0.5, 0.5, 0.5));
 			UASSERT(box.intersectsWithLine(l));
 			// Update old voxel
 			old_voxel = new_voxel;

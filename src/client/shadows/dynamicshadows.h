@@ -35,8 +35,8 @@ struct shadowFrustum
 	f32 radius{0.0f};
 	core::matrix4 ProjOrthMat;
 	core::matrix4 ViewMat;
-	v3f position;
-	v3f player;
+	v3d position;
+	v3d player;
 	v3s32 camera_offset;
 };
 
@@ -44,7 +44,7 @@ class DirectionalLight
 {
 public:
 	DirectionalLight(const u32 shadowMapResolution,
-			const v3f &position,
+			const v3d &position,
 			video::SColorf lightColor = video::SColor(0xffffffff),
 			f32 farValue = 100.0f);
 	~DirectionalLight() = default;
@@ -54,13 +54,13 @@ public:
 	void update_frustum(const Camera *cam, Client *client, bool force = false);
 
 	// when set direction is updated to negative normalized(direction)
-	void setDirection(v3f dir);
-	v3f getDirection() const{
+	void setDirection(v3d dir);
+	v3d getDirection() const{
 		return direction;
 	};
-	v3f getPosition() const;
-	v3f getPlayerPos() const;
-	v3f getFuturePlayerPos() const;
+	v3d getPosition() const;
+	v3d getPlayerPos() const;
+	v3d getFuturePlayerPos() const;
 
 	/// Gets the light's matrices.
 	const core::matrix4 &getViewMatrix() const;
@@ -112,11 +112,11 @@ private:
 	f32 farPlane;
 	u32 mapRes;
 
-	v3f pos;
-	v3f direction{0};
+	v3d pos;
+	v3d direction{0};
 
-	v3f last_cam_pos_world{0,0,0};
-	v3f last_look{0,1,0};
+	v3d last_cam_pos_world{0,0,0};
+	v3d last_look{0,1,0};
 
 	shadowFrustum shadow_frustum;
 	shadowFrustum future_frustum;

@@ -77,8 +77,8 @@ public:
 	v3s32 getFootstepNodePos();
 
 	// Used to check if anything changed and prevent sending packets if not
-	v3f last_position;
-	v3f last_speed;
+	v3d last_position;
+	v3d last_speed;
 	float last_pitch = 0.0f;
 	float last_yaw = 0.0f;
 	u32 last_keyPressed = 0;
@@ -123,18 +123,18 @@ public:
 	void setPitch(f32 pitch) { m_pitch = pitch; }
 	f32 getPitch() const { return m_pitch; }
 
-	inline void setPosition(const v3f &position)
+	inline void setPosition(const v3d &position)
 	{
 		m_position = position;
 		m_sneak_node_exists = false;
 	}
 
-	v3f getPosition() const { return m_position; }
+	v3d getPosition() const { return m_position; }
 
 	// Non-transformed eye offset getters
 	// For accurate positions, use the Camera functions
-	v3f getEyePosition() const { return m_position + getEyeOffset(); }
-	v3f getEyeOffset() const;
+	v3d getEyePosition() const { return m_position + getEyeOffset(); }
+	v3d getEyeOffset() const;
 	void setEyeHeight(float eye_height) { m_eye_height = eye_height; }
 
 	void setCollisionbox(const aabb3f &box) { m_collisionbox = box; }
@@ -148,7 +148,7 @@ public:
 
 	bool isDead() const;
 
-	inline void addVelocity(const v3f &vel)
+	inline void addVelocity(const v3d &vel)
 	{
 		m_added_velocity += vel;
 	}
@@ -156,16 +156,16 @@ public:
 	inline Lighting& getLighting() { return m_lighting; }
 
 private:
-	void accelerate(const v3f &target_speed, const f32 max_increase_H,
+	void accelerate(const v3d &target_speed, const f32 max_increase_H,
 		const f32 max_increase_V, const bool use_pitch);
-	bool updateSneakNode(Map *map, const v3f &position, const v3f &sneak_max);
-	float getSlipFactor(Environment *env, const v3f &speedH);
+	bool updateSneakNode(Map *map, const v3d &position, const v3d &sneak_max);
+	float getSlipFactor(Environment *env, const v3d &speedH);
 	void handleAutojump(f32 dtime, Environment *env,
 		const collisionMoveResult &result,
-		const v3f &position_before_move, const v3f &speed_before_move,
+		const v3d &position_before_move, const v3d &speed_before_move,
 		f32 pos_max_d);
 
-	v3f m_position;
+	v3d m_position;
 	v3s32 m_standing_node;
 
 	v3s32 m_sneak_node = v3s32(32767, 32767, 32767);
@@ -200,7 +200,7 @@ private:
 	bool m_autojump = false;
 	float m_autojump_time = 0.0f;
 
-	v3f m_added_velocity = v3f(0.0f); // in BS-space; cleared on each move()
+	v3d m_added_velocity = v3d(0.0f); // in BS-space; cleared on each move()
 
 	GenericCAO *m_cao = nullptr;
 	Client *m_client;

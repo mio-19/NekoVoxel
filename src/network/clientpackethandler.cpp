@@ -131,11 +131,11 @@ void Client::handleCommand_AuthAccept(NetworkPacket* pkt)
 {
 	deleteAuthData();
 
-	v3f playerpos;
+	v3d playerpos;
 	*pkt >> playerpos >> m_map_seed >> m_recommended_send_interval
 		>> m_sudo_auth_methods;
 
-	playerpos -= v3f(0, BS / 2, 0);
+	playerpos -= v3d(0, BS / 2, 0);
 
 	// Set player position
 	LocalPlayer *player = m_env.getLocalPlayer();
@@ -606,7 +606,7 @@ void Client::handleCommand_MovePlayer(NetworkPacket* pkt)
 	LocalPlayer *player = m_env.getLocalPlayer();
 	assert(player != NULL);
 
-	v3f pos;
+	v3d pos;
 	f32 pitch, yaw;
 
 	*pkt >> pos >> pitch >> yaw;
@@ -635,7 +635,7 @@ void Client::handleCommand_MovePlayer(NetworkPacket* pkt)
 void Client::handleCommand_DeathScreen(NetworkPacket* pkt)
 {
 	bool set_camera_point_target;
-	v3f camera_point_target;
+	v3d camera_point_target;
 
 	*pkt >> set_camera_point_target;
 	*pkt >> camera_point_target;
@@ -820,7 +820,7 @@ void Client::handleCommand_PlaySound(NetworkPacket* pkt)
 
 	SimpleSoundSpec spec;
 	SoundLocation type; // 0=local, 1=positional, 2=object
-	v3f pos;
+	v3d pos;
 	u16 object_id;
 	bool ephemeral = false;
 
@@ -1127,7 +1127,7 @@ void Client::handleCommand_HudAdd(NetworkPacket* pkt)
 	u32 dir;
 	v2f align;
 	v2f offset;
-	v3f world_pos;
+	v3d world_pos;
 	v2s32 size;
 	s32 z_index = 0;
 	std::string text2;
@@ -1181,7 +1181,7 @@ void Client::handleCommand_HudChange(NetworkPacket* pkt)
 {
 	std::string sdata;
 	v2f v2fdata;
-	v3f v3fdata;
+	v3d v3fdata;
 	u32 intdata = 0;
 	v2s32 v2s32data;
 	u32 server_id;
@@ -1558,7 +1558,7 @@ void Client::handleCommand_CSMRestrictionFlags(NetworkPacket *pkt)
 
 void Client::handleCommand_PlayerSpeed(NetworkPacket *pkt)
 {
-	v3f added_vel;
+	v3d added_vel;
 
 	*pkt >> added_vel;
 

@@ -61,7 +61,7 @@ struct ClientEventHudAdd
 	std::string text, text2;
 	u32 number, item, dir, style;
 	v2f align, offset;
-	v3f world_pos;
+	v3d world_pos;
 	v2s32 size;
 	s32 z_index;
 };
@@ -73,7 +73,7 @@ struct ClientEventHudChange
 	v2f v2fdata;
 	std::string sdata;
 	u32 data;
-	v3f v3fdata;
+	v3d v3fdata;
 	v2s32 v2s32data;
 };
 

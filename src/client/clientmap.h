@@ -88,7 +88,7 @@ public:
 		ISceneNode::drop(); // calls destructor
 	}
 
-	void updateCamera(v3f pos, v3f dir, f32 fov, v3s32 offset);
+	void updateCamera(v3d pos, v3d dir, f32 fov, v3s32 offset);
 
 	/*
 		Forcefully get a sector from somewhere
@@ -118,7 +118,7 @@ public:
 	void updateDrawList();
 	// @brief Calculate statistics about the map and keep the blocks alive
 	void touchMapBlocks();
-	void updateDrawListShadow(v3f shadow_light_pos, v3f shadow_light_dir, float radius, float length);
+	void updateDrawListShadow(v3d shadow_light_pos, v3d shadow_light_dir, float radius, float length);
 	// Returns true if draw list needs updating before drawing the next frame.
 	bool needsUpdateDrawList() { return m_needs_update_drawlist; }
 	void renderMap(video::IVideoDriver* driver, s32 pass);
@@ -194,8 +194,8 @@ private:
 
 	MapDrawControl &m_control;
 
-	v3f m_camera_position = v3f(0,0,0);
-	v3f m_camera_direction = v3f(0,0,1);
+	v3d m_camera_position = v3d(0,0,0);
+	v3d m_camera_direction = v3d(0,0,1);
 	f32 m_camera_fov = M_PI;
 	v3s32 m_camera_offset;
 	bool m_needs_update_transparent_meshes = true;

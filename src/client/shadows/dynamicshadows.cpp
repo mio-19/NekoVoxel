@@ -27,7 +27,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 using m4f = core::matrix4;
 
-static v3f quantizeDirection(v3f direction, float step)
+static v3d quantizeDirection(v3d direction, float step)
 {
 
 	float yaw = std::atan2(direction.Z, direction.X);
@@ -36,14 +36,14 @@ static v3f quantizeDirection(v3f direction, float step)
 	yaw = std::floor(yaw / step) * step;
 	pitch = std::floor(pitch / step) * step;
 
-	return v3f(std::cos(yaw)*std::cos(pitch), std::sin(pitch), std::sin(yaw)*std::cos(pitch));
+	return v3d(std::cos(yaw)*std::cos(pitch), std::sin(pitch), std::sin(yaw)*std::cos(pitch));
 }
 
 void DirectionalLight::createSplitMatrices(const Camera *cam)
 {
 	static const float COS_15_DEG = 0.965926f;
-	v3f newCenter;
-	v3f look = cam->getDirection().normalize();
+	v3d newCenter;
+	v3d look = cam->getDirection().normalize();
 
 	// if current look direction is < 15 degrees away from the captured
 	// look direction then stick to the captured value, otherwise recapture.
@@ -61,7 +61,7 @@ void DirectionalLight::createSplitMatrices(const Camera *cam)
 	float sfFar = adjustDist(future_frustum.zFar, cam->getFovY());
 
 	// adjusted camera positions
-	v3f cam_pos_world = cam->getPosition();
+	v3d cam_pos_world = cam->getPosition();
 
 	// if world position is less than 1 block away from the captured
 	// world position then stick to the captured value, otherwise recapture.
@@ -70,42 +70,42 @@ void DirectionalLight::createSplitMatrices(const Camera *cam)
 	else
 		last_cam_pos_world = cam_pos_world;
 
-	v3f cam_pos_scene = v3f(cam_pos_world.X - cam->getOffset().X * BS,
+	v3d cam_pos_scene = v3d(cam_pos_world.X - cam->getOffset().X * BS,
 			cam_pos_world.Y - cam->getOffset().Y * BS,
 			cam_pos_world.Z - cam->getOffset().Z * BS);
 	cam_pos_scene += look * sfNear;
 	cam_pos_world += look * sfNear;
 
 	// center point of light frustum
-	v3f center_scene = cam_pos_scene + look * 0.35 * (sfFar - sfNear);
-	v3f center_world = cam_pos_world + look * 0.35 * (sfFar - sfNear);
+	v3d center_scene = cam_pos_scene + look * 0.35 * (sfFar - sfNear);
+	v3d center_world = cam_pos_world + look * 0.35 * (sfFar - sfNear);
 
 	// Create a vector to the frustum far corner
-	const v3f &viewUp = cam->getCameraNode()->getUpVector();
-	v3f viewRight = look.crossProduct(viewUp);
+	const v3d &viewUp = cam->getCameraNode()->getUpVector();
+	v3d viewRight = look.crossProduct(viewUp);
 
-	v3f farCorner = (look + viewRight * tanFovX + viewUp * tanFovY).normalize();
+	v3d farCorner = (look + viewRight * tanFovX + viewUp * tanFovY).normalize();
 	// Compute the frustumBoundingSphere radius
-	v3f boundVec = (cam_pos_scene + farCorner * sfFar) - center_scene;
+	v3d boundVec = (cam_pos_scene + farCorner * sfFar) - center_scene;
 	float radius = boundVec.getLength();
 	float length = radius * 3.0f;
-	v3f eye_displacement = quantizeDirection(direction, M_PI / 2880 /*15 seconds*/) * length;
+	v3d eye_displacement = quantizeDirection(direction, M_PI / 2880 /*15 seconds*/) * length;
 
 	// we must compute the viewmat with the position - the camera offset
 	// but the future_frustum position must be the actual world position
-	v3f eye = center_scene - eye_displacement;
+	v3d eye = center_scene - eye_displacement;
 	future_frustum.player = cam_pos_scene;
 	future_frustum.position = center_world - eye_displacement;
 	future_frustum.length = length;
 	future_frustum.radius = radius;
-	future_frustum.ViewMat.buildCameraLookAtMatrixLH(eye, center_scene, v3f(0.0f, 1.0f, 0.0f));
+	future_frustum.ViewMat.buildCameraLookAtMatrixLH(eye, center_scene, v3d(0.0f, 1.0f, 0.0f));
 	future_frustum.ProjOrthMat.buildProjectionMatrixOrthoLH(radius, radius, 
 			0.0f, length, false);
 	future_frustum.camera_offset = cam->getOffset();
 }
 
 DirectionalLight::DirectionalLight(const u32 shadowMapResolution,
-		const v3f &position, video::SColorf lightColor,
+		const v3d &position, video::SColorf lightColor,
 		f32 farValue) :
 		diffuseColor(lightColor),
 		farPlane(farValue), mapRes(shadowMapResolution), pos(position)
@@ -137,7 +137,7 @@ void DirectionalLight::update_frustum(const Camera *cam, Client *client, bool fo
 	// when camera offset changes, adjust the current frustum view matrix to avoid flicker
 	v3s32 cam_offset = cam->getOffset();
 	if (cam_offset != shadow_frustum.camera_offset) {
-		v3f rotated_offset;
+		v3d rotated_offset;
 		shadow_frustum.ViewMat.rotateVect(rotated_offset, intToFloat(cam_offset - shadow_frustum.camera_offset, BS));
 		shadow_frustum.ViewMat.setTranslation(shadow_frustum.ViewMat.getTranslation() + rotated_offset);
 		shadow_frustum.player += intToFloat(shadow_frustum.camera_offset - cam->getOffset(), BS);
@@ -154,23 +154,23 @@ void DirectionalLight::commitFrustum()
 	dirty = false;
 }
 
-void DirectionalLight::setDirection(v3f dir)
+void DirectionalLight::setDirection(v3d dir)
 {
 	direction = -dir;
 	direction.normalize();
 }
 
-v3f DirectionalLight::getPosition() const
+v3d DirectionalLight::getPosition() const
 {
 	return shadow_frustum.position;
 }
 
-v3f DirectionalLight::getPlayerPos() const
+v3d DirectionalLight::getPlayerPos() const
 {
 	return shadow_frustum.player;
 }
 
-v3f DirectionalLight::getFuturePlayerPos() const
+v3d DirectionalLight::getFuturePlayerPos() const
 {
 	return future_frustum.player;
 }

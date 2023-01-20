@@ -87,9 +87,9 @@ public:
 	std::string getClientInitializationData(u16 protocol_version) override;
 	void getStaticData(std::string *result) const override;
 	void step(float dtime, bool send_recommended) override;
-	void setBasePosition(v3f position);
-	void setPos(const v3f &pos) override;
-	void moveTo(v3f pos, bool continuous) override;
+	void setBasePosition(v3d position);
+	void setPos(const v3d &pos) override;
+	void moveTo(v3d pos, bool continuous) override;
 	void setPlayerYaw(const float yaw);
 	// Data should not be sent at player initialization
 	void setPlayerYawAndSend(const float yaw);
@@ -109,7 +109,7 @@ public:
 		Interaction interface
 	*/
 
-	u32 punch(v3f dir, const ToolCapabilities *toolcap, ServerActiveObject *puncher,
+	u32 punch(v3d dir, const ToolCapabilities *toolcap, ServerActiveObject *puncher,
 			float time_from_last_punch, u16 initial_wear = 0) override;
 	void rightClick(ServerActiveObject *clicker) override;
 	void setHP(s32 hp, const PlayerHPChangeReason &reason) override
@@ -143,7 +143,7 @@ public:
 
 	// Cheat prevention
 
-	v3f getLastGoodPosition() const { return m_last_good_position; }
+	v3d getLastGoodPosition() const { return m_last_good_position; }
 	float resetTimeFromLastPunch()
 	{
 		float r = m_time_from_last_punch;
@@ -159,7 +159,7 @@ public:
 	float getNoCheatDigTime() { return m_nocheat_dig_time; }
 	void noCheatDigEnd() { m_nocheat_dig_pos = v3s32(32767, 32767, 32767); }
 	LagPool &getDigPool() { return m_dig_pool; }
-	void setMaxSpeedOverride(const v3f &vel);
+	void setMaxSpeedOverride(const v3d &vel);
 	// Returns true if cheated
 	bool checkMovementCheat();
 
@@ -177,8 +177,8 @@ public:
 
 	void finalize(RemotePlayer *player, const std::set<std::string> &privs);
 
-	v3f getEyePosition() const { return m_base_position + getEyeOffset(); }
-	v3f getEyeOffset() const;
+	v3d getEyePosition() const { return m_base_position + getEyeOffset(); }
+	v3d getEyeOffset() const;
 	float getZoomFOV() const;
 
 	inline SimpleMetadata &getMeta() { return m_meta; }
@@ -194,13 +194,13 @@ private:
 	// Cheat prevention
 	LagPool m_dig_pool;
 	LagPool m_move_pool;
-	v3f m_last_good_position;
+	v3d m_last_good_position;
 	float m_time_from_last_teleport = 0.0f;
 	float m_time_from_last_punch = 0.0f;
 	v3s32 m_nocheat_dig_pos = v3s32(32767, 32767, 32767);
 	float m_nocheat_dig_time = 0.0f;
 	float m_max_speed_override_time = 0.0f;
-	v3f m_max_speed_override = v3f(0.0f, 0.0f, 0.0f);
+	v3d m_max_speed_override = v3d(0.0f, 0.0f, 0.0f);
 
 	// Timers
 	IntervalLimiter m_breathing_interval;

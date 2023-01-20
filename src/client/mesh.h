@@ -26,7 +26,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
  * Applies shading to a color based on the surface's
  * normal vector.
  */
-void applyFacesShading(video::SColor &color, const v3f &normal);
+void applyFacesShading(video::SColor &color, const v3d &normal);
 
 /*
 	Create a new cube mesh.
@@ -35,18 +35,18 @@ void applyFacesShading(video::SColor &color, const v3f &normal);
 	The resulting mesh has 6 materials (up, down, right, left, back, front)
 	which must be defined by the caller.
 */
-scene::IAnimatedMesh* createCubeMesh(v3f scale);
+scene::IAnimatedMesh* createCubeMesh(v3d scale);
 
 /*
 	Multiplies each vertex coordinate by the specified scaling factors
 	(componentwise vector multiplication).
 */
-void scaleMesh(scene::IMesh *mesh, v3f scale);
+void scaleMesh(scene::IMesh *mesh, v3d scale);
 
 /*
 	Translate each vertex coordinate by the specified vector.
 */
-void translateMesh(scene::IMesh *mesh, v3f vec);
+void translateMesh(scene::IMesh *mesh, v3d vec);
 
 /*!
  * Sets a constant color for all vertices in the mesh buffer.
@@ -87,7 +87,7 @@ void setMeshColorByNormalXYZ(scene::IMesh *mesh,
 		const video::SColor &colorY,
 		const video::SColor &colorZ);
 
-void setMeshColorByNormal(scene::IMesh *mesh, const v3f &normal,
+void setMeshColorByNormal(scene::IMesh *mesh, const v3d &normal,
 		const video::SColor &color);
 
 /*

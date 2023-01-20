@@ -47,7 +47,7 @@ public:
 	virtual bool getCollisionBox(aabb3f *toset) const { return false; }
 	virtual bool getSelectionBox(aabb3f *toset) const { return false; }
 	virtual bool collideWithObjects() const { return false; }
-	virtual const v3f getPosition() const { return v3f(0.0f); }
+	virtual const v3d getPosition() const { return v3d(0.0f); }
 	virtual scene::ISceneNode *getSceneNode() const
 	{ return NULL; }
 	virtual scene::IAnimatedMeshSceneNode *getAnimatedMeshSceneNode() const
@@ -81,7 +81,7 @@ public:
 		ClientEnvironment *env);
 
 	// If returns true, punch will not be sent to the server
-	virtual bool directReportPunch(v3f dir, const ItemStack *punchitem = nullptr,
+	virtual bool directReportPunch(v3d dir, const ItemStack *punchitem = nullptr,
 		float time_from_last_punch = 1000000) { return false; }
 
 protected:

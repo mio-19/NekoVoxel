@@ -26,14 +26,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "server.h"
 #include "serverenvironment.h"
 
-LuaEntitySAO::LuaEntitySAO(ServerEnvironment *env, v3f pos, const std::string &data)
+LuaEntitySAO::LuaEntitySAO(ServerEnvironment *env, v3d pos, const std::string &data)
 	: UnitSAO(env, pos)
 {
 	std::string name;
 	std::string state;
 	u16 hp = 1;
-	v3f velocity;
-	v3f rotation;
+	v3d velocity;
+	v3d rotation;
 
 	while (!data.empty()) { // breakable, run for one iteration
 		std::istringstream is(data, std::ios::binary);
@@ -153,17 +153,17 @@ void LuaEntitySAO::step(float dtime, bool send_recommended)
 	// If the object gets detached this comes into effect automatically from the last known origin
 	if (auto *parent = getParent()) {
 		m_base_position = parent->getBasePosition();
-		m_velocity = v3f(0,0,0);
-		m_acceleration = v3f(0,0,0);
+		m_velocity = v3d(0,0,0);
+		m_acceleration = v3d(0,0,0);
 	} else {
 		if(m_prop.physical){
 			aabb3f box = m_prop.collisionbox;
 			box.MinEdge *= BS;
 			box.MaxEdge *= BS;
 			f32 pos_max_d = BS*0.25; // Distance per iteration
-			v3f p_pos = m_base_position;
-			v3f p_velocity = m_velocity;
-			v3f p_acceleration = m_acceleration;
+			v3d p_pos = m_base_position;
+			v3d p_velocity = m_velocity;
+			v3d p_acceleration = m_acceleration;
 			moveresult = collisionMoveSimple(m_env, m_env->getGameDef(),
 					pos_max_d, box, m_prop.stepheight, dtime,
 					&p_pos, &p_velocity, p_acceleration,
@@ -309,7 +309,7 @@ void LuaEntitySAO::getStaticData(std::string *result) const
 	*result = os.str();
 }
 
-u32 LuaEntitySAO::punch(v3f dir,
+u32 LuaEntitySAO::punch(v3d dir,
 		const ToolCapabilities *toolcap,
 		ServerActiveObject *puncher,
 		float time_from_last_punch,
@@ -362,7 +362,7 @@ void LuaEntitySAO::rightClick(ServerActiveObject *clicker)
 	m_env->getScriptIface()->luaentity_Rightclick(m_id, clicker);
 }
 
-void LuaEntitySAO::setPos(const v3f &pos)
+void LuaEntitySAO::setPos(const v3d &pos)
 {
 	if(isAttached())
 		return;
@@ -370,7 +370,7 @@ void LuaEntitySAO::setPos(const v3f &pos)
 	sendPosition(false, true);
 }
 
-void LuaEntitySAO::moveTo(v3f pos, bool continuous)
+void LuaEntitySAO::moveTo(v3d pos, bool continuous)
 {
 	if(isAttached())
 		return;
@@ -417,22 +417,22 @@ u16 LuaEntitySAO::getHP() const
 	return m_hp;
 }
 
-void LuaEntitySAO::setVelocity(v3f velocity)
+void LuaEntitySAO::setVelocity(v3d velocity)
 {
 	m_velocity = velocity;
 }
 
-v3f LuaEntitySAO::getVelocity()
+v3d LuaEntitySAO::getVelocity()
 {
 	return m_velocity;
 }
 
-void LuaEntitySAO::setAcceleration(v3f acceleration)
+void LuaEntitySAO::setAcceleration(v3d acceleration)
 {
 	m_acceleration = acceleration;
 }
 
-v3f LuaEntitySAO::getAcceleration()
+v3d LuaEntitySAO::getAcceleration()
 {
 	return m_acceleration;
 }

@@ -335,13 +335,13 @@ void transformNodeBox(const MapNode &n, const NodeBox &nodebox,
 		// side
 		else
 		{
-			v3f vertices[2] =
+			v3d vertices[2] =
 			{
 				nodebox.wall_side.MinEdge,
 				nodebox.wall_side.MaxEdge
 			};
 
-			for (v3f &vertex : vertices) {
+			for (v3d &vertex : vertices) {
 				if(dir == v3s32(-1,0,0))
 					vertex.rotateXZBy(0);
 				if(dir == v3s32(1,0,0))

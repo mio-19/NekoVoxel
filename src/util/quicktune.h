@@ -22,10 +22,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 	Eg. if you have this constant somewhere that you just can't get right
 	by changing it and recompiling all over again:
-		v3f wield_position = v3f(55, -35, 65);
+		v3d wield_position = v3d(55, -35, 65);
 
 	Make it look like this:
-		v3f wield_position = v3f(55, -35, 65);
+		v3d wield_position = v3d(55, -35, 65);
 		QUICKTUNE_AUTONAME(QVT_FLOAT, wield_position.X, 0, 100);
 		QUICKTUNE_AUTONAME(QVT_FLOAT, wield_position.Y, -80, 20);
 		QUICKTUNE_AUTONAME(QVT_FLOAT, wield_position.Z, 0, 100);

@@ -56,8 +56,8 @@ static aabb3f getNodeBoundingBox(const std::vector<aabb3f> &nodeboxes)
 }
 
 
-bool LocalPlayer::updateSneakNode(Map *map, const v3f &position,
-	const v3f &sneak_max)
+bool LocalPlayer::updateSneakNode(Map *map, const v3d &position,
+	const v3d &sneak_max)
 {
 	// Acceptable distance to node center
 	constexpr f32 allowed_range = (0.5f + 0.1f) * BS;
@@ -84,7 +84,7 @@ bool LocalPlayer::updateSneakNode(Map *map, const v3f &position,
 		position_y_mod = m_sneak_node_bb_top.MaxEdge.Y - position_y_mod;
 
 	// Get position of current standing node
-	const v3s32 current_node = floatToInt(position - v3f(0.0f, position_y_mod, 0.0f), BS);
+	const v3s32 current_node = floatToInt(position - v3d(0.0f, position_y_mod, 0.0f), BS);
 
 	if (current_node != m_sneak_node) {
 		new_sneak_node_exists = false;
@@ -110,7 +110,7 @@ bool LocalPlayer::updateSneakNode(Map *map, const v3f &position,
 		if (!is_valid_position || !nodemgr->get(node).walkable)
 			continue;
 
-		v3f pf = intToFloat(p, BS);
+		v3d pf = intToFloat(p, BS);
 		{
 			std::vector<aabb3f> nodeboxes;
 			node.getCollisionBoxes(nodemgr, &nodeboxes);
@@ -191,12 +191,12 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 	Map *map = &env->getMap();
 	const NodeDefManager *nodemgr = m_client->ndef();
 
-	v3f position = getPosition();
+	v3d position = getPosition();
 
 	// Copy parent position if local player is attached
 	if (getParent()) {
 		setPosition(m_cao->getPosition());
-		m_added_velocity = v3f(0.0f); // ignored
+		m_added_velocity = v3d(0.0f); // ignored
 		return;
 	}
 
@@ -212,12 +212,12 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 		setPosition(position);
 
 		touching_ground = false;
-		m_added_velocity = v3f(0.0f); // ignored
+		m_added_velocity = v3d(0.0f); // ignored
 		return;
 	}
 
 	m_speed += m_added_velocity;
-	m_added_velocity = v3f(0.0f);
+	m_added_velocity = v3d(0.0f);
 
 	/*
 		Collision detection
@@ -234,7 +234,7 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 	// If in liquid, the threshold of coming out is at higher y
 	if (in_liquid)
 	{
-		pp = floatToInt(position + v3f(0.0f, BS * 0.1f, 0.0f), BS);
+		pp = floatToInt(position + v3d(0.0f, BS * 0.1f, 0.0f), BS);
 		node = map->getNode(pp, &is_valid_position);
 		if (is_valid_position) {
 			const ContentFeatures &cf = nodemgr->get(node.getContent());
@@ -246,7 +246,7 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 	} else {
 		// If not in liquid, the threshold of going in is at lower y
 
-		pp = floatToInt(position + v3f(0.0f, BS * 0.5f, 0.0f), BS);
+		pp = floatToInt(position + v3d(0.0f, BS * 0.5f, 0.0f), BS);
 		node = map->getNode(pp, &is_valid_position);
 		if (is_valid_position) {
 			const ContentFeatures &cf = nodemgr->get(node.getContent());
@@ -261,7 +261,7 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 	/*
 		Check if player is in liquid (the stable value)
 	*/
-	pp = floatToInt(position + v3f(0.0f), BS);
+	pp = floatToInt(position + v3d(0.0f), BS);
 	node = map->getNode(pp, &is_valid_position);
 	if (is_valid_position) {
 		in_liquid_stable = nodemgr->get(node.getContent()).liquid_move_physics;
@@ -273,8 +273,8 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 		Check if player is climbing
 	*/
 
-	pp = floatToInt(position + v3f(0.0f, 0.5f * BS, 0.0f), BS);
-	v3s32 pp2 = floatToInt(position + v3f(0.0f, -0.2f * BS, 0.0f), BS);
+	pp = floatToInt(position + v3d(0.0f, 0.5f * BS, 0.0f), BS);
+	v3s32 pp2 = floatToInt(position + v3d(0.0f, -0.2f * BS, 0.0f), BS);
 	node = map->getNode(pp, &is_valid_position);
 	bool is_valid_position2;
 	MapNode node2 = map->getNode(pp2, &is_valid_position2);
@@ -302,9 +302,9 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 	float player_stepheight = (m_cao == nullptr) ? 0.0f :
 		(touching_ground ? m_cao->getStepHeight() : (0.2f * BS));
 
-	v3f accel_f(0, -gravity, 0);
-	const v3f initial_position = position;
-	const v3f initial_speed = m_speed;
+	v3d accel_f(0, -gravity, 0);
+	const v3d initial_position = position;
+	const v3d initial_speed = m_speed;
 
 	collisionMoveResult result = collisionMoveSimple(env, m_client,
 		pos_max_d, m_collisionbox, player_stepheight, dtime,
@@ -315,7 +315,7 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 
 	// Add new collisions to the vector
 	if (collision_info && !free_move) {
-		v3f diff = intToFloat(m_standing_node, BS) - position;
+		v3d diff = intToFloat(m_standing_node, BS) - position;
 		f32 distance_sq = diff.getLengthSQ();
 		// Force update each ClientEnvironment::step()
 		bool is_first = collision_info->empty();
@@ -352,22 +352,22 @@ void LocalPlayer::move(f32 dtime, Environment *env, f32 pos_max_d,
 
 	// Max. distance (X, Z) over border for sneaking determined by collision box
 	// * 0.49 to keep the center just barely on the node
-	v3f sneak_max = m_collisionbox.getExtent() * 0.49f;
+	v3d sneak_max = m_collisionbox.getExtent() * 0.49f;
 
 	if (m_sneak_ladder_detected) {
 		// restore legacy behavior (this makes the m_speed.Y hack necessary)
-		sneak_max = v3f(0.4f * BS, 0.0f, 0.4f * BS);
+		sneak_max = v3d(0.4f * BS, 0.0f, 0.4f * BS);
 	}
 
 	/*
 		If sneaking, keep on top of last walked node and don't fall off
 	*/
 	if (could_sneak && m_sneak_node_exists) {
-		const v3f sn_f = intToFloat(m_sneak_node, BS);
-		const v3f bmin = sn_f + m_sneak_node_bb_top.MinEdge;
-		const v3f bmax = sn_f + m_sneak_node_bb_top.MaxEdge;
-		const v3f old_pos = position;
-		const v3f old_speed = m_speed;
+		const v3d sn_f = intToFloat(m_sneak_node, BS);
+		const v3d bmin = sn_f + m_sneak_node_bb_top.MinEdge;
+		const v3d bmax = sn_f + m_sneak_node_bb_top.MaxEdge;
+		const v3d old_pos = position;
+		const v3d old_speed = m_speed;
 		f32 y_diff = bmax.Y - position.Y;
 		m_standing_node = m_sneak_node;
 
@@ -508,7 +508,7 @@ void LocalPlayer::applyControl(float dtime, Environment *env)
 
 	// Nullify speed and don't run positioning code if the player is attached
 	if (getParent()) {
-		setSpeed(v3f(0.0f));
+		setSpeed(v3d(0.0f));
 		return;
 	}
 
@@ -517,7 +517,7 @@ void LocalPlayer::applyControl(float dtime, Environment *env)
 	// All vectors are relative to the player's yaw,
 	// (and pitch if pitch move mode enabled),
 	// and will be rotated at the end
-	v3f speedH, speedV; // Horizontal (X, Z) and Vertical (Y)
+	v3d speedH, speedV; // Horizontal (X, Z) and Vertical (Y)
 
 	bool fly_allowed = m_client->checkLocalPrivilege("fly");
 	bool fast_allowed = m_client->checkLocalPrivilege("fast");
@@ -595,7 +595,7 @@ void LocalPlayer::applyControl(float dtime, Environment *env)
 		}
 	}
 
-	speedH = v3f(sin(control.movement_direction), 0.0f, cos(control.movement_direction));
+	speedH = v3d(sin(control.movement_direction), 0.0f, cos(control.movement_direction));
 
 	if (m_autojump) {
 		// release autojump after a given time
@@ -623,7 +623,7 @@ void LocalPlayer::applyControl(float dtime, Environment *env)
 				raising the height at which the jump speed is kept
 				at its starting value
 			*/
-			v3f speedJ = getSpeed();
+			v3d speedJ = getSpeed();
 			if (speedJ.Y >= -0.5f * BS) {
 				speedJ.Y = movement_speed_jump * physics_override.jump;
 				setSpeed(speedJ);
@@ -678,7 +678,7 @@ void LocalPlayer::applyControl(float dtime, Environment *env)
 
 	// Don't sink when swimming in pitch mode
 	if (pitch_move && in_liquid) {
-		v3f controlSpeed = speedH + speedV;
+		v3d controlSpeed = speedH + speedV;
 		if (controlSpeed.getLength() > 0.01f)
 			swimming_pitch = true;
 	}
@@ -699,7 +699,7 @@ v3s32 LocalPlayer::getStandingNodePos()
 
 v3s32 LocalPlayer::getFootstepNodePos()
 {
-	v3f feet_pos = getPosition() + v3f(0.0f, m_collisionbox.MinEdge.Y, 0.0f);
+	v3d feet_pos = getPosition() + v3d(0.0f, m_collisionbox.MinEdge.Y, 0.0f);
 
 	// Emit swimming sound if the player is in liquid
 	if (in_liquid_stable)
@@ -708,22 +708,22 @@ v3s32 LocalPlayer::getFootstepNodePos()
 	// BS * 0.05 below the player's feet ensures a 1/16th height
 	// nodebox is detected instead of the node below it.
 	if (touching_ground)
-		return floatToInt(feet_pos - v3f(0.0f, BS * 0.05f, 0.0f), BS);
+		return floatToInt(feet_pos - v3d(0.0f, BS * 0.05f, 0.0f), BS);
 
 	// A larger distance below is necessary for a footstep sound
 	// when landing after a jump or fall. BS * 0.5 ensures water
 	// sounds when swimming in 1 node deep water.
-	return floatToInt(feet_pos - v3f(0.0f, BS * 0.5f, 0.0f), BS);
+	return floatToInt(feet_pos - v3d(0.0f, BS * 0.5f, 0.0f), BS);
 }
 
 v3s32 LocalPlayer::getLightPosition() const
 {
-	return floatToInt(m_position + v3f(0.0f, BS * 1.5f, 0.0f), BS);
+	return floatToInt(m_position + v3d(0.0f, BS * 1.5f, 0.0f), BS);
 }
 
-v3f LocalPlayer::getEyeOffset() const
+v3d LocalPlayer::getEyeOffset() const
 {
-	return v3f(0.0f, BS * m_eye_height, 0.0f);
+	return v3d(0.0f, BS * m_eye_height, 0.0f);
 }
 
 ClientActiveObject *LocalPlayer::getParent() const
@@ -738,23 +738,23 @@ bool LocalPlayer::isDead() const
 }
 
 // 3D acceleration
-void LocalPlayer::accelerate(const v3f &target_speed, const f32 max_increase_H,
+void LocalPlayer::accelerate(const v3d &target_speed, const f32 max_increase_H,
 	const f32 max_increase_V, const bool use_pitch)
 {
 	const f32 yaw = getYaw();
 	const f32 pitch = getPitch();
-	v3f flat_speed = m_speed;
+	v3d flat_speed = m_speed;
 	// Rotate speed vector by -yaw and -pitch to make it relative to the player's yaw and pitch
 	flat_speed.rotateXZBy(-yaw);
 	if (use_pitch)
 		flat_speed.rotateYZBy(-pitch);
 
-	v3f d_wanted = target_speed - flat_speed;
-	v3f d;
+	v3d d_wanted = target_speed - flat_speed;
+	v3d d;
 
 	// Then compare the horizontal and vertical components with the wanted speed
 	if (max_increase_H > 0.0f) {
-		v3f d_wanted_H = d_wanted * v3f(1.0f, 0.0f, 1.0f);
+		v3d d_wanted_H = d_wanted * v3d(1.0f, 0.0f, 1.0f);
 		if (d_wanted_H.getLength() > max_increase_H)
 			d += d_wanted_H.normalize() * max_increase_H;
 		else
@@ -786,13 +786,13 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	Map *map = &env->getMap();
 	const NodeDefManager *nodemgr = m_client->ndef();
 
-	v3f position = getPosition();
+	v3d position = getPosition();
 
 	// Copy parent position if local player is attached
 	if (getParent()) {
 		setPosition(m_cao->getPosition());
 		m_sneak_node_exists = false;
-		m_added_velocity = v3f(0.0f);
+		m_added_velocity = v3d(0.0f);
 		return;
 	}
 
@@ -808,12 +808,12 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 
 		touching_ground = false;
 		m_sneak_node_exists = false;
-		m_added_velocity = v3f(0.0f);
+		m_added_velocity = v3d(0.0f);
 		return;
 	}
 
 	m_speed += m_added_velocity;
-	m_added_velocity = v3f(0.0f);
+	m_added_velocity = v3d(0.0f);
 
 	// Apply gravity (note: this is broken, but kept since this is *old* move code)
 	m_speed.Y -= gravity * dtime;
@@ -830,7 +830,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	*/
 	if (in_liquid) {
 		// If in liquid, the threshold of coming out is at higher y
-		pp = floatToInt(position + v3f(0.0f, BS * 0.1f, 0.0f), BS);
+		pp = floatToInt(position + v3d(0.0f, BS * 0.1f, 0.0f), BS);
 		node = map->getNode(pp, &is_valid_position);
 		if (is_valid_position) {
 			const ContentFeatures &cf = nodemgr->get(node.getContent());
@@ -841,7 +841,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 		}
 	} else {
 		// If not in liquid, the threshold of going in is at lower y
-		pp = floatToInt(position + v3f(0.0f, BS * 0.5f, 0.0f), BS);
+		pp = floatToInt(position + v3d(0.0f, BS * 0.5f, 0.0f), BS);
 		node = map->getNode(pp, &is_valid_position);
 		if (is_valid_position) {
 			const ContentFeatures &cf = nodemgr->get(node.getContent());
@@ -855,7 +855,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	/*
 		Check if player is in liquid (the stable value)
 	*/
-	pp = floatToInt(position + v3f(0.0f), BS);
+	pp = floatToInt(position + v3d(0.0f), BS);
 	node = map->getNode(pp, &is_valid_position);
 	if (is_valid_position)
 		in_liquid_stable = nodemgr->get(node.getContent()).liquid_move_physics;
@@ -865,8 +865,8 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	/*
 		Check if player is climbing
 	*/
-	pp = floatToInt(position + v3f(0.0f, 0.5f * BS, 0.0f), BS);
-	v3s32 pp2 = floatToInt(position + v3f(0.0f, -0.2f * BS, 0.0f), BS);
+	pp = floatToInt(position + v3d(0.0f, 0.5f * BS, 0.0f), BS);
+	v3s32 pp2 = floatToInt(position + v3d(0.0f, -0.2f * BS, 0.0f), BS);
 	node = map->getNode(pp, &is_valid_position);
 	bool is_valid_position2;
 	MapNode node2 = map->getNode(pp2, &is_valid_position2);
@@ -897,7 +897,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 			!(fly_allowed && player_settings.free_move) && !in_liquid &&
 			physics_override.sneak) {
 		f32 maxd = 0.5f * BS + sneak_max;
-		v3f lwn_f = intToFloat(m_sneak_node, BS);
+		v3d lwn_f = intToFloat(m_sneak_node, BS);
 		position.X = rangelim(position.X, lwn_f.X - maxd, lwn_f.X + maxd);
 		position.Z = rangelim(position.Z, lwn_f.Z - maxd, lwn_f.Z + maxd);
 
@@ -919,9 +919,9 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	// TODO: This shouldn't be hardcoded but decided by the server
 	float player_stepheight = touching_ground ? (BS * 0.6f) : (BS * 0.2f);
 
-	v3f accel_f;
-	const v3f initial_position = position;
-	const v3f initial_speed = m_speed;
+	v3d accel_f;
+	const v3d initial_position = position;
+	const v3d initial_speed = m_speed;
 
 	collisionMoveResult result = collisionMoveSimple(env, m_client,
 		pos_max_d, m_collisionbox, player_stepheight, dtime,
@@ -929,7 +929,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 
 	// Position was slightly changed; update standing node pos
 	if (touching_ground)
-		m_standing_node = floatToInt(m_position - v3f(0.0f, 0.1f * BS, 0.0f), BS);
+		m_standing_node = floatToInt(m_position - v3d(0.0f, 0.1f * BS, 0.0f), BS);
 	else
 		m_standing_node = floatToInt(m_position, BS);
 
@@ -952,7 +952,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	f32 position_y_mod = 0.05f * BS;
 	if (m_sneak_node_bb_ymax > 0.0f)
 		position_y_mod = m_sneak_node_bb_ymax - position_y_mod;
-	v3s32 current_node = floatToInt(position - v3f(0.0f, position_y_mod, 0.0f), BS);
+	v3s32 current_node = floatToInt(position - v3d(0.0f, position_y_mod, 0.0f), BS);
 	if (m_sneak_node_exists &&
 			nodemgr->get(map->getNode(m_old_node_below)).name == "air" &&
 			m_old_node_below_type != "air") {
@@ -968,7 +968,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 
 	if (m_need_to_get_new_sneak_node && physics_override.sneak) {
 		m_sneak_node_bb_ymax = 0.0f;
-		v3s32 pos_i_bottom = floatToInt(position - v3f(0.0f, position_y_mod, 0.0f), BS);
+		v3s32 pos_i_bottom = floatToInt(position - v3d(0.0f, position_y_mod, 0.0f), BS);
 		v2f player_p2df(position.X, position.Z);
 		f32 min_distance_f = 100000.0f * BS;
 		// If already seeking from some node, compare to it.
@@ -976,7 +976,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 		for (s32 x= -1; x <= 1; x++)
 		for (s32 z= -1; z <= 1; z++) {
 			v3s32 p = pos_i_bottom + v3s32(x, 0, z);
-			v3f pf = intToFloat(p, BS);
+			v3d pf = intToFloat(p, BS);
 			v2f node_p2df(pf.X, pf.Z);
 			f32 distance_f = player_p2df.getDistanceFrom(node_p2df);
 			f32 max_axis_distance_f = MYMAX(
@@ -1057,7 +1057,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	/*
 		Update the node last under the player
 	*/
-	m_old_node_below = floatToInt(position - v3f(0.0f, BS / 2.0f, 0.0f), BS);
+	m_old_node_below = floatToInt(position - v3d(0.0f, BS / 2.0f, 0.0f), BS);
 	m_old_node_below_type = nodemgr->get(map->getNode(m_old_node_below)).name;
 
 	/*
@@ -1110,7 +1110,7 @@ void LocalPlayer::old_move(f32 dtime, Environment *env, f32 pos_max_d,
 	handleAutojump(dtime, env, result, initial_position, initial_speed, pos_max_d);
 }
 
-float LocalPlayer::getSlipFactor(Environment *env, const v3f &speedH)
+float LocalPlayer::getSlipFactor(Environment *env, const v3d &speedH)
 {
 	// Slip on slippery nodes
 	const NodeDefManager *nodemgr = env->getGameDef()->ndef();
@@ -1121,7 +1121,7 @@ float LocalPlayer::getSlipFactor(Environment *env, const v3f &speedH)
 		slippery = itemgroup_get(f.groups, "slippery");
 
 	if (slippery >= 1) {
-		if (speedH == v3f(0.0f))
+		if (speedH == v3d(0.0f))
 			slippery *= 2;
 
 		return core::clamp(1.0f / (slippery + 1), 0.001f, 1.0f);
@@ -1130,8 +1130,8 @@ float LocalPlayer::getSlipFactor(Environment *env, const v3f &speedH)
 }
 
 void LocalPlayer::handleAutojump(f32 dtime, Environment *env,
-	const collisionMoveResult &result, const v3f &initial_position,
-	const v3f &initial_speed, f32 pos_max_d)
+	const collisionMoveResult &result, const v3d &initial_position,
+	const v3d &initial_speed, f32 pos_max_d)
 {
 	PlayerSettings &player_settings = getPlayerSettings();
 	if (!player_settings.autojump)
@@ -1159,8 +1159,8 @@ void LocalPlayer::handleAutojump(f32 dtime, Environment *env,
 		return;
 
 	// check for nodes above
-	v3f headpos_min = m_position + m_collisionbox.MinEdge * 0.99f;
-	v3f headpos_max = m_position + m_collisionbox.MaxEdge * 0.99f;
+	v3d headpos_min = m_position + m_collisionbox.MinEdge * 0.99f;
+	v3d headpos_max = m_position + m_collisionbox.MaxEdge * 0.99f;
 	headpos_min.Y = headpos_max.Y; // top face of collision box
 	v3s32 ceilpos_min = floatToInt(headpos_min, BS) + v3s32(0, 1, 0);
 	v3s32 ceilpos_max = floatToInt(headpos_max, BS) + v3s32(0, 1, 0);
@@ -1183,18 +1183,18 @@ void LocalPlayer::handleAutojump(f32 dtime, Environment *env,
 	float jumpspeed = movement_speed_jump * physics_override.jump;
 	float peak_dtime = jumpspeed / gravity; // at the peak of the jump v = gt <=> t = v / g
 	float jump_height = (jumpspeed - 0.5f * gravity * peak_dtime) * peak_dtime; // s = vt - 1/2 gt^2
-	v3f jump_pos = initial_position + v3f(0.0f, jump_height, 0.0f);
-	v3f jump_speed = initial_speed;
+	v3d jump_pos = initial_position + v3d(0.0f, jump_height, 0.0f);
+	v3d jump_speed = initial_speed;
 
 	// try at peak of jump, zero step height
 	collisionMoveResult jump_result = collisionMoveSimple(env, m_client, pos_max_d,
-		m_collisionbox, 0.0f, dtime, &jump_pos, &jump_speed, v3f(0.0f));
+		m_collisionbox, 0.0f, dtime, &jump_pos, &jump_speed, v3d(0.0f));
 
 	// see if we can get a little bit farther horizontally if we had
 	// jumped
-	v3f run_delta = m_position - initial_position;
+	v3d run_delta = m_position - initial_position;
 	run_delta.Y = 0.0f;
-	v3f jump_delta = jump_pos - initial_position;
+	v3d jump_delta = jump_pos - initial_position;
 	jump_delta.Y = 0.0f;
 	if (jump_delta.getLengthSQ() > run_delta.getLengthSQ() * 1.01f) {
 		m_autojump = true;

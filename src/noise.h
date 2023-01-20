@@ -110,7 +110,7 @@ private:
 struct NoiseParams {
 	float offset = 0.0f;
 	float scale = 1.0f;
-	v3f spread = v3f(250, 250, 250);
+	v3d spread = v3d(250, 250, 250);
 	s32 seed = 12345;
 	u16 octaves = 3;
 	float persist = 0.6f;
@@ -119,7 +119,7 @@ struct NoiseParams {
 
 	NoiseParams() = default;
 
-	NoiseParams(float offset_, float scale_, const v3f &spread_, s32 seed_,
+	NoiseParams(float offset_, float scale_, const v3d &spread_, s32 seed_,
 		u16 octaves_, float persist_, float lacunarity_,
 		u32 flags_=NOISE_FLAG_DEFAULTS)
 	{
@@ -150,7 +150,7 @@ public:
 	~Noise();
 
 	void setSize(u32 sx, u32 sy, u32 sz=1);
-	void setSpreadFactor(v3f spread);
+	void setSpreadFactor(v3d spread);
 	void setOctaves(int octaves);
 
 	void gradientMap2D(

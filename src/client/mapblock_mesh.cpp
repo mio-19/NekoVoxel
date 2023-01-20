@@ -404,7 +404,7 @@ static void getNodeVertexDirs(const v3s32 &dir, v3s32 *vertex_dirs)
 #endif
 }
 
-static void getNodeTextureCoords(v3f base, const v3f &scale, const v3s32 &dir, float *u, float *v)
+static void getNodeTextureCoords(v3d base, const v3d &scale, const v3s32 &dir, float *u, float *v)
 {
 	if (dir.X > 0 || dir.Y != 0 || dir.Z < 0)
 		base -= scale;
@@ -442,17 +442,17 @@ struct FastFace
 };
 
 static void makeFastFace(const TileSpec &tile, u16 li0, u16 li1, u16 li2, u16 li3,
-	const v3f &tp, const v3f &p, const v3s32 &dir, const v3f &scale, std::vector<FastFace> &dest)
+	const v3d &tp, const v3d &p, const v3s32 &dir, const v3d &scale, std::vector<FastFace> &dest)
 {
 	// Position is at the center of the cube.
-	v3f pos = p * BS;
+	v3d pos = p * BS;
 
 	float x0 = 0.0f;
 	float y0 = 0.0f;
 	float w = 1.0f;
 	float h = 1.0f;
 
-	v3f vertex_pos[4];
+	v3d vertex_pos[4];
 	v3s32 vertex_dirs[4];
 	getNodeVertexDirs(dir, vertex_dirs);
 	if (tile.world_aligned)
@@ -570,14 +570,14 @@ static void makeFastFace(const TileSpec &tile, u16 li0, u16 li1, u16 li2, u16 li
 	}
 
 	for (u16 i = 0; i < 4; i++) {
-		vertex_pos[i] = v3f(
+		vertex_pos[i] = v3d(
 				BS / 2 * vertex_dirs[i].X,
 				BS / 2 * vertex_dirs[i].Y,
 				BS / 2 * vertex_dirs[i].Z
 		);
 	}
 
-	for (v3f &vpos : vertex_pos) {
+	for (v3d &vpos : vertex_pos) {
 		vpos.X *= scale.X;
 		vpos.Y *= scale.Y;
 		vpos.Z *= scale.Z;
@@ -589,7 +589,7 @@ static void makeFastFace(const TileSpec &tile, u16 li0, u16 li1, u16 li2, u16 li
 	else if (scale.Y < 0.999f || scale.Y > 1.001f) abs_scale = scale.Y;
 	else if (scale.Z < 0.999f || scale.Z > 1.001f) abs_scale = scale.Z;
 
-	v3f normal(dir.X, dir.Y, dir.Z);
+	v3d normal(dir.X, dir.Y, dir.Z);
 
 	u16 li[4] = { li0, li1, li2, li3 };
 	u16 day[4];
@@ -854,7 +854,7 @@ static void updateFastFaceRow(
 		MeshMakeData *data,
 		const v3s32 &&startpos,
 		v3s32 translate_dir,
-		const v3f &&translate_dir_f,
+		const v3d &&translate_dir_f,
 		const v3s32 &&face_dir,
 		std::vector<FastFace> &dest)
 {
@@ -921,11 +921,11 @@ static void updateFastFaceRow(
 			*/
 			if (makes_face) {
 				// Floating point conversion of the position vector
-				v3f pf(p_corrected.X, p_corrected.Y, p_corrected.Z);
+				v3d pf(p_corrected.X, p_corrected.Y, p_corrected.Z);
 				// Center point of face (kind of)
-				v3f sp = pf - ((f32)continuous_tiles_count * 0.5f - 0.5f)
+				v3d sp = pf - ((f32)continuous_tiles_count * 0.5f - 0.5f)
 					* translate_dir_f;
-				v3f scale(1, 1, 1);
+				v3d scale(1, 1, 1);
 
 				if (translate_dir.X != 0)
 					scale.X = continuous_tiles_count;
@@ -962,7 +962,7 @@ static void updateAllFastFaceRows(MeshMakeData *data,
 		updateFastFaceRow(data,
 				v3s32(0, y, z),
 				v3s32(1, 0, 0), //dir
-				v3f  (1, 0, 0),
+				v3d  (1, 0, 0),
 				v3s32(0, 1, 0), //face dir
 				dest);
 
@@ -974,7 +974,7 @@ static void updateAllFastFaceRows(MeshMakeData *data,
 		updateFastFaceRow(data,
 				v3s32(x, y, 0),
 				v3s32(0, 0, 1), //dir
-				v3f  (0, 0, 1),
+				v3d  (0, 0, 1),
 				v3s32(1, 0, 0), //face dir
 				dest);
 
@@ -986,7 +986,7 @@ static void updateAllFastFaceRows(MeshMakeData *data,
 		updateFastFaceRow(data,
 				v3s32(0, y, z),
 				v3s32(1, 0, 0), //dir
-				v3f  (1, 0, 0),
+				v3d  (1, 0, 0),
 				v3s32(0, 0, 1), //face dir
 				dest);
 }
@@ -1024,7 +1024,7 @@ void MapBlockBspTree::buildTree(const std::vector<MeshTriangle> *triangles)
 
 	if (!indexes.empty()) {
 		// Start in the center of the block with increment of one quarter in each direction
-		root = buildTree(v3f(1, 0, 0), v3f((MAP_BLOCKSIZE + 1) * 0.5f * BS), MAP_BLOCKSIZE * 0.25f * BS, indexes, 0);
+		root = buildTree(v3d(1, 0, 0), v3d((MAP_BLOCKSIZE + 1) * 0.5f * BS), MAP_BLOCKSIZE * 0.25f * BS, indexes, 0);
 	} else {
 		root = -1;
 	}
@@ -1042,7 +1042,7 @@ void MapBlockBspTree::buildTree(const std::vector<MeshTriangle> *triangles)
 static const MeshTriangle *findSplitCandidate(const std::vector<s32> &list, const std::vector<MeshTriangle> &triangles)
 {
 	// find the center of the cluster.
-	v3f center(0, 0, 0);
+	v3d center(0, 0, 0);
 	size_t n = list.size();
 	for (s32 i : list) {
 		center += triangles[i].centroid / n;
@@ -1062,7 +1062,7 @@ static const MeshTriangle *findSplitCandidate(const std::vector<s32> &list, cons
 	return candidate_triangle;
 }
 
-s32 MapBlockBspTree::buildTree(v3f normal, v3f origin, float delta, const std::vector<s32> &list, u32 depth)
+s32 MapBlockBspTree::buildTree(v3d normal, v3d origin, float delta, const std::vector<s32> &list, u32 depth)
 {
 	// if the list is empty, don't bother
 	if (list.empty())
@@ -1091,7 +1091,7 @@ s32 MapBlockBspTree::buildTree(v3f normal, v3f origin, float delta, const std::v
 	}
 
 	// define the new split-plane
-	v3f candidate_normal(normal.Z, normal.X, normal.Y);
+	v3d candidate_normal(normal.Z, normal.X, normal.Y);
 	float candidate_delta = delta;
 	if (depth % 3 == 2)
 		candidate_delta /= 2;
@@ -1100,8 +1100,8 @@ s32 MapBlockBspTree::buildTree(v3f normal, v3f origin, float delta, const std::v
 	s32 back_index = -1;
 
 	if (!front_list.empty()) {
-		v3f next_normal = candidate_normal;
-		v3f next_origin = origin + delta * normal;
+		v3d next_normal = candidate_normal;
+		v3d next_origin = origin + delta * normal;
 		float next_delta = candidate_delta;
 		if (next_delta < 5) {
 			const MeshTriangle *candidate = findSplitCandidate(front_list, *triangles);
@@ -1116,8 +1116,8 @@ s32 MapBlockBspTree::buildTree(v3f normal, v3f origin, float delta, const std::v
 	}
 
 	if (!back_list.empty()) {
-		v3f next_normal = candidate_normal;
-		v3f next_origin = origin - delta * normal;
+		v3d next_normal = candidate_normal;
+		v3d next_origin = origin - delta * normal;
 		float next_delta = candidate_delta;
 		if (next_delta < 5) {
 			const MeshTriangle *candidate = findSplitCandidate(back_list, *triangles);
@@ -1137,7 +1137,7 @@ s32 MapBlockBspTree::buildTree(v3f normal, v3f origin, float delta, const std::v
 	return nodes.size() - 1;
 }
 
-void MapBlockBspTree::traverse(s32 node, v3f viewpoint, std::vector<s32> &output) const
+void MapBlockBspTree::traverse(s32 node, v3d viewpoint, std::vector<s32> &output) const
 {
 	if (node < 0) return; // recursion break;
 
@@ -1494,14 +1494,14 @@ bool MapBlockMesh::animate(bool faraway, float time, int crack,
 	return true;
 }
 
-void MapBlockMesh::updateTransparentBuffers(v3f camera_pos, v3s32 block_pos)
+void MapBlockMesh::updateTransparentBuffers(v3d camera_pos, v3s32 block_pos)
 {
 	// nothing to do if the entire block is opaque
 	if (m_transparent_triangles.empty())
 		return;
 
-	v3f block_posf = intToFloat(block_pos * MAP_BLOCKSIZE, BS);
-	v3f rel_camera_pos = camera_pos - block_posf;
+	v3d block_posf = intToFloat(block_pos * MAP_BLOCKSIZE, BS);
+	v3d rel_camera_pos = camera_pos - block_posf;
 
 	std::vector<s32> triangle_refs;
 	m_bsp_tree.traverse(rel_camera_pos, triangle_refs);

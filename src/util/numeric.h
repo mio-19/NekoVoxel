@@ -188,11 +188,11 @@ inline float wrapDegrees_0_360(float f)
 }
 
 
-/** Returns \p v3f wrapped to the range [0, 360]
+/** Returns \p v3d wrapped to the range [0, 360]
   */
-inline v3f wrapDegrees_0_360_v3f(v3f v)
+inline v3d wrapDegrees_0_360_v3f(v3d v)
 {
-	v3f value_v3f;
+	v3d value_v3f;
 	value_v3f.X = modulo360f(v.X);
 	value_v3f.Y = modulo360f(v.Y);
 	value_v3f.Z = modulo360f(v.Z);
@@ -254,7 +254,7 @@ inline u32 calc_parity(u32 v)
 
 u64 murmur_hash_64_ua(const void *key, int len, unsigned int seed);
 
-bool isBlockInSight(v3s32 blockpos_b, v3f camera_pos, v3f camera_dir,
+bool isBlockInSight(v3s32 blockpos_b, v3d camera_pos, v3d camera_dir,
 		f32 camera_fov, f32 range, f32 *distance_ptr=NULL);
 
 s32 adjustDist(s32 dist, float zoom_fov);
@@ -276,7 +276,7 @@ inline constexpr f32 sqr(f32 f)
 /*
 	Returns integer position of node in given floating point position
 */
-inline v3s32 floatToInt(v3f p, f32 d)
+inline v3s32 floatToInt(v3d p, f32 d)
 {
 	return v3s32(
 		(p.X + (p.X > 0 ? d / 2 : -d / 2)) / d,
@@ -309,9 +309,9 @@ inline v3s32 doubleToInt(v3d p, double d)
 /*
 	Returns floating point position of node in given integer position
 */
-inline v3f intToFloat(v3s32 p, f32 d)
+inline v3d intToFloat(v3s32 p, f32 d)
 {
-	return v3f(
+	return v3d(
 		(f32)p.X * d,
 		(f32)p.Y * d,
 		(f32)p.Z * d
@@ -437,16 +437,16 @@ inline void wrappedApproachShortest(T &current, const T target, const T stepsize
 	}
 }
 
-void setPitchYawRollRad(core::matrix4 &m, const v3f &rot);
+void setPitchYawRollRad(core::matrix4 &m, const v3d &rot);
 
-inline void setPitchYawRoll(core::matrix4 &m, const v3f &rot)
+inline void setPitchYawRoll(core::matrix4 &m, const v3d &rot)
 {
 	setPitchYawRollRad(m, rot * core::DEGTORAD64);
 }
 
-v3f getPitchYawRollRad(const core::matrix4 &m);
+v3d getPitchYawRollRad(const core::matrix4 &m);
 
-inline v3f getPitchYawRoll(const core::matrix4 &m)
+inline v3d getPitchYawRoll(const core::matrix4 &m)
 {
 	return getPitchYawRollRad(m) * core::RADTODEG64;
 }
@@ -463,18 +463,18 @@ inline irr::video::SColor multiplyColorValue(const irr::video::SColor &color, fl
 template <typename T> inline T numericAbsolute(T v) { return v < 0 ? T(-v) : v;                }
 template <typename T> inline T numericSign(T v)     { return T(v < 0 ? -1 : (v == 0 ? 0 : 1)); }
 
-inline v3f vecAbsolute(v3f v)
+inline v3d vecAbsolute(v3d v)
 {
-	return v3f(
+	return v3d(
 		numericAbsolute(v.X),
 		numericAbsolute(v.Y),
 		numericAbsolute(v.Z)
 	);
 }
 
-inline v3f vecSign(v3f v)
+inline v3d vecSign(v3d v)
 {
-	return v3f(
+	return v3d(
 		numericSign(v.X),
 		numericSign(v.Y),
 		numericSign(v.Z)

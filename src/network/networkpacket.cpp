@@ -419,7 +419,7 @@ NetworkPacket& NetworkPacket::operator>>(v2f& dst)
 	return *this;
 }
 
-NetworkPacket& NetworkPacket::operator>>(v3f& dst)
+NetworkPacket& NetworkPacket::operator>>(v3d& dst)
 {
 	checkReadOffset(m_read_offset, 12);
 
@@ -498,7 +498,7 @@ NetworkPacket& NetworkPacket::operator<<(v2f src)
 	return *this;
 }
 
-NetworkPacket& NetworkPacket::operator<<(v3f src)
+NetworkPacket& NetworkPacket::operator<<(v3d src)
 {
 	*this << (float) src.X;
 	*this << (float) src.Y;

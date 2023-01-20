@@ -118,7 +118,7 @@ public:
 
 	void addBlock(v3s32 pos, MinimapMapblock *data);
 
-	v3f getYawVec();
+	v3d getYawVec();
 
 	void setPos(v3s32 pos);
 	v3s32 getPos() const { return data->pos; }

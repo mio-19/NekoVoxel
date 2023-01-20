@@ -181,9 +181,9 @@ bool ClientLauncher::run(GameStartData &start_data, const Settings &cmd_args)
 	if (!g_menuclouds)
 		g_menuclouds = new Clouds(g_menucloudsmgr, -1, rand());
 	g_menuclouds->setHeight(100.0f);
-	g_menuclouds->update(v3f(0, 0, 0), video::SColor(255, 240, 240, 255));
+	g_menuclouds->update(v3d(0, 0, 0), video::SColor(255, 240, 240, 255));
 	scene::ICameraSceneNode* camera;
-	camera = g_menucloudsmgr->addCameraSceneNode(NULL, v3f(0, 0, 0), v3f(0, 60, 100));
+	camera = g_menucloudsmgr->addCameraSceneNode(NULL, v3d(0, 0, 0), v3d(0, 60, 100));
 	camera->setFarValue(10000);
 
 	/*
@@ -574,13 +574,13 @@ void ClientLauncher::speed_tests()
 	volatile static f32 tempf;
 	// Silence compiler warning
 	(void)temp16;
-	static v3f tempv3f1;
-	static v3f tempv3f2;
+	static v3d tempv3f1;
+	static v3d tempv3f2;
 	static std::string tempstring;
 	static std::string tempstring2;
 
-	tempv3f1 = v3f();
-	tempv3f2 = v3f();
+	tempv3f1 = v3d();
+	tempv3f2 = v3d();
 	tempstring.clear();
 	tempstring2.clear();
 
@@ -618,11 +618,11 @@ void ClientLauncher::speed_tests()
 	{
 		TimeTaker timer("Testing floating-point vector speed");
 
-		tempv3f1 = v3f(1, 2, 3);
-		tempv3f2 = v3f(4, 5, 6);
+		tempv3f1 = v3d(1, 2, 3);
+		tempv3f2 = v3d(4, 5, 6);
 		for (u32 i = 0; i < 10000000; i++) {
 			tempf += tempv3f1.dotProduct(tempv3f2);
-			tempv3f2 += v3f(7, 8, 9);
+			tempv3f2 += v3d(7, 8, 9);
 		}
 	}
 

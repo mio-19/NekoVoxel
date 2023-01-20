@@ -211,14 +211,14 @@ void ClientEnvironment::step(float dtime)
 
 			// Movement resistance
 			if (lplayer->move_resistance > 0) {
-				v3f speed = lplayer->getSpeed();
+				v3d speed = lplayer->getSpeed();
 
 				// How much the node's move_resistance blocks movement, ranges
 				// between 0 and 1. Should match the scale at which liquid_viscosity
 				// increase affects other liquid attributes.
 				static const f32 resistance_factor = 0.3f;
 
-				v3f d_wanted;
+				v3d d_wanted;
 				bool in_liquid_stable = lplayer->in_liquid_stable || lplayer->in_liquid;
 				if (in_liquid_stable) {
 					d_wanted = -speed / lplayer->movement_liquid_fluidity;
@@ -233,7 +233,7 @@ void ClientEnvironment::step(float dtime)
 
 				dl *= (lplayer->move_resistance * resistance_factor) +
 					(1 - resistance_factor);
-				v3f d = d_wanted.normalize() * (dl * dtime_part * 100.0f);
+				v3d d = d_wanted.normalize() * (dl * dtime_part * 100.0f);
 				speed += d;
 
 				lplayer->setSpeed(speed);
@@ -261,7 +261,7 @@ void ClientEnvironment::step(float dtime)
 	}
 
 	for (const CollisionInfo &info : player_collisions) {
-		v3f speed_diff = info.new_speed - info.old_speed;;
+		v3d speed_diff = info.new_speed - info.old_speed;;
 		// Handle only fall damage
 		// (because otherwise walking against something in fast_move kills you)
 		if (speed_diff.Y < 0 || info.old_speed.Y >= 0)
@@ -496,7 +496,7 @@ void ClientEnvironment::getSelectedActiveObjects(
 {
 	std::vector<DistanceSortedActiveObject> allObjects;
 	m_ao_manager.getActiveSelectableObjects(shootline_on_map, allObjects);
-	const v3f line_vector = shootline_on_map.getVector();
+	const v3d line_vector = shootline_on_map.getVector();
 
 	for (const auto &allObject : allObjects) {
 		ClientActiveObject *obj = allObject.obj;
@@ -504,14 +504,14 @@ void ClientEnvironment::getSelectedActiveObjects(
 		if (!obj->getSelectionBox(&selection_box))
 			continue;
 
-		v3f current_intersection;
-		v3f current_normal, current_raw_normal;
-		const v3f rel_pos = shootline_on_map.start - obj->getPosition();
+		v3d current_intersection;
+		v3d current_normal, current_raw_normal;
+		const v3d rel_pos = shootline_on_map.start - obj->getPosition();
 		bool collision;
 		GenericCAO* gcao = dynamic_cast<GenericCAO*>(obj);
 		if (gcao != nullptr && gcao->getProperties().rotate_selectionbox) {
 			gcao->getSceneNode()->updateAbsolutePosition();
-			const v3f deg = obj->getSceneNode()->getAbsoluteTransformation().getRotationDegrees();
+			const v3d deg = obj->getSceneNode()->getAbsoluteTransformation().getRotationDegrees();
 			collision = boxLineCollision(selection_box, deg,
 				rel_pos, line_vector, &current_intersection, &current_normal, &current_raw_normal);
 		} else {

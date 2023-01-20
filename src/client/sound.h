@@ -46,16 +46,16 @@ public:
 			const std::string &name, const std::string &filedata) = 0;
 
 	virtual void updateListener(
-			const v3f &pos, const v3f &vel, const v3f &at, const v3f &up) = 0;
+			const v3d &pos, const v3d &vel, const v3d &at, const v3d &up) = 0;
 	virtual void setListenerGain(float gain) = 0;
 
 	// playSound functions return -1 on failure, otherwise a handle to the
 	// sound. If name=="", call should be ignored without error.
 	virtual int playSound(const SimpleSoundSpec &spec) = 0;
-	virtual int playSoundAt(const SimpleSoundSpec &spec, const v3f &pos) = 0;
+	virtual int playSoundAt(const SimpleSoundSpec &spec, const v3d &pos) = 0;
 	virtual void stopSound(int sound) = 0;
 	virtual bool soundExists(int sound) = 0;
-	virtual void updateSoundPosition(int sound, v3f pos) = 0;
+	virtual void updateSoundPosition(int sound, v3d pos) = 0;
 	virtual bool updateSoundGain(int id, float gain) = 0;
 	virtual float getSoundGain(int id) = 0;
 	virtual void step(float dtime) = 0;
@@ -73,16 +73,16 @@ public:
 	{
 		return true;
 	}
-	void updateListener(const v3f &pos, const v3f &vel, const v3f &at, const v3f &up)
+	void updateListener(const v3d &pos, const v3d &vel, const v3d &at, const v3d &up)
 	{
 	}
 	void setListenerGain(float gain) {}
 
 	int playSound(const SimpleSoundSpec &spec) { return -1; }
-	int playSoundAt(const SimpleSoundSpec &spec, const v3f &pos) { return -1; }
+	int playSoundAt(const SimpleSoundSpec &spec, const v3d &pos) { return -1; }
 	void stopSound(int sound) {}
 	bool soundExists(int sound) { return false; }
-	void updateSoundPosition(int sound, v3f pos) {}
+	void updateSoundPosition(int sound, v3d pos) {}
 	bool updateSoundGain(int id, float gain) { return false; }
 	float getSoundGain(int id) { return 0; }
 	void step(float dtime) {}

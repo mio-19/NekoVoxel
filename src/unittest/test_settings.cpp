@@ -161,7 +161,7 @@ void TestSettings::testAllSettings()
 
 	// Test the setting of settings too
 	s.setFloat("floaty_thing_2", 1.25);
-	s.setV3F("coord2", v3f(1, 2, 3.3));
+	s.setV3F("coord2", v3d(1, 2, 3.3));
 	UASSERT(s.get("floaty_thing_2").substr(0,4) == "1.25");
 	UASSERT(fabs(s.getFloat("floaty_thing_2") - 1.25) < 0.001);
 	UASSERT(fabs(s.getV3F("coord2").X - 1.0) < 0.001);

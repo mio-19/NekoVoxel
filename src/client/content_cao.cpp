@@ -116,7 +116,7 @@ void SmoothTranslatorWrappedv3f::translate(f32 dtime)
 {
 	anim_time_counter = anim_time_counter + dtime;
 
-	v3f val_diff_v3f;
+	v3d val_diff_v3f;
 	val_diff_v3f.X = std::abs(val_target.X - val_old.X);
 	val_diff_v3f.Y = std::abs(val_target.Y - val_old.Y);
 	val_diff_v3f.Z = std::abs(val_target.Z - val_old.Z);
@@ -212,7 +212,7 @@ public:
 	bool getCollisionBox(aabb3f *toset) const { return false; }
 private:
 	scene::IMeshSceneNode *m_node;
-	v3f m_position;
+	v3d m_position;
 };
 
 // Prototype
@@ -221,7 +221,7 @@ TestCAO proto_TestCAO(NULL, NULL);
 TestCAO::TestCAO(Client *client, ClientEnvironment *env):
 	ClientActiveObject(0, client, env),
 	m_node(NULL),
-	m_position(v3f(0,10*BS,0))
+	m_position(v3d(0,10*BS,0))
 {
 	ClientActiveObject::registerType(getType(), create);
 }
@@ -284,14 +284,14 @@ void TestCAO::updateNodePos()
 		return;
 
 	m_node->setPosition(m_position);
-	//m_node->setRotation(v3f(0, 45, 0));
+	//m_node->setRotation(v3d(0, 45, 0));
 }
 
 void TestCAO::step(float dtime, ClientEnvironment *env)
 {
 	if(m_node)
 	{
-		v3f rot = m_node->getRotation();
+		v3d rot = m_node->getRotation();
 		//infostream<<"dtime="<<dtime<<", rot.Y="<<rot.Y<<std::endl;
 		rot.Y += dtime * 180;
 		m_node->setRotation(rot);
@@ -306,7 +306,7 @@ void TestCAO::processMessage(const std::string &data)
 	is>>cmd;
 	if(cmd == 0)
 	{
-		v3f newpos;
+		v3d newpos;
 		is>>newpos.X;
 		is>>newpos.Y;
 		is>>newpos.Z;
@@ -418,7 +418,7 @@ bool GenericCAO::getSelectionBox(aabb3f *toset) const
 	return true;
 }
 
-const v3f GenericCAO::getPosition() const
+const v3d GenericCAO::getPosition() const
 {
 	if (!getParent())
 		return pos_translator.val_current;
@@ -475,7 +475,7 @@ void GenericCAO::setChildrenVisible(bool toset)
 }
 
 void GenericCAO::setAttachment(int parent_id, const std::string &bone,
-		v3f position, v3f rotation, bool force_visible)
+		v3d position, v3d rotation, bool force_visible)
 {
 	int old_parent = m_attachment_parent_id;
 	m_attachment_parent_id = parent_id;
@@ -509,8 +509,8 @@ void GenericCAO::setAttachment(int parent_id, const std::string &bone,
 	}
 }
 
-void GenericCAO::getAttachment(int *parent_id, std::string *bone, v3f *position,
-	v3f *rotation, bool *force_visible) const
+void GenericCAO::getAttachment(int *parent_id, std::string *bone, v3d *position,
+	v3d *rotation, bool *force_visible) const
 {
 	*parent_id = m_attachment_parent_id;
 	*bone = m_attachment_bone;
@@ -526,7 +526,7 @@ void GenericCAO::clearChildAttachments()
 		int child_id = *m_attachment_child_ids.begin();
 
 		if (ClientActiveObject *child = m_env->getActiveObject(child_id))
-			child->setAttachment(0, "", v3f(), v3f(), false);
+			child->setAttachment(0, "", v3d(), v3d(), false);
 
 		removeAttachmentChild(child_id);
 	}
@@ -537,7 +537,7 @@ void GenericCAO::clearParentAttachment()
 	if (m_attachment_parent_id)
 		setAttachment(0, "", m_attachment_position, m_attachment_rotation, false);
 	else
-		setAttachment(0, "", v3f(), v3f(), false);
+		setAttachment(0, "", v3d(), v3d(), false);
 }
 
 void GenericCAO::addAttachmentChild(int child_id)
@@ -657,7 +657,7 @@ void GenericCAO::addToScene(ITextureSource *tsrc, scene::ISceneManager *smgr)
 	if (m_prop.visual == "sprite") {
 		grabMatrixNode();
 		m_spritenode = m_smgr->addBillboardSceneNode(
-				m_matrixnode, v2f(1, 1), v3f(0,0,0), -1);
+				m_matrixnode, v2f(1, 1), v3d(0,0,0), -1);
 		m_spritenode->grab();
 		m_spritenode->setMaterialTexture(0,
 				tsrc->getTextureForMesh("no_texture.png"));
@@ -746,7 +746,7 @@ void GenericCAO::addToScene(ITextureSource *tsrc, scene::ISceneManager *smgr)
 		mesh->drop();
 	} else if (m_prop.visual == "cube") {
 		grabMatrixNode();
-		scene::IMesh *mesh = createCubeMesh(v3f(BS,BS,BS));
+		scene::IMesh *mesh = createCubeMesh(v3d(BS,BS,BS));
 		m_meshnode = m_smgr->addMeshSceneNode(mesh, m_matrixnode);
 		m_meshnode->grab();
 		mesh->drop();
@@ -985,7 +985,7 @@ void GenericCAO::updateNametag()
 	if (!node)
 		return;
 
-	v3f pos;
+	v3d pos;
 	pos.Y = m_prop.selectionbox.MaxEdge.Y + 0.3f;
 	if (!m_nametag) {
 		// Add nametag
@@ -1010,11 +1010,11 @@ void GenericCAO::updateNodePos()
 
 	if (node) {
 		v3s32 camera_offset = m_env->getCameraOffset();
-		v3f pos = pos_translator.val_current -
+		v3d pos = pos_translator.val_current -
 				intToFloat(camera_offset, BS);
 		getPosRotMatrix().setTranslation(pos);
 		if (node != m_spritenode) { // rotate if not a sprite
-			v3f rot = m_is_local_player ? -m_rotation : -rot_translator.val_current;
+			v3d rot = m_is_local_player ? -m_rotation : -rot_translator.val_current;
 			setPitchYawRoll(getPosRotMatrix(), rot);
 		}
 	}
@@ -1033,8 +1033,8 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 		if (m_is_visible) {
 			int old_anim = player->last_animation;
 			float old_anim_speed = player->last_animation_speed;
-			m_velocity = v3f(0,0,0);
-			m_acceleration = v3f(0,0,0);
+			m_velocity = v3d(0,0,0);
+			m_acceleration = v3d(0,0,0);
 			const PlayerControl &controls = player->getPlayerControl();
 			f32 new_speed = player->local_animation_speed;
 
@@ -1131,13 +1131,13 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 	{
 		// Set these for later
 		m_position = getPosition();
-		m_velocity = v3f(0,0,0);
-		m_acceleration = v3f(0,0,0);
+		m_velocity = v3d(0,0,0);
+		m_acceleration = v3d(0,0,0);
 		pos_translator.val_current = m_position;
 		pos_translator.val_target = m_position;
 	} else {
 		rot_translator.translate(dtime);
-		v3f lastpos = pos_translator.val_current;
+		v3d lastpos = pos_translator.val_current;
 
 		if(m_prop.physical)
 		{
@@ -1146,8 +1146,8 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 			box.MaxEdge *= BS;
 			collisionMoveResult moveresult;
 			f32 pos_max_d = BS*0.125; // Distance per iteration
-			v3f p_pos = m_position;
-			v3f p_velocity = m_velocity;
+			v3d p_pos = m_position;
+			v3d p_velocity = m_velocity;
 			moveresult = collisionMoveSimple(env,env->getGameDef(),
 					pos_max_d, box, m_prop.stepheight, dtime,
 					&p_pos, &p_velocity, m_acceleration,
@@ -1174,7 +1174,7 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 			if (!m_is_local_player && m_prop.makes_footstep_sound) {
 				const NodeDefManager *ndef = m_client->ndef();
 				v3s32 p = floatToInt(getPosition() +
-					v3f(0.0f, (m_prop.collisionbox.MinEdge.Y - 0.5f) * BS, 0.0f), BS);
+					v3d(0.0f, (m_prop.collisionbox.MinEdge.Y - 0.5f) * BS, 0.0f), BS);
 				MapNode n = m_env->getMap().getNode(p);
 				SimpleSoundSpec spec = ndef->get(n).sound_footstep;
 				// Reduce footstep gain, as non-local-player footsteps are
@@ -1207,7 +1207,7 @@ void GenericCAO::step(float dtime, ClientEnvironment *env)
 
 	if (node && fabs(m_prop.automatic_rotate) > 0.001f) {
 		// This is the child node's rotation. It is only used for automatic_rotate.
-		v3f local_rot = node->getRotation();
+		v3d local_rot = node->getRotation();
 		local_rot.Y = modulo360f(local_rot.Y - dtime * core::RADTODEG *
 				m_prop.automatic_rotate);
 		node->setRotation(local_rot);
@@ -1253,7 +1253,7 @@ void GenericCAO::updateTexturePos()
 				m_spritenode->getSceneManager()->getActiveCamera();
 		if(!camera)
 			return;
-		v3f cam_to_entity = m_spritenode->getAbsolutePosition()
+		v3d cam_to_entity = m_spritenode->getAbsolutePosition()
 				- camera->getAbsolutePosition();
 		cam_to_entity.normalize();
 
@@ -1558,7 +1558,7 @@ void GenericCAO::updateBonePosition()
 		// We check each bone to see if it has been rotated ~180deg from its expected position due to a bug in Irricht
 		// when using EJUOR_CONTROL joint control. If the bug is detected we update the bone to the proper position
 		// and update the bones transformation.
-		v3f bone_rot = bone->getRelativeTransformation().getRotationDegrees();
+		v3d bone_rot = bone->getRelativeTransformation().getRotationDegrees();
 		float offset = fabsf(bone_rot.X - bone->getRotation().X);
 		if (offset > 179.9f && offset < 180.1f) {
 			bone->setRotation(bone_rot);
@@ -1600,7 +1600,7 @@ void GenericCAO::updateAttachments()
 	if (!parent) { // Detach or don't attach
 		if (m_matrixnode) {
 			v3s32 camera_offset = m_env->getCameraOffset();
-			v3f old_pos = getPosition();
+			v3d old_pos = getPosition();
 
 			m_matrixnode->setParent(m_smgr->getRootSceneNode());
 			getPosRotMatrix().setTranslation(old_pos - intToFloat(camera_offset, BS));
@@ -1730,7 +1730,7 @@ void GenericCAO::processMessage(const std::string &data)
 		// Place us a bit higher if we're physical, to not sink into
 		// the ground due to sucky collision detection...
 		if(m_prop.physical)
-			m_position += v3f(0,0.002,0);
+			m_position += v3d(0,0.002,0);
 
 		if(getParent() != NULL) // Just in case
 			return;
@@ -1825,16 +1825,16 @@ void GenericCAO::processMessage(const std::string &data)
 		updateAnimationSpeed();
 	} else if (cmd == AO_CMD_SET_BONE_POSITION) {
 		std::string bone = deSerializeString16(is);
-		v3f position = readV3F32(is);
-		v3f rotation = readV3F32(is);
-		m_bone_position[bone] = core::vector2d<v3f>(position, rotation);
+		v3d position = readV3F32(is);
+		v3d rotation = readV3F32(is);
+		m_bone_position[bone] = core::vector2d<v3d>(position, rotation);
 
 		// updateBonePosition(); now called every step
 	} else if (cmd == AO_CMD_ATTACH_TO) {
 		u16 parent_id = readS32(is);
 		std::string bone = deSerializeString16(is);
-		v3f position = readV3F32(is);
-		v3f rotation = readV3F32(is);
+		v3d position = readV3F32(is);
+		v3d rotation = readV3F32(is);
 		bool force_visible = readU8(is); // Returns false for EOF
 
 		setAttachment(parent_id, bone, position, rotation, force_visible);
@@ -1902,7 +1902,7 @@ void GenericCAO::processMessage(const std::string &data)
 
 /* \pre punchitem != NULL
  */
-bool GenericCAO::directReportPunch(v3f dir, const ItemStack *punchitem,
+bool GenericCAO::directReportPunch(v3d dir, const ItemStack *punchitem,
 		float time_from_last_punch)
 {
 	assert(punchitem);	// pre-condition

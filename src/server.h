@@ -103,12 +103,12 @@ struct ServerPlayingSound
 
 	float gain = 1.0f; // for amplification of the base sound
 	float max_hear_distance = 32 * BS;
-	v3f pos;
+	v3d pos;
 	u16 object = 0;
 	std::string to_player;
 	std::string exclude_player;
 
-	v3f getPos(ServerEnvironment *env, bool *pos_exists) const;
+	v3d getPos(ServerEnvironment *env, bool *pos_exists) const;
 
 	SimpleSoundSpec spec;
 
@@ -301,7 +301,7 @@ public:
 	bool showFormspec(const char *name, const std::string &formspec, const std::string &formname);
 	Map & getMap() { return m_env->getMap(); }
 	ServerEnvironment & getEnv() { return *m_env; }
-	v3f findSpawnPos();
+	v3d findSpawnPos();
 
 	u32 hudAdd(RemotePlayer *player, HudElement *element);
 	bool hudRemove(RemotePlayer *player, u32 id);
@@ -315,7 +315,7 @@ public:
 
 	void setLocalPlayerAnimations(RemotePlayer *player, v2s32 animation_frames[4],
 			f32 frame_speed);
-	void setPlayerEyeOffset(RemotePlayer *player, const v3f &first, const v3f &third);
+	void setPlayerEyeOffset(RemotePlayer *player, const v3d &first, const v3d &third);
 
 	void setSky(RemotePlayer *player, const SkyboxParams &params);
 	void setSun(RemotePlayer *player, const SunParams &params);
@@ -349,7 +349,7 @@ public:
 	void SendPlayerBreath(PlayerSAO *sao);
 	void SendInventory(PlayerSAO *playerSAO, bool incremental);
 	void SendMovePlayer(session_t peer_id);
-	void SendPlayerSpeed(session_t peer_id, const v3f &added_vel);
+	void SendPlayerSpeed(session_t peer_id, const v3d &added_vel);
 	void SendPlayerFov(session_t peer_id);
 
 	void SendMinimapModes(session_t peer_id,
@@ -434,7 +434,7 @@ private:
 		const std::string &custom_reason, bool reconnect = false);
 	void SendAccessDenied_Legacy(session_t peer_id, const std::wstring &reason);
 	void SendDeathscreen(session_t peer_id, bool set_camera_point_target,
-		v3f camera_point_target);
+		v3d camera_point_target);
 	void SendItemDef(session_t peer_id, IItemDefManager *itemdef, u16 protocol_version);
 	void SendNodeDef(session_t peer_id, const NodeDefManager *nodedef,
 		u16 protocol_version);
@@ -445,7 +445,7 @@ private:
 
 	void SendLocalPlayerAnimations(session_t peer_id, v2s32 animation_frames[4],
 		f32 animation_speed);
-	void SendEyeOffset(session_t peer_id, v3f first, v3f third);
+	void SendEyeOffset(session_t peer_id, v3d first, v3d third);
 	void SendPlayerPrivileges(session_t peer_id);
 	void SendPlayerInventoryFormspec(session_t peer_id);
 	void SendPlayerFormspecPrepend(session_t peer_id);
@@ -478,7 +478,7 @@ private:
 			std::unordered_set<u16> *far_players = nullptr,
 			float far_d_nodes = 100, bool remove_metadata = true);
 	void sendNodeChangePkt(NetworkPacket &pkt, v3s32 block_pos,
-			v3f p, float far_d_nodes, std::unordered_set<u16> *far_players);
+			v3d p, float far_d_nodes, std::unordered_set<u16> *far_players);
 
 	void sendMetadataChanged(const std::unordered_set<v3s32> &positions,
 			float far_d_nodes = 100);

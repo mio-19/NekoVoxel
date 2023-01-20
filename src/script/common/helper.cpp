@@ -78,7 +78,7 @@ v2f LuaHelper::readParam(lua_State *L, int index)
 }
 
 template <>
-v3f LuaHelper::readParam(lua_State *L, int index)
+v3d LuaHelper::readParam(lua_State *L, int index)
 {
 	return check_v3f(L, index);
 }

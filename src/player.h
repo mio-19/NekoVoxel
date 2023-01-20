@@ -146,12 +146,12 @@ public:
 			std::vector<CollisionInfo> *collision_info)
 	{}
 
-	v3f getSpeed() const
+	v3d getSpeed() const
 	{
 		return m_speed;
 	}
 
-	void setSpeed(v3f speed)
+	void setSpeed(v3d speed)
 	{
 		m_speed = speed;
 	}
@@ -168,8 +168,8 @@ public:
 		return size;
 	}
 
-	v3f eye_offset_first;
-	v3f eye_offset_third;
+	v3d eye_offset_first;
+	v3d eye_offset_third;
 
 	Inventory inventory;
 
@@ -223,7 +223,7 @@ public:
 
 protected:
 	char m_name[PLAYERNAME_SIZE];
-	v3f m_speed;
+	v3d m_speed;
 	u16 m_wield_index = 0;
 	PlayerFovSpec m_fov_override_spec = { 0.0f, false, 0.0f };
 

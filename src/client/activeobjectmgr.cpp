@@ -91,7 +91,7 @@ void ActiveObjectMgr::removeObject(u16 id)
 }
 
 // clang-format on
-void ActiveObjectMgr::getActiveObjects(const v3f &origin, f32 max_d,
+void ActiveObjectMgr::getActiveObjects(const v3d &origin, f32 max_d,
 		std::vector<DistanceSortedActiveObject> &dest)
 {
 	f32 max_d2 = max_d * max_d;
@@ -116,9 +116,9 @@ void ActiveObjectMgr::getActiveSelectableObjects(const core::line3d<f32> &shootl
 	// the selection box center is inside this cuboid.
 
 	f32 max_d = shootline.getLength();
-	v3f dir = shootline.getVector().normalize();
-	v3f dir_ortho1 = dir.crossProduct(dir + v3f(1,0,0)).normalize();
-	v3f dir_ortho2 = dir.crossProduct(dir_ortho1);
+	v3d dir = shootline.getVector().normalize();
+	v3d dir_ortho1 = dir.crossProduct(dir + v3d(1,0,0)).normalize();
+	v3d dir_ortho2 = dir.crossProduct(dir_ortho1);
 
 	for (auto &ao_it : m_active_objects) {
 		ClientActiveObject *obj = ao_it.second;
@@ -130,7 +130,7 @@ void ActiveObjectMgr::getActiveSelectableObjects(const core::line3d<f32> &shootl
 		// possible optimization: get rid of the sqrt here
 		f32 selection_box_radius = selection_box.getRadius();
 
-		v3f pos_diff = obj->getPosition() + selection_box.getCenter() - shootline.start;
+		v3d pos_diff = obj->getPosition() + selection_box.getCenter() - shootline.start;
 
 		f32 d = dir.dotProduct(pos_diff);
 

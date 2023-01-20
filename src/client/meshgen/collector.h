@@ -39,10 +39,10 @@ struct MeshCollector
 	std::array<std::vector<PreMeshBuffer>, MAX_TILE_LAYERS> prebuffers;
 	// bounding sphere radius and center
 	f32 m_bounding_radius_sq = 0.0f;
-	v3f m_center_pos;
+	v3d m_center_pos;
 
 	// center_pos: pos to use for bounding-sphere, in BS-space
-	MeshCollector(const v3f center_pos) : m_center_pos(center_pos) {}
+	MeshCollector(const v3d center_pos) : m_center_pos(center_pos) {}
 
 	// clang-format off
 	void append(const TileSpec &material,
@@ -51,7 +51,7 @@ struct MeshCollector
 	void append(const TileSpec &material,
 			const video::S3DVertex *vertices, u32 numVertices,
 			const u16 *indices, u32 numIndices,
-			v3f pos, video::SColor c, u8 light_source);
+			v3d pos, video::SColor c, u8 light_source);
 	// clang-format on
 
 private:
@@ -63,7 +63,7 @@ private:
 	void append(const TileLayer &material,
 			const video::S3DVertex *vertices, u32 numVertices,
 			const u16 *indices, u32 numIndices,
-			v3f pos, video::SColor c, u8 light_source,
+			v3d pos, video::SColor c, u8 light_source,
 			u8 layernum, bool use_scale = false);
 	// clang-format on
 

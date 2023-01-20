@@ -260,7 +260,7 @@ void read_object_properties(lua_State *L, int index,
 			scale_z = lua_tonumber(L, -1);
 		lua_pop(L, 1);
 
-		prop->visual_size = v3f(scale_xy.X, scale_xy.Y, scale_z);
+		prop->visual_size = v3d(scale_xy.X, scale_xy.Y, scale_z);
 	}
 	lua_pop(L, 1);
 
@@ -1078,7 +1078,7 @@ void read_server_sound_params(lua_State *L, int index,
 		getstringfield(L, index, "to_player", params.to_player);
 		lua_getfield(L, index, "pos");
 		if(!lua_isnil(L, -1)){
-			v3f p = read_v3f(L, -1)*BS;
+			v3d p = read_v3f(L, -1)*BS;
 			params.pos = p;
 			params.type = SoundLocation::Position;
 		}
@@ -1949,7 +1949,7 @@ void read_hud_element(lua_State *L, HudElement *elem)
 	lua_pop(L, 1);
 
 	lua_getfield(L, 2, "world_pos");
-	elem->world_pos = lua_istable(L, -1) ? read_v3f(L, -1) : v3f();
+	elem->world_pos = lua_istable(L, -1) ? read_v3f(L, -1) : v3d();
 	lua_pop(L, 1);
 
 	elem->style = getintfield_default(L, 2, "style", 0);

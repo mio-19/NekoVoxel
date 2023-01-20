@@ -114,20 +114,20 @@ u64 murmur_hash_64_ua(const void *key, int len, unsigned int seed)
 	range: viewing range
 	distance_ptr: return location for distance from the camera
 */
-bool isBlockInSight(v3s32 blockpos_b, v3f camera_pos, v3f camera_dir,
+bool isBlockInSight(v3s32 blockpos_b, v3d camera_pos, v3d camera_dir,
 		f32 camera_fov, f32 range, f32 *distance_ptr)
 {
 	v3s32 blockpos_nodes = blockpos_b * MAP_BLOCKSIZE;
 
 	// Block center position
-	v3f blockpos(
+	v3d blockpos(
 			((float)blockpos_nodes.X + MAP_BLOCKSIZE/2) * BS,
 			((float)blockpos_nodes.Y + MAP_BLOCKSIZE/2) * BS,
 			((float)blockpos_nodes.Z + MAP_BLOCKSIZE/2) * BS
 	);
 
 	// Block position relative to camera
-	v3f blockpos_relative = blockpos - camera_pos;
+	v3d blockpos_relative = blockpos - camera_pos;
 
 	// Total distance
 	f32 d = MYMAX(0, blockpos_relative.getLength() - BLOCK_MAX_RADIUS);
@@ -151,7 +151,7 @@ bool isBlockInSight(v3s32 blockpos_b, v3f camera_pos, v3f camera_dir,
 	f32 adjdist = BLOCK_MAX_RADIUS / cos((M_PI - camera_fov) / 2);
 
 	// Block position relative to adjusted camera
-	v3f blockpos_adj = blockpos - (camera_pos - camera_dir * adjdist);
+	v3d blockpos_adj = blockpos - (camera_pos - camera_dir * adjdist);
 
 	// Distance in camera direction (+=front, -=back)
 	f32 dforward = blockpos_adj.dotProduct(camera_dir);
@@ -187,7 +187,7 @@ s32 adjustDist(s32 dist, float zoom_fov)
 	return std::round(adjustDist((float)dist, zoom_fov));
 }
 
-void setPitchYawRollRad(core::matrix4 &m, const v3f &rot)
+void setPitchYawRollRad(core::matrix4 &m, const v3d &rot)
 {
 	f64 a1 = rot.Z, a2 = rot.X, a3 = rot.Y;
 	f64 c1 = cos(a1), s1 = sin(a1);
@@ -208,7 +208,7 @@ void setPitchYawRollRad(core::matrix4 &m, const v3f &rot)
 	M[10] = c2 * c3;
 }
 
-v3f getPitchYawRollRad(const core::matrix4 &m)
+v3d getPitchYawRollRad(const core::matrix4 &m)
 {
 	const f32 *M = m.pointer();
 
@@ -219,5 +219,5 @@ v3f getPitchYawRollRad(const core::matrix4 &m)
 	f64 s1 = sin(a1);
 	f32 a3 = atan2f(s1*M[6] - c1*M[2], c1*M[0] - s1*M[4]);
 
-	return v3f(a2, a3, a1);
+	return v3d(a2, a3, a1);
 }

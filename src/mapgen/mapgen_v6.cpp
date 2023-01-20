@@ -73,7 +73,7 @@ MapgenV6::MapgenV6(MapgenV6Params *params, EmergeParams *emerge)
 	np_trees       = &params->np_trees;
 	np_apple_trees = &params->np_apple_trees;
 
-	np_dungeons = NoiseParams(0.9, 0.5, v3f(500.0, 500.0, 500.0), 0, 2, 0.8, 2.0);
+	np_dungeons = NoiseParams(0.9, 0.5, v3d(500.0, 500.0, 500.0), 0, 2, 0.8, 2.0);
 
 	//// Create noise objects
 	noise_terrain_base   = new Noise(&params->np_terrain_base,   seed, csize.X, csize.Y);
@@ -166,17 +166,17 @@ MapgenV6::~MapgenV6()
 
 
 MapgenV6Params::MapgenV6Params():
-	np_terrain_base   (-4,   20.0, v3f(250.0, 250.0, 250.0), 82341,  5, 0.6,  2.0),
-	np_terrain_higher (20,   16.0, v3f(500.0, 500.0, 500.0), 85039,  5, 0.6,  2.0),
-	np_steepness      (0.85, 0.5,  v3f(125.0, 125.0, 125.0), -932,   5, 0.7,  2.0),
-	np_height_select  (0,    1.0,  v3f(250.0, 250.0, 250.0), 4213,   5, 0.69, 2.0),
-	np_mud            (4,    2.0,  v3f(200.0, 200.0, 200.0), 91013,  3, 0.55, 2.0),
-	np_beach          (0,    1.0,  v3f(250.0, 250.0, 250.0), 59420,  3, 0.50, 2.0),
-	np_biome          (0,    1.0,  v3f(500.0, 500.0, 500.0), 9130,   3, 0.50, 2.0),
-	np_cave           (6,    6.0,  v3f(250.0, 250.0, 250.0), 34329,  3, 0.50, 2.0),
-	np_humidity       (0.5,  0.5,  v3f(500.0, 500.0, 500.0), 72384,  3, 0.50, 2.0),
-	np_trees          (0,    1.0,  v3f(125.0, 125.0, 125.0), 2,      4, 0.66, 2.0),
-	np_apple_trees    (0,    1.0,  v3f(100.0, 100.0, 100.0), 342902, 3, 0.45, 2.0)
+	np_terrain_base   (-4,   20.0, v3d(250.0, 250.0, 250.0), 82341,  5, 0.6,  2.0),
+	np_terrain_higher (20,   16.0, v3d(500.0, 500.0, 500.0), 85039,  5, 0.6,  2.0),
+	np_steepness      (0.85, 0.5,  v3d(125.0, 125.0, 125.0), -932,   5, 0.7,  2.0),
+	np_height_select  (0,    1.0,  v3d(250.0, 250.0, 250.0), 4213,   5, 0.69, 2.0),
+	np_mud            (4,    2.0,  v3d(200.0, 200.0, 200.0), 91013,  3, 0.55, 2.0),
+	np_beach          (0,    1.0,  v3d(250.0, 250.0, 250.0), 59420,  3, 0.50, 2.0),
+	np_biome          (0,    1.0,  v3d(500.0, 500.0, 500.0), 9130,   3, 0.50, 2.0),
+	np_cave           (6,    6.0,  v3d(250.0, 250.0, 250.0), 34329,  3, 0.50, 2.0),
+	np_humidity       (0.5,  0.5,  v3d(500.0, 500.0, 500.0), 72384,  3, 0.50, 2.0),
+	np_trees          (0,    1.0,  v3d(125.0, 125.0, 125.0), 2,      4, 0.66, 2.0),
+	np_apple_trees    (0,    1.0,  v3d(100.0, 100.0, 100.0), 342902, 3, 0.45, 2.0)
 {
 }
 
@@ -579,7 +579,7 @@ void MapgenV6::makeChunk(BlockMakeData *data)
 			dp.large_room_chance = (ps.range(1, 4) == 1) ? 1 : 0;
 
 			dp.np_alt_wall
-				= NoiseParams(-0.4, 1.0, v3f(40.0, 40.0, 40.0), 32474, 6, 1.1, 2.0);
+				= NoiseParams(-0.4, 1.0, v3d(40.0, 40.0, 40.0), 32474, 6, 1.1, 2.0);
 
 			if (getBiome(0, v2s32(node_min.X, node_min.Z)) == BT_DESERT) {
 				dp.c_wall              = c_desert_stone;

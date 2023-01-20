@@ -71,20 +71,20 @@ public:
 
 	std::vector<aabb3f> *getSelectionBoxes() { return &m_selection_boxes; }
 
-	void setSelectionPos(const v3f &pos, const v3s32 &camera_offset);
+	void setSelectionPos(const v3d &pos, const v3s32 &camera_offset);
 
-	v3f getSelectionPos() const { return m_selection_pos; }
+	v3d getSelectionPos() const { return m_selection_pos; }
 
-	void setSelectionRotation(v3f rotation) { m_selection_rotation = rotation; }
+	void setSelectionRotation(v3d rotation) { m_selection_rotation = rotation; }
 
-	v3f getSelectionRotation() const { return m_selection_rotation; }
+	v3d getSelectionRotation() const { return m_selection_rotation; }
 
 	void setSelectionMeshColor(const video::SColor &color)
 	{
 		m_selection_mesh_color = color;
 	}
 
-	void setSelectedFaceNormal(const v3f &face_normal)
+	void setSelectedFaceNormal(const v3d &face_normal)
 	{
 		m_selected_face_normal = face_normal;
 	}
@@ -128,13 +128,13 @@ private:
 
 	std::vector<aabb3f> m_selection_boxes;
 	std::vector<aabb3f> m_halo_boxes;
-	v3f m_selection_pos;
-	v3f m_selection_pos_with_offset;
-	v3f m_selection_rotation;
+	v3d m_selection_pos;
+	v3d m_selection_pos_with_offset;
+	v3d m_selection_rotation;
 
 	scene::IMesh *m_selection_mesh = nullptr;
 	video::SColor m_selection_mesh_color;
-	v3f m_selected_face_normal;
+	v3d m_selected_face_normal;
 
 	video::SMaterial m_selection_material;
 

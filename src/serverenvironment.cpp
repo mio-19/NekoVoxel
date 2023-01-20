@@ -308,8 +308,8 @@ void fillRadiusBlock(v3s32 p0, s32 r, std::set<v3s32> &list)
 
 void fillViewConeBlock(v3s32 p0,
 	const s32 r,
-	const v3f camera_pos,
-	const v3f camera_dir,
+	const v3d camera_pos,
+	const v3d camera_dir,
 	const float camera_fov,
 	std::set<v3s32> &list)
 {
@@ -343,7 +343,7 @@ void ActiveBlockList::update(std::vector<PlayerSAO*> &active_players,
 		s32 player_ao_range = std::min(active_object_range, playersao->getWantedRange());
 		// only do this if this would add blocks
 		if (player_ao_range > active_block_range) {
-			v3f camera_dir = v3f(0,0,1);
+			v3d camera_dir = v3d(0,0,1);
 			camera_dir.rotateYZBy(playersao->getLookPitch());
 			camera_dir.rotateXZBy(playersao->getRotation().Y);
 			fillViewConeBlock(pos,
@@ -1771,7 +1771,7 @@ void ServerEnvironment::getSelectedActiveObjects(
 	std::vector<ServerActiveObject *> objs;
 	getObjectsInsideRadius(objs, shootline_on_map.start,
 		shootline_on_map.getLength() + 10.0f, nullptr);
-	const v3f line_vector = shootline_on_map.getVector();
+	const v3d line_vector = shootline_on_map.getVector();
 
 	for (auto obj : objs) {
 		if (obj->isGone())
@@ -1780,12 +1780,12 @@ void ServerEnvironment::getSelectedActiveObjects(
 		if (!obj->getSelectionBox(&selection_box))
 			continue;
 
-		v3f pos = obj->getBasePosition();
-		v3f rel_pos = shootline_on_map.start - pos;
+		v3d pos = obj->getBasePosition();
+		v3d rel_pos = shootline_on_map.start - pos;
 
-		v3f current_intersection;
-		v3f current_normal;
-		v3f current_raw_normal;
+		v3d current_intersection;
+		v3d current_normal;
+		v3d current_raw_normal;
 
 		ObjectProperties *props = obj->accessObjectProperties();
 		bool collision;
@@ -1826,7 +1826,7 @@ u16 ServerEnvironment::addActiveObjectRaw(ServerActiveObject *object,
 	// Add static data to block
 	if (object->isStaticAllowed()) {
 		// Add static object to active static list of the block
-		v3f objectpos = object->getBasePosition();
+		v3d objectpos = object->getBasePosition();
 		StaticObject s_obj(object, objectpos);
 		// Add to the block where the object is located in
 		v3s32 blockpos = getNodeBlockPos(floatToInt(objectpos, BS));
@@ -1948,7 +1948,7 @@ static void print_hexdump(std::ostream &o, const std::string &data)
 	}
 }
 
-ServerActiveObject* ServerEnvironment::createSAO(ActiveObjectType type, v3f pos,
+ServerActiveObject* ServerEnvironment::createSAO(ActiveObjectType type, v3d pos,
 		const std::string &data)
 {
 	switch (type) {
@@ -2037,7 +2037,7 @@ void ServerEnvironment::deactivateFarObjects(bool _force_delete)
 		if (!force_delete && obj->isGone())
 			return false;
 
-		const v3f &objectpos = obj->getBasePosition();
+		const v3d &objectpos = obj->getBasePosition();
 
 		// The block in which the object resides in
 		v3s32 blockpos_o = getNodeBlockPos(floatToInt(objectpos, BS));

@@ -39,7 +39,7 @@ struct ObjectProperties
 	bool pointable = true;
 	std::string visual = "sprite";
 	std::string mesh = "";
-	v3f visual_size = v3f(1, 1, 1);
+	v3d visual_size = v3d(1, 1, 1);
 	std::vector<std::string> textures;
 	std::string damage_texture_modifier = "^[brighten";
 	std::vector<video::SColor> colors;

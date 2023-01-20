@@ -44,7 +44,7 @@ public:
 
 	f32 MaxFar{2048.0f}, MapRes{1024.0f};
 	f32 PerspectiveBiasXY {0.9f}, PerspectiveBiasZ {0.5f};
-	v3f CameraPos;
+	v3d CameraPos;
 
 private:
 	CachedVertexShaderSetting<f32, 16> m_light_mvp_setting;

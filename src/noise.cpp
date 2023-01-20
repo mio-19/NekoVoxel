@@ -405,7 +405,7 @@ void Noise::setSize(u32 sx, u32 sy, u32 sz)
 }
 
 
-void Noise::setSpreadFactor(v3f spread)
+void Noise::setSpreadFactor(v3d spread)
 {
 	this->np.spread = spread;
 

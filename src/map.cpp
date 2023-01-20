@@ -1110,19 +1110,19 @@ bool Map::determineAdditionalOcclusionCheck(const v3s32 &pos_camera,
 bool Map::isOccluded(const v3s32 &pos_camera, const v3s32 &pos_target,
 	float step, float stepfac, float offset, float end_offset, u32 needed_count)
 {
-	v3f direction = intToFloat(pos_target - pos_camera, BS);
+	v3d direction = intToFloat(pos_target - pos_camera, BS);
 	float distance = direction.getLength();
 
 	// Normalize direction vector
 	if (distance > 0.0f)
 		direction /= distance;
 
-	v3f pos_origin_f = intToFloat(pos_camera, BS);
+	v3d pos_origin_f = intToFloat(pos_camera, BS);
 	u32 count = 0;
 	bool is_valid_position;
 
 	for (; offset < distance + end_offset; offset += step) {
-		v3f pos_node_f = pos_origin_f + direction * offset;
+		v3d pos_node_f = pos_origin_f + direction * offset;
 		v3s32 pos_node = floatToInt(pos_node_f, BS);
 
 		MapNode node = getNode(pos_node, &is_valid_position);

@@ -250,9 +250,9 @@ inline v3s32 readV3S32(const u8 *data)
 	return p;
 }
 
-inline v3f readV3F1000(const u8 *data)
+inline v3d readV3F1000(const u8 *data)
 {
-	v3f p;
+	v3d p;
 	p.X = readF1000(&data[0]);
 	p.Y = readF1000(&data[4]);
 	p.Z = readF1000(&data[8]);
@@ -267,9 +267,9 @@ inline v2f readV2F32(const u8 *data)
 	return p;
 }
 
-inline v3f readV3F32(const u8 *data)
+inline v3d readV3F32(const u8 *data)
 {
-	v3f p;
+	v3d p;
 	p.X = readF32(&data[0]);
 	p.Y = readF32(&data[4]);
 	p.Z = readF32(&data[8]);
@@ -357,7 +357,7 @@ inline void writeV3S32(u8 *data, v3s32 p)
 	writeS32(&data[8], p.Z);
 }
 
-inline void writeV3F1000(u8 *data, v3f p)
+inline void writeV3F1000(u8 *data, v3d p)
 {
 	writeF1000(&data[0], p.X);
 	writeF1000(&data[4], p.Y);
@@ -370,7 +370,7 @@ inline void writeV2F32(u8 *data, v2f p)
 	writeF32(&data[4], p.Y);
 }
 
-inline void writeV3F32(u8 *data, v3f p)
+inline void writeV3F32(u8 *data, v3d p)
 {
 	writeF32(&data[0], p.X);
 	writeF32(&data[4], p.Y);
@@ -411,9 +411,9 @@ MAKE_STREAM_READ_FXN(v2s16, V2S16,    4);
 MAKE_STREAM_READ_FXN(v3s16, V3S16,    6);
 MAKE_STREAM_READ_FXN(v2s32, V2S32,    8);
 MAKE_STREAM_READ_FXN(v3s32, V3S32,   12);
-MAKE_STREAM_READ_FXN(v3f,   V3F1000, 12);
+MAKE_STREAM_READ_FXN(v3d,   V3F1000, 12);
 MAKE_STREAM_READ_FXN(v2f,   V2F32,    8);
-MAKE_STREAM_READ_FXN(v3f,   V3F32,   12);
+MAKE_STREAM_READ_FXN(v3d,   V3F32,   12);
 MAKE_STREAM_READ_FXN(video::SColor, ARGB8, 4);
 
 MAKE_STREAM_WRITE_FXN(u8,    U8,       1);
@@ -430,9 +430,9 @@ MAKE_STREAM_WRITE_FXN(v2s16, V2S16,    4);
 MAKE_STREAM_WRITE_FXN(v3s16, V3S16,    6);
 MAKE_STREAM_WRITE_FXN(v2s32, V2S32,    8);
 MAKE_STREAM_WRITE_FXN(v3s32, V3S32,   12);
-MAKE_STREAM_WRITE_FXN(v3f,   V3F1000, 12);
+MAKE_STREAM_WRITE_FXN(v3d,   V3F1000, 12);
 MAKE_STREAM_WRITE_FXN(v2f,   V2F32,    8);
-MAKE_STREAM_WRITE_FXN(v3f,   V3F32,   12);
+MAKE_STREAM_WRITE_FXN(v3d,   V3F32,   12);
 MAKE_STREAM_WRITE_FXN(video::SColor, ARGB8, 4);
 
 ////
@@ -444,7 +444,7 @@ inline float clampToF1000(float v)
 	return core::clamp(v, F1000_MIN, F1000_MAX);
 }
 
-inline v3f clampToF1000(v3f v)
+inline v3d clampToF1000(v3d v)
 {
 	return {clampToF1000(v.X), clampToF1000(v.Y), clampToF1000(v.Z)};
 }

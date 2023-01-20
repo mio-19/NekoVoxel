@@ -270,7 +270,7 @@ int ModApiClient::l_sound_play(lua_State *L)
 
 	SoundLocation type = SoundLocation::Local;
 	float gain = 1.0f;
-	v3f position;
+	v3d position;
 
 	if (lua_istable(L, 2)) {
 		getfloatfield(L, 2, "gain", gain);

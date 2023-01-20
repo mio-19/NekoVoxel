@@ -559,20 +559,20 @@ public:
 		m_animation_timer_delta_pixel.set(&animation_timer_delta_f, services);
 
 		float eye_position_array[3];
-		v3f epos = m_client->getEnv().getLocalPlayer()->getEyePosition();
+		v3d epos = m_client->getEnv().getLocalPlayer()->getEyePosition();
 		epos.getAs3Values(eye_position_array);
 		m_eye_position_pixel.set(eye_position_array, services);
 		m_eye_position_vertex.set(eye_position_array, services);
 
 		if (m_client->getMinimap()) {
 			float minimap_yaw_array[3];
-			v3f minimap_yaw = m_client->getMinimap()->getYawVec();
+			v3d minimap_yaw = m_client->getMinimap()->getYawVec();
 			minimap_yaw.getAs3Values(minimap_yaw_array);
 			m_minimap_yaw.set(minimap_yaw_array, services);
 		}
 
 		float camera_offset_array[3];
-		v3f offset = intToFloat(m_client->getCamera()->getOffset(), BS);
+		v3d offset = intToFloat(m_client->getCamera()->getOffset(), BS);
 		offset.getAs3Values(camera_offset_array);
 		m_camera_offset_pixel.set(camera_offset_array, services);
 		m_camera_offset_vertex.set(camera_offset_array, services);
@@ -719,7 +719,7 @@ struct GameRunData {
 
 	f32 fog_range;
 
-	v3f update_draw_list_last_cam_dir;
+	v3d update_draw_list_last_cam_dir;
 
 	float time_of_day_smooth;
 };
@@ -842,7 +842,7 @@ protected:
 	void handlePointingAtNode(const PointedThing &pointed,
 			const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime);
 	void handlePointingAtObject(const PointedThing &pointed, const ItemStack &playeritem,
-			const v3f &player_position, bool show_debug);
+			const v3d &player_position, bool show_debug);
 	void handleDigging(const PointedThing &pointed, const v3s32 &nodepos,
 			const ItemStack &selected_item, const ItemStack &hand_item, f32 dtime);
 	void updateFrame(ProfilerGraph *graph, RunStats *stats, f32 dtime,
@@ -3123,8 +3123,8 @@ void Game::updateCamera(f32 dtime)
 	m_camera_offset_changed = (camera_offset != old_camera_offset);
 
 	if (!m_flags.disable_camera_update) {
-		v3f camera_position = camera->getPosition();
-		v3f camera_direction = camera->getDirection();
+		v3d camera_position = camera->getPosition();
+		v3d camera_direction = camera->getDirection();
 
 		client->getEnv().getClientMap().updateCamera(camera_position,
 				camera_direction, camera_fov, camera_offset);
@@ -3145,7 +3145,7 @@ void Game::updateSound(f32 dtime)
 	// Update sound listener
 	v3s32 camera_offset = camera->getOffset();
 	sound->updateListener(camera->getCameraNode()->getPosition() + intToFloat(camera_offset, BS),
-			      v3f(0, 0, 0), // velocity
+			      v3d(0, 0, 0), // velocity
 			      camera->getDirection(),
 			      camera->getCameraNode()->getUpVector());
 
@@ -3182,7 +3182,7 @@ void Game::processPlayerInteraction(f32 dtime, bool show_hud)
 {
 	LocalPlayer *player = client->getEnv().getLocalPlayer();
 
-	const v3f camera_direction = camera->getDirection();
+	const v3d camera_direction = camera->getDirection();
 	const v3s32 camera_offset  = camera->getOffset();
 
 	/*
@@ -3297,7 +3297,7 @@ void Game::processPlayerInteraction(f32 dtime, bool show_hud)
 	} else if (pointed.type == POINTEDTHING_NODE) {
 		handlePointingAtNode(pointed, selected_item, hand_item, dtime);
 	} else if (pointed.type == POINTEDTHING_OBJECT) {
-		v3f player_position  = player->getPosition();
+		v3d player_position  = player->getPosition();
 		bool basic_debug_allowed = client->checkPrivilege("debug") || (player->hud_flags & HUD_FLAG_BASIC_DEBUG);
 		handlePointingAtObject(pointed, tool_item, player_position,
 				m_game_ui->m_flags.show_basic_debug && basic_debug_allowed);
@@ -3338,7 +3338,7 @@ PointedThing Game::updatePointedThing(
 {
 	std::vector<aabb3f> *selectionboxes = hud->getSelectionBoxes();
 	selectionboxes->clear();
-	hud->setSelectedFaceNormal(v3f());
+	hud->setSelectedFaceNormal(v3d());
 	static thread_local const bool show_entity_selectionbox = g_settings->getBool(
 		"show_entity_selectionbox");
 
@@ -3359,14 +3359,14 @@ PointedThing Game::updatePointedThing(
 		aabb3f selection_box;
 		if (show_entity_selectionbox && runData.selected_object->doShowSelectionBox() &&
 				runData.selected_object->getSelectionBox(&selection_box)) {
-			v3f pos = runData.selected_object->getPosition();
+			v3d pos = runData.selected_object->getPosition();
 			selectionboxes->push_back(aabb3f(selection_box));
 			hud->setSelectionPos(pos, camera_offset);
 			GenericCAO* gcao = dynamic_cast<GenericCAO*>(runData.selected_object);
 			if (gcao != nullptr && gcao->getProperties().rotate_selectionbox)
 				hud->setSelectionRotation(gcao->getSceneNode()->getAbsoluteTransformation().getRotationDegrees());
 			else
-				hud->setSelectionRotation(v3f());
+				hud->setSelectionRotation(v3d());
 		}
 		hud->setSelectedFaceNormal(result.raw_intersection_normal);
 	} else if (result.type == POINTEDTHING_NODE) {
@@ -3380,19 +3380,19 @@ PointedThing Game::updatePointedThing(
 		for (std::vector<aabb3f>::const_iterator i = boxes.begin();
 			i != boxes.end(); ++i) {
 			aabb3f box = *i;
-			box.MinEdge -= v3f(d, d, d);
-			box.MaxEdge += v3f(d, d, d);
+			box.MinEdge -= v3d(d, d, d);
+			box.MaxEdge += v3d(d, d, d);
 			selectionboxes->push_back(box);
 		}
 		hud->setSelectionPos(intToFloat(result.node_undersurface, BS),
 			camera_offset);
-		hud->setSelectionRotation(v3f());
+		hud->setSelectionRotation(v3d());
 		hud->setSelectedFaceNormal(result.intersection_normal);
 	}
 
 	// Update selection mesh light level and vertex colors
 	if (!selectionboxes->empty()) {
-		v3f pf = hud->getSelectionPos();
+		v3d pf = hud->getSelectionPos();
 		v3s32 p = floatToInt(pf, BS);
 
 		// Get selection mesh light level
@@ -3699,7 +3699,7 @@ bool Game::nodePlacement(const ItemDefinition &selected_def,
 }
 
 void Game::handlePointingAtObject(const PointedThing &pointed,
-		const ItemStack &tool_item, const v3f &player_position, bool show_debug)
+		const ItemStack &tool_item, const v3d &player_position, bool show_debug)
 {
 	std::wstring infotext = unescape_translate(
 		utf8_to_wide(runData.selected_object->infoText()));
@@ -3733,8 +3733,8 @@ void Game::handlePointingAtObject(const PointedThing &pointed,
 
 		if (do_punch_damage) {
 			// Report direct punch
-			v3f objpos = runData.selected_object->getPosition();
-			v3f dir = (objpos - player_position).normalize();
+			v3d objpos = runData.selected_object->getPosition();
+			v3d dir = (objpos - player_position).normalize();
 
 			bool disable_send = runData.selected_object->directReportPunch(
 					dir, &tool_item, runData.time_from_last_punch);
@@ -3956,7 +3956,7 @@ void Game::updateFrame(ProfilerGraph *graph, RunStats *stats, f32 dtime,
 			clouds->setVisible(true);
 			clouds->step(dtime);
 			// camera->getPosition is not enough for 3rd person views
-			v3f camera_node_position = camera->getCameraNode()->getPosition();
+			v3d camera_node_position = camera->getCameraNode()->getPosition();
 			v3s32 camera_offset      = camera->getOffset();
 			camera_node_position.X   = camera_node_position.X + camera_offset.X * BS;
 			camera_node_position.Y   = camera_node_position.Y + camera_offset.Y * BS;
@@ -4059,7 +4059,7 @@ void Game::updateFrame(ProfilerGraph *graph, RunStats *stats, f32 dtime,
 
 	float update_draw_list_delta = 0.2f;
 
-	v3f camera_direction = camera->getDirection();
+	v3d camera_direction = camera->getDirection();
 	if (runData.update_draw_list_timer >= update_draw_list_delta
 			|| runData.update_draw_list_last_cam_dir.getDistanceFrom(camera_direction) > 0.2
 			|| m_camera_offset_changed
@@ -4211,9 +4211,9 @@ void Game::updateShadows()
 	timeoftheday = fmod(timeoftheday + 0.75f, 0.5f) + 0.25f;
 	const float offset_constant = 10000.0f;
 
-	v3f light = is_day ? sky->getSunDirection() : sky->getMoonDirection();
+	v3d light = is_day ? sky->getSunDirection() : sky->getMoonDirection();
 
-	v3f sun_pos = light * offset_constant;
+	v3d sun_pos = light * offset_constant;
 
 	if (shadow->getDirectionalLightCount() == 0)
 		shadow->addDirectionalLight();

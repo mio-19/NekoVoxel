@@ -41,13 +41,13 @@ struct Nametag
 	std::string text;
 	video::SColor textcolor;
 	Optional<video::SColor> bgcolor;
-	v3f pos;
+	v3d pos;
 
 	Nametag(scene::ISceneNode *a_parent_node,
 			const std::string &text,
 			const video::SColor &textcolor,
 			const Optional<video::SColor> &bgcolor,
-			const v3f &pos):
+			const v3d &pos):
 		parent_node(a_parent_node),
 		text(text),
 		textcolor(textcolor),
@@ -93,20 +93,20 @@ public:
 
 	// Get the camera position (in absolute scene coordinates).
 	// This has view bobbing applied.
-	inline v3f getPosition() const
+	inline v3d getPosition() const
 	{
 		return m_camera_position;
 	}
 
 	// Returns the absolute position of the head SceneNode in the world
-	inline v3f getHeadPosition() const
+	inline v3d getHeadPosition() const
 	{
 		return m_headnode->getAbsolutePosition();
 	}
 
 	// Get the camera direction (in absolute camera coordinates).
 	// This has view bobbing applied.
-	inline v3f getDirection() const
+	inline v3d getDirection() const
 	{
 		return m_camera_direction;
 	}
@@ -142,8 +142,8 @@ public:
 	{
 		return [planes = getFrustumCullPlanes(),
 				camera_offset = intToFloat(m_camera_offset, BS)
-				](v3f position, f32 radius) {
-			v3f pos_camspace = position - camera_offset;
+				](v3d position, f32 radius) {
+			v3d pos_camspace = position - camera_offset;
 			for (auto &plane : planes) {
 				if (plane.getDistanceTo(pos_camspace) > radius)
 					return true;
@@ -200,7 +200,7 @@ public:
 
 	Nametag *addNametag(scene::ISceneNode *parent_node,
 		const std::string &text, video::SColor textcolor,
-		Optional<video::SColor> bgcolor, const v3f &pos);
+		Optional<video::SColor> bgcolor, const v3d &pos);
 
 	void removeNametag(Nametag *nametag);
 
@@ -230,9 +230,9 @@ private:
 	f32 m_cache_fov;
 
 	// Absolute camera position
-	v3f m_camera_position;
+	v3d m_camera_position;
 	// Absolute camera direction
-	v3f m_camera_direction;
+	v3d m_camera_direction;
 	// Camera offset
 	v3s32 m_camera_offset;
 

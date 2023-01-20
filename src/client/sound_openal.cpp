@@ -97,7 +97,7 @@ static ALenum warn_if_error(ALenum err, const char *desc)
 	return err;
 }
 
-void f3_set(ALfloat *f3, v3f v)
+void f3_set(ALfloat *f3, v3d v)
 {
 	f3[0] = v.X;
 	f3[1] = v.Y;
@@ -446,7 +446,7 @@ public:
 	}
 
 	PlayingSound* createPlayingSoundAt(SoundBuffer *buf, bool loop,
-			float volume, v3f pos, float pitch)
+			float volume, v3d pos, float pitch)
 	{
 		infostream << "OpenALSoundManager: Creating positional playing sound"
 				<< std::endl;
@@ -568,7 +568,7 @@ public:
 		return !!buf;
 	}
 
-	void updateListener(const v3f &pos, const v3f &vel, const v3f &at, const v3f &up)
+	void updateListener(const v3d &pos, const v3d &vel, const v3d &at, const v3d &up)
 	{
 		alListener3f(AL_POSITION, pos.X, pos.Y, pos.Z);
 		alListener3f(AL_VELOCITY, vel.X, vel.Y, vel.Z);
@@ -606,7 +606,7 @@ public:
 		return handle;
 	}
 
-	int playSoundAt(const SimpleSoundSpec &spec, const v3f &pos)
+	int playSoundAt(const SimpleSoundSpec &spec, const v3d &pos)
 	{
 		maintain();
 		if (spec.name.empty())
@@ -682,7 +682,7 @@ public:
 		return (m_sounds_playing.count(sound) != 0);
 	}
 
-	void updateSoundPosition(int id, v3f pos)
+	void updateSoundPosition(int id, v3d pos)
 	{
 		auto i = m_sounds_playing.find(id);
 		if (i == m_sounds_playing.end())

@@ -140,7 +140,7 @@ void TestUtilities::testWrapDegrees_0_360_v3f()
 {
     // only x test with little step
 	for (float x = -720.f; x <= 720; x += 0.05) {
-        v3f r = wrapDegrees_0_360_v3f(v3f(x, 0, 0));
+        v3d r = wrapDegrees_0_360_v3f(v3d(x, 0, 0));
         UASSERT(r.X >= 0.0f && r.X < 360.0f)
         UASSERT(r.Y == 0.0f)
         UASSERT(r.Z == 0.0f)
@@ -148,7 +148,7 @@ void TestUtilities::testWrapDegrees_0_360_v3f()
 
     // only y test with little step
     for (float y = -720.f; y <= 720; y += 0.05) {
-        v3f r = wrapDegrees_0_360_v3f(v3f(0, y, 0));
+        v3d r = wrapDegrees_0_360_v3f(v3d(0, y, 0));
         UASSERT(r.X == 0.0f)
         UASSERT(r.Y >= 0.0f && r.Y < 360.0f)
         UASSERT(r.Z == 0.0f)
@@ -156,7 +156,7 @@ void TestUtilities::testWrapDegrees_0_360_v3f()
 
     // only z test with little step
     for (float z = -720.f; z <= 720; z += 0.05) {
-        v3f r = wrapDegrees_0_360_v3f(v3f(0, 0, z));
+        v3d r = wrapDegrees_0_360_v3f(v3d(0, 0, z));
         UASSERT(r.X == 0.0f)
         UASSERT(r.Y == 0.0f)
         UASSERT(r.Z >= 0.0f && r.Z < 360.0f)
@@ -166,7 +166,7 @@ void TestUtilities::testWrapDegrees_0_360_v3f()
     for (float x = -720.f; x <= 720; x += 2.5) {
         for (float y = -720.f; y <= 720; y += 2.5) {
             for (float z = -720.f; z <= 720; z += 2.5) {
-                v3f r = wrapDegrees_0_360_v3f(v3f(x, y, z));
+                v3d r = wrapDegrees_0_360_v3f(v3d(x, y, z));
                 UASSERT(r.X >= 0.0f && r.X < 360.0f)
                 UASSERT(r.Y >= 0.0f && r.Y < 360.0f)
                 UASSERT(r.Z >= 0.0f && r.Z < 360.0f)
@@ -427,7 +427,7 @@ static bool within(const f32 value1, const f32 value2, const f32 precision)
 	return std::fabs(value1 - value2) <= precision;
 }
 
-static bool within(const v3f &v1, const v3f &v2, const f32 precision)
+static bool within(const v3d &v1, const v3d &v2, const f32 precision)
 {
 	return within(v1.X, v2.X, precision) && within(v1.Y, v2.Y, precision)
 		&& within(v1.Z, v2.Z, precision);
@@ -444,7 +444,7 @@ static bool within(const core::matrix4 &m1, const core::matrix4 &m2,
 	return true;
 }
 
-static bool roundTripsDeg(const v3f &v, const f32 precision)
+static bool roundTripsDeg(const v3d &v, const f32 precision)
 {
 	core::matrix4 m;
 	setPitchYawRoll(m, v);
@@ -460,7 +460,7 @@ void TestUtilities::testEulerConversion()
 	// High tolerance is 2 ulp(180.0), needed for numbers in degrees.
 	// ulp(180.0) = 2^-16
 	const f32 tolH = 3.0517578125e-5f;
-	v3f v1, v2;
+	v3d v1, v2;
 	core::matrix4 m1, m2;
 	const f32 *M1 = m1.pointer();
 	const f32 *M2 = m2.pointer();
@@ -468,8 +468,8 @@ void TestUtilities::testEulerConversion()
 	// Check that the radians version and the degrees version
 	// produce the same results. Check also that the conversion
 	// works both ways for these values.
-	v1 = v3f(M_PI/3.0, M_PI/5.0, M_PI/4.0);
-	v2 = v3f(60.0f, 36.0f, 45.0f);
+	v1 = v3d(M_PI/3.0, M_PI/5.0, M_PI/4.0);
+	v2 = v3d(60.0f, 36.0f, 45.0f);
 	setPitchYawRollRad(m1, v1);
 	setPitchYawRoll(m2, v2);
 	UASSERT(within(m1, m2, tolL));
@@ -506,7 +506,7 @@ void TestUtilities::testEulerConversion()
 	// Compare to Irrlicht's results. To be comparable, the
 	// angles must come in a different order and the matrix
 	// elements to compare are different too.
-	m2.setRotationRadians(v3f(v1.Z, v1.X, v1.Y));
+	m2.setRotationRadians(v3d(v1.Z, v1.X, v1.Y));
 	UASSERT(within(M1[0], M2[5], tolL));
 	UASSERT(within(M1[1], M2[6], tolL));
 	UASSERT(within(M1[2], M2[4], tolL));
@@ -520,12 +520,12 @@ void TestUtilities::testEulerConversion()
 	UASSERT(within(M1[10], M2[0], tolL));
 
 	// Check that Eulers that produce near gimbal-lock still round-trip
-	UASSERT(roundTripsDeg(v3f(89.9999f, 17.f, 0.f), tolH));
-	UASSERT(roundTripsDeg(v3f(89.9999f, 0.f, 19.f), tolH));
-	UASSERT(roundTripsDeg(v3f(89.9999f, 17.f, 19.f), tolH));
+	UASSERT(roundTripsDeg(v3d(89.9999f, 17.f, 0.f), tolH));
+	UASSERT(roundTripsDeg(v3d(89.9999f, 0.f, 19.f), tolH));
+	UASSERT(roundTripsDeg(v3d(89.9999f, 17.f, 19.f), tolH));
 
 	// Check that Eulers at an angle > 90 degrees may not round-trip...
-	v1 = v3f(90.00001f, 1.f, 1.f);
+	v1 = v3d(90.00001f, 1.f, 1.f);
 	setPitchYawRoll(m1, v1);
 	v2 = getPitchYawRoll(m1);
 	//UASSERT(within(v1, v2, tolL)); // this is typically false

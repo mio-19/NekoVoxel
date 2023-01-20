@@ -57,7 +57,7 @@ void MeshCollector::append(const TileLayer &layer, const video::S3DVertex *verti
 }
 
 void MeshCollector::append(const TileSpec &tile, const video::S3DVertex *vertices,
-		u32 numVertices, const u16 *indices, u32 numIndices, v3f pos,
+		u32 numVertices, const u16 *indices, u32 numIndices, v3d pos,
 		video::SColor c, u8 light_source)
 {
 	for (int layernum = 0; layernum < MAX_TILE_LAYERS; layernum++) {
@@ -70,7 +70,7 @@ void MeshCollector::append(const TileSpec &tile, const video::S3DVertex *vertice
 }
 
 void MeshCollector::append(const TileLayer &layer, const video::S3DVertex *vertices,
-		u32 numVertices, const u16 *indices, u32 numIndices, v3f pos,
+		u32 numVertices, const u16 *indices, u32 numIndices, v3d pos,
 		video::SColor c, u8 light_source, u8 layernum, bool use_scale)
 {
 	PreMeshBuffer &p = findBuffer(layer, layernum, numVertices);

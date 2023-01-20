@@ -33,7 +33,7 @@ inline static void applyShadeFactor(video::SColor& color, float factor)
 	color.setBlue(core::clamp(core::round32(color.getBlue()*factor), 0, 255));
 }
 
-void applyFacesShading(video::SColor &color, const v3f &normal)
+void applyFacesShading(video::SColor &color, const v3d &normal)
 {
 	/*
 		Some drawtypes have normals set to (0, 0, 0), this must result in
@@ -53,7 +53,7 @@ void applyFacesShading(video::SColor &color, const v3f &normal)
 		applyShadeFactor(color, 0.670820f * x2 + 1.000000f * y2 + 0.836660f * z2);
 }
 
-scene::IAnimatedMesh* createCubeMesh(v3f scale)
+scene::IAnimatedMesh* createCubeMesh(v3d scale)
 {
 	video::SColor c(255,255,255,255);
 	video::S3DVertex vertices[24] =
@@ -112,7 +112,7 @@ scene::IAnimatedMesh* createCubeMesh(v3f scale)
 	return anim_mesh;
 }
 
-void scaleMesh(scene::IMesh *mesh, v3f scale)
+void scaleMesh(scene::IMesh *mesh, v3d scale)
 {
 	if (mesh == NULL)
 		return;
@@ -140,7 +140,7 @@ void scaleMesh(scene::IMesh *mesh, v3f scale)
 	mesh->setBoundingBox(bbox);
 }
 
-void translateMesh(scene::IMesh *mesh, v3f vec)
+void translateMesh(scene::IMesh *mesh, v3d vec)
 {
 	if (mesh == NULL)
 		return;
@@ -253,7 +253,7 @@ void setMeshColorByNormalXYZ(scene::IMesh *mesh,
 	applyToMesh(mesh, colorizator);
 }
 
-void setMeshColorByNormal(scene::IMesh *mesh, const v3f &normal,
+void setMeshColorByNormal(scene::IMesh *mesh, const v3d &normal,
 		const video::SColor &color)
 {
 	if (!mesh)
@@ -265,7 +265,7 @@ void setMeshColorByNormal(scene::IMesh *mesh, const v3f &normal,
 	applyToMesh(mesh, colorizator);
 }
 
-template <float v3f::*U, float v3f::*V>
+template <float v3d::*U, float v3d::*V>
 static void rotateMesh(scene::IMesh *mesh, float degrees)
 {
 	degrees *= M_PI / 180.0f;
@@ -282,17 +282,17 @@ static void rotateMesh(scene::IMesh *mesh, float degrees)
 
 void rotateMeshXYby(scene::IMesh *mesh, f64 degrees)
 {
-	rotateMesh<&v3f::X, &v3f::Y>(mesh, degrees);
+	rotateMesh<&v3d::X, &v3d::Y>(mesh, degrees);
 }
 
 void rotateMeshXZby(scene::IMesh *mesh, f64 degrees)
 {
-	rotateMesh<&v3f::X, &v3f::Z>(mesh, degrees);
+	rotateMesh<&v3d::X, &v3d::Z>(mesh, degrees);
 }
 
 void rotateMeshYZby(scene::IMesh *mesh, f64 degrees)
 {
-	rotateMesh<&v3f::Y, &v3f::Z>(mesh, degrees);
+	rotateMesh<&v3d::Y, &v3d::Z>(mesh, degrees);
 }
 
 void rotateMeshBy6dFacedir(scene::IMesh *mesh, int facedir)
@@ -450,8 +450,8 @@ scene::IMesh* convertNodeboxesToMesh(const std::vector<aabb3f> &boxes,
 		// use default texture UV mapping if not provided
 		const f32 *txc = uv_coords ? uv_coords : txc_default;
 
-		v3f min = box.MinEdge;
-		v3f max = box.MaxEdge;
+		v3d min = box.MinEdge;
+		v3d max = box.MaxEdge;
 
 		video::S3DVertex vertices[24] =
 		{

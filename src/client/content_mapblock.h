@@ -73,7 +73,7 @@ public:
 // current node
 	v3s32 blockpos_nodes;
 	v3s32 p;
-	v3f origin;
+	v3d origin;
 	MapNode n;
 	const ContentFeatures *f;
 	LightPair light;
@@ -84,9 +84,9 @@ public:
 
 // lighting
 	void getSmoothLightFrame();
-	LightInfo blendLight(const v3f &vertex_pos);
-	video::SColor blendLightColor(const v3f &vertex_pos);
-	video::SColor blendLightColor(const v3f &vertex_pos, const v3f &vertex_normal);
+	LightInfo blendLight(const v3d &vertex_pos);
+	video::SColor blendLightColor(const v3d &vertex_pos);
+	video::SColor blendLightColor(const v3d &vertex_pos, const v3d &vertex_normal);
 
 	void useTile(int index = 0, u8 set_flags = MATERIAL_FLAG_CRACK_OVERLAY,
 		u8 reset_flags = 0, bool special = false);
@@ -95,7 +95,7 @@ public:
 	void getSpecialTile(int index, TileSpec *tile, bool apply_crack = false);
 
 // face drawing
-	void drawQuad(v3f *vertices, const v3s32 &normal = v3s32(0, 0, 0),
+	void drawQuad(v3d *vertices, const v3s32 &normal = v3s32(0, 0, 0),
 		float vertical_tiling = 1.0);
 
 // cuboid drawing!
@@ -139,7 +139,7 @@ public:
 
 // plantlike-specific
 	PlantlikeStyle draw_style;
-	v3f offset;
+	v3d offset;
 	float rotate_degree;
 	bool random_offset_Y;
 	int face_num;

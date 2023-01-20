@@ -127,7 +127,7 @@ int ObjectRef::l_set_pos(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f pos = checkFloatPos(L, 2);
+	v3d pos = checkFloatPos(L, 2);
 
 	sao->setPos(pos);
 	return 0;
@@ -142,7 +142,7 @@ int ObjectRef::l_move_to(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f pos = checkFloatPos(L, 2);
+	v3d pos = checkFloatPos(L, 2);
 	bool continuous = readParam<bool>(L, 3);
 
 	sao->moveTo(pos, continuous);
@@ -162,7 +162,7 @@ int ObjectRef::l_punch(lua_State *L)
 
 	float time_from_last_punch = readParam<float>(L, 3, 1000000.0f);
 	ToolCapabilities toolcap = read_tool_capabilities(L, 4);
-	v3f dir = readParam<v3f>(L, 5, sao->getBasePosition() - puncher->getBasePosition());
+	v3d dir = readParam<v3d>(L, 5, sao->getBasePosition() - puncher->getBasePosition());
 	dir.normalize();
 
 	u32 wear = sao->punch(dir, &toolcap, puncher, time_from_last_punch);
@@ -444,8 +444,8 @@ int ObjectRef::l_set_eye_offset(lua_State *L)
 	if (player == nullptr)
 		return 0;
 
-	v3f offset_first = readParam<v3f>(L, 2, v3f(0, 0, 0));
-	v3f offset_third = readParam<v3f>(L, 3, v3f(0, 0, 0));
+	v3d offset_first = readParam<v3d>(L, 2, v3d(0, 0, 0));
+	v3d offset_third = readParam<v3d>(L, 3, v3d(0, 0, 0));
 
 	// Prevent abuse of offset values (keep player always visible)
 	offset_third.X = rangelim(offset_third.X,-10,10);
@@ -518,8 +518,8 @@ int ObjectRef::l_set_bone_position(lua_State *L)
 		return 0;
 
 	std::string bone = readParam<std::string>(L, 2, "");
-	v3f position = readParam<v3f>(L, 3, v3f(0, 0, 0));
-	v3f rotation = readParam<v3f>(L, 4, v3f(0, 0, 0));
+	v3d position = readParam<v3d>(L, 3, v3d(0, 0, 0));
+	v3d rotation = readParam<v3d>(L, 4, v3d(0, 0, 0));
 
 	sao->setBonePosition(bone, position, rotation);
 	return 0;
@@ -536,8 +536,8 @@ int ObjectRef::l_get_bone_position(lua_State *L)
 
 	std::string bone = readParam<std::string>(L, 2, "");
 
-	v3f position = v3f(0, 0, 0);
-	v3f rotation = v3f(0, 0, 0);
+	v3d position = v3d(0, 0, 0);
+	v3d rotation = v3d(0, 0, 0);
 	sao->getBonePosition(bone, &position, &rotation);
 
 	push_v3f(L, position);
@@ -560,8 +560,8 @@ int ObjectRef::l_set_attach(lua_State *L)
 
 	int parent_id;
 	std::string bone;
-	v3f position;
-	v3f rotation;
+	v3d position;
+	v3d rotation;
 	bool force_visible;
 
 	sao->getAttachment(&parent_id, &bone, &position, &rotation, &force_visible);
@@ -571,8 +571,8 @@ int ObjectRef::l_set_attach(lua_State *L)
 	}
 
 	bone          = readParam<std::string>(L, 3, "");
-	position      = readParam<v3f>(L, 4, v3f(0, 0, 0));
-	rotation      = readParam<v3f>(L, 5, v3f(0, 0, 0));
+	position      = readParam<v3d>(L, 4, v3d(0, 0, 0));
+	rotation      = readParam<v3d>(L, 5, v3d(0, 0, 0));
 	force_visible = readParam<bool>(L, 6, false);
 
 	sao->setAttachment(parent->getId(), bone, position, rotation, force_visible);
@@ -591,8 +591,8 @@ int ObjectRef::l_get_attach(lua_State *L)
 
 	int parent_id;
 	std::string bone;
-	v3f position;
-	v3f rotation;
+	v3d position;
+	v3d rotation;
 	bool force_visible;
 
 	sao->getAttachment(&parent_id, &bone, &position, &rotation, &force_visible);
@@ -773,7 +773,7 @@ int ObjectRef::l_set_velocity(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f vel = checkFloatPos(L, 2);
+	v3d vel = checkFloatPos(L, 2);
 
 	sao->setVelocity(vel);
 	return 0;
@@ -788,7 +788,7 @@ int ObjectRef::l_add_velocity(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f vel = checkFloatPos(L, 2);
+	v3d vel = checkFloatPos(L, 2);
 
 	if (sao->getType() == ACTIVEOBJECT_TYPE_LUAENTITY) {
 		LuaEntitySAO *entitysao = dynamic_cast<LuaEntitySAO*>(sao);
@@ -813,7 +813,7 @@ int ObjectRef::l_get_velocity(lua_State *L)
 
 	if (sao->getType() == ACTIVEOBJECT_TYPE_LUAENTITY) {
 		LuaEntitySAO *entitysao = dynamic_cast<LuaEntitySAO*>(sao);
-		v3f vel = entitysao->getVelocity();
+		v3d vel = entitysao->getVelocity();
 		pushFloatPos(L, vel);
 		return 1;
 	} else if (sao->getType() == ACTIVEOBJECT_TYPE_PLAYER) {
@@ -835,7 +835,7 @@ int ObjectRef::l_set_acceleration(lua_State *L)
 	if (entitysao == nullptr)
 		return 0;
 
-	v3f acceleration = checkFloatPos(L, 2);
+	v3d acceleration = checkFloatPos(L, 2);
 
 	entitysao->setAcceleration(acceleration);
 	return 0;
@@ -850,7 +850,7 @@ int ObjectRef::l_get_acceleration(lua_State *L)
 	if (entitysao == nullptr)
 		return 0;
 
-	v3f acceleration = entitysao->getAcceleration();
+	v3d acceleration = entitysao->getAcceleration();
 	pushFloatPos(L, acceleration);
 	return 1;
 }
@@ -864,7 +864,7 @@ int ObjectRef::l_set_rotation(lua_State *L)
 	if (entitysao == nullptr)
 		return 0;
 
-	v3f rotation = check_v3f(L, 2) * core::RADTODEG;
+	v3d rotation = check_v3f(L, 2) * core::RADTODEG;
 
 	entitysao->setRotation(rotation);
 	return 0;
@@ -879,7 +879,7 @@ int ObjectRef::l_get_rotation(lua_State *L)
 	if (entitysao == nullptr)
 		return 0;
 
-	v3f rotation = entitysao->getRotation() * core::DEGTORAD;
+	v3d rotation = entitysao->getRotation() * core::DEGTORAD;
 
 	lua_newtable(L);
 	push_v3f(L, rotation);
@@ -897,7 +897,7 @@ int ObjectRef::l_set_yaw(lua_State *L)
 
 	float yaw = readParam<float>(L, 2) * core::RADTODEG;
 
-	entitysao->setRotation(v3f(0, yaw, 0));
+	entitysao->setRotation(v3d(0, yaw, 0));
 	return 0;
 }
 
@@ -1022,7 +1022,7 @@ int ObjectRef::l_get_look_dir(lua_State *L)
 
 	float pitch = playersao->getRadLookPitchDep();
 	float yaw = playersao->getRadYawDep();
-	v3f v(std::cos(pitch) * std::cos(yaw), std::sin(pitch), std::cos(pitch) *
+	v3d v(std::cos(pitch) * std::cos(yaw), std::sin(pitch), std::cos(pitch) *
 		std::sin(yaw));
 
 	push_v3f(L, v);

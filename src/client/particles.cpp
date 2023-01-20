@@ -176,14 +176,14 @@ void Particle::step(float dtime)
 	m_time += dtime;
 
 	// apply drag (not handled by collisionMoveSimple) and brownian motion
-	v3f av = vecAbsolute(m_velocity);
+	v3d av = vecAbsolute(m_velocity);
 	av -= av * (m_drag * dtime);
-	m_velocity = av*vecSign(m_velocity) + v3f(m_jitter.pickWithin())*dtime;
+	m_velocity = av*vecSign(m_velocity) + v3d(m_jitter.pickWithin())*dtime;
 
 	if (m_collisiondetection) {
 		aabb3f box = m_collisionbox;
-		v3f p_pos = m_pos * BS;
-		v3f p_velocity = m_velocity * BS;
+		v3d p_pos = m_pos * BS;
+		v3d p_velocity = m_velocity * BS;
 		collisionMoveResult r = collisionMoveSimple(m_env, m_gamedef, BS * 0.5f,
 			box, 0.0f, dtime, &p_pos, &p_velocity, m_acceleration * BS, nullptr,
 			m_object_collision);
@@ -322,11 +322,11 @@ void Particle::updateVertices()
 	// see #10398
 	// v3s32 camera_offset = m_env->getCameraOffset();
 	// particle position is now handled by step()
-	m_box.reset(v3f());
+	m_box.reset(v3d());
 
 	for (video::S3DVertex &vertex : m_vertices) {
 		if (m_vertical) {
-			v3f ppos = m_player->getPosition()/BS;
+			v3d ppos = m_player->getPosition()/BS;
 			vertex.Pos.rotateXZBy(std::atan2(ppos.Z - m_pos.Z, ppos.X - m_pos.X) /
 				core::DEGTORAD + 90);
 		} else {
@@ -402,8 +402,8 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 	auto r_radius = p.radius.blend(fac);
 	auto r_jitter = p.jitter.blend(fac);
 	auto r_bounce = p.bounce.blend(fac);
-	v3f  attractor_origin = p.attractor_origin.blend(fac);
-	v3f  attractor_direction = p.attractor_direction.blend(fac);
+	v3d  attractor_origin = p.attractor_origin.blend(fac);
+	v3d  attractor_direction = p.attractor_direction.blend(fac);
 	auto attractor_obj       = findObjectByID(env, p.attractor_attachment);
 	auto attractor_direction_obj = findObjectByID(env, p.attractor_direction_attachment);
 
@@ -412,9 +412,9 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 	auto r_attract = p.attract.blend(fac);
 	auto attract = r_attract.pickWithin();
 
-	v3f ppos = m_player->getPosition() / BS;
-	v3f pos = r_pos.pickWithin();
-	v3f sphere_radius = r_radius.pickWithin();
+	v3d ppos = m_player->getPosition() / BS;
+	v3d pos = r_pos.pickWithin();
+	v3d sphere_radius = r_radius.pickWithin();
 
 	// Need to apply this first or the following check
 	// will be wrong for attached spawners
@@ -457,12 +457,12 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 
 	pp.expirationtime = r_exp.pickWithin();
 
-	if (sphere_radius != v3f()) {
+	if (sphere_radius != v3d()) {
 		f32 l = sphere_radius.getLength();
-		v3f mag = sphere_radius;
+		v3d mag = sphere_radius;
 		mag.normalize();
 
-		v3f ofs = v3f(l,0,0);
+		v3d ofs = v3d(l,0,0);
 		ofs.rotateXZBy(myrand_range(0.f,360.f));
 		ofs.rotateYZBy(myrand_range(0.f,360.f));
 		ofs.rotateXYBy(myrand_range(0.f,360.f));
@@ -471,7 +471,7 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 	}
 
 	if (p.attractor_kind != ParticleParamTypes::AttractorKind::none && attract != 0) {
-		v3f dir;
+		v3d dir;
 		f32 dist = 0; /* =0 necessary to silence warning */
 		switch (p.attractor_kind) {
 			case ParticleParamTypes::AttractorKind::none:
@@ -487,7 +487,7 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 			case ParticleParamTypes::AttractorKind::line: {
 				// https://github.com/minetest/minetest/issues/11505#issuecomment-915612700
 				const auto& lorigin = attractor_origin;
-				v3f ldir = attractor_direction;
+				v3d ldir = attractor_direction;
 				ldir.normalize();
 				auto origin_to_point = pp.pos - lorigin;
 				auto scalar_projection = origin_to_point.dotProduct(ldir);
@@ -502,10 +502,10 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 
 			case ParticleParamTypes::AttractorKind::plane: {
 				// https://github.com/minetest/minetest/issues/11505#issuecomment-915612700
-				const v3f& porigin = attractor_origin;
-				v3f normal = attractor_direction;
+				const v3d& porigin = attractor_origin;
+				v3d normal = attractor_direction;
 				normal.normalize();
-				v3f point_to_origin = porigin - pp.pos;
+				v3d point_to_origin = porigin - pp.pos;
 				f32 factor = normal.dotProduct(point_to_origin);
 				if (numericAbsolute(factor) == 0.0f) {
 					dir = normal;
@@ -520,7 +520,7 @@ void ParticleSpawner::spawnParticle(ClientEnvironment *env, float radius,
 		}
 
 		f32 speedTowards = numericAbsolute(attract) * dist;
-		v3f avel = dir * speedTowards;
+		v3d avel = dir * speedTowards;
 		if (attract > 0 && speedTowards > 0) {
 			avel *= -1;
 			if (p.attractor_kill) {
@@ -871,17 +871,17 @@ void ParticleManager::addNodeParticle(IGameDef *gamedef,
 	p.expirationtime = myrand_range(0, 100) / 100.0f;
 
 	// Physics
-	p.vel = v3f(
+	p.vel = v3d(
 		myrand_range(-1.5f,1.5f),
 		myrand_range(0.f,3.f),
 		myrand_range(-1.5f,1.5f)
 	);
-	p.acc = v3f(
+	p.acc = v3d(
 		0.0f,
 		-player->movement_gravity * player->physics_override.gravity / BS,
 		0.0f
 	);
-	p.pos = v3f(
+	p.pos = v3d(
 		(f32)pos.X + myrand_range(0.f, .5f) - .25f,
 		(f32)pos.Y + myrand_range(0.f, .5f) - .25f,
 		(f32)pos.Z + myrand_range(0.f, .5f) - .25f

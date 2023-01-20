@@ -119,7 +119,7 @@ void PlayerDatabaseLevelDB::savePlayer(RemotePlayer *player)
 	/*
 	u8 version = 1
 	u16 hp
-	v3f position
+	v3d position
 	f32 pitch
 	f32 yaw
 	u16 breath

@@ -899,7 +899,7 @@ void MapgenBasic::generateDungeons(s32 max_stone_y)
 	DungeonParams dp;
 
 	dp.np_alt_wall =
-		NoiseParams(-0.4, 1.0, v3f(40.0, 40.0, 40.0), 32474, 6, 1.1, 2.0);
+		NoiseParams(-0.4, 1.0, v3d(40.0, 40.0, 40.0), 32474, 6, 1.1, 2.0);
 
 	dp.seed                = seed;
 	dp.only_in_ground      = true;

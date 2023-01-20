@@ -316,8 +316,8 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 {
 	// Get player position
 	// Smooth the movement when walking up stairs
-	v3f old_player_position = m_playernode->getPosition();
-	v3f player_position = player->getPosition();
+	v3d old_player_position = m_playernode->getPosition();
+	v3d player_position = player->getPosition();
 
 	f32 yaw = player->getYaw();
 	f32 pitch = player->getPitch();
@@ -346,7 +346,7 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 
 	// Set player node transformation
 	m_playernode->setPosition(player_position);
-	m_playernode->setRotation(v3f(0, -1 * yaw, 0));
+	m_playernode->setRotation(v3d(0, -1 * yaw, 0));
 	m_playernode->updateAbsolutePosition();
 
 	// Get camera tilt timer (hurt animation)
@@ -374,7 +374,7 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 
 	// Calculate and translate the head SceneNode offsets
 	{
-		v3f eye_offset = player->getEyeOffset();
+		v3d eye_offset = player->getEyeOffset();
 		if (m_camera_mode == CAMERA_MODE_FIRST)
 			eye_offset += player->eye_offset_first;
 		else
@@ -383,15 +383,15 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 		// Set head node transformation
 		eye_offset.Y += cameratilt * -player->hurt_tilt_strength + fall_bobbing;
 		m_headnode->setPosition(eye_offset);
-		m_headnode->setRotation(v3f(pitch, 0,
+		m_headnode->setRotation(v3d(pitch, 0,
 			cameratilt * player->hurt_tilt_strength));
 		m_headnode->updateAbsolutePosition();
 	}
 
 	// Compute relative camera position and target
-	v3f rel_cam_pos = v3f(0,0,0);
-	v3f rel_cam_target = v3f(0,0,1);
-	v3f rel_cam_up = v3f(0,1,0);
+	v3d rel_cam_pos = v3d(0,0,0);
+	v3d rel_cam_target = v3d(0,0,1);
+	v3d rel_cam_up = v3d(0,1,0);
 
 	if (m_cache_view_bobbing_amount != 0.0f && m_view_bobbing_anim != 0.0f &&
 		m_camera_mode < CAMERA_MODE_THIRD) {
@@ -401,7 +401,7 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 		f32 bobknob = 1.2;
 		f32 bobtmp = sin(pow(bobfrac, bobknob) * M_PI);
 
-		v3f bobvec = v3f(
+		v3d bobvec = v3d(
 			0.3 * bobdir * sin(bobfrac * M_PI),
 			-0.28 * bobtmp * bobtmp,
 			0.);
@@ -415,11 +415,11 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 	m_headnode->getAbsoluteTransformation().transformVect(m_camera_position, rel_cam_pos);
 	m_headnode->getAbsoluteTransformation().rotateVect(m_camera_direction, rel_cam_target - rel_cam_pos);
 
-	v3f abs_cam_up;
+	v3d abs_cam_up;
 	m_headnode->getAbsoluteTransformation().rotateVect(abs_cam_up, rel_cam_up);
 
 	// Separate camera position for calculation
-	v3f my_cp = m_camera_position;
+	v3d my_cp = m_camera_position;
 
 	// Reposition the camera for third person view
 	if (m_camera_mode > CAMERA_MODE_FIRST)
@@ -523,10 +523,10 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 		addArmInertia(yaw);
 
 	// Position the wielded item
-	//v3f wield_position = v3f(45, -35, 65);
-	v3f wield_position = v3f(m_wieldmesh_offset.X, m_wieldmesh_offset.Y, 65);
-	//v3f wield_rotation = v3f(-100, 120, -100);
-	v3f wield_rotation = v3f(-100, 120, -100);
+	//v3d wield_position = v3d(45, -35, 65);
+	v3d wield_position = v3d(m_wieldmesh_offset.X, m_wieldmesh_offset.Y, 65);
+	//v3d wield_rotation = v3d(-100, 120, -100);
+	v3d wield_rotation = v3d(-100, 120, -100);
 	wield_position.Y += fabs(m_wield_change_timer)*320 - 40;
 	if(m_digging_anim < 0.05 || m_digging_anim > 0.5)
 	{
@@ -553,7 +553,7 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 
 		// Euler angles are PURE EVIL, so why not use quaternions?
 		core::quaternion quat_begin(wield_rotation * core::DEGTORAD);
-		core::quaternion quat_end(v3f(80, 30, 100) * core::DEGTORAD);
+		core::quaternion quat_end(v3d(80, 30, 100) * core::DEGTORAD);
 		core::quaternion quat_slerp;
 		quat_slerp.slerp(quat_begin, quat_end, sin(digfrac * M_PI));
 		quat_slerp.toEuler(wield_rotation);
@@ -575,7 +575,7 @@ void Camera::update(LocalPlayer* player, f32 frametime, f32 tool_reload_ratio)
 	// If the player is walking, swimming, or climbing,
 	// view bobbing is enabled and free_move is off,
 	// start (or continue) the view bobbing animation.
-	const v3f &speed = player->getSpeed();
+	const v3d &speed = player->getSpeed();
 	const bool movement_XZ = hypot(speed.X, speed.Z) > BS;
 	const bool movement_Y = fabs(speed.Y) > BS;
 
@@ -669,7 +669,7 @@ void Camera::drawNametags()
 	for (const Nametag *nametag : m_nametags) {
 		// Nametags are hidden in GenericCAO::updateNametag()
 
-		v3f pos = nametag->parent_node->getAbsolutePosition() + nametag->pos * BS;
+		v3d pos = nametag->parent_node->getAbsolutePosition() + nametag->pos * BS;
 		f32 transformed_pos[4] = { pos.X, pos.Y, pos.Z, 1.0f };
 		trans.multiplyWith1x4Matrix(transformed_pos);
 		if (transformed_pos[3] > 0) {
@@ -701,7 +701,7 @@ void Camera::drawNametags()
 
 Nametag *Camera::addNametag(scene::ISceneNode *parent_node,
 		const std::string &text, video::SColor textcolor,
-		Optional<video::SColor> bgcolor, const v3f &pos)
+		Optional<video::SColor> bgcolor, const v3d &pos)
 {
 	Nametag *nametag = new Nametag(parent_node, text, textcolor, bgcolor, pos);
 	m_nametags.push_back(nametag);

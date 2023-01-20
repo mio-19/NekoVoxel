@@ -77,23 +77,23 @@ class MeshTriangle
 public:
 	scene::SMeshBuffer *buffer;
 	u16 p1, p2, p3;
-	v3f centroid;
+	v3d centroid;
 	float areaSQ;
 
 	void updateAttributes()
 	{
-		v3f v1 = buffer->getPosition(p1);
-		v3f v2 = buffer->getPosition(p2);
-		v3f v3 = buffer->getPosition(p3);
+		v3d v1 = buffer->getPosition(p1);
+		v3d v2 = buffer->getPosition(p2);
+		v3d v3 = buffer->getPosition(p3);
 
 		centroid = (v1 + v2 + v3) / 3;
 		areaSQ = (v2-v1).crossProduct(v3-v1).getLengthSQ() / 4;
 	}
 
-	v3f getNormal() const {
-		v3f v1 = buffer->getPosition(p1);
-		v3f v2 = buffer->getPosition(p2);
-		v3f v3 = buffer->getPosition(p3);
+	v3d getNormal() const {
+		v3d v1 = buffer->getPosition(p1);
+		v3d v2 = buffer->getPosition(p2);
+		v3d v3 = buffer->getPosition(p3);
 
 		return (v2-v1).crossProduct(v3-v1);
 	}
@@ -110,7 +110,7 @@ public:
 
 	void buildTree(const std::vector<MeshTriangle> *triangles);
 
-	void traverse(v3f viewpoint, std::vector<s32> &output) const
+	void traverse(v3d viewpoint, std::vector<s32> &output) const
 	{
 		traverse(root, viewpoint, output);
 	}
@@ -119,21 +119,21 @@ private:
 	// Tree node definition;
 	struct TreeNode
 	{
-		v3f normal;
-		v3f origin;
+		v3d normal;
+		v3d origin;
 		std::vector<s32> triangle_refs;
 		s32 front_ref;
 		s32 back_ref;
 
 		TreeNode() = default;
-		TreeNode(v3f normal, v3f origin, const std::vector<s32> &triangle_refs, s32 front_ref, s32 back_ref) :
+		TreeNode(v3d normal, v3d origin, const std::vector<s32> &triangle_refs, s32 front_ref, s32 back_ref) :
 				normal(normal), origin(origin), triangle_refs(triangle_refs), front_ref(front_ref), back_ref(back_ref)
 		{}
 	};
 
 
-	s32 buildTree(v3f normal, v3f origin, float delta, const std::vector<s32> &list, u32 depth);
-	void traverse(s32 node, v3f viewpoint, std::vector<s32> &output) const;
+	s32 buildTree(v3d normal, v3d origin, float delta, const std::vector<s32> &list, u32 depth);
+	void traverse(s32 node, v3d viewpoint, std::vector<s32> &output) const;
 
 	const std::vector<MeshTriangle> *triangles = nullptr; // this reference is managed externally
 	std::vector<TreeNode> nodes; // list of nodes
@@ -225,10 +225,10 @@ public:
 	f32 getBoundingRadius() const { return m_bounding_radius; }
 
 	/// Center of the bounding-sphere, in BS-space, relative to block pos.
-	v3f getBoundingSphereCenter() const { return m_bounding_sphere_center; }
+	v3d getBoundingSphereCenter() const { return m_bounding_sphere_center; }
 
 	/// update transparent buffers to render towards the camera
-	void updateTransparentBuffers(v3f camera_pos, v3s32 block_pos);
+	void updateTransparentBuffers(v3d camera_pos, v3s32 block_pos);
 	void consolidateTransparentBuffers();
 
 	/// get the list of transparent buffers
@@ -251,7 +251,7 @@ private:
 
 	f32 m_bounding_radius;
 	// MapblockMeshGenerator uses the same as mapblock center
-	v3f m_bounding_sphere_center = v3f((MAP_BLOCKSIZE * 0.5f - 0.5f) * BS);
+	v3d m_bounding_sphere_center = v3d((MAP_BLOCKSIZE * 0.5f - 0.5f) * BS);
 
 	bool m_enable_shaders;
 	bool m_enable_vbo;

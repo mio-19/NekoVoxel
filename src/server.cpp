@@ -139,14 +139,14 @@ void *ServerThread::run()
 	return nullptr;
 }
 
-v3f ServerPlayingSound::getPos(ServerEnvironment *env, bool *pos_exists) const
+v3d ServerPlayingSound::getPos(ServerEnvironment *env, bool *pos_exists) const
 {
 	if (pos_exists)
 		*pos_exists = false;
 
 	switch (type ){
 	case SoundLocation::Local:
-		return v3f(0,0,0);
+		return v3d(0,0,0);
 	case SoundLocation::Position:
 		if (pos_exists)
 			*pos_exists = true;
@@ -154,17 +154,17 @@ v3f ServerPlayingSound::getPos(ServerEnvironment *env, bool *pos_exists) const
 	case SoundLocation::Object:
 		{
 			if (object == 0)
-				return v3f(0,0,0);
+				return v3d(0,0,0);
 			ServerActiveObject *sao = env->getActiveObject(object);
 			if (!sao)
-				return v3f(0,0,0);
+				return v3d(0,0,0);
 			if (pos_exists)
 				*pos_exists = true;
 			return sao->getBasePosition();
 		}
 	}
 
-	return v3f(0,0,0);
+	return v3d(0,0,0);
 }
 
 void Server::ShutdownState::reset()
@@ -1127,7 +1127,7 @@ PlayerSAO* Server::StageTwoClientInit(session_t peer_id)
 
 	// Send death screen
 	if (playersao->isDead())
-		SendDeathscreen(peer_id, false, v3f(0,0,0));
+		SendDeathscreen(peer_id, false, v3d(0,0,0));
 
 	// Send Breath
 	SendPlayerBreath(playersao);
@@ -1421,9 +1421,9 @@ void Server::SendAccessDenied(session_t peer_id, AccessDeniedCode reason,
 }
 
 void Server::SendDeathscreen(session_t peer_id, bool set_camera_point_target,
-		v3f camera_point_target)
+		v3d camera_point_target)
 {
-	NetworkPacket pkt(TOCLIENT_DEATHSCREEN, 1 + sizeof(v3f), peer_id);
+	NetworkPacket pkt(TOCLIENT_DEATHSCREEN, 1 + sizeof(v3d), peer_id);
 	pkt << set_camera_point_target << camera_point_target;
 	Send(&pkt);
 }
@@ -1553,7 +1553,7 @@ void Server::SendSpawnParticle(session_t peer_id, u16 protocol_version,
 
 	if (peer_id == PEER_ID_INEXISTENT) {
 		std::vector<session_t> clients = m_clients.getClientIDs();
-		const v3f pos = p.pos * BS;
+		const v3d pos = p.pos * BS;
 		const float radius_sq = radius * radius;
 
 		for (const session_t client_id : clients) {
@@ -1596,7 +1596,7 @@ void Server::SendAddParticleSpawner(session_t peer_id, u16 protocol_version,
 
 	if (peer_id == PEER_ID_INEXISTENT) {
 		std::vector<session_t> clients = m_clients.getClientIDs();
-		const v3f pos = (
+		const v3d pos = (
 			p.pos.start.min.val +
 			p.pos.start.max.val +
 			p.pos.end.min.val +
@@ -1750,7 +1750,7 @@ void Server::SendHUDChange(session_t peer_id, u32 id, HudElementStat stat, void 
 			pkt << *(std::string *) value;
 			break;
 		case HUD_STAT_WORLD_POS:
-			pkt << *(v3f *) value;
+			pkt << *(v3d *) value;
 			break;
 		case HUD_STAT_SIZE:
 			pkt << *(v2s32 *) value;
@@ -1910,11 +1910,11 @@ void Server::SendMovePlayer(session_t peer_id)
 	// Send attachment updates instantly to the client prior updating position
 	sao->sendOutdatedData();
 
-	NetworkPacket pkt(TOCLIENT_MOVE_PLAYER, sizeof(v3f) + sizeof(f32) * 2, peer_id);
+	NetworkPacket pkt(TOCLIENT_MOVE_PLAYER, sizeof(v3d) + sizeof(f32) * 2, peer_id);
 	pkt << sao->getBasePosition() << sao->getLookPitch() << sao->getRotation().Y;
 
 	{
-		v3f pos = sao->getBasePosition();
+		v3d pos = sao->getBasePosition();
 		verbosestream << "Server: Sending TOCLIENT_MOVE_PLAYER"
 				<< " pos=(" << pos.X << "," << pos.Y << "," << pos.Z << ")"
 				<< " pitch=" << sao->getLookPitch()
@@ -1947,7 +1947,7 @@ void Server::SendLocalPlayerAnimations(session_t peer_id, v2s32 animation_frames
 	Send(&pkt);
 }
 
-void Server::SendEyeOffset(session_t peer_id, v3f first, v3f third)
+void Server::SendEyeOffset(session_t peer_id, v3d first, v3d third)
 {
 	NetworkPacket pkt(TOCLIENT_EYE_OFFSET, 0, peer_id);
 	pkt << first << third;
@@ -2119,7 +2119,7 @@ void Server::SendCSMRestrictionFlags(session_t peer_id)
 	Send(&pkt);
 }
 
-void Server::SendPlayerSpeed(session_t peer_id, const v3f &added_vel)
+void Server::SendPlayerSpeed(session_t peer_id, const v3d &added_vel)
 {
 	NetworkPacket pkt(TOCLIENT_PLAYER_SPEED, 0, peer_id);
 	pkt << added_vel;
@@ -2140,7 +2140,7 @@ s32 Server::playSound(ServerPlayingSound &params, bool ephemeral)
 {
 	// Find out initial position of sound
 	bool pos_exists = false;
-	const v3f pos = params.getPos(m_env, &pos_exists);
+	const v3d pos = params.getPos(m_env, &pos_exists);
 	// If position is not found while it should be, cancel sound
 	if(pos_exists != (params.type != SoundLocation::Local))
 		return -1;
@@ -2254,7 +2254,7 @@ void Server::fadeSound(s32 handle, float step, float gain)
 void Server::sendRemoveNode(v3s32 p, std::unordered_set<u16> *far_players,
 		float far_d_nodes)
 {
-	v3f p_f = intToFloat(p, BS);
+	v3d p_f = intToFloat(p, BS);
 	v3s32 block_pos = getNodeBlockPos(p);
 
 	NetworkPacket pkt(TOCLIENT_REMOVENODE, 6);
@@ -2266,7 +2266,7 @@ void Server::sendRemoveNode(v3s32 p, std::unordered_set<u16> *far_players,
 void Server::sendAddNode(v3s32 p, MapNode n, std::unordered_set<u16> *far_players,
 		float far_d_nodes, bool remove_metadata)
 {
-	v3f p_f = intToFloat(p, BS);
+	v3d p_f = intToFloat(p, BS);
 	v3s32 block_pos = getNodeBlockPos(p);
 
 	NetworkPacket pkt(TOCLIENT_ADDNODE, 6 + 2 + 1 + 1 + 1);
@@ -2276,7 +2276,7 @@ void Server::sendAddNode(v3s32 p, MapNode n, std::unordered_set<u16> *far_player
 }
 
 void Server::sendNodeChangePkt(NetworkPacket &pkt, v3s32 block_pos,
-		v3f p, float far_d_nodes, std::unordered_set<u16> *far_players)
+		v3d p, float far_d_nodes, std::unordered_set<u16> *far_players)
 {
 	float maxd = far_d_nodes * BS;
 	std::vector<session_t> clients = m_clients.getClientIDs();
@@ -2790,7 +2790,7 @@ void Server::HandlePlayerDeath(PlayerSAO *playersao, const PlayerHPChangeReason 
 	// Trigger scripted stuff
 	m_script->on_dieplayer(playersao, reason);
 
-	SendDeathscreen(playersao->getPeerID(), false, v3f(0,0,0));
+	SendDeathscreen(playersao->getPeerID(), false, v3d(0,0,0));
 }
 
 void Server::RespawnPlayer(session_t peer_id)
@@ -2847,7 +2847,7 @@ void Server::acceptAuth(session_t peer_id, bool forSudoMode)
 		u32 sudo_auth_mechs = client->allowed_auth_mechs;
 		client->allowed_sudo_mechs = sudo_auth_mechs;
 
-		resp_pkt << v3f(0,0,0) << (u64) m_env->getServerMap().getSeed()
+		resp_pkt << v3d(0,0,0) << (u64) m_env->getServerMap().getSeed()
 				<< g_settings->getFloat("dedicated_server_step")
 				<< sudo_auth_mechs;
 
@@ -3371,7 +3371,7 @@ void Server::setLocalPlayerAnimations(RemotePlayer *player,
 	SendLocalPlayerAnimations(player->getPeerId(), animation_frames, frame_speed);
 }
 
-void Server::setPlayerEyeOffset(RemotePlayer *player, const v3f &first, const v3f &third)
+void Server::setPlayerEyeOffset(RemotePlayer *player, const v3d &first, const v3d &third)
 {
 	sanity_check(player);
 	player->eye_offset_first = first;
@@ -3720,10 +3720,10 @@ std::string Server::getBuiltinLuaPath()
 	return porting::path_share + DIR_DELIM + "builtin";
 }
 
-v3f Server::findSpawnPos()
+v3d Server::findSpawnPos()
 {
 	ServerMap &map = m_env->getServerMap();
-	v3f nodeposf;
+	v3d nodeposf;
 	if (g_settings->getV3FNoEx("static_spawnpoint", nodeposf))
 		return nodeposf * BS;
 
@@ -3788,7 +3788,7 @@ v3f Server::findSpawnPos()
 		return nodeposf;
 
 	// No suitable spawn point found, return fallback 0,0,0
-	return v3f(0.0f, 0.0f, 0.0f);
+	return v3d(0.0f, 0.0f, 0.0f);
 }
 
 void Server::requestShutdown(const std::string &msg, bool reconnect, float delay)

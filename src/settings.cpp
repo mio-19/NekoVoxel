@@ -560,9 +560,9 @@ v2f Settings::getV2F(const std::string &name) const
 }
 
 
-v3f Settings::getV3F(const std::string &name) const
+v3d Settings::getV3F(const std::string &name) const
 {
-	v3f value;
+	v3d value;
 	Strfnd f(get(name));
 	f.next("(");
 	value.X = stof(f.next(","));
@@ -808,7 +808,7 @@ bool Settings::getV2FNoEx(const std::string &name, v2f &val) const
 }
 
 
-bool Settings::getV3FNoEx(const std::string &name, v3f &val) const
+bool Settings::getV3FNoEx(const std::string &name, v3d &val) const
 {
 	try {
 		val = getV3F(name);
@@ -944,7 +944,7 @@ bool Settings::setV2F(const std::string &name, v2f value)
 }
 
 
-bool Settings::setV3F(const std::string &name, v3f value)
+bool Settings::setV3F(const std::string &name, v3d value)
 {
 	std::ostringstream os;
 	os << "(" << value.X << "," << value.Y << "," << value.Z << ")";

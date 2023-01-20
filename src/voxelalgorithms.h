@@ -89,20 +89,20 @@ struct VoxelLineIterator
 {
 public:
 	//! Starting position of the line in world coordinates.
-	v3f m_start_position;
+	v3d m_start_position;
 	//! Direction and length of the line in world coordinates.
-	v3f m_line_vector;
+	v3d m_line_vector;
 	/*!
 	 * Each component stores the next smallest positive number, by
 	 * which multiplying the line's vector gives a vector that ends
 	 * on the intersection of two nodes.
 	 */
-	v3f m_next_intersection_multi { 10000.0f, 10000.0f, 10000.0f };
+	v3d m_next_intersection_multi { 10000.0f, 10000.0f, 10000.0f };
 	/*!
 	 * Each component stores the smallest positive number, by which
 	 * m_next_intersection_multi's components can be increased.
 	 */
-	v3f m_intersection_multi_inc { 10000.0f, 10000.0f, 10000.0f };
+	v3d m_intersection_multi_inc { 10000.0f, 10000.0f, 10000.0f };
 	/*!
 	 * Direction of the line. Each component can be -1 or 1 (if a
 	 * component of the line's vector is 0, then there will be 1).
@@ -125,7 +125,7 @@ public:
 	 * line in voxel coordinates. start_position+line_vector
 	 * is the end of the line
 	 */
-	VoxelLineIterator(const v3f &start_position,const v3f &line_vector);
+	VoxelLineIterator(const v3d &start_position,const v3d &line_vector);
 
 	/*!
 	 * Steps to the next voxel.

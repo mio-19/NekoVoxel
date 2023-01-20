@@ -30,7 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "cavegen.h"
 
 // TODO Remove this. Cave liquids are now defined and located using biome definitions
-static NoiseParams nparams_caveliquids(0, 1, v3f(150.0, 150.0, 150.0), 776, 3, 0.6, 2.0);
+static NoiseParams nparams_caveliquids(0, 1, v3d(150.0, 150.0, 150.0), 776, 3, 0.6, 2.0);
 
 
 ////
@@ -357,7 +357,7 @@ void CavesRandomWalk::makeCave(MMVManip *vm, v3s32 nmin, v3s32 nmax,
 
 	large_cave_is_flat = (ps->range(0, 1) == 0);
 
-	main_direction = v3f(0, 0, 0);
+	main_direction = v3d(0, 0, 0);
 
 	// Allowed route area size in nodes
 	ar = node_max - node_min + v3s32(1, 1, 1);
@@ -453,7 +453,7 @@ void CavesRandomWalk::makeTunnel(bool dirswitch)
 		);
 	}
 
-	v3f vec;
+	v3d vec;
 	// Jump downward sometimes
 	if (!large_cave && ps->range(0, 12) == 0) {
 		vec.Z = (float)(ps->next() % (maxlen.Z * 1)) - (float)maxlen.Z / 2;
@@ -474,7 +474,7 @@ void CavesRandomWalk::makeTunnel(bool dirswitch)
 
 	vec += main_direction;
 
-	v3f rp = orp + vec;
+	v3d rp = orp + vec;
 	if (rp.X < 0)
 		rp.X = 0;
 	else if (rp.X >= ar.X)
@@ -507,7 +507,7 @@ void CavesRandomWalk::makeTunnel(bool dirswitch)
 }
 
 
-void CavesRandomWalk::carveRoute(v3f vec, float f, bool randomize_xz)
+void CavesRandomWalk::carveRoute(v3d vec, float f, bool randomize_xz)
 {
 	MapNode airnode(CONTENT_AIR);
 	MapNode waternode(c_water_source);
@@ -516,7 +516,7 @@ void CavesRandomWalk::carveRoute(v3f vec, float f, bool randomize_xz)
 	v3s32 startp(orp.X, orp.Y, orp.Z);
 	startp += of;
 
-	v3f fp = orp + vec * f;
+	v3d fp = orp + vec * f;
 	fp.X += 0.1f * ps->range(-10, 10);
 	fp.Z += 0.1f * ps->range(-10, 10);
 	v3s32 cp(fp.X, fp.Y, fp.Z);
@@ -672,7 +672,7 @@ void CavesV6::makeCave(MMVManip *vm, v3s32 nmin, v3s32 nmax,
 	}
 	large_cave_is_flat = (ps->range(0, 1) == 0);
 
-	main_direction = v3f(0, 0, 0);
+	main_direction = v3d(0, 0, 0);
 
 	// Allowed route area size in nodes
 	ar = node_max - node_min + v3s32(1, 1, 1);
@@ -768,7 +768,7 @@ void CavesV6::makeTunnel(bool dirswitch)
 		);
 	}
 
-	v3f vec;
+	v3d vec;
 	vec.Z = (float)(ps->next() % maxlen.Z) - (float)maxlen.Z / 2;
 	vec.Y = (float)(ps->next() % maxlen.Y) - (float)maxlen.Y / 2;
 	vec.X = (float)(ps->next() % maxlen.X) - (float)maxlen.X / 2;
@@ -795,7 +795,7 @@ void CavesV6::makeTunnel(bool dirswitch)
 
 	vec += main_direction;
 
-	v3f rp = orp + vec;
+	v3d rp = orp + vec;
 	if (rp.X < 0)
 		rp.X = 0;
 	else if (rp.X >= ar.X)
@@ -829,7 +829,7 @@ void CavesV6::makeTunnel(bool dirswitch)
 }
 
 
-void CavesV6::carveRoute(v3f vec, float f, bool randomize_xz,
+void CavesV6::carveRoute(v3d vec, float f, bool randomize_xz,
 	bool tunnel_above_ground)
 {
 	MapNode airnode(CONTENT_AIR);
@@ -839,7 +839,7 @@ void CavesV6::carveRoute(v3f vec, float f, bool randomize_xz,
 	v3s32 startp(orp.X, orp.Y, orp.Z);
 	startp += of;
 
-	v3f fp = orp + vec * f;
+	v3d fp = orp + vec * f;
 	fp.X += 0.1f * ps->range(-10, 10);
 	fp.Z += 0.1f * ps->range(-10, 10);
 	v3s32 cp(fp.X, fp.Y, fp.Z);

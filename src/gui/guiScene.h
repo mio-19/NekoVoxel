@@ -50,14 +50,14 @@ private:
 	void calcOptimalDistance();
 	void updateTargetPos();
 	void updateCamera(scene::ISceneNode *target);
-	void setCameraRotation(v3f rot);
+	void setCameraRotation(v3d rot);
 	/// @return true indicates that the rotation was corrected
-	bool correctBounds(v3f &rot);
+	bool correctBounds(v3d &rot);
 	void cameraLoop();
 
 	void updateCameraPos() { m_cam_pos = m_cam->getPosition(); };
-	v3f getCameraRotation() const { return (m_cam_pos - m_target_pos).getHorizontalAngle(); };
-	void rotateCamera(const v3f &delta) { setCameraRotation(getCameraRotation() + delta); };
+	v3d getCameraRotation() const { return (m_cam_pos - m_target_pos).getHorizontalAngle(); };
+	void rotateCamera(const v3d &delta) { setCameraRotation(getCameraRotation() + delta); };
 
 	scene::ISceneManager *m_smgr;
 	video::IVideoDriver *m_driver;
@@ -69,9 +69,9 @@ private:
 
 	u64 m_last_time = 0;
 
-	v3f m_cam_pos;
-	v3f m_target_pos;
-	v3f m_last_target_pos;
+	v3d m_cam_pos;
+	v3d m_target_pos;
+	v3d m_last_target_pos;
 	// Cursor positions
 	v2f m_curr_pos;
 	v2f m_last_pos;

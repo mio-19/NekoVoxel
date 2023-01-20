@@ -74,9 +74,9 @@ static inline f32 truncate(const f32 val, const f32 factor)
 	return truncf(val * factor) / factor;
 }
 
-static inline v3f truncate(const v3f& vec, const f32 factor)
+static inline v3d truncate(const v3d& vec, const f32 factor)
 {
-	return v3f(
+	return v3d(
 		truncate(vec.X, factor),
 		truncate(vec.Y, factor),
 		truncate(vec.Z, factor)
@@ -89,7 +89,7 @@ static inline v3f truncate(const v3f& vec, const f32 factor)
 // The time after which the collision occurs is stored in dtime.
 CollisionAxis axisAlignedCollision(
 		const aabb3f &staticbox, const aabb3f &movingbox,
-		const v3f &speed, f32 *dtime)
+		const v3d &speed, f32 *dtime)
 {
 	//TimeTaker tt("axisAlignedCollision");
 
@@ -225,8 +225,8 @@ static inline void getNeighborConnectingFace(const v3s32 &p,
 collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 		f32 pos_max_d, const aabb3f &box_0,
 		f32 stepheight, f32 dtime,
-		v3f *pos_f, v3f *speed_f,
-		v3f accel_f, ActiveObject *self,
+		v3d *pos_f, v3d *speed_f,
+		v3d accel_f, ActiveObject *self,
 		bool collideWithObjects)
 {
 	#define PROFILER_NAME(text) (s_env ? ("Server: " text) : ("Client: " text))
@@ -252,12 +252,12 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 		time_notification_done = false;
 	}
 
-	v3f dpos_f = (*speed_f + accel_f * 0.5f * dtime) * dtime;
-	v3f newpos_f = *pos_f + dpos_f;
+	v3d dpos_f = (*speed_f + accel_f * 0.5f * dtime) * dtime;
+	v3d newpos_f = *pos_f + dpos_f;
 	*speed_f += accel_f * dtime;
 
 	// If the object is static, there are no collisions
-	if (dpos_f == v3f())
+	if (dpos_f == v3d())
 		return result;
 
 	// Limit speed for avoiding hangs
@@ -275,12 +275,12 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 	//TimeTaker tt2("collisionMoveSimple collect boxes");
 	ScopeProfiler sp2(g_profiler, PROFILER_NAME("collision collect boxes"), SPT_AVG);
 
-	v3f minpos_f(
+	v3d minpos_f(
 		MYMIN(pos_f->X, newpos_f.X),
 		MYMIN(pos_f->Y, newpos_f.Y) + 0.01f * BS, // bias rounding, player often at +/-n.5
 		MYMIN(pos_f->Z, newpos_f.Z)
 	);
-	v3f maxpos_f(
+	v3d maxpos_f(
 		MYMAX(pos_f->X, newpos_f.X),
 		MYMAX(pos_f->Y, newpos_f.Y),
 		MYMAX(pos_f->Z, newpos_f.Z)
@@ -342,7 +342,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 			n.getCollisionBoxes(gamedef->ndef(), &nodeboxes, neighbors);
 
 			// Calculate float position only once
-			v3f posf = intToFloat(p, BS);
+			v3d posf = intToFloat(p, BS);
 			for (auto box : nodeboxes) {
 				box.MinEdge += posf;
 				box.MaxEdge += posf;
@@ -361,7 +361,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 	// This also intentionally occurs in the case of the object being positioned
 	// solely on loaded CONTENT_IGNORE nodes, no matter where they come from.
 	if (!any_position_valid) {
-		*speed_f = v3f(0, 0, 0);
+		*speed_f = v3d(0, 0, 0);
 		return result;
 	}
 
@@ -428,7 +428,7 @@ collisionMoveResult collisionMoveSimple(Environment *env, IGameDef *gamedef,
 			LocalPlayer *lplayer = c_env->getLocalPlayer();
 			if (lplayer->getParent() == nullptr) {
 				aabb3f lplayer_collisionbox = lplayer->getCollisionbox();
-				v3f lplayer_pos = lplayer->getPosition();
+				v3d lplayer_pos = lplayer->getPosition();
 				lplayer_collisionbox.MinEdge += lplayer_pos;
 				lplayer_collisionbox.MaxEdge += lplayer_pos;
 				ActiveObject *obj = (ActiveObject*) lplayer->getCAO();

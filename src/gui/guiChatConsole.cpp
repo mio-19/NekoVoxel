@@ -71,7 +71,7 @@ GUIChatConsole::GUIChatConsole(
 		m_background_color.setGreen(255);
 		m_background_color.setBlue(255);
 	} else {
-		v3f console_color = g_settings->getV3F("console_color");
+		v3d console_color = g_settings->getV3F("console_color");
 		m_background_color.setRed(clamp_u8(myround(console_color.X)));
 		m_background_color.setGreen(clamp_u8(myround(console_color.Y)));
 		m_background_color.setBlue(clamp_u8(myround(console_color.Z)));

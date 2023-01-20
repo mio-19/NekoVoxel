@@ -132,11 +132,11 @@ void TestMapSettingsManager::testMapSettingsManager()
 	UASSERT(mgr.setMapSetting("seed", "02468"));
 	UASSERT(mgr.setMapSetting("mg_flags", "nolight", true));
 
-	NoiseParams script_np_filler_depth(0, 100, v3f(200, 100, 200), 261, 4, 0.7, 2.0);
-	NoiseParams script_np_factor(0, 100, v3f(50, 50, 50), 920381, 3, 0.45, 2.0);
-	NoiseParams script_np_height(0, 100, v3f(450, 450, 450), 84174, 4, 0.5, 2.0);
-	NoiseParams meta_np_height(20, 10, v3f(250, 250, 250), 84174,  4, 0.5,  1.0);
-	NoiseParams user_np_ground(-43, 40, v3f(80,  80,  80),  983240, 4, 0.55, 2.0, NOISE_FLAG_EASED);
+	NoiseParams script_np_filler_depth(0, 100, v3d(200, 100, 200), 261, 4, 0.7, 2.0);
+	NoiseParams script_np_factor(0, 100, v3d(50, 50, 50), 920381, 3, 0.45, 2.0);
+	NoiseParams script_np_height(0, 100, v3d(450, 450, 450), 84174, 4, 0.5, 2.0);
+	NoiseParams meta_np_height(20, 10, v3d(250, 250, 250), 84174,  4, 0.5,  1.0);
+	NoiseParams user_np_ground(-43, 40, v3d(80,  80,  80),  983240, 4, 0.55, 2.0, NOISE_FLAG_EASED);
 
 	mgr.setMapSettingNoiseParams("mgv5_np_filler_depth", &script_np_filler_depth, true);
 	mgr.setMapSettingNoiseParams("mgv5_np_height", &script_np_height);

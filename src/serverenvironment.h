@@ -343,7 +343,7 @@ public:
 	u8 findSunlight(v3s32 pos) const;
 
 	// Find all active objects inside a radius around a point
-	void getObjectsInsideRadius(std::vector<ServerActiveObject *> &objects, const v3f &pos, float radius,
+	void getObjectsInsideRadius(std::vector<ServerActiveObject *> &objects, const v3d &pos, float radius,
 			std::function<bool(ServerActiveObject *obj)> include_obj_cb)
 	{
 		return m_ao_manager.getObjectsInsideRadius(pos, radius, objects, include_obj_cb);
@@ -516,5 +516,5 @@ private:
 	MetricGaugePtr m_active_block_gauge;
 	MetricGaugePtr m_active_object_gauge;
 
-	ServerActiveObject* createSAO(ActiveObjectType type, v3f pos, const std::string &data);
+	ServerActiveObject* createSAO(ActiveObjectType type, v3d pos, const std::string &data);
 };

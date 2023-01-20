@@ -79,7 +79,7 @@ LuaEntitySAO *getAttachedObject(PlayerSAO *sao, ServerEnvironment *env)
 
 	int id;
 	std::string bone;
-	v3f dummy;
+	v3d dummy;
 	bool force_visible;
 	sao->getAttachment(&id, &bone, &dummy, &dummy, &force_visible);
 	ServerActiveObject *ao = env->getActiveObject(id);
@@ -118,23 +118,23 @@ void RemoteClient::GetNextBlocks (
 		return;
 	}
 
-	v3f playerpos = sao->getBasePosition();
+	v3d playerpos = sao->getBasePosition();
 	// if the player is attached, get the velocity from the attached object
 	LuaEntitySAO *lsao = getAttachedObject(sao, env);
-	const v3f &playerspeed = lsao? lsao->getVelocity() : player->getSpeed();
-	v3f playerspeeddir(0,0,0);
+	const v3d &playerspeed = lsao? lsao->getVelocity() : player->getSpeed();
+	v3d playerspeeddir(0,0,0);
 	if (playerspeed.getLength() > 1.0f * BS)
 		playerspeeddir = playerspeed / playerspeed.getLength();
 	// Predict to next block
-	v3f playerpos_predicted = playerpos + playerspeeddir * (MAP_BLOCKSIZE * BS);
+	v3d playerpos_predicted = playerpos + playerspeeddir * (MAP_BLOCKSIZE * BS);
 
 	v3s32 center_nodepos = floatToInt(playerpos_predicted, BS);
 
 	v3s32 center = getNodeBlockPos(center_nodepos);
 
 	// Camera position and direction
-	v3f camera_pos = sao->getEyePosition();
-	v3f camera_dir = v3f(0,0,1);
+	v3d camera_pos = sao->getEyePosition();
+	v3d camera_dir = v3d(0,0,1);
 	camera_dir.rotateYZBy(sao->getLookPitch());
 	camera_dir.rotateXZBy(sao->getRotation().Y);
 

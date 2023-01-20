@@ -2244,9 +2244,9 @@ namespace {
 		return v / 12.92f;
 	}
 
-	v3f srgb_to_linear(const video::SColor &col_srgb)
+	v3d srgb_to_linear(const video::SColor &col_srgb)
 	{
-		v3f col(col_srgb.getRed(), col_srgb.getGreen(), col_srgb.getBlue());
+		v3d col(col_srgb.getRed(), col_srgb.getGreen(), col_srgb.getBlue());
 		col /= 255.0f;
 		col.X = srgb_to_linear_component(col.X);
 		col.Y = srgb_to_linear_component(col.Y);
@@ -2254,9 +2254,9 @@ namespace {
 		return col;
 	}
 
-	video::SColor linear_to_srgb(const v3f &col_linear)
+	video::SColor linear_to_srgb(const v3d &col_linear)
 	{
-		v3f col;
+		v3d col;
 		col.X = linear_to_srgb_component(col_linear.X);
 		col.Y = linear_to_srgb_component(col_linear.Y);
 		col.Z = linear_to_srgb_component(col_linear.Z);
@@ -2283,7 +2283,7 @@ video::SColor TextureSource::getTextureAverageColor(const std::string &name)
 		return c;
 
 	u32 total = 0;
-	v3f col_acc(0, 0, 0);
+	v3d col_acc(0, 0, 0);
 	core::dimension2d<u32> dim = image->getDimension();
 	u16 step = 1;
 	if (dim.Width > 16)

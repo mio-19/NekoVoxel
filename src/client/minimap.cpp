@@ -540,16 +540,16 @@ video::ITexture *Minimap::getMinimapTexture()
 	return data->texture;
 }
 
-v3f Minimap::getYawVec()
+v3d Minimap::getYawVec()
 {
 	if (data->minimap_shape_round) {
-		return v3f(
+		return v3d(
 			std::cos(m_angle * core::DEGTORAD),
 			std::sin(m_angle * core::DEGTORAD),
 			1.0);
 	}
 
-	return v3f(1.0, 0.0, 1.0);
+	return v3d(1.0, 0.0, 1.0);
 }
 
 scene::SMeshBuffer *Minimap::getMinimapMeshBuffer()
@@ -704,7 +704,7 @@ void Minimap::updateActiveMarkers()
 		data->minimap_mask_round : data->minimap_mask_square;
 
 	m_active_markers.clear();
-	v3f cam_offset = intToFloat(client->getCamera()->getOffset(), BS);
+	v3d cam_offset = intToFloat(client->getCamera()->getOffset(), BS);
 	v3s32 pos_offset = data->pos - v3s32(data->mode.map_size / 2,
 			data->mode.scan_height / 2,
 			data->mode.map_size / 2);

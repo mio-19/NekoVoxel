@@ -166,7 +166,7 @@ public:
 	float getFloat(const std::string &name) const;
 	float getFloat(const std::string &name, float min, float max) const;
 	v2f getV2F(const std::string &name) const;
-	v3f getV3F(const std::string &name) const;
+	v3d getV3F(const std::string &name) const;
 	u32 getFlagStr(const std::string &name, const FlagDesc *flagdesc,
 			u32 *flagmask) const;
 	bool getNoiseParams(const std::string &name, NoiseParams &np) const;
@@ -195,7 +195,7 @@ public:
 	bool getU64NoEx(const std::string &name, u64 &val) const;
 	bool getFloatNoEx(const std::string &name, float &val) const;
 	bool getV2FNoEx(const std::string &name, v2f &val) const;
-	bool getV3FNoEx(const std::string &name, v3f &val) const;
+	bool getV3FNoEx(const std::string &name, v3d &val) const;
 
 	// Like other getters, but handling each flag individualy:
 	// 1) Read default flags (or 0)
@@ -222,7 +222,7 @@ public:
 	bool setU64(const std::string &name, u64 value);
 	bool setFloat(const std::string &name, float value);
 	bool setV2F(const std::string &name, v2f value);
-	bool setV3F(const std::string &name, v3f value);
+	bool setV3F(const std::string &name, v3d value);
 	bool setFlagStr(const std::string &name, u32 flags,
 		const FlagDesc *flagdesc = nullptr, u32 flagmask = U32_MAX);
 	bool setNoiseParams(const std::string &name, const NoiseParams &np);

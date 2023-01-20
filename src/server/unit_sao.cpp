@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "scripting_server.h"
 #include "serverenvironment.h"
 
-UnitSAO::UnitSAO(ServerEnvironment *env, v3f pos) : ServerActiveObject(env, pos)
+UnitSAO::UnitSAO(ServerEnvironment *env, v3d pos) : ServerActiveObject(env, pos)
 {
 	// Initialize something to armor groups
 	m_armor_groups["fleshy"] = 100;
@@ -75,14 +75,14 @@ void UnitSAO::setAnimationSpeed(float frame_speed)
 	m_animation_speed_sent = false;
 }
 
-void UnitSAO::setBonePosition(const std::string &bone, v3f position, v3f rotation)
+void UnitSAO::setBonePosition(const std::string &bone, v3d position, v3d rotation)
 {
 	// store these so they can be updated to clients
-	m_bone_position[bone] = core::vector2d<v3f>(position, rotation);
+	m_bone_position[bone] = core::vector2d<v3d>(position, rotation);
 	m_bone_position_sent = false;
 }
 
-void UnitSAO::getBonePosition(const std::string &bone, v3f *position, v3f *rotation)
+void UnitSAO::getBonePosition(const std::string &bone, v3d *position, v3d *rotation)
 {
 	auto it = m_bone_position.find(bone);
 	if (it != m_bone_position.end()) {
@@ -124,8 +124,8 @@ void UnitSAO::sendOutdatedData()
 }
 // clang-format on
 
-void UnitSAO::setAttachment(int parent_id, const std::string &bone, v3f position,
-		v3f rotation, bool force_visible)
+void UnitSAO::setAttachment(int parent_id, const std::string &bone, v3d position,
+		v3d rotation, bool force_visible)
 {
 	auto *obj = parent_id ? m_env->getActiveObject(parent_id) : nullptr;
 	if (obj) {
@@ -167,8 +167,8 @@ void UnitSAO::setAttachment(int parent_id, const std::string &bone, v3f position
 		onAttach(parent_id);
 }
 
-void UnitSAO::getAttachment(int *parent_id, std::string *bone, v3f *position,
-		v3f *rotation, bool *force_visible) const
+void UnitSAO::getAttachment(int *parent_id, std::string *bone, v3d *position,
+		v3d *rotation, bool *force_visible) const
 {
 	*parent_id = m_attachment_parent_id;
 	*bone = m_attachment_bone;
@@ -185,7 +185,7 @@ void UnitSAO::clearChildAttachments()
 
 		// Child can be NULL if it was deleted earlier
 		if (ServerActiveObject *child = m_env->getActiveObject(child_id))
-			child->setAttachment(0, "", v3f(0, 0, 0), v3f(0, 0, 0), false);
+			child->setAttachment(0, "", v3d(0, 0, 0), v3d(0, 0, 0), false);
 
 		removeAttachmentChild(child_id);
 	}
@@ -198,7 +198,7 @@ void UnitSAO::clearParentAttachment()
 		parent = m_env->getActiveObject(m_attachment_parent_id);
 		setAttachment(0, "", m_attachment_position, m_attachment_rotation, false);
 	} else {
-		setAttachment(0, "", v3f(0, 0, 0), v3f(0, 0, 0), false);
+		setAttachment(0, "", v3d(0, 0, 0), v3d(0, 0, 0), false);
 	}
 	// Do it
 	if (parent)
@@ -277,7 +277,7 @@ std::string UnitSAO::generateUpdateAttachmentCommand() const
 }
 
 std::string UnitSAO::generateUpdateBonePositionCommand(
-		const std::string &bone, const v3f &position, const v3f &rotation)
+		const std::string &bone, const v3d &position, const v3d &rotation)
 {
 	std::ostringstream os(std::ios::binary);
 	// command
@@ -325,8 +325,8 @@ std::string UnitSAO::generateUpdateArmorGroupsCommand() const
 	return os.str();
 }
 
-std::string UnitSAO::generateUpdatePositionCommand(const v3f &position,
-		const v3f &velocity, const v3f &acceleration, const v3f &rotation,
+std::string UnitSAO::generateUpdatePositionCommand(const v3d &position,
+		const v3d &velocity, const v3d &acceleration, const v3d &rotation,
 		bool do_interpolate, bool is_movement_end, f32 update_interval)
 {
 	std::ostringstream os(std::ios::binary);

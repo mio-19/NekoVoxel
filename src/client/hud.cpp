@@ -67,14 +67,14 @@ Hud::Hud(Client *client, LocalPlayer *player,
 
 	tsrc = client->getTextureSource();
 
-	v3f crosshair_color = g_settings->getV3F("crosshair_color");
+	v3d crosshair_color = g_settings->getV3F("crosshair_color");
 	u32 cross_r = rangelim(myround(crosshair_color.X), 0, 255);
 	u32 cross_g = rangelim(myround(crosshair_color.Y), 0, 255);
 	u32 cross_b = rangelim(myround(crosshair_color.Z), 0, 255);
 	u32 cross_a = rangelim(g_settings->getS32("crosshair_alpha"), 0, 255);
 	crosshair_argb = video::SColor(cross_a, cross_r, cross_g, cross_b);
 
-	v3f selectionbox_color = g_settings->getV3F("selectionbox_color");
+	v3d selectionbox_color = g_settings->getV3F("selectionbox_color");
 	u32 sbox_r = rangelim(myround(selectionbox_color.X), 0, 255);
 	u32 sbox_g = rangelim(myround(selectionbox_color.Y), 0, 255);
 	u32 sbox_b = rangelim(myround(selectionbox_color.Z), 0, 255);
@@ -122,12 +122,12 @@ Hud::Hud(Client *client, LocalPlayer *player,
 	m_rotation_mesh_buffer.Indices.set_used(6);
 
 	video::SColor white(255, 255, 255, 255);
-	v3f normal(0.f, 0.f, 1.f);
+	v3d normal(0.f, 0.f, 1.f);
 
-	m_rotation_mesh_buffer.Vertices[0] = video::S3DVertex(v3f(-1.f, -1.f, 0.f), normal, white, v2f(0.f, 1.f));
-	m_rotation_mesh_buffer.Vertices[1] = video::S3DVertex(v3f(-1.f,  1.f, 0.f), normal, white, v2f(0.f, 0.f));
-	m_rotation_mesh_buffer.Vertices[2] = video::S3DVertex(v3f( 1.f,  1.f, 0.f), normal, white, v2f(1.f, 0.f));
-	m_rotation_mesh_buffer.Vertices[3] = video::S3DVertex(v3f( 1.f, -1.f, 0.f), normal, white, v2f(1.f, 1.f));
+	m_rotation_mesh_buffer.Vertices[0] = video::S3DVertex(v3d(-1.f, -1.f, 0.f), normal, white, v2f(0.f, 1.f));
+	m_rotation_mesh_buffer.Vertices[1] = video::S3DVertex(v3d(-1.f,  1.f, 0.f), normal, white, v2f(0.f, 0.f));
+	m_rotation_mesh_buffer.Vertices[2] = video::S3DVertex(v3d( 1.f,  1.f, 0.f), normal, white, v2f(1.f, 0.f));
+	m_rotation_mesh_buffer.Vertices[3] = video::S3DVertex(v3d( 1.f, -1.f, 0.f), normal, white, v2f(1.f, 1.f));
 
 	m_rotation_mesh_buffer.Indices[0] = 0;
 	m_rotation_mesh_buffer.Indices[1] = 1;
@@ -316,7 +316,7 @@ bool Hud::hasElementOfType(HudElementType type)
 // Calculates screen position of waypoint. Returns true if waypoint is visible (in front of the player), else false.
 bool Hud::calculateScreenPos(const v3s32 &camera_offset, HudElement *e, v2s32 *pos)
 {
-	v3f w_pos = e->world_pos * BS;
+	v3d w_pos = e->world_pos * BS;
 	scene::ICameraSceneNode* camera =
 		client->getSceneManager()->getActiveCamera();
 	w_pos -= intToFloat(camera_offset, BS);
@@ -429,7 +429,7 @@ void Hud::drawLuaElements(const v3s32 &camera_offset)
 				font->draw(text.c_str(), bounds + v2s32((e->align.X - 1.0) * bounds.getWidth() / 2, 0), color);
 				if (draw_precision) {
 					std::ostringstream os;
-					v3f p_pos = player->getPosition() / BS;
+					v3d p_pos = player->getPosition() / BS;
 					float distance = std::floor(precision * p_pos.getDistanceFrom(e->world_pos)) / precision;
 					os << distance << unit;
 					text = unescape_translate(utf8_to_wide(os.str()));
@@ -480,7 +480,7 @@ void Hud::drawLuaElements(const v3s32 &camera_offset)
 					return; // Avoid zero divides
 
 				// Angle according to camera view
-				v3f fore(0.f, 0.f, 1.f);
+				v3d fore(0.f, 0.f, 1.f);
 				scene::ICameraSceneNode *cam = client->getSceneManager()->getActiveCamera();
 				cam->getAbsoluteTransformation().rotateVect(fore);
 				int angle = - fore.getHorizontalAngle().Y;
@@ -583,7 +583,7 @@ void Hud::drawCompassRotate(HudElement *e, video::ITexture *texture,
 
 	core::matrix4 Matrix;
 	Matrix.makeIdentity();
-	Matrix.setRotationDegrees(v3f(0.f, 0.f, angle));
+	Matrix.setRotationDegrees(v3d(0.f, 0.f, angle));
 
 	driver->setViewPort(rect);
 	driver->setTransform(video::ETS_PROJECTION, core::matrix4());
@@ -817,7 +817,7 @@ void Hud::drawCrosshair()
 	}
 }
 
-void Hud::setSelectionPos(const v3f &pos, const v3s32 &camera_offset)
+void Hud::setSelectionPos(const v3d &pos, const v3s32 &camera_offset)
 {
 	m_camera_offset = camera_offset;
 	m_selection_pos = pos;
@@ -900,11 +900,11 @@ void Hud::drawBlockBounds()
 		floorf((float) pos.Z / MAP_BLOCKSIZE)
 	);
 
-	v3f offset = intToFloat(client->getCamera()->getOffset(), BS);
+	v3d offset = intToFloat(client->getCamera()->getOffset(), BS);
 
 	s8 radius = m_block_bounds_mode == BLOCK_BOUNDS_NEAR ? 2 : 0;
 
-	v3f halfNode = v3f(BS, BS, BS) / 2.0f;
+	v3d halfNode = v3d(BS, BS, BS) / 2.0f;
 
 	for (s8 x = -radius; x <= radius; x++)
 	for (s8 y = -radius; y <= radius; y++)
@@ -1067,7 +1067,7 @@ void drawItemStack(
 
 		if (enable_animations) {
 			float timer_f = (float) delta / 5000.f;
-			matrix.setRotationDegrees(v3f(
+			matrix.setRotationDegrees(v3d(
 				angle.X + rotation_speed.X * 3.60f * timer_f,
 				angle.Y + rotation_speed.Y * 3.60f * timer_f,
 				angle.Z + rotation_speed.Z * 3.60f * timer_f)

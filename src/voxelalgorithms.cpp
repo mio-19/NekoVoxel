@@ -1234,7 +1234,7 @@ void repair_block_light(Map *map, MapBlock *block,
 		modified_blocks);
 }
 
-VoxelLineIterator::VoxelLineIterator(const v3f &start_position, const v3f &line_vector) :
+VoxelLineIterator::VoxelLineIterator(const v3d &start_position, const v3d &line_vector) :
 	m_start_position(start_position),
 	m_line_vector(line_vector)
 {

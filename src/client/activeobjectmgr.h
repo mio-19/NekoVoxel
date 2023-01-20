@@ -35,7 +35,7 @@ public:
 	bool registerObject(ClientActiveObject *obj) override;
 	void removeObject(u16 id) override;
 
-	void getActiveObjects(const v3f &origin, f32 max_d,
+	void getActiveObjects(const v3d &origin, f32 max_d,
 			std::vector<DistanceSortedActiveObject> &dest);
 	// Similar to above, but takes selection box sizes, and line direction into
 	// account.

@@ -140,11 +140,11 @@ public:
 	v3s32 node_min;
 	v3s32 node_max;
 
-	v3f orp;  // starting point, relative to caved space
+	v3d orp;  // starting point, relative to caved space
 	v3s32 of; // absolute coordinates of caved space
 	v3s32 ar; // allowed route area
 	s32 rs;   // tunnel radius size
-	v3f main_direction;
+	v3d main_direction;
 
 	s32 route_y_min;
 	s32 route_y_max;
@@ -171,7 +171,7 @@ public:
 
 private:
 	void makeTunnel(bool dirswitch);
-	void carveRoute(v3f vec, float f, bool randomize_xz);
+	void carveRoute(v3d vec, float f, bool randomize_xz);
 
 	inline bool isPosAboveSurface(v3s32 p);
 };
@@ -218,11 +218,11 @@ public:
 	v3s32 node_min;
 	v3s32 node_max;
 
-	v3f orp;  // starting point, relative to caved space
+	v3d orp;  // starting point, relative to caved space
 	v3s32 of; // absolute coordinates of caved space
 	v3s32 ar; // allowed route area
 	s32 rs;   // tunnel radius size
-	v3f main_direction;
+	v3d main_direction;
 
 	s32 route_y_min;
 	s32 route_y_max;
@@ -242,7 +242,7 @@ public:
 
 private:
 	void makeTunnel(bool dirswitch);
-	void carveRoute(v3f vec, float f, bool randomize_xz, bool tunnel_above_ground);
+	void carveRoute(v3d vec, float f, bool randomize_xz, bool tunnel_above_ground);
 
 	inline s32 getSurfaceFromHeightmap(v3s32 p);
 };

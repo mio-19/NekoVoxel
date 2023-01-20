@@ -550,21 +550,21 @@ void Sky::update(float time_of_day, float time_brightness,
 	}
 }
 
-static v3f getSkyBodyPosition(float horizon_position, float day_position, float orbit_tilt)
+static v3d getSkyBodyPosition(float horizon_position, float day_position, float orbit_tilt)
 {
-	v3f result = v3f(0, 0, -1);
+	v3d result = v3d(0, 0, -1);
 	result.rotateXZBy(horizon_position);
 	result.rotateXYBy(day_position);
 	result.rotateYZBy(orbit_tilt);
 	return result;
 }
 
-v3f Sky::getSunDirection()
+v3d Sky::getSunDirection()
 {
 	return getSkyBodyPosition(90, getWickedTimeOfDay(m_time_of_day) * 360 - 90, m_sky_body_orbit_tilt);
 }
 
-v3f Sky::getMoonDirection()
+v3d Sky::getMoonDirection()
 {
 	return getSkyBodyPosition(270, getWickedTimeOfDay(m_time_of_day) * 360 - 90, m_sky_body_orbit_tilt);
 }
@@ -692,7 +692,7 @@ void Sky::draw_stars(video::IVideoDriver * driver, float wicked_time_of_day)
 	if (m_star_color.a <= 0.0f) // Stars are only drawn when not fully transparent
 		return;
 	m_materials[0].DiffuseColor = m_materials[0].EmissiveColor = m_star_color.toSColor();
-	auto sky_rotation = core::matrix4().setRotationAxisRadians(2.0f * M_PI * (wicked_time_of_day - 0.25f), v3f(0.0f, 0.0f, 1.0f));
+	auto sky_rotation = core::matrix4().setRotationAxisRadians(2.0f * M_PI * (wicked_time_of_day - 0.25f), v3d(0.0f, 0.0f, 1.0f));
 	auto world_matrix = driver->getTransform(video::ETS_WORLD);
 	driver->setTransform(video::ETS_WORLD, world_matrix * sky_rotation);
 	driver->setMaterial(m_materials[0]);
@@ -726,8 +726,8 @@ void Sky::place_sky_body(
 	* day_position: turn the body around the Z axis, to place it depending of the time of the day
 	*/
 {
-	v3f centrum = getSkyBodyPosition(horizon_position, day_position, m_sky_body_orbit_tilt);
-	v3f untilted_centrum = getSkyBodyPosition(horizon_position, day_position, 0.f);
+	v3d centrum = getSkyBodyPosition(horizon_position, day_position, m_sky_body_orbit_tilt);
+	v3d untilted_centrum = getSkyBodyPosition(horizon_position, day_position, 0.f);
 	for (video::S3DVertex &vertex : vertices) {
 		// Body is directed to -Z (south) by default
 		vertex.Pos.rotateXZBy(horizon_position);
@@ -839,17 +839,17 @@ void Sky::updateStars()
 	PcgRandom rgen(m_seed);
 	float d = (0.006 / 2) * m_star_params.scale;
 	for (u16 i = 0; i < m_star_params.count; i++) {
-		v3f r = v3f(
+		v3d r = v3d(
 			rgen.range(-10000, 10000),
 			rgen.range(-10000, 10000),
 			rgen.range(-10000, 10000)
 		);
 		core::CMatrix4<f32> a;
-		a.buildRotateFromTo(v3f(0, 1, 0), r);
-		v3f p = v3f(-d, 1, -d);
-		v3f p1 = v3f(d, 1, -d);
-		v3f p2 = v3f(d, 1, d);
-		v3f p3 = v3f(-d, 1, d);
+		a.buildRotateFromTo(v3d(0, 1, 0), r);
+		v3d p = v3d(-d, 1, -d);
+		v3d p1 = v3d(d, 1, -d);
+		v3d p2 = v3d(d, 1, d);
+		v3d p3 = v3d(-d, 1, d);
 		a.rotateVect(p);
 		a.rotateVect(p1);
 		a.rotateVect(p2);

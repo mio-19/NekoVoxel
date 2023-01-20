@@ -118,14 +118,14 @@ void MapblockMeshGenerator::getSpecialTile(int index, TileSpec *tile, bool apply
 		top_layer->material_flags |= MATERIAL_FLAG_CRACK;
 }
 
-void MapblockMeshGenerator::drawQuad(v3f *coords, const v3s32 &normal,
+void MapblockMeshGenerator::drawQuad(v3d *coords, const v3s32 &normal,
 	float vertical_tiling)
 {
 	const v2f tcoords[4] = {v2f(0.0, 0.0), v2f(1.0, 0.0),
 		v2f(1.0, vertical_tiling), v2f(0.0, vertical_tiling)};
 	video::S3DVertex vertices[4];
 	bool shade_face = !f->light_source && (normal != v3s32(0, 0, 0));
-	v3f normal2(normal.X, normal.Y, normal.Z);
+	v3d normal2(normal.X, normal.Y, normal.Z);
 	for (int j = 0; j < 4; j++) {
 		vertices[j].Pos = coords[j] + origin;
 		vertices[j].Normal = normal2;
@@ -157,8 +157,8 @@ void MapblockMeshGenerator::drawCuboid(const aabb3f &box,
 {
 	assert(tilecount >= 1 && tilecount <= 6); // pre-condition
 
-	v3f min = box.MinEdge;
-	v3f max = box.MaxEdge;
+	v3d min = box.MinEdge;
+	v3d max = box.MaxEdge;
 
 	video::SColor colors[6];
 	if (!data->m_smooth_lighting) {
@@ -166,12 +166,12 @@ void MapblockMeshGenerator::drawCuboid(const aabb3f &box,
 			colors[face] = encode_light(light, f->light_source);
 		}
 		if (!f->light_source) {
-			applyFacesShading(colors[0], v3f(0, 1, 0));
-			applyFacesShading(colors[1], v3f(0, -1, 0));
-			applyFacesShading(colors[2], v3f(1, 0, 0));
-			applyFacesShading(colors[3], v3f(-1, 0, 0));
-			applyFacesShading(colors[4], v3f(0, 0, 1));
-			applyFacesShading(colors[5], v3f(0, 0, -1));
+			applyFacesShading(colors[0], v3d(0, 1, 0));
+			applyFacesShading(colors[1], v3d(0, -1, 0));
+			applyFacesShading(colors[2], v3d(1, 0, 0));
+			applyFacesShading(colors[3], v3d(-1, 0, 0));
+			applyFacesShading(colors[4], v3d(0, 0, 1));
+			applyFacesShading(colors[5], v3d(0, 0, -1));
 		}
 	}
 
@@ -303,7 +303,7 @@ void MapblockMeshGenerator::getSmoothLightFrame()
 
 // Calculates vertex light level
 //  vertex_pos - vertex position in the node (coordinates are clamped to [0.0, 1.0] or so)
-LightInfo MapblockMeshGenerator::blendLight(const v3f &vertex_pos)
+LightInfo MapblockMeshGenerator::blendLight(const v3d &vertex_pos)
 {
 	// Light levels at (logical) node corners are known. Here,
 	// trilinear interpolation is used to calculate light level
@@ -330,14 +330,14 @@ LightInfo MapblockMeshGenerator::blendLight(const v3f &vertex_pos)
 // Calculates vertex color to be used in mapblock mesh
 //  vertex_pos - vertex position in the node (coordinates are clamped to [0.0, 1.0] or so)
 //  tile_color - node's tile color
-video::SColor MapblockMeshGenerator::blendLightColor(const v3f &vertex_pos)
+video::SColor MapblockMeshGenerator::blendLightColor(const v3d &vertex_pos)
 {
 	LightInfo light = blendLight(vertex_pos);
 	return encode_light(light.getPair(), f->light_source);
 }
 
-video::SColor MapblockMeshGenerator::blendLightColor(const v3f &vertex_pos,
-	const v3f &vertex_normal)
+video::SColor MapblockMeshGenerator::blendLightColor(const v3d &vertex_pos,
+	const v3d &vertex_normal)
 {
 	LightInfo light = blendLight(vertex_pos);
 	video::SColor color = encode_light(light.getPair(MYMAX(0.0f, vertex_normal.Y)), f->light_source);
@@ -398,7 +398,7 @@ void MapblockMeshGenerator::drawAutoLightedCuboid(aabb3f box, const f32 *txc,
 	if (data->m_smooth_lighting) {
 		LightInfo lights[8];
 		for (int j = 0; j < 8; ++j) {
-			v3f d;
+			v3d d;
 			d.X = (j & 4) ? dx2 : dx1;
 			d.Y = (j & 2) ? dy2 : dy1;
 			d.Z = (j & 1) ? dz2 : dz1;
@@ -609,7 +609,7 @@ void MapblockMeshGenerator::drawLiquidSides()
 			const v3s32 &base = face.p[vertex.u];
 			float v = vertex.v;
 
-			v3f pos;
+			v3d pos;
 			pos.X = (base.X - 0.5f) * BS;
 			pos.Z = (base.Z - 0.5f) * BS;
 			if (vertex.v) {
@@ -722,14 +722,14 @@ void MapblockMeshGenerator::drawGlasslikeNode()
 		if (neighbor.getContent() == n.getContent())
 			continue;
 		// Face at Z-
-		v3f vertices[4] = {
-			v3f(-BS / 2,  BS / 2, -BS / 2),
-			v3f( BS / 2,  BS / 2, -BS / 2),
-			v3f( BS / 2, -BS / 2, -BS / 2),
-			v3f(-BS / 2, -BS / 2, -BS / 2),
+		v3d vertices[4] = {
+			v3d(-BS / 2,  BS / 2, -BS / 2),
+			v3d( BS / 2,  BS / 2, -BS / 2),
+			v3d( BS / 2, -BS / 2, -BS / 2),
+			v3d(-BS / 2, -BS / 2, -BS / 2),
 		};
 
-		for (v3f &vertex : vertices) {
+		for (v3d &vertex : vertices) {
 			switch (face) {
 				case D6D_ZP:
 					vertex.rotateXZBy(180); break;
@@ -846,14 +846,14 @@ void MapblockMeshGenerator::drawGlasslikeFramedNode()
 
 		tile = glass_tiles[face];
 		// Face at Z-
-		v3f vertices[4] = {
-			v3f(-a,  a, -g),
-			v3f( a,  a, -g),
-			v3f( a, -a, -g),
-			v3f(-a, -a, -g),
+		v3d vertices[4] = {
+			v3d(-a,  a, -g),
+			v3d( a,  a, -g),
+			v3d( a, -a, -g),
+			v3d(-a, -a, -g),
 		};
 
-		for (v3f &vertex : vertices) {
+		for (v3d &vertex : vertices) {
 			switch (face) {
 				case D6D_ZP:
 					vertex.rotateXZBy(180); break;
@@ -909,14 +909,14 @@ void MapblockMeshGenerator::drawTorchlikeNode()
 	useTile(tileindex, MATERIAL_FLAG_CRACK_OVERLAY, MATERIAL_FLAG_BACKFACE_CULLING);
 
 	float size = BS / 2 * f->visual_scale;
-	v3f vertices[4] = {
-		v3f(-size,  size, 0),
-		v3f( size,  size, 0),
-		v3f( size, -size, 0),
-		v3f(-size, -size, 0),
+	v3d vertices[4] = {
+		v3d(-size,  size, 0),
+		v3d( size,  size, 0),
+		v3d( size, -size, 0),
+		v3d(-size, -size, 0),
 	};
 
-	for (v3f &vertex : vertices) {
+	for (v3d &vertex : vertices) {
 		switch (wall) {
 			case DWM_YP:
 				vertex.Y += -size + BS/2;
@@ -952,14 +952,14 @@ void MapblockMeshGenerator::drawSignlikeNode()
 	static const float offset = BS / 16;
 	float size = BS / 2 * f->visual_scale;
 	// Wall at X+ of node
-	v3f vertices[4] = {
-		v3f(BS / 2 - offset,  size,  size),
-		v3f(BS / 2 - offset,  size, -size),
-		v3f(BS / 2 - offset, -size, -size),
-		v3f(BS / 2 - offset, -size,  size),
+	v3d vertices[4] = {
+		v3d(BS / 2 - offset,  size,  size),
+		v3d(BS / 2 - offset,  size, -size),
+		v3d(BS / 2 - offset, -size, -size),
+		v3d(BS / 2 - offset, -size,  size),
 	};
 
-	for (v3f &vertex : vertices) {
+	for (v3d &vertex : vertices) {
 		switch (wall) {
 			case DWM_YP:
 				vertex.rotateXYBy( 90); break;
@@ -981,11 +981,11 @@ void MapblockMeshGenerator::drawSignlikeNode()
 void MapblockMeshGenerator::drawPlantlikeQuad(float rotation, float quad_offset,
 	bool offset_top_only)
 {
-	v3f vertices[4] = {
-		v3f(-scale, -BS / 2 + 2.0 * scale * plant_height, 0),
-		v3f( scale, -BS / 2 + 2.0 * scale * plant_height, 0),
-		v3f( scale, -BS / 2, 0),
-		v3f(-scale, -BS / 2, 0),
+	v3d vertices[4] = {
+		v3d(-scale, -BS / 2 + 2.0 * scale * plant_height, 0),
+		v3d( scale, -BS / 2 + 2.0 * scale * plant_height, 0),
+		v3d( scale, -BS / 2, 0),
+		v3d(-scale, -BS / 2, 0),
 	};
 	if (random_offset_Y) {
 		PseudoRandom yrng(face_num++ | p.X << 16 | p.Z << 8 | p.Y << 24);
@@ -995,14 +995,14 @@ void MapblockMeshGenerator::drawPlantlikeQuad(float rotation, float quad_offset,
 	for (int i = 0; i < offset_count; i++)
 		vertices[i].Z += quad_offset;
 
-	for (v3f &vertex : vertices) {
+	for (v3d &vertex : vertices) {
 		vertex.rotateXZBy(rotation + rotate_degree);
 		vertex += offset;
 	}
 
 	u8 wall = n.getWallMounted(nodedef);
 	if (wall != DWM_YN) {
-		for (v3f &vertex : vertices) {
+		for (v3d &vertex : vertices) {
 			switch (wall) {
 				case DWM_YP:
 					vertex.rotateYZBy(180);
@@ -1034,7 +1034,7 @@ void MapblockMeshGenerator::drawPlantlike(bool is_rooted)
 {
 	draw_style = PLANT_STYLE_CROSS;
 	scale = BS / 2 * f->visual_scale;
-	offset = v3f(0, 0, 0);
+	offset = v3d(0, 0, 0);
 	rotate_degree = 0.0f;
 	random_offset_Y = false;
 	face_num = 0;
@@ -1125,7 +1125,7 @@ void MapblockMeshGenerator::drawPlantlikeNode()
 void MapblockMeshGenerator::drawPlantlikeRootedNode()
 {
 	useTile(0, MATERIAL_FLAG_CRACK_OVERLAY, 0, true);
-	origin += v3f(0.0, BS, 0.0);
+	origin += v3d(0.0, BS, 0.0);
 	p.Y++;
 	if (data->m_smooth_lighting) {
 		getSmoothLightFrame();
@@ -1140,14 +1140,14 @@ void MapblockMeshGenerator::drawPlantlikeRootedNode()
 void MapblockMeshGenerator::drawFirelikeQuad(float rotation, float opening_angle,
 	float offset_h, float offset_v)
 {
-	v3f vertices[4] = {
-		v3f(-scale, -BS / 2 + scale * 2, 0),
-		v3f( scale, -BS / 2 + scale * 2, 0),
-		v3f( scale, -BS / 2, 0),
-		v3f(-scale, -BS / 2, 0),
+	v3d vertices[4] = {
+		v3d(-scale, -BS / 2 + scale * 2, 0),
+		v3d( scale, -BS / 2 + scale * 2, 0),
+		v3d( scale, -BS / 2, 0),
+		v3d(-scale, -BS / 2, 0),
 	};
 
-	for (v3f &vertex : vertices) {
+	for (v3d &vertex : vertices) {
 		vertex.rotateYZBy(opening_angle);
 		vertex.Z += offset_h;
 		vertex.rotateXZBy(rotation);
@@ -1363,14 +1363,14 @@ void MapblockMeshGenerator::drawRaillikeNode()
 	static const float offset = BS / 64;
 	static const float size   = BS / 2;
 	float y2 = sloped ? size : -size;
-	v3f vertices[4] = {
-		v3f(-size,    y2 + offset,  size),
-		v3f( size,    y2 + offset,  size),
-		v3f( size, -size + offset, -size),
-		v3f(-size, -size + offset, -size),
+	v3d vertices[4] = {
+		v3d(-size,    y2 + offset,  size),
+		v3d( size,    y2 + offset,  size),
+		v3d( size, -size + offset, -size),
+		v3d(-size, -size + offset, -size),
 	};
 	if (angle)
-		for (v3f &vertex : vertices)
+		for (v3d &vertex : vertices)
 			vertex.rotateXZBy(angle);
 	drawQuad(vertices);
 }

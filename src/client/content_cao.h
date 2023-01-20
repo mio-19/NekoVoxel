@@ -61,7 +61,7 @@ struct SmoothTranslatorWrapped : SmoothTranslator<f32>
 	void translate(f32 dtime);
 };
 
-struct SmoothTranslatorWrappedv3f : SmoothTranslator<v3f>
+struct SmoothTranslatorWrappedv3f : SmoothTranslator<v3d>
 {
 	void translate(f32 dtime);
 };
@@ -86,12 +86,12 @@ private:
 	scene::IDummyTransformationSceneNode *m_matrixnode = nullptr;
 	Nametag *m_nametag = nullptr;
 	MinimapMarker *m_marker = nullptr;
-	v3f m_position = v3f(0.0f, 10.0f * BS, 0);
-	v3f m_velocity;
-	v3f m_acceleration;
-	v3f m_rotation;
+	v3d m_position = v3d(0.0f, 10.0f * BS, 0);
+	v3d m_velocity;
+	v3d m_acceleration;
+	v3d m_rotation;
 	u16 m_hp = 1;
-	SmoothTranslator<v3f> pos_translator;
+	SmoothTranslator<v3d> pos_translator;
 	SmoothTranslatorWrappedv3f rot_translator;
 	// Spritesheet/animation stuff
 	v2f m_tx_size = v2f(1,1);
@@ -103,13 +103,13 @@ private:
 	float m_animation_blend = 0.0f;
 	bool m_animation_loop = true;
 	// stores position and rotation for each bone name
-	std::unordered_map<std::string, core::vector2d<v3f>> m_bone_position;
+	std::unordered_map<std::string, core::vector2d<v3d>> m_bone_position;
 
 	int m_attachment_parent_id = 0;
 	std::unordered_set<int> m_attachment_child_ids;
 	std::string m_attachment_bone = "";
-	v3f m_attachment_position;
-	v3f m_attachment_rotation;
+	v3d m_attachment_position;
+	v3d m_attachment_rotation;
 	bool m_attached_to_local = false;
 	bool m_force_visible = false;
 
@@ -162,9 +162,9 @@ public:
 
 	virtual bool getSelectionBox(aabb3f *toset) const;
 
-	const v3f getPosition() const;
+	const v3d getPosition() const;
 
-	inline const v3f &getRotation() const { return m_rotation; }
+	inline const v3d &getRotation() const { return m_rotation; }
 
 	bool isImmortal() const;
 
@@ -215,10 +215,10 @@ public:
 	}
 
 	void setChildrenVisible(bool toset);
-	void setAttachment(int parent_id, const std::string &bone, v3f position,
-			v3f rotation, bool force_visible);
-	void getAttachment(int *parent_id, std::string *bone, v3f *position,
-			v3f *rotation, bool *force_visible) const;
+	void setAttachment(int parent_id, const std::string &bone, v3d position,
+			v3d rotation, bool force_visible);
+	void getAttachment(int *parent_id, std::string *bone, v3d *position,
+			v3d *rotation, bool *force_visible) const;
 	void clearChildAttachments();
 	void clearParentAttachment();
 	void addAttachmentChild(int child_id);
@@ -268,7 +268,7 @@ public:
 
 	void processMessage(const std::string &data);
 
-	bool directReportPunch(v3f dir, const ItemStack *punchitem=NULL,
+	bool directReportPunch(v3d dir, const ItemStack *punchitem=NULL,
 			float time_from_last_punch=1000000);
 
 	std::string debugInfoText();

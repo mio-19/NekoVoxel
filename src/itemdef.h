@@ -67,7 +67,7 @@ struct ItemDefinition
 	std::string wield_overlay; // Overlay of wield_image.
 	std::string palette_image; // If specified, the item will be colorized based on this
 	video::SColor color; // The fallback color of the node.
-	v3f wield_scale;
+	v3d wield_scale;
 
 	/*
 		Item stack and interaction properties

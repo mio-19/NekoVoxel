@@ -29,8 +29,8 @@ v2f PARAM_PVFN(pick) (float* f, const v2f a, const v2f b) {
 	);
 }
 
-v3f PARAM_PVFN(pick) (float* f, const v3f a, const v3f b) {
-	return v3f(
+v3d PARAM_PVFN(pick) (float* f, const v3d a, const v3d b) {
+	return v3d(
 		numericalBlend(f[0], a.X, b.X),
 		numericalBlend(f[1], a.Y, b.Y),
 		numericalBlend(f[2], a.Z, b.Z)
@@ -39,7 +39,7 @@ v3f PARAM_PVFN(pick) (float* f, const v3f a, const v3f b) {
 
 v2f PARAM_PVFN(interpolate) (float fac, const v2f a, const v2f b)
 	{ return b.getInterpolated(a, fac); }
-v3f PARAM_PVFN(interpolate) (float fac, const v3f a, const v3f b)
+v3d PARAM_PVFN(interpolate) (float fac, const v3d a, const v3d b)
 	{ return b.getInterpolated(a, fac); }
 
 #define PARAM_DEF_SRZR(T, wr, rd) \
@@ -58,7 +58,7 @@ PARAM_DEF_NUM(u16, writeU16,   readU16); PARAM_DEF_NUM(s16, writeS16,   readS16)
 PARAM_DEF_NUM(u32, writeU32,   readU32); PARAM_DEF_NUM(s32, writeS32,   readS32);
 PARAM_DEF_NUM(f32, writeF32,   readF32);
 PARAM_DEF_SRZR(v2f, writeV2F32, readV2F32);
-PARAM_DEF_SRZR(v3f, writeV3F32, readV3F32);
+PARAM_DEF_SRZR(v3d, writeV3F32, readV3F32);
 
 enum class ParticleTextureFlags : u8 {
 	/* each value specifies a bit in a bitmask; if the maximum value
@@ -169,7 +169,7 @@ void ParticleParameters::deSerialize(std::istream &is, u16 protocol_ver)
 	node.param2 = readU8(is);
 	node_tile   = readU8(is);
 
-	if (streamEndsBeforeParam<v3f, readV3F32>(drag, is))
+	if (streamEndsBeforeParam<v3d, readV3F32>(drag, is))
 		return;
 	jitter.deSerialize(is);
 	bounce.deSerialize(is);

@@ -119,10 +119,10 @@ private:
 	video::SMaterial m_material;
 	v2f m_texpos;
 	v2f m_texsize;
-	v3f m_pos;
-	v3f m_velocity;
-	v3f m_acceleration;
-	v3f m_drag;
+	v3d m_pos;
+	v3d m_velocity;
+	v3d m_acceleration;
+	v3d m_drag;
 	ParticleParamTypes::v3fRange m_jitter;
 	ParticleParamTypes::f32Range m_bounce;
 	LocalPlayer *m_player;

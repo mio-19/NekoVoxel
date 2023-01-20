@@ -83,7 +83,7 @@ float Environment::getTimeOfDayF()
 	return m_time_of_day_f;
 }
 
-bool Environment::line_of_sight(v3f pos1, v3f pos2, v3s32 *p)
+bool Environment::line_of_sight(v3d pos1, v3d pos2, v3s32 *p)
 {
 	// Iterate trough nodes on the line
 	voxalgo::VoxelLineIterator iterator(pos1 / BS, (pos2 - pos1) / BS);
@@ -143,7 +143,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 	Map &map = getMap();
 	// If a node is found, this is the center of the
 	// first nodebox the shootline meets.
-	v3f found_boxcenter(0, 0, 0);
+	v3d found_boxcenter(0, 0, 0);
 	// The untested nodes are in this range.
 	core::aabbox3d<s32> new_nodes;
 	while (state->m_iterator.m_current_index <= lastIndex) {
@@ -204,11 +204,11 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 
 			// Do calculations relative to the node center
 			// to translate the ray rather than the boxes
-			v3f npf = intToFloat(np, BS);
-			v3f rel_start = state->m_shootline.start - npf;
+			v3d npf = intToFloat(np, BS);
+			v3d rel_start = state->m_shootline.start - npf;
 			for (aabb3f &box : boxes) {
-				v3f intersection_point;
-				v3f intersection_normal;
+				v3d intersection_point;
+				v3d intersection_normal;
 				if (!boxLineCollision(box, rel_start,
 						state->m_shootline.getVector(), &intersection_point,
 						&intersection_normal)) {
@@ -239,7 +239,7 @@ void Environment::continueRaycast(RaycastState *state, PointedThing *result)
 			result.distanceSq = min_distance_sq;
 			// Set undersurface and abovesurface nodes
 			f32 d = 0.002 * BS;
-			v3f fake_intersection = result.intersection_point;
+			v3d fake_intersection = result.intersection_point;
 			found_boxcenter += npf; // translate back to world coords
 			// Move intersection towards its source block.
 			if (fake_intersection.X < found_boxcenter.X) {

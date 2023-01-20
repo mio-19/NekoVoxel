@@ -76,16 +76,16 @@ namespace treegen {
 		const NodeDefManager *ndef, const TreeDef &tree_definition);
 
 	// L-System tree gen helper functions
-	void tree_trunk_placement(MMVManip &vmanip, v3f p0,
+	void tree_trunk_placement(MMVManip &vmanip, v3d p0,
 		TreeDef &tree_definition);
-	void tree_leaves_placement(MMVManip &vmanip, v3f p0,
+	void tree_leaves_placement(MMVManip &vmanip, v3d p0,
 		PseudoRandom ps, TreeDef &tree_definition);
-	void tree_single_leaves_placement(MMVManip &vmanip, v3f p0,
+	void tree_single_leaves_placement(MMVManip &vmanip, v3d p0,
 		PseudoRandom ps, TreeDef &tree_definition);
-	void tree_fruit_placement(MMVManip &vmanip, v3f p0,
+	void tree_fruit_placement(MMVManip &vmanip, v3d p0,
 		TreeDef &tree_definition);
-	irr::core::matrix4 setRotationAxisRadians(irr::core::matrix4 M, double angle, v3f axis);
+	irr::core::matrix4 setRotationAxisRadians(irr::core::matrix4 M, double angle, v3d axis);
 
-	v3f transposeMatrix(irr::core::matrix4 M ,v3f v);
+	v3d transposeMatrix(irr::core::matrix4 M ,v3d v);
 
 }; // namespace treegen

@@ -100,9 +100,9 @@ protected:
 		return (float) sqlite3_column_double(s, iCol);
 	}
 
-	inline const v3f sqlite_to_v3f(sqlite3_stmt *s, int iCol)
+	inline const v3d sqlite_to_v3f(sqlite3_stmt *s, int iCol)
 	{
-		return v3f(sqlite_to_float(s, iCol), sqlite_to_float(s, iCol + 1),
+		return v3d(sqlite_to_float(s, iCol), sqlite_to_float(s, iCol + 1),
 				sqlite_to_float(s, iCol + 2));
 	}
 
