@@ -143,7 +143,7 @@ namespace {
 	typedef std::pair<std::string, Packer> PackerTuple;
 }
 
-static inline auto emplace(PackedValue &pv, s32 type)
+static inline auto emplace(PackedValue &pv, s16 type)
 {
 	pv.i.emplace_back();
 	auto ref = VectorRef<PackedInstr>::back(pv.i);
