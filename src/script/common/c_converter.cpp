@@ -266,11 +266,25 @@ v3s16 read_v3s16(lua_State *L, int index)
 	return doubleToInt16(pf, 1.0);
 }
 
+v3s32 read_v3s32(lua_State *L, int index)
+{
+	// Correct rounding at <0
+	v3d pf = read_v3d(L, index);
+	return doubleToInt(pf, 1.0);
+}
+
 v3s16 check_v3s16(lua_State *L, int index)
 {
 	// Correct rounding at <0
 	v3d pf = check_v3d(L, index);
 	return doubleToInt16(pf, 1.0);
+}
+
+v3s32 check_v3s32(lua_State *L, int index)
+{
+	// Correct rounding at <0
+	v3d pf = check_v3d(L, index);
+	return doubleToInt(pf, 1.0);
 }
 
 bool read_color(lua_State *L, int index, video::SColor *color)
