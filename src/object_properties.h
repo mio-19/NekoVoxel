@@ -43,8 +43,8 @@ struct ObjectProperties
 	std::vector<std::string> textures;
 	std::string damage_texture_modifier = "^[brighten";
 	std::vector<video::SColor> colors;
-	v2size spritediv = v2size(1, 1);
-	v2size initial_sprite_basepos;
+	v2s16 spritediv = v2s16(1, 1);
+	v2s16 initial_sprite_basepos;
 	bool is_visible = true;
 	bool makes_footstep_sound = false;
 	f32 stepheight = 0.0f;

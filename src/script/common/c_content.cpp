@@ -295,12 +295,12 @@ void read_object_properties(lua_State *L, int index,
 
 	lua_getfield(L, -1, "spritediv");
 	if(lua_istable(L, -1))
-		prop->spritediv = read_v2size(L, -1);
+		prop->spritediv = read_v2s16(L, -1);
 	lua_pop(L, 1);
 
 	lua_getfield(L, -1, "initial_sprite_basepos");
 	if(lua_istable(L, -1))
-		prop->initial_sprite_basepos = read_v2size(L, -1);
+		prop->initial_sprite_basepos = read_v2s16(L, -1);
 	lua_pop(L, 1);
 
 	getboolfield(L, -1, "is_visible", prop->is_visible);
@@ -407,9 +407,9 @@ void push_object_properties(lua_State *L, ObjectProperties *prop)
 	}
 	lua_setfield(L, -2, "colors");
 
-	push_v2size(L, prop->spritediv);
+	push_v2s16(L, prop->spritediv);
 	lua_setfield(L, -2, "spritediv");
-	push_v2size(L, prop->initial_sprite_basepos);
+	push_v2s16(L, prop->initial_sprite_basepos);
 	lua_setfield(L, -2, "initial_sprite_basepos");
 	lua_pushboolean(L, prop->is_visible);
 	lua_setfield(L, -2, "is_visible");
