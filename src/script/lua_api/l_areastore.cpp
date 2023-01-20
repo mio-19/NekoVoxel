@@ -47,9 +47,9 @@ static void push_area(lua_State *L, const Area *a,
 	}
 	lua_newtable(L);
 	if (include_corners) {
-		push_v3s16(L, a->minedge);
+		push_v3s32(L, a->minedge);
 		lua_setfield(L, -2, "min");
-		push_v3s16(L, a->maxedge);
+		push_v3s32(L, a->maxedge);
 		lua_setfield(L, -2, "max");
 	}
 	if (include_data) {

@@ -134,8 +134,8 @@ void ObjectProperties::serialize(std::ostream &os) const
 	for (const std::string &texture : textures) {
 		os << serializeString16(texture);
 	}
-	writeV2S16(os, spritediv);
-	writeV2S16(os, initial_sprite_basepos);
+	writeV2S32(os, spritediv);
+	writeV2S32(os, initial_sprite_basepos);
 	writeU8(os, is_visible);
 	writeU8(os, makes_footstep_sound);
 	writeF32(os, automatic_rotate);

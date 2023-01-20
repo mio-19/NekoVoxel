@@ -467,7 +467,7 @@ std::string LuaEntitySAO::generateSetSpriteCommand(v2s32 p, u16 num_frames,
 	// command
 	writeU8(os, AO_CMD_SET_SPRITE);
 	// parameters
-	writeV2S16(os, p);
+	writeV2S32(os, p);
 	writeU16(os, num_frames);
 	writeF32(os, framelength);
 	writeU8(os, select_horiz_by_yawpitch);

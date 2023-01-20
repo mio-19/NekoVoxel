@@ -627,10 +627,10 @@ int ModApiMapgen::l_get_mapgen_object(lua_State *L)
 		lua_setmetatable(L, -2);
 
 		// emerged min pos
-		push_v3s16(L, vm->m_area.MinEdge);
+		push_v3s32(L, vm->m_area.MinEdge);
 
 		// emerged max pos
-		push_v3s16(L, vm->m_area.MaxEdge);
+		push_v3s32(L, vm->m_area.MaxEdge);
 
 		return 3;
 	}
@@ -697,7 +697,7 @@ int ModApiMapgen::l_get_mapgen_object(lua_State *L)
 			lua_createtable(L, it->second.size(), 0);
 
 			for (size_t j = 0; j != it->second.size(); j++) {
-				push_v3s16(L, it->second[j]);
+				push_v3s32(L, it->second[j]);
 				lua_rawseti(L, -2, j + 1);
 			}
 
@@ -840,8 +840,8 @@ int ModApiMapgen::l_get_mapgen_edges(lua_State *L)
 	}
 
 	std::pair<s32, s32> edges = get_mapgen_edges(mapgen_limit, chunksize);
-	push_v3s16(L, v3s32(1, 1, 1) * edges.first);
-	push_v3s16(L, v3s32(1, 1, 1) * edges.second);
+	push_v3s32(L, v3s32(1, 1, 1) * edges.first);
+	push_v3s32(L, v3s32(1, 1, 1) * edges.second);
 	return 2;
 }
 
@@ -1755,7 +1755,7 @@ int ModApiMapgen::l_read_schematic(lua_State *L)
 	lua_createtable(L, 0, (write_yslice == "none") ? 2 : 3);
 
 	// Create the size field
-	push_v3s16(L, schem->size);
+	push_v3s32(L, schem->size);
 	lua_setfield(L, 1, "size");
 
 	// Create the yslice_prob field

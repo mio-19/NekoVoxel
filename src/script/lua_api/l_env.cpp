@@ -97,7 +97,7 @@ void LuaABM::trigger(ServerEnvironment *env, v3s32 p, MapNode n,
 	lua_getfield(L, -1, "action");
 	luaL_checktype(L, -1, LUA_TFUNCTION);
 	lua_remove(L, -2); // Remove registered_abms[m_id]
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, n);
 	lua_pushnumber(L, active_object_count);
 	lua_pushnumber(L, active_object_count_wider);
@@ -140,7 +140,7 @@ void LuaLBM::trigger(ServerEnvironment *env, v3s32 p,
 	lua_getfield(L, -1, "action");
 	luaL_checktype(L, -1, LUA_TFUNCTION);
 	lua_remove(L, -2); // Remove registered_lbms[m_id]
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, n);
 	lua_pushnumber(L, dtime_s);
 
@@ -572,7 +572,7 @@ int ModApiEnvMod::l_find_nodes_with_meta(lua_State *L)
 
 	lua_createtable(L, positions.size(), 0);
 	for (size_t i = 0; i != positions.size(); i++) {
-		push_v3s16(L, positions[i]);
+		push_v3s32(L, positions[i]);
 		lua_rawseti(L, -2, i + 1);
 	}
 
@@ -841,7 +841,7 @@ int ModApiEnvMod::l_find_node_near(lua_State *L)
 			v3s32 p = pos + i;
 			content_t c = map.getNode(p).getContent();
 			if (CONTAINS(filter, c)) {
-				push_v3s16(L, p);
+				push_v3s32(L, p);
 				return 1;
 			}
 		}
@@ -908,7 +908,7 @@ int ModApiEnvMod::l_find_nodes_in_area(lua_State *L)
 			if (it != filter.end()) {
 				// Calculate index of the table and append the position
 				u32 filt_index = it - filter.begin();
-				push_v3s16(L, p);
+				push_v3s32(L, p);
 				lua_rawseti(L, base + 1 + filt_index, ++idx[filt_index]);
 			}
 
@@ -940,7 +940,7 @@ int ModApiEnvMod::l_find_nodes_in_area(lua_State *L)
 
 			auto it = std::find(filter.begin(), filter.end(), c);
 			if (it != filter.end()) {
-				push_v3s16(L, p);
+				push_v3s32(L, p);
 				lua_rawseti(L, -2, ++i);
 
 				u32 filt_index = it - filter.begin();
@@ -1003,7 +1003,7 @@ int ModApiEnvMod::l_find_nodes_in_area_under_air(lua_State *L)
 			content_t csurf = map.getNode(psurf).getContent();
 			if (c != CONTENT_AIR && csurf == CONTENT_AIR &&
 					CONTAINS(filter, c)) {
-				push_v3s16(L, p);
+				push_v3s32(L, p);
 				lua_rawseti(L, -2, ++i);
 			}
 			c = csurf;
@@ -1106,7 +1106,7 @@ int ModApiEnvMod::l_line_of_sight(lua_State *L)
 	bool success = env->line_of_sight(pos1, pos2, &p);
 	lua_pushboolean(L, success);
 	if (!success) {
-		push_v3s16(L, p);
+		push_v3s32(L, p);
 		return 2;
 	}
 	return 1;
@@ -1279,7 +1279,7 @@ int ModApiEnvMod::l_find_path(lua_State *L)
 		unsigned int index = 1;
 		for (const v3s32 &i : path) {
 			lua_pushnumber(L,index);
-			push_v3s16(L, i);
+			push_v3s32(L, i);
 			lua_settable(L, top);
 			index++;
 		}

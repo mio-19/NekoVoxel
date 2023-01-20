@@ -138,8 +138,8 @@ void MapgenFlatParams::readParams(const Settings *settings)
 void MapgenFlatParams::writeParams(Settings *settings) const
 {
 	settings->setFlagStr("mgflat_spflags", spflags, flagdesc_mapgen_flat);
-	settings->setS16("mgflat_ground_level",         ground_level);
-	settings->setS16("mgflat_large_cave_depth",     large_cave_depth);
+	settings->setS32("mgflat_ground_level",         ground_level);
+	settings->setS32("mgflat_large_cave_depth",     large_cave_depth);
 	settings->setU16("mgflat_small_cave_num_min",   small_cave_num_min);
 	settings->setU16("mgflat_small_cave_num_max",   small_cave_num_max);
 	settings->setU16("mgflat_large_cave_num_min",   large_cave_num_min);
@@ -150,11 +150,11 @@ void MapgenFlatParams::writeParams(Settings *settings) const
 	settings->setFloat("mgflat_lake_steepness",     lake_steepness);
 	settings->setFloat("mgflat_hill_threshold",     hill_threshold);
 	settings->setFloat("mgflat_hill_steepness",     hill_steepness);
-	settings->setS16("mgflat_cavern_limit",         cavern_limit);
-	settings->setS16("mgflat_cavern_taper",         cavern_taper);
+	settings->setS32("mgflat_cavern_limit",         cavern_limit);
+	settings->setS32("mgflat_cavern_taper",         cavern_taper);
 	settings->setFloat("mgflat_cavern_threshold",   cavern_threshold);
-	settings->setS16("mgflat_dungeon_ymin",         dungeon_ymin);
-	settings->setS16("mgflat_dungeon_ymax",         dungeon_ymax);
+	settings->setS32("mgflat_dungeon_ymin",         dungeon_ymin);
+	settings->setS32("mgflat_dungeon_ymax",         dungeon_ymax);
 
 	settings->setNoiseParams("mgflat_np_terrain",      np_terrain);
 	settings->setNoiseParams("mgflat_np_filler_depth", np_filler_depth);

@@ -191,7 +191,7 @@ bool ScriptApiClient::on_dignode(v3s32 p, MapNode node)
 	lua_getfield(L, -1, "registered_on_dignode");
 
 	// Push data
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, node);
 
 	// Call functions
@@ -213,7 +213,7 @@ bool ScriptApiClient::on_punchnode(v3s32 p, MapNode node)
 	lua_getfield(L, -1, "registered_on_punchnode");
 
 	// Push data
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, node);
 
 	// Call functions

@@ -375,7 +375,7 @@ int InvRef::l_get_location(lua_State *L)
 		lua_newtable(L);
 		lua_pushstring(L, "node");
 		lua_setfield(L, -2, "type");
-		push_v3s16(L, loc.p);
+		push_v3s32(L, loc.p);
 		lua_setfield(L, -2, "pos");
 		return 1;
 	case InventoryLocation::DETACHED:

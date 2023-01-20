@@ -180,8 +180,8 @@ void TestSettings::testAllSettings()
 	group3.set("dog", "woof");
 
 	Settings group2;
-	group2.setS16("num_apples", 4);
-	group2.setS16("num_oranges", 53);
+	group2.setS32("num_apples", 4);
+	group2.setS32("num_oranges", 53);
 	group2.setGroup("animals", group3);
 	group2.set("animals", "cute"); //destroys group 3
 	s.setGroup("groupy_thing", group2);

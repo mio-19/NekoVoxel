@@ -55,8 +55,8 @@ int LuaVoxelManip::l_read_from_map(lua_State *L)
 
 	vm->initialEmerge(bp1, bp2);
 
-	push_v3s16(L, vm->m_area.MinEdge);
-	push_v3s16(L, vm->m_area.MaxEdge);
+	push_v3s32(L, vm->m_area.MinEdge);
+	push_v3s32(L, vm->m_area.MaxEdge);
 
 	return 2;
 }
@@ -371,8 +371,8 @@ int LuaVoxelManip::l_get_emerged_area(lua_State *L)
 
 	LuaVoxelManip *o = checkObject<LuaVoxelManip>(L, 1);
 
-	push_v3s16(L, o->vm->m_area.MinEdge);
-	push_v3s16(L, o->vm->m_area.MaxEdge);
+	push_v3s32(L, o->vm->m_area.MinEdge);
+	push_v3s32(L, o->vm->m_area.MaxEdge);
 
 	return 2;
 }

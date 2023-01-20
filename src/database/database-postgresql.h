@@ -56,7 +56,7 @@ protected:
 		return (float) atof(PQgetvalue(res, row, col));
 	}
 
-	inline v3s32 pg_to_v3s16(PGresult *res, int row, int col)
+	inline v3s32 pg_to_v3s32(PGresult *res, int row, int col)
 	{
 		return v3s32(
 			pg_to_int(res, row, col),

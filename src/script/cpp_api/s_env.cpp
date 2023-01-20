@@ -37,8 +37,8 @@ void ScriptApiEnv::environment_OnGenerated(v3s32 minp, v3s32 maxp,
 	lua_getglobal(L, "core");
 	lua_getfield(L, -1, "registered_on_generateds");
 	// Call callbacks
-	push_v3s16(L, minp);
-	push_v3s16(L, maxp);
+	push_v3s32(L, minp);
+	push_v3s32(L, maxp);
 	lua_pushnumber(L, blockseed);
 	runCallbacks(3, RUN_CALLBACKS_MODE_FIRST);
 }
@@ -235,7 +235,7 @@ void ScriptApiEnv::on_emerge_area_completion(
 	lua_rawgeti(L, LUA_REGISTRYINDEX, state->callback_ref);
 	luaL_checktype(L, -1, LUA_TFUNCTION);
 
-	push_v3s16(L, blockpos);
+	push_v3s32(L, blockpos);
 	lua_pushinteger(L, action);
 	lua_pushinteger(L, state->refcount);
 	lua_rawgeti(L, LUA_REGISTRYINDEX, state->args_ref);
@@ -265,7 +265,7 @@ void ScriptApiEnv::check_for_falling(v3s32 p)
 	lua_getglobal(L, "core");
 	lua_getfield(L, -1, "check_for_falling");
 	luaL_checktype(L, -1, LUA_TFUNCTION);
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	PCALL_RES(lua_pcall(L, 1, 0, error_handler));
 }
 
@@ -290,7 +290,7 @@ void ScriptApiEnv::on_liquid_transformed(
 	lua_createtable(L, list.size(), 0);
 	for(std::pair<v3s32, MapNode> p : list) {
 		lua_pushnumber(L, index);
-		push_v3s16(L, p.first);
+		push_v3s32(L, p.first);
 		lua_rawset(L, -4);
 		lua_pushnumber(L, index++);
 		pushnode(L, p.second);

@@ -60,7 +60,7 @@ int ModApiRollback::l_rollback_get_node_actions(lua_State *L)
 		lua_pushstring(L, iter->actor.c_str());
 		lua_setfield(L, -2, "actor");
 
-		push_v3s16(L, iter->p);
+		push_v3s32(L, iter->p);
 		lua_setfield(L, -2, "pos");
 
 		lua_pushnumber(L, iter->unix_time);

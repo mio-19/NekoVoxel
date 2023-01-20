@@ -139,14 +139,14 @@ void MapgenFractalParams::writeParams(Settings *settings) const
 {
 	settings->setFlagStr("mgfractal_spflags", spflags, flagdesc_mapgen_fractal);
 	settings->setFloat("mgfractal_cave_width",         cave_width);
-	settings->setS16("mgfractal_large_cave_depth",     large_cave_depth);
+	settings->setS32("mgfractal_large_cave_depth",     large_cave_depth);
 	settings->setU16("mgfractal_small_cave_num_min",   small_cave_num_min);
 	settings->setU16("mgfractal_small_cave_num_max",   small_cave_num_max);
 	settings->setU16("mgfractal_large_cave_num_min",   large_cave_num_min);
 	settings->setU16("mgfractal_large_cave_num_max",   large_cave_num_max);
 	settings->setFloat("mgfractal_large_cave_flooded", large_cave_flooded);
-	settings->setS16("mgfractal_dungeon_ymin",         dungeon_ymin);
-	settings->setS16("mgfractal_dungeon_ymax",         dungeon_ymax);
+	settings->setS32("mgfractal_dungeon_ymin",         dungeon_ymin);
+	settings->setS32("mgfractal_dungeon_ymax",         dungeon_ymax);
 	settings->setU16("mgfractal_fractal",              fractal);
 	settings->setU16("mgfractal_iterations",           iterations);
 	settings->setV3F("mgfractal_scale",                scale);

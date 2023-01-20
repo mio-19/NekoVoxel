@@ -118,7 +118,7 @@ bool ScriptApiNode::node_on_punch(v3s32 p, MapNode node,
 		return false;
 
 	// Call function
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, node);
 	objectrefGetOrCreate(L, puncher);
 	pushPointedThing(pointed);
@@ -141,7 +141,7 @@ bool ScriptApiNode::node_on_dig(v3s32 p, MapNode node,
 		return false;
 
 	// Call function
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, node);
 	objectrefGetOrCreate(L, digger);
 	PCALL_RES(lua_pcall(L, 3, 1, error_handler));
@@ -167,7 +167,7 @@ void ScriptApiNode::node_on_construct(v3s32 p, MapNode node)
 		return;
 
 	// Call function
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	PCALL_RES(lua_pcall(L, 1, 0, error_handler));
 	lua_pop(L, 1);  // Pop error handler
 }
@@ -185,7 +185,7 @@ void ScriptApiNode::node_on_destruct(v3s32 p, MapNode node)
 		return;
 
 	// Call function
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	PCALL_RES(lua_pcall(L, 1, 0, error_handler));
 	lua_pop(L, 1);  // Pop error handler
 }
@@ -203,7 +203,7 @@ bool ScriptApiNode::node_on_flood(v3s32 p, MapNode node, MapNode newnode)
 		return false;
 
 	// Call function
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, node);
 	pushnode(L, newnode);
 	PCALL_RES(lua_pcall(L, 3, 1, error_handler));
@@ -224,7 +224,7 @@ void ScriptApiNode::node_after_destruct(v3s32 p, MapNode node)
 		return;
 
 	// Call function
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	pushnode(L, node);
 	PCALL_RES(lua_pcall(L, 2, 0, error_handler));
 	lua_pop(L, 1);  // Pop error handler
@@ -243,7 +243,7 @@ bool ScriptApiNode::node_on_timer(v3s32 p, MapNode node, f32 dtime)
 		return false;
 
 	// Call function
-	push_v3s16(L, p);
+	push_v3s32(L, p);
 	lua_pushnumber(L,dtime);
 	PCALL_RES(lua_pcall(L, 2, 1, error_handler));
 	lua_remove(L, error_handler);
@@ -271,7 +271,7 @@ void ScriptApiNode::node_on_receive_fields(v3s32 p,
 		return;
 
 	// Call function
-	push_v3s16(L, p);                    // pos
+	push_v3s32(L, p);                    // pos
 	lua_pushstring(L, formname.c_str()); // formname
 	lua_newtable(L);                     // fields
 	StringMap::const_iterator it;

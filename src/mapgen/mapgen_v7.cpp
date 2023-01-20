@@ -213,26 +213,26 @@ void MapgenV7Params::readParams(const Settings *settings)
 void MapgenV7Params::writeParams(Settings *settings) const
 {
 	settings->setFlagStr("mgv7_spflags", spflags, flagdesc_mapgen_v7);
-	settings->setS16("mgv7_mount_zero_level",           mount_zero_level);
-	settings->setS16("mgv7_floatland_ymin",             floatland_ymin);
-	settings->setS16("mgv7_floatland_ymax",             floatland_ymax);
-	settings->setS16("mgv7_floatland_taper",            floatland_taper);
+	settings->setS32("mgv7_mount_zero_level",           mount_zero_level);
+	settings->setS32("mgv7_floatland_ymin",             floatland_ymin);
+	settings->setS32("mgv7_floatland_ymax",             floatland_ymax);
+	settings->setS32("mgv7_floatland_taper",            floatland_taper);
 	settings->setFloat("mgv7_float_taper_exp",          float_taper_exp);
 	settings->setFloat("mgv7_floatland_density",        floatland_density);
-	settings->setS16("mgv7_floatland_ywater",           floatland_ywater);
+	settings->setS32("mgv7_floatland_ywater",           floatland_ywater);
 
 	settings->setFloat("mgv7_cave_width",               cave_width);
-	settings->setS16("mgv7_large_cave_depth",           large_cave_depth);
+	settings->setS32("mgv7_large_cave_depth",           large_cave_depth);
 	settings->setU16("mgv7_small_cave_num_min",         small_cave_num_min);
 	settings->setU16("mgv7_small_cave_num_max",         small_cave_num_max);
 	settings->setU16("mgv7_large_cave_num_min",         large_cave_num_min);
 	settings->setU16("mgv7_large_cave_num_max",         large_cave_num_max);
 	settings->setFloat("mgv7_large_cave_flooded",       large_cave_flooded);
-	settings->setS16("mgv7_cavern_limit",               cavern_limit);
-	settings->setS16("mgv7_cavern_taper",               cavern_taper);
+	settings->setS32("mgv7_cavern_limit",               cavern_limit);
+	settings->setS32("mgv7_cavern_taper",               cavern_taper);
 	settings->setFloat("mgv7_cavern_threshold",         cavern_threshold);
-	settings->setS16("mgv7_dungeon_ymin",               dungeon_ymin);
-	settings->setS16("mgv7_dungeon_ymax",               dungeon_ymax);
+	settings->setS32("mgv7_dungeon_ymin",               dungeon_ymin);
+	settings->setS32("mgv7_dungeon_ymax",               dungeon_ymax);
 
 	settings->setNoiseParams("mgv7_np_terrain_base",    np_terrain_base);
 	settings->setNoiseParams("mgv7_np_terrain_alt",     np_terrain_alt);

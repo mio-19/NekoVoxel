@@ -208,8 +208,8 @@ void MapgenV6Params::writeParams(Settings *settings) const
 	settings->setFlagStr("mgv6_spflags", spflags, flagdesc_mapgen_v6);
 	settings->setFloat("mgv6_freq_desert", freq_desert);
 	settings->setFloat("mgv6_freq_beach",  freq_beach);
-	settings->setS16("mgv6_dungeon_ymin",  dungeon_ymin);
-	settings->setS16("mgv6_dungeon_ymax",  dungeon_ymax);
+	settings->setS32("mgv6_dungeon_ymin",  dungeon_ymin);
+	settings->setS32("mgv6_dungeon_ymax",  dungeon_ymax);
 
 	settings->setNoiseParams("mgv6_np_terrain_base",   np_terrain_base);
 	settings->setNoiseParams("mgv6_np_terrain_higher", np_terrain_higher);

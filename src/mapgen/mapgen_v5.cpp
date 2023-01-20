@@ -130,17 +130,17 @@ void MapgenV5Params::writeParams(Settings *settings) const
 {
 	settings->setFlagStr("mgv5_spflags", spflags, flagdesc_mapgen_v5);
 	settings->setFloat("mgv5_cave_width",         cave_width);
-	settings->setS16("mgv5_large_cave_depth",     large_cave_depth);
+	settings->setS32("mgv5_large_cave_depth",     large_cave_depth);
 	settings->setU16("mgv5_small_cave_num_min",   small_cave_num_min);
 	settings->setU16("mgv5_small_cave_num_max",   small_cave_num_max);
 	settings->setU16("mgv5_large_cave_num_min",   large_cave_num_min);
 	settings->setU16("mgv5_large_cave_num_max",   large_cave_num_max);
 	settings->setFloat("mgv5_large_cave_flooded", large_cave_flooded);
-	settings->setS16("mgv5_cavern_limit",         cavern_limit);
-	settings->setS16("mgv5_cavern_taper",         cavern_taper);
+	settings->setS32("mgv5_cavern_limit",         cavern_limit);
+	settings->setS32("mgv5_cavern_taper",         cavern_taper);
 	settings->setFloat("mgv5_cavern_threshold",   cavern_threshold);
-	settings->setS16("mgv5_dungeon_ymin",         dungeon_ymin);
-	settings->setS16("mgv5_dungeon_ymax",         dungeon_ymax);
+	settings->setS32("mgv5_dungeon_ymin",         dungeon_ymin);
+	settings->setS32("mgv5_dungeon_ymax",         dungeon_ymax);
 
 	settings->setNoiseParams("mgv5_np_filler_depth", np_filler_depth);
 	settings->setNoiseParams("mgv5_np_factor",       np_factor);
