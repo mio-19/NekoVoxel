@@ -343,7 +343,7 @@ void TestSerialization::testStreamWrite()
 
 void TestSerialization::testFloatFormat()
 {
-	FloatType type = getFloatSerializationType();
+	FloatType type = getFloatSerializationType32();
 	u32 i;
 	f32 fs, fm;
 

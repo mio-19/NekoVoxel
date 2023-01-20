@@ -29,6 +29,9 @@ enum FloatType
 };
 
 f32 u32Tof32Slow(u32 i);
+f64 u64Tof64Slow(u64 i);
 u32 f32Tou32Slow(f32 f);
+u32 f64Tou64Slow(f32 f);
 
-FloatType getFloatSerializationType();
+FloatType getFloatSerializationType32();
+FloatType getFloatSerializationType64();

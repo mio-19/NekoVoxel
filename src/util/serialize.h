@@ -205,7 +205,7 @@ inline f32 readF32(const u8 *data)
 	case FLOATTYPE_SLOW:
 		return u32Tof32Slow(u);
 	case FLOATTYPE_UNKNOWN: // First initialization
-		g_serialize_f32_type = getFloatSerializationType();
+		g_serialize_f32_type = getFloatSerializationType32();
 		return readF32(data);
 	}
 	throw SerializationError("readF32: Unreachable code");
@@ -224,7 +224,7 @@ inline f64 readF64(const u8 *data)
 	case FLOATTYPE_SLOW:
 		return u64Tof64Slow(u);
 	case FLOATTYPE_UNKNOWN: // First initialization
-		g_serialize_f64_type = getFloatSerializationType();
+		g_serialize_f64_type = getFloatSerializationType64();
 		return readF64(data);
 	}
 	throw SerializationError("readF64: Unreachable code");
@@ -340,7 +340,7 @@ inline void writeF32(u8 *data, f32 i)
 	case FLOATTYPE_SLOW:
 		return writeU32(data, f32Tou32Slow(i));
 	case FLOATTYPE_UNKNOWN: // First initialization
-		g_serialize_f32_type = getFloatSerializationType();
+		g_serialize_f32_type = getFloatSerializationType32();
 		return writeF32(data, i);
 	}
 	throw SerializationError("writeF32: Unreachable code");
@@ -357,7 +357,7 @@ inline void writeF64(u8 *data, f64 i)
 	case FLOATTYPE_SLOW:
 		return writeU64(data, f64Tou64Slow(i));
 	case FLOATTYPE_UNKNOWN: // First initialization
-		g_serialize_f64_type = getFloatSerializationType();
+		g_serialize_f64_type = getFloatSerializationType64();
 		return writeF64(data, i);
 	}
 	throw SerializationError("writeF64: Unreachable code");

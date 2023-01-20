@@ -59,6 +59,12 @@ f32 u32Tof32Slow(u32 i)
 	// clang-format on
 }
 
+// Given an unsigned 64-bit integer representing an IEEE-754 single-precision
+// float, return the float.
+f64 u64Tof64Slow(u64 i) {
+	throw std::runtime_error("TODO");
+}
+
 // Given a float, return an unsigned 32-bit integer representing the f32
 // in IEEE-754 single-precision format.
 u32 f32Tou32Slow(f32 f)
@@ -89,10 +95,16 @@ u32 f32Tou32Slow(f32 f)
 	return signbit | (exp << 23) | (imant & 0x7FFFFFUL);
 }
 
+// Given a float, return an unsigned 64-bit integer representing the f64
+// in IEEE-754 single-precision format.
+u64 f64Tou64Slow(f64 f) {
+	throw std::runtime_error("TODO");
+}
+
 // This test needs the following requisites in order to work:
 // - The float type must be a 32 bits IEEE-754 single-precision float.
 // - The endianness of f32s and integers must match.
-FloatType getFloatSerializationType()
+FloatType getFloatSerializationType32()
 {
 	// clang-format off
 	const f32 cf = -22220490.f;
@@ -133,4 +145,9 @@ FloatType getFloatSerializationType()
 
 	return FLOATTYPE_SLOW;
 	// clang-format on
+}
+
+// TODO
+FloatType getFloatSerializationType64() {
+	return getFloatSerializationType32();
 }
