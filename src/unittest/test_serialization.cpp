@@ -324,7 +324,7 @@ void TestSerialization::testStreamWrite()
 	UASSERT(!memcmp(&data[0], test_serialized_data, data.size()));
 
 	writeV2S32(os, v2s32(500, 500));
-	writeV3S16(os, v3s32(4207, 604, -30));
+	writeV3S32(os, v3s32(4207, 604, -30));
 	writeV2S32(os, v2s32(1920, 1080));
 	writeV3S32(os, v3s32(-400, 6400054, 290549855));
 

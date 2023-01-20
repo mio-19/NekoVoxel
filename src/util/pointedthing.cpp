@@ -78,8 +78,8 @@ void PointedThing::serialize(std::ostream &os) const
 	case POINTEDTHING_NOTHING:
 		break;
 	case POINTEDTHING_NODE:
-		writeV3S16(os, node_undersurface);
-		writeV3S16(os, node_abovesurface);
+		writeV3S32(os, node_undersurface);
+		writeV3S32(os, node_abovesurface);
 		break;
 	case POINTEDTHING_OBJECT:
 		writeU16(os, object_id);
