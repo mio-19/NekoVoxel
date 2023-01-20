@@ -295,7 +295,7 @@ std::string UnitSAO::generateUpdateAnimationSpeedCommand() const
 	// command
 	writeU8(os, AO_CMD_SET_ANIMATION_SPEED);
 	// parameters
-	writeF32(os, m_animation_speed);
+	writeF64(os, m_animation_speed);
 	return os.str();
 }
 
@@ -306,8 +306,8 @@ std::string UnitSAO::generateUpdateAnimationCommand() const
 	writeU8(os, AO_CMD_SET_ANIMATION);
 	// parameters
 	writeV2F32(os, m_animation_range);
-	writeF32(os, m_animation_speed);
-	writeF32(os, m_animation_blend);
+	writeF64(os, m_animation_speed);
+	writeF64(os, m_animation_blend);
 	// these are sent inverted so we get true when the server sends nothing
 	writeU8(os, !m_animation_loop);
 	return os.str();
@@ -345,7 +345,7 @@ std::string UnitSAO::generateUpdatePositionCommand(const v3d &position,
 	// is_end_position (for interpolation)
 	writeU8(os, is_movement_end);
 	// update_interval (for interpolation)
-	writeF32(os, update_interval);
+	writeF64(os, update_interval);
 	return os.str();
 }
 

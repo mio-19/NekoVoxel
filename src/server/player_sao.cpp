@@ -315,9 +315,9 @@ std::string PlayerSAO::generateUpdatePhysicsOverrideCommand() const
 	// command
 	writeU8(os, AO_CMD_SET_PHYSICS_OVERRIDE);
 	// parameters
-	writeF32(os, phys.speed);
-	writeF32(os, phys.jump);
-	writeF32(os, phys.gravity);
+	writeF64(os, phys.speed);
+	writeF64(os, phys.jump);
+	writeF64(os, phys.gravity);
 	// MT 0.4.10 legacy: send inverted for detault `true` if the server sends nothing
 	writeU8(os, !phys.sneak);
 	writeU8(os, !phys.sneak_glitch);

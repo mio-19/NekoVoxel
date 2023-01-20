@@ -186,7 +186,7 @@ namespace ParticleParamTypes
 		void serialize(std::ostream &os) const
 		{
 			legacySerialize(os);
-			writeF32(os, bias);
+			writeF64(os, bias);
 		}
 		void deSerialize(std::istream &is)
 		{
@@ -292,7 +292,7 @@ namespace ParticleParamTypes
 		{
 			writeU8(os, static_cast<u8>(style));
 			writeU16(os, reps);
-			writeF32(os, beginning);
+			writeF64(os, beginning);
 			start.serialize(os);
 			end.serialize(os);
 		}

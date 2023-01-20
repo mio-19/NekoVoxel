@@ -469,7 +469,7 @@ std::string LuaEntitySAO::generateSetSpriteCommand(v2s32 p, u16 num_frames,
 	// parameters
 	writeV2S32(os, p);
 	writeU16(os, num_frames);
-	writeF32(os, framelength);
+	writeF64(os, framelength);
 	writeU8(os, select_horiz_by_yawpitch);
 	return os.str();
 }

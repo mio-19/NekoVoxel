@@ -138,8 +138,8 @@ void PlayerDatabaseLevelDB::savePlayer(RemotePlayer *player)
 	sanity_check(sao);
 	writeU16(os, sao->getHP());
 	writeV3F64(os, sao->getBasePosition());
-	writeF32(os, sao->getLookPitch());
-	writeF32(os, sao->getRotation().Y);
+	writeF64(os, sao->getLookPitch());
+	writeF64(os, sao->getRotation().Y);
 	writeU16(os, sao->getBreath());
 
 	const auto &stringvars = sao->getMeta().getStrings();

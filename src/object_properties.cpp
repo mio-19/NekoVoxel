@@ -122,7 +122,7 @@ void ObjectProperties::serialize(std::ostream &os) const
 	writeU8(os, 4); // PROTOCOL_VERSION >= 37
 	writeU16(os, hp_max);
 	writeU8(os, physical);
-	writeF32(os, 0.f); // Removed property (weight)
+	writeF64(os, 0.f); // Removed property (weight)
 	writeV3F64(os, collisionbox.MinEdge);
 	writeV3F64(os, collisionbox.MaxEdge);
 	writeV3F64(os, selectionbox.MinEdge);
@@ -138,26 +138,26 @@ void ObjectProperties::serialize(std::ostream &os) const
 	writeV2S32(os, initial_sprite_basepos);
 	writeU8(os, is_visible);
 	writeU8(os, makes_footstep_sound);
-	writeF32(os, automatic_rotate);
+	writeF64(os, automatic_rotate);
 	os << serializeString16(mesh);
 	writeU16(os, colors.size());
 	for (video::SColor color : colors) {
 		writeARGB8(os, color);
 	}
 	writeU8(os, collideWithObjects);
-	writeF32(os, stepheight);
+	writeF64(os, stepheight);
 	writeU8(os, automatic_face_movement_dir);
-	writeF32(os, automatic_face_movement_dir_offset);
+	writeF64(os, automatic_face_movement_dir_offset);
 	writeU8(os, backface_culling);
 	os << serializeString16(nametag);
 	writeARGB8(os, nametag_color);
-	writeF32(os, automatic_face_movement_max_rotation_per_sec);
+	writeF64(os, automatic_face_movement_max_rotation_per_sec);
 	os << serializeString16(infotext);
 	os << serializeString16(wield_item);
 	writeS8(os, glow);
 	writeU16(os, breath_max);
-	writeF32(os, eye_height);
-	writeF32(os, zoom_fov);
+	writeF64(os, eye_height);
+	writeF64(os, zoom_fov);
 	writeU8(os, use_texture_alpha);
 	os << serializeString16(damage_texture_modifier);
 	writeU8(os, shaded);

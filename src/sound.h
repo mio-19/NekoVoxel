@@ -40,9 +40,9 @@ struct SimpleSoundSpec
 	void serialize(std::ostream &os, u16 protocol_version) const
 	{
 		os << serializeString16(name);
-		writeF32(os, gain);
-		writeF32(os, pitch);
-		writeF32(os, fade);
+		writeF64(os, gain);
+		writeF64(os, pitch);
+		writeF64(os, fade);
 	}
 
 	void deSerialize(std::istream &is, u16 protocol_version)

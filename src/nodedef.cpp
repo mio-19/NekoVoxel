@@ -464,7 +464,7 @@ void ContentFeatures::serialize(std::ostream &os, u16 protocol_version) const
 	// visual
 	writeU8(os, drawtype);
 	os << serializeString16(mesh);
-	writeF32(os, visual_scale);
+	writeF64(os, visual_scale);
 	writeU8(os, 6);
 	for (const TileDef &td : tiledef)
 		td.serialize(os, protocol_version);

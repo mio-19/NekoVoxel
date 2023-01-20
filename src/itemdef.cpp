@@ -161,7 +161,7 @@ void ItemDefinition::serialize(std::ostream &os, u16 protocol_version) const
 	sound_place.serialize(os, protocol_version);
 	sound_place_failed.serialize(os, protocol_version);
 
-	writeF32(os, range);
+	writeF64(os, range);
 	os << serializeString16(palette_image);
 	writeARGB8(os, color);
 	os << serializeString16(inventory_overlay);

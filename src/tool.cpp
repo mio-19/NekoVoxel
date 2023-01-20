@@ -61,7 +61,7 @@ void ToolCapabilities::serialize(std::ostream &os, u16 protocol_version) const
 		writeU8(os, 5);
 	else
 		writeU8(os, 4); // proto == 37
-	writeF32(os, full_punch_interval);
+	writeF64(os, full_punch_interval);
 	writeS32(os, max_drop_level);
 	writeU32(os, groupcaps.size());
 	for (const auto &groupcap : groupcaps) {
@@ -73,7 +73,7 @@ void ToolCapabilities::serialize(std::ostream &os, u16 protocol_version) const
 		writeU32(os, cap->times.size());
 		for (const auto &time : cap->times) {
 			writeS32(os, time.first);
-			writeF32(os, time.second);
+			writeF64(os, time.second);
 		}
 	}
 
