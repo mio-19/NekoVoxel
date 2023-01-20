@@ -577,6 +577,13 @@ v3s16 getv3s16field_default(lua_State *L, int table,
 	return default_;
 }
 
+v3s32 getv3s32field_default(lua_State *L, int table,
+		const char *fieldname, v3s16 default_)
+{
+	getv3intfield(L, table, fieldname, default_);
+	return default_;
+}
+
 void setstringfield(lua_State *L, int table,
 		const char *fieldname, const std::string &value)
 {
