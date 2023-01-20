@@ -149,8 +149,8 @@ void TestSettings::testAllSettings()
 	s.parseConfigLines(is);
 
 	UASSERT(s.getS32("leet") == 1337);
-	UASSERT(s.getS32("leetleet") == 32767);
-	UASSERT(s.getS32("leetleet_neg") == -32768);
+	UASSERT(s.getS16("leetleet") == 32767);
+	UASSERT(s.getS16("leetleet_neg") == -32768);
 
 	// Not sure if 1.1 is an exact value as a float, but doesn't matter
 	UASSERT(fabs(s.getFloat("floaty_thing") - 1.1) < 0.001);
