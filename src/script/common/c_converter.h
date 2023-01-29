@@ -62,9 +62,10 @@ bool getintfield(lua_State *L, int table,
 }
 
 // Retrieve an v3s16 where all components are optional (falls back to default)
+/*
 v3s16              getv3s16field_default(lua_State *L, int table,
                              const char *fieldname, v3s16 default_);
-
+*/
 // Retrieve an v3s32 where all components are optional (falls back to default)
 v3s32              getv3s32field_default(lua_State *L, int table,
                              const char *fieldname, v3s32 default_);
