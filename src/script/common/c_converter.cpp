@@ -202,6 +202,23 @@ v2f check_v2f(lua_State *L, int index)
 	return p;
 }
 
+v2d check_v2d(lua_State *L, int index)
+{
+	v2d p;
+	CHECK_POS_TAB(index);
+	lua_getfield(L, index, "x");
+	CHECK_POS_COORD(-1, "x");
+	p.X = lua_tonumber(L, -1);
+	CHECK_FLOAT(p.X, "x");
+	lua_pop(L, 1);
+	lua_getfield(L, index, "y");
+	CHECK_POS_COORD(-1, "y");
+	p.Y = lua_tonumber(L, -1);
+	CHECK_FLOAT(p.Y, "y");
+	lua_pop(L, 1);
+	return p;
+}
+
 v3f read_v3f(lua_State *L, int index)
 {
 	read_v3_aux(L, index);
@@ -233,6 +250,19 @@ v3f check_v3f(lua_State *L, int index)
 	float z = lua_tonumber(L, -1);
 	lua_pop(L, 3);
 	return v3f(x, y, z);
+}
+
+v3d check_v3d(lua_State *L, int index)
+{
+	read_v3_aux(L, index);
+	CHECK_POS_COORD(-3, "x");
+	CHECK_POS_COORD(-2, "y");
+	CHECK_POS_COORD(-1, "z");
+	double x = lua_tonumber(L, -3);
+	double y = lua_tonumber(L, -2);
+	double z = lua_tonumber(L, -1);
+	lua_pop(L, 3);
+	return v3d(x, y, z);
 }
 
 v3d read_v3d(lua_State *L, int index)
