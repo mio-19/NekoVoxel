@@ -70,7 +70,7 @@ void read_item_definition(lua_State* L, int index,
 
 	lua_getfield(L, index, "wield_scale");
 	if(lua_istable(L, -1)){
-		def.wield_scale = check_v3f(L, -1);
+		def.wield_scale = check_v3d(L, -1);
 	}
 	lua_pop(L, 1);
 
@@ -252,9 +252,9 @@ void read_object_properties(lua_State *L, int index,
 	lua_getfield(L, -1, "visual_size");
 	if (lua_istable(L, -1)) {
 		// Backwards compatibility: Also accept { x = ?, y = ? }
-		v2f scale_xy = read_v2f(L, -1);
+		v2d scale_xy = read_v2d(L, -1);
 
-		f32 scale_z = scale_xy.X;
+		f64 scale_z = scale_xy.X;
 		lua_getfield(L, -1, "z");
 		if (lua_isnumber(L, -1))
 			scale_z = lua_tonumber(L, -1);
@@ -1078,7 +1078,7 @@ void read_server_sound_params(lua_State *L, int index,
 		getstringfield(L, index, "to_player", params.to_player);
 		lua_getfield(L, index, "pos");
 		if(!lua_isnil(L, -1)){
-			v3f p = read_v3f(L, -1)*BS;
+			v3d p = read_v3d(L, -1)*BS;
 			params.pos = p;
 			params.type = SoundLocation::Position;
 		}
@@ -1697,7 +1697,7 @@ bool read_noiseparams(lua_State *L, int index, NoiseParams *np)
 		&flags, &flagmask) ? flags : NOISE_FLAG_DEFAULTS;
 
 	lua_getfield(L, index, "spread");
-	np->spread  = read_v3f(L, -1);
+	np->spread  = read_v3d(L, -1);
 	lua_pop(L, 1);
 
 	return true;

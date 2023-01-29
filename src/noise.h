@@ -110,7 +110,7 @@ private:
 struct NoiseParams {
 	float offset = 0.0f;
 	float scale = 1.0f;
-	v3f spread = v3f(250, 250, 250);
+	v3d spread = v3d(250, 250, 250);
 	s32 seed = 12345;
 	u16 octaves = 3;
 	float persist = 0.6f;
