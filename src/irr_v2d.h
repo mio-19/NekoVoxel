@@ -24,6 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <vector2d.h>
 
 typedef core::vector2d<f32> v2f;
+typedef core::vector2d<f64> v2d;
 typedef core::vector2d<s16> v2s16;
 typedef core::vector2d<s32> v2s32;
 typedef core::vector2d<u32> v2u32;
