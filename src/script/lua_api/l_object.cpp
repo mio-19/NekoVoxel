@@ -466,8 +466,8 @@ int ObjectRef::l_get_eye_offset(lua_State *L)
 	if (player == nullptr)
 		return 0;
 
-	push_v3f(L, player->eye_offset_first);
-	push_v3f(L, player->eye_offset_third);
+	push_v3d(L, player->eye_offset_first);
+	push_v3d(L, player->eye_offset_third);
 	return 2;
 }
 
@@ -540,8 +540,8 @@ int ObjectRef::l_get_bone_position(lua_State *L)
 	v3f rotation = v3f(0, 0, 0);
 	sao->getBonePosition(bone, &position, &rotation);
 
-	push_v3f(L, position);
-	push_v3f(L, rotation);
+	push_v3d(L, position);
+	push_v3d(L, rotation);
 	return 2;
 }
 
@@ -602,8 +602,8 @@ int ObjectRef::l_get_attach(lua_State *L)
 	ServerActiveObject *parent = env->getActiveObject(parent_id);
 	getScriptApiBase(L)->objectrefGetOrCreate(L, parent);
 	lua_pushlstring(L, bone.c_str(), bone.size());
-	push_v3f(L, position);
-	push_v3f(L, rotation);
+	push_v3d(L, position);
+	push_v3d(L, rotation);
 	lua_pushboolean(L, force_visible);
 	return 5;
 }
@@ -818,7 +818,7 @@ int ObjectRef::l_get_velocity(lua_State *L)
 		return 1;
 	} else if (sao->getType() == ACTIVEOBJECT_TYPE_PLAYER) {
 		RemotePlayer *player = dynamic_cast<PlayerSAO*>(sao)->getPlayer();
-		push_v3f(L, player->getSpeed() / BS);
+		push_v3d(L, player->getSpeed() / BS);
 		return 1;
 	}
 
@@ -882,7 +882,7 @@ int ObjectRef::l_get_rotation(lua_State *L)
 	v3f rotation = entitysao->getRotation() * core::DEGTORAD;
 
 	lua_newtable(L);
-	push_v3f(L, rotation);
+	push_v3d(L, rotation);
 	return 1;
 }
 
@@ -1025,7 +1025,7 @@ int ObjectRef::l_get_look_dir(lua_State *L)
 	v3f v(std::cos(pitch) * std::cos(yaw), std::sin(pitch), std::cos(pitch) *
 		std::sin(yaw));
 
-	push_v3f(L, v);
+	push_v3d(L, v);
 	return 1;
 }
 

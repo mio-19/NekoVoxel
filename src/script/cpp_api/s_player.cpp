@@ -71,7 +71,7 @@ bool ScriptApiPlayer::on_punchplayer(ServerActiveObject *player,
 	objectrefGetOrCreate(L, hitter);
 	lua_pushnumber(L, time_from_last_punch);
 	push_tool_capabilities(L, *toolcap);
-	push_v3f(L, dir);
+	push_v3d(L, dir);
 	lua_pushnumber(L, damage);
 	runCallbacks(6, RUN_CALLBACKS_MODE_OR);
 	return readParam<bool>(L, -1);

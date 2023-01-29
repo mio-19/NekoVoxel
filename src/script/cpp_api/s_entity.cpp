@@ -263,7 +263,7 @@ bool ScriptApiEntity::luaentity_Punch(u16 id,
 	objectrefGetOrCreate(L, puncher);  // Clicker reference
 	lua_pushnumber(L, time_from_last_punch);
 	push_tool_capabilities(L, *toolcap);
-	push_v3f(L, dir);
+	push_v3d(L, dir);
 	lua_pushnumber(L, damage);
 
 	setOriginFromTable(object);

@@ -56,7 +56,7 @@ int LuaLocalPlayer::l_get_velocity(lua_State *L)
 {
 	LocalPlayer *player = getobject(L, 1);
 
-	push_v3f(L, player->getSpeed() / BS);
+	push_v3d(L, player->getSpeed() / BS);
 	return 1;
 }
 
@@ -184,7 +184,7 @@ int LuaLocalPlayer::l_get_last_pos(lua_State *L)
 {
 	LocalPlayer *player = getobject(L, 1);
 
-	push_v3f(L, player->last_position / BS);
+	push_v3d(L, player->last_position / BS);
 	return 1;
 }
 
@@ -192,7 +192,7 @@ int LuaLocalPlayer::l_get_last_velocity(lua_State *L)
 {
 	LocalPlayer *player = getobject(L, 1);
 
-	push_v3f(L, player->last_speed);
+	push_v3d(L, player->last_speed);
 	return 1;
 }
 
@@ -258,7 +258,7 @@ int LuaLocalPlayer::l_get_pos(lua_State *L)
 {
 	LocalPlayer *player = getobject(L, 1);
 
-	push_v3f(L, player->getPosition() / BS);
+	push_v3d(L, player->getPosition() / BS);
 	return 1;
 }
 

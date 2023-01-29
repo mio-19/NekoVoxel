@@ -107,7 +107,7 @@ int LuaCamera::l_get_pos(lua_State *L)
 	if (!camera)
 		return 0;
 
-	push_v3f(L, camera->getPosition() / BS);
+	push_v3d(L, camera->getPosition() / BS);
 	return 1;
 }
 
@@ -117,7 +117,7 @@ int LuaCamera::l_get_offset(lua_State *L)
 	LocalPlayer *player = getClient(L)->getEnv().getLocalPlayer();
 	sanity_check(player);
 
-	push_v3f(L, player->getEyeOffset() / BS);
+	push_v3d(L, player->getEyeOffset() / BS);
 	return 1;
 }
 
@@ -128,7 +128,7 @@ int LuaCamera::l_get_look_dir(lua_State *L)
 	if (!camera)
 		return 0;
 
-	push_v3f(L, camera->getDirection());
+	push_v3d(L, camera->getDirection());
 	return 1;
 }
 

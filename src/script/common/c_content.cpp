@@ -173,7 +173,7 @@ void push_item_definition_full(lua_State *L, const ItemDefinition &i)
 	lua_setfield(L, -2, "palette_image");
 	push_ARGB8(L, i.color);
 	lua_setfield(L, -2, "color");
-	push_v3f(L, i.wield_scale);
+	push_v3d(L, i.wield_scale);
 	lua_setfield(L, -2, "wield_scale");
 	lua_pushinteger(L, i.stack_max);
 	lua_setfield(L, -2, "stack_max");
@@ -388,7 +388,7 @@ void push_object_properties(lua_State *L, ObjectProperties *prop)
 	lua_setfield(L, -2, "visual");
 	lua_pushlstring(L, prop->mesh.c_str(), prop->mesh.size());
 	lua_setfield(L, -2, "mesh");
-	push_v3f(L, prop->visual_size);
+	push_v3d(L, prop->visual_size);
 	lua_setfield(L, -2, "visual_size");
 
 	lua_createtable(L, prop->textures.size(), 0);
@@ -1718,7 +1718,7 @@ void push_noiseparams(lua_State *L, NoiseParams *np)
 		np->flags);
 	lua_setfield(L, -2, "flags");
 
-	push_v3f(L, np->spread);
+	push_v3d(L, np->spread);
 	lua_setfield(L, -2, "spread");
 }
 
@@ -1885,9 +1885,9 @@ void push_pointed_thing(lua_State *L, const PointedThing &pointed, bool csm,
 		lua_setfield(L, -2, "type");
 	}
 	if (hitpoint && (pointed.type != POINTEDTHING_NOTHING)) {
-		push_v3f(L, pointed.intersection_point / BS); // convert to node coords
+		push_v3d(L, pointed.intersection_point / BS); // convert to node coords
 		lua_setfield(L, -2, "intersection_point");
-		push_v3f(L, pointed.intersection_normal);
+		push_v3d(L, pointed.intersection_normal);
 		lua_setfield(L, -2, "intersection_normal");
 		lua_pushinteger(L, pointed.box_id + 1); // change to Lua array index
 		lua_setfield(L, -2, "box_id");
@@ -2006,7 +2006,7 @@ void push_hud_element(lua_State *L, HudElement *elem)
 	lua_pushnumber(L, elem->dir);
 	lua_setfield(L, -2, "dir");
 
-	push_v3f(L, elem->world_pos);
+	push_v3d(L, elem->world_pos);
 	lua_setfield(L, -2, "world_pos");
 
 	lua_pushnumber(L, elem->z_index);
@@ -2140,10 +2140,10 @@ void push_collision_move_result(lua_State *L, const collisionMoveResult &res)
 			lua_setfield(L, -2, "object");
 		}
 
-		push_v3f(L, c.old_speed / BS);
+		push_v3d(L, c.old_speed / BS);
 		lua_setfield(L, -2, "old_velocity");
 
-		push_v3f(L, c.new_speed / BS);
+		push_v3d(L, c.new_speed / BS);
 		lua_setfield(L, -2, "new_velocity");
 
 		lua_rawseti(L, -2, i++);
