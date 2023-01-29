@@ -309,7 +309,7 @@ void LuaEntitySAO::getStaticData(std::string *result) const
 	*result = os.str();
 }
 
-u32 LuaEntitySAO::punch(v3f dir,
+u32 LuaEntitySAO::punch(v3d dir,
 		const ToolCapabilities *toolcap,
 		ServerActiveObject *puncher,
 		float time_from_last_punch,

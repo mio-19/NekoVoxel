@@ -178,8 +178,8 @@ int LuaRaycast::create_object(lua_State *L)
 	bool objects = true;
 	bool liquids = false;
 
-	v3f pos1 = checkFloatPos(L, 1);
-	v3f pos2 = checkFloatPos(L, 2);
+	v3d pos1 = checkDoublePos(L, 1);
+	v3d pos2 = checkDoublePos(L, 2);
 	if (lua_isboolean(L, 3)) {
 		objects = readParam<bool>(L, 3);
 	}
@@ -607,7 +607,7 @@ int ModApiEnvMod::l_add_entity(lua_State *L)
 {
 	GET_ENV_PTR;
 
-	v3f pos = checkFloatPos(L, 1);
+	v3d pos = checkDoublePos(L, 1);
 	const char *name = luaL_checkstring(L, 2);
 	std::string staticdata = readParam<std::string>(L, 3, "");
 
@@ -631,7 +631,7 @@ int ModApiEnvMod::l_add_item(lua_State *L)
 	GET_ENV_PTR;
 
 	// pos
-	//v3f pos = checkFloatPos(L, 1);
+	//v3d pos = checkDoublePos(L, 1);
 	// item
 	ItemStack item = read_item(L, 2,getServer(L)->idef());
 	if(item.empty() || !item.isKnown(getServer(L)->idef()))
@@ -704,7 +704,7 @@ int ModApiEnvMod::l_get_objects_inside_radius(lua_State *L)
 	ScriptApiBase *script = getScriptApiBase(L);
 
 	// Do it
-	v3f pos = checkFloatPos(L, 1);
+	v3d pos = checkDoublePos(L, 1);
 	float radius = readParam<float>(L, 2) * BS;
 	std::vector<ServerActiveObject *> objs;
 
@@ -1097,9 +1097,9 @@ int ModApiEnvMod::l_line_of_sight(lua_State *L)
 	GET_PLAIN_ENV_PTR;
 
 	// read position 1 from lua
-	v3f pos1 = checkFloatPos(L, 1);
+	v3d pos1 = checkDoublePos(L, 1);
 	// read position 2 from lua
-	v3f pos2 = checkFloatPos(L, 2);
+	v3d pos2 = checkDoublePos(L, 2);
 
 	v3s32 p;
 

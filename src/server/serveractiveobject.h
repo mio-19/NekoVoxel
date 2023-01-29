@@ -146,7 +146,7 @@ public:
 	{ return true; }
 
 	// Returns added tool wear
-	virtual u32 punch(v3f dir,
+	virtual u32 punch(v3d dir,
 			const ToolCapabilities *toolcap = nullptr,
 			ServerActiveObject *puncher = nullptr,
 			float time_from_last_punch = 1000000.0f,

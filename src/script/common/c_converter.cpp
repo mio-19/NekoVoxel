@@ -88,7 +88,25 @@ void push_v3f(lua_State *L, v3f p)
 	lua_call(L, 3, 1);
 }
 
+void push_v3d(lua_State *L, v3d p)
+{
+	lua_rawgeti(L, LUA_REGISTRYINDEX, CUSTOM_RIDX_PUSH_VECTOR);
+	lua_pushnumber(L, p.X);
+	lua_pushnumber(L, p.Y);
+	lua_pushnumber(L, p.Z);
+	lua_call(L, 3, 1);
+}
+
 void push_v2f(lua_State *L, v2f p)
+{
+	lua_createtable(L, 0, 2);
+	lua_pushnumber(L, p.X);
+	lua_setfield(L, -2, "x");
+	lua_pushnumber(L, p.Y);
+	lua_setfield(L, -2, "y");
+}
+
+void push_v2d(lua_State *L, v2d p)
 {
 	lua_createtable(L, 0, 2);
 	lua_pushnumber(L, p.X);
@@ -154,6 +172,19 @@ v2f read_v2f(lua_State *L, int index)
 	return p;
 }
 
+v2d read_v2d(lua_State *L, int index)
+{
+	v2d p;
+	CHECK_POS_TAB(index);
+	lua_getfield(L, index, "x");
+	p.X = lua_tonumber(L, -1);
+	lua_pop(L, 1);
+	lua_getfield(L, index, "y");
+	p.Y = lua_tonumber(L, -1);
+	lua_pop(L, 1);
+	return p;
+}
+
 v2f check_v2f(lua_State *L, int index)
 {
 	v2f p;
@@ -179,6 +210,16 @@ v3f read_v3f(lua_State *L, int index)
 	float z = lua_tonumber(L, -1);
 	lua_pop(L, 3);
 	return v3f(x, y, z);
+}
+
+v3d read_v3d(lua_State *L, int index)
+{
+	read_v3_aux(L, index);
+	double x = lua_tonumber(L, -3);
+	double y = lua_tonumber(L, -2);
+	double z = lua_tonumber(L, -1);
+	lua_pop(L, 3);
+	return v3d(x, y, z);
 }
 
 v3f check_v3f(lua_State *L, int index)
@@ -239,6 +280,11 @@ void pushFloatPos(lua_State *L, v3f p)
 v3f checkFloatPos(lua_State *L, int index)
 {
 	return check_v3f(L, index) * BS;
+}
+
+v3d checkDoublePos(lua_State *L, int index)
+{
+	return check_v3d(L, index) * BS;
 }
 
 void push_v3s16(lua_State *L, v3s16 p)

@@ -415,7 +415,7 @@ void PlayerSAO::setLookPitchAndSend(const float pitch)
 	m_env->getGameDef()->SendMovePlayer(m_peer_id);
 }
 
-u32 PlayerSAO::punch(v3f dir,
+u32 PlayerSAO::punch(v3d dir,
 	const ToolCapabilities *toolcap,
 	ServerActiveObject *puncher,
 	float time_from_last_punch,

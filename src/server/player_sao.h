@@ -109,7 +109,7 @@ public:
 		Interaction interface
 	*/
 
-	u32 punch(v3f dir, const ToolCapabilities *toolcap, ServerActiveObject *puncher,
+	u32 punch(v3d dir, const ToolCapabilities *toolcap, ServerActiveObject *puncher,
 			float time_from_last_punch, u16 initial_wear = 0) override;
 	void rightClick(ServerActiveObject *clicker) override;
 	void setHP(s32 hp, const PlayerHPChangeReason &reason) override
@@ -143,7 +143,7 @@ public:
 
 	// Cheat prevention
 
-	v3f getLastGoodPosition() const { return m_last_good_position; }
+	v3d getLastGoodPosition() const { return m_last_good_position; }
 	float resetTimeFromLastPunch()
 	{
 		float r = m_time_from_last_punch;
@@ -194,7 +194,7 @@ private:
 	// Cheat prevention
 	LagPool m_dig_pool;
 	LagPool m_move_pool;
-	v3f m_last_good_position;
+	v3d m_last_good_position;
 	float m_time_from_last_teleport = 0.0f;
 	float m_time_from_last_punch = 0.0f;
 	v3s32 m_nocheat_dig_pos = v3s32(32767, 32767, 32767);

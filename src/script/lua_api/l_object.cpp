@@ -114,7 +114,7 @@ int ObjectRef::l_get_pos(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	push_v3f(L, sao->getBasePosition() / BS);
+	push_v3d(L, sao->getBasePosition() / BS);
 	return 1;
 }
 
@@ -127,7 +127,7 @@ int ObjectRef::l_set_pos(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f pos = checkFloatPos(L, 2);
+	v3d pos = checkDoublePos(L, 2);
 
 	sao->setPos(pos);
 	return 0;
@@ -142,7 +142,7 @@ int ObjectRef::l_move_to(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f pos = checkFloatPos(L, 2);
+	v3d pos = checkDoublePos(L, 2);
 	bool continuous = readParam<bool>(L, 3);
 
 	sao->moveTo(pos, continuous);
@@ -773,7 +773,7 @@ int ObjectRef::l_set_velocity(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f vel = checkFloatPos(L, 2);
+	v3d vel = checkDoublePos(L, 2);
 
 	sao->setVelocity(vel);
 	return 0;
@@ -788,7 +788,7 @@ int ObjectRef::l_add_velocity(lua_State *L)
 	if (sao == nullptr)
 		return 0;
 
-	v3f vel = checkFloatPos(L, 2);
+	v3d vel = checkDoublePos(L, 2);
 
 	if (sao->getType() == ACTIVEOBJECT_TYPE_LUAENTITY) {
 		LuaEntitySAO *entitysao = dynamic_cast<LuaEntitySAO*>(sao);
@@ -835,7 +835,7 @@ int ObjectRef::l_set_acceleration(lua_State *L)
 	if (entitysao == nullptr)
 		return 0;
 
-	v3f acceleration = checkFloatPos(L, 2);
+	v3d acceleration = checkDoublePos(L, 2);
 
 	entitysao->setAcceleration(acceleration);
 	return 0;

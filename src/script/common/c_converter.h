@@ -90,14 +90,17 @@ void               setfloatfield(lua_State *L, int table,
 void               setboolfield(lua_State *L, int table,
                              const char *fieldname, bool value);
 
-v3f                 checkFloatPos       (lua_State *L, int index);
+//v3f                 checkFloatPos       (lua_State *L, int index);
+v3d                 checkDoublePos       (lua_State *L, int index);
 v2f                 check_v2f           (lua_State *L, int index);
 v3f                 check_v3f           (lua_State *L, int index);
 v3s16               check_v3s16         (lua_State *L, int index);
 v3s32               check_v3s32         (lua_State *L, int index);
 
-v3f                 read_v3f            (lua_State *L, int index);
-v2f                 read_v2f            (lua_State *L, int index);
+//v3f                 read_v3f            (lua_State *L, int index);
+//v2f                 read_v2f            (lua_State *L, int index);
+v3d                 read_v3d            (lua_State *L, int index);
+v2d                 read_v2d            (lua_State *L, int index);
 v2s16               read_v2s16          (lua_State *L, int index);
 v2s32               read_v2s32          (lua_State *L, int index);
 video::SColor       read_ARGB8          (lua_State *L, int index);
@@ -106,7 +109,7 @@ bool                read_color          (lua_State *L, int index,
 bool                is_color_table      (lua_State *L, int index);
 
 aabb3f              read_aabb3f         (lua_State *L, int index, f32 scale);
-v3s16               read_v3s16          (lua_State *L, int index);
+//v3s16               read_v3s16          (lua_State *L, int index);
 v3s32               read_v3s32          (lua_State *L, int index);
 std::vector<aabb3f> read_aabb3f_vector  (lua_State *L, int index, f32 scale);
 size_t              read_stringlist     (lua_State *L, int index,
@@ -114,13 +117,15 @@ size_t              read_stringlist     (lua_State *L, int index,
 
 void                push_v2s16          (lua_State *L, v2s16 p);
 void                push_v2s32          (lua_State *L, v2s32 p);
-void                push_v3s16          (lua_State *L, v3s16 p);
+//void                push_v3s16          (lua_State *L, v3s16 p);
 void                push_v3s32          (lua_State *L, v3s32 p);
 void                push_aabb3f         (lua_State *L, aabb3f box);
 void                push_ARGB8          (lua_State *L, video::SColor color);
 void                pushFloatPos        (lua_State *L, v3f p);
-void                push_v3f            (lua_State *L, v3f p);
-void                push_v2f            (lua_State *L, v2f p);
+//void                push_v3f            (lua_State *L, v3f p);
+//void                push_v2f            (lua_State *L, v2f p);
+void                push_v3d            (lua_State *L, v3d p);
+void                push_v2d            (lua_State *L, v2d p);
 
 void                warn_if_field_exists(lua_State *L, int table,
                                          const char *fieldname,

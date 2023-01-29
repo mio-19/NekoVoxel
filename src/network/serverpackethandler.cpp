@@ -973,7 +973,7 @@ void Server::handleCommand_Interact(NetworkPacket *pkt)
 
 	process_PlayerPos(player, playersao, pkt);
 
-	v3f player_pos = playersao->getLastGoodPosition();
+	v3d player_pos = playersao->getLastGoodPosition();
 
 	// Update wielded item
 
@@ -1098,7 +1098,7 @@ void Server::handleCommand_Interact(NetworkPacket *pkt)
 		ItemStack tool_item = playersao->getWieldedItem(&selected_item, &hand_item);
 		ToolCapabilities toolcap =
 				tool_item.getToolCapabilities(m_itemdef);
-		v3f dir = (pointed_object->getBasePosition() -
+		v3d dir = (pointed_object->getBasePosition() -
 				(playersao->getBasePosition() + playersao->getEyeOffset())
 					).normalize();
 		float time_from_last_punch =
