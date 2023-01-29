@@ -59,11 +59,13 @@ float LuaHelper::readParam(lua_State *L, int index)
 	return static_cast<float>(v);
 }
 
+/*
 template <>
 v2s16 LuaHelper::readParam(lua_State *L, int index)
 {
 	return read_v2s16(L, index);
 }
+*/
 
 template <>
 v2s32 LuaHelper::readParam(lua_State *L, int index)
@@ -71,6 +73,7 @@ v2s32 LuaHelper::readParam(lua_State *L, int index)
 	return read_v2s32(L, index);
 }
 
+/*
 template <>
 v2f LuaHelper::readParam(lua_State *L, int index)
 {
@@ -82,6 +85,7 @@ v3f LuaHelper::readParam(lua_State *L, int index)
 {
 	return check_v3f(L, index);
 }
+*/
 
 template <>
 std::string LuaHelper::readParam(lua_State *L, int index)

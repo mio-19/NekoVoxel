@@ -265,29 +265,6 @@ v3d check_v3d(lua_State *L, int index)
 	return v3d(x, y, z);
 }
 
-v3d read_v3d(lua_State *L, int index)
-{
-	read_v3_aux(L, index);
-	double x = lua_tonumber(L, -3);
-	double y = lua_tonumber(L, -2);
-	double z = lua_tonumber(L, -1);
-	lua_pop(L, 3);
-	return v3d(x, y, z);
-}
-
-v3d check_v3d(lua_State *L, int index)
-{
-	read_v3_aux(L, index);
-	CHECK_POS_COORD(-3, "x");
-	CHECK_POS_COORD(-2, "y");
-	CHECK_POS_COORD(-1, "z");
-	double x = lua_tonumber(L, -3);
-	double y = lua_tonumber(L, -2);
-	double z = lua_tonumber(L, -1);
-	lua_pop(L, 3);
-	return v3d(x, y, z);
-}
-
 void push_ARGB8(lua_State *L, video::SColor color)
 {
 	lua_createtable(L, 0, 4);
